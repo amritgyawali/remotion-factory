@@ -1,0 +1,69 @@
+{
+  "series": "Eye health, plainly",
+  "postType": "draft",
+
+  "schedule": {
+    "startDate": "2026-08-01",
+    "timezone": "+05:45",
+    "times": ["07:30", "12:45", "19:15"]
+  },
+
+  "channels": ["PASTE_INTEGRATION_IDS_HERE"],
+
+  "channelSettings": {
+    "instagram-standalone": { "__type": "instagram-standalone", "post_type": "post" },
+    "x": { "__type": "x", "who_can_reply_post": "everyone" },
+    "threads": { "__type": "threads" },
+    "facebook": { "__type": "facebook", "post_type": "post" },
+    "linkedin": { "__type": "linkedin" }
+  },
+
+  "items": [
+    {
+      "id": "d01-a",
+      "template": "StatCard",
+      "caption": "Most vision loss doesn't have to happen.\n\n#eyehealth #optometry #vision",
+      "props": {
+        "eyebrow": "Eye health, plainly",
+        "day": 1,
+        "durationInSeconds": 8,
+        "value": "43%",
+        "label": "of vision loss is preventable",
+        "context": ["Most of it comes down to a test", "that takes fifteen minutes."],
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "d01-b",
+      "template": "ListReveal",
+      "caption": "If two of these sound like you, book the test.\n\n#eyehealth #eyestrain #optometry",
+      "props": {
+        "eyebrow": "Eye health, plainly",
+        "day": 1,
+        "durationInSeconds": 10,
+        "headline": "Four signs you should book an eye test",
+        "items": [
+          "Headaches by mid-afternoon",
+          "Squinting at road signs",
+          "Words swimming after 20 minutes",
+          "One eye doing all the work"
+        ],
+        "kicker": "FOLLOW ALONG"
+      }
+    },
+    {
+      "id": "d01-c",
+      "template": "StatCard",
+      "caption": "Screens don't damage your eyes. They do something else.\n\n#screentime #eyestrain #eyehealth",
+      "props": {
+        "eyebrow": "Eye health, plainly",
+        "day": 1,
+        "durationInSeconds": 9,
+        "value": "66%",
+        "label": "fewer blinks in front of a screen",
+        "context": ["That's the dryness, not the light.", "Blink on purpose. Look away at 20."],
+        "kicker": "SAVE THIS"
+      }
+    }
+  ]
+}
