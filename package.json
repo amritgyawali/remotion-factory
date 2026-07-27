@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "studio": "remotion studio",
-    "validate": "node scripts/validate-plan.mjs",
+    "validate": "node scripts/validate-plan.mjs && node scripts/queue.mjs --check",
+    "queue": "node scripts/queue.mjs",
     "channels": "node scripts/channels.mjs",
     "render": "node scripts/render-all.mjs",
-    "render:dry": "DRY_RUN=1 node scripts/render-all.mjs"
+    "render:dry": "node scripts/render-all.mjs --dry-run"
   },
   "dependencies": {
     "@remotion/cli": "^4.0.0",

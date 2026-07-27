@@ -1,0 +1,179 @@
+name: Publish next video
+
+on:
+  schedule:
+    # Four local runs a day, away from GitHub's busy top-of-hour window.
+    # 00:17/06:17/12:17/18:17 Asia/Kathmandu = 18:32/00:32/06:32/12:32 UTC.
+    - cron: "32 0,6,12,18 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Render one video only; never touch Postiz or state.json"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  # Share the group with the manual batch workflow so they never overlap.
+  group: render
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && '1' || '0' }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # workflow_dispatch lets callers choose a branch. Production secrets
+          # must only ever be used with the reviewed code on main.
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - id: queue
+        name: Pick the next unposted item
+        shell: bash
+        run: node scripts/queue.mjs --github-output >> "$GITHUB_OUTPUT"
+
+      - name: Queue is empty
+        if: steps.queue.outputs.id == ''
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        shell: bash
+        run: |
+          echo "::warning::Queue is empty. Append new items to plan.json."
+          if [ -n "$TELEGRAM_BOT_TOKEN" ] && [ -n "$TELEGRAM_CHAT_ID" ]; then
+            curl -fsS -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
+              -d chat_id="$TELEGRAM_CHAT_ID" \
+              -d disable_web_page_preview=true \
+              -d text="Video queue is empty. Append new items to plan.json.
+          $RUN_URL" || true
+          fi
+
+      - name: Install Chrome runtime libraries
+        if: steps.queue.outputs.id != ''
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            libnss3 libdbus-1-3 libatk1.0-0 libatk-bridge2.0-0 \
+            libcups2 libxkbcommon0 libxdamage1 libgbm1 libpango-1.0-0 \
+            libcairo2 fonts-liberation || true
+          sudo apt-get install -y libasound2t64 || sudo apt-get install -y libasound2 || true
+
+      - name: Install dependencies
+        if: steps.queue.outputs.id != ''
+        run: npm install --no-audit --no-fund
+
+      - name: Cache Chrome Headless Shell
+        if: steps.queue.outputs.id != ''
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/remotion
+            node_modules/.remotion
+          key: remotion-browser-${{ runner.os }}-v1
+
+      - name: Ensure browser
+        if: steps.queue.outputs.id != ''
+        run: npx remotion browser ensure
+
+      - name: Render and publish one video
+        if: steps.queue.outputs.id != ''
+        env:
+          POSTIZ_API_URL: ${{ secrets.POSTIZ_API_URL }}
+          POSTIZ_API_KEY: ${{ secrets.POSTIZ_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          ONLY: ${{ steps.queue.outputs.id }}
+          QUEUE_RUN: "1"
+          REMOTION_CONCURRENCY: 2
+        run: node scripts/render-all.mjs
+
+      - name: Commit queue state
+        if: steps.queue.outputs.id != '' && env.DRY_RUN != '1'
+        env:
+          ITEM_ID: ${{ steps.queue.outputs.id }}
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- state.json
+
+          staged="$(git diff --cached --name-only)"
+          if [ "$staged" != "state.json" ]; then
+            echo "Expected only state.json to be staged; got: $staged" >&2
+            exit 1
+          fi
+
+          git commit -m "chore(queue): mark $ITEM_ID posted"
+          for attempt in 1 2 3; do
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            echo "Push attempt $attempt failed; rebasing onto current main."
+            git pull --rebase origin main
+          done
+          echo "Could not push state.json after three attempts." >&2
+          exit 1
+
+      - name: Archive to Cloudflare R2
+        if: steps.queue.outputs.id != '' && success()
+        continue-on-error: true
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        shell: bash
+        run: |
+          if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ] || \
+             [ -z "$R2_ENDPOINT" ] || [ -z "$R2_BUCKET" ]; then
+            echo "::warning::R2 is incomplete, skipping archive."
+            exit 0
+          fi
+          aws s3 sync out/ "s3://$R2_BUCKET/$(date +%Y-%m)/" \
+            --endpoint-url "$R2_ENDPOINT" --exclude "*.props.json"
+
+      - name: Keep the video for 7 days
+        if: always() && steps.queue.outputs.id != ''
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: video-${{ steps.queue.outputs.id }}-${{ github.run_id }}
+          path: |
+            out/*.mp4
+            out/summary.json
+          retention-days: 7
+          if-no-files-found: warn
+
+  notify-failure:
+    needs: publish
+    if: ${{ always() && needs.publish.result == 'failure' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Telegram
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        shell: bash
+        run: |
+          [ -z "$TELEGRAM_BOT_TOKEN" ] && exit 0
+          curl -fsS -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
+            -d chat_id="$TELEGRAM_CHAT_ID" \
+            -d disable_web_page_preview=true \
+            -d text="Publish-next run failed. Check Postiz before retrying: a failure during the state push can mean Postiz already accepted the video.
+          $RUN_URL" || true

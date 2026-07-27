@@ -39,8 +39,8 @@ export type TemplateId = "StatCard" | "ListReveal";
 export type PlanItem = {
   id: string;
   template: TemplateId;
-  /** ISO 8601, e.g. "2026-08-01T18:30:00.000Z" */
-  publishAt: string;
+  /** ISO 8601 for legacy calendar plans. Queue items deliberately omit it. */
+  publishAt?: string;
   /** Caption text posted alongside the video. */
   caption: string;
   /** Which connected Postiz channels to post to. Empty = all of them. */
@@ -50,6 +50,8 @@ export type PlanItem = {
 
 export type Plan = {
   series: string;
+  /** Queue mode renders the first id not listed in state.json. */
+  mode?: "queue";
   /** "draft" | "schedule" | "now" — start on draft. */
   postType: "draft" | "schedule" | "now";
   /**

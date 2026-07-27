@@ -2,9 +2,11 @@ import { spawn } from "node:child_process";
 import { mkdir, readFile, writeFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { loadPlan } from "./validate-plan.mjs";
+import { getQueue, markPosted, QUEUE_LOW_WATER } from "./queue.mjs";
 
 const OUT = "out";
-const DRY_RUN = process.env.DRY_RUN === "1";
+const DRY_RUN = process.env.DRY_RUN === "1" || process.argv.includes("--dry-run");
+const QUEUE_RUN = process.env.QUEUE_RUN === "1";
 const ONLY = (process.env.ONLY ?? "").split(",").map((s) => s.trim()).filter(Boolean);
 const THROTTLE_MS = Number(process.env.POSTIZ_THROTTLE_MS ?? 2000);
 
@@ -169,7 +171,34 @@ async function main() {
 
   await mkdir(OUT, { recursive: true });
 
-  const items = ONLY.length ? plan.items.filter((i) => ONLY.includes(i.id)) : plan.items;
+  let queue = null;
+  let items;
+
+  if (QUEUE_RUN) {
+    if (plan.mode !== "queue") throw new Error('QUEUE_RUN requires plan mode "queue"');
+    queue = await getQueue(plan);
+    if (!queue.next) {
+      const empty = `${plan.series}\nQueue is empty. Nothing rendered.`;
+      console.warn(empty);
+      await writeFile(path.join(OUT, "summary.json"), JSON.stringify({ done: [], failed: [] }, null, 2));
+      await notify(empty);
+      return;
+    }
+    if (ONLY.length && (ONLY.length !== 1 || ONLY[0] !== queue.next.id)) {
+      throw new Error(`queue moved — expected "${ONLY.join(",")}", next item is "${queue.next.id}"`);
+    }
+    items = [queue.next];
+  } else {
+    items = ONLY.length ? plan.items.filter((i) => ONLY.includes(i.id)) : plan.items;
+  }
+
+  if (plan.mode === "queue" && !DRY_RUN && !QUEUE_RUN) {
+    throw new Error("queue mode refuses a non-dry batch run — use the Publish next video workflow");
+  }
+  if (QUEUE_RUN && items.length !== 1) {
+    throw new Error(`queue runs must contain exactly one item — got ${items.length}`);
+  }
+
   console.log(`Rendering ${items.length} video(s), postType "${plan.postType}"${DRY_RUN ? " (DRY RUN — nothing will reach Postiz)" : ""}\n`);
 
   let integrations = [];
@@ -204,14 +233,23 @@ async function main() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             type: plan.postType,
-            date: new Date(item.publishAt).toISOString(),
+            date: item.publishAt ? new Date(item.publishAt).toISOString() : new Date().toISOString(),
             shortLink: false,
             tags: [],
             posts: buildPosts(item, media, integrations, plan),
           }),
         });
         console.log(`  sent to Postiz as ${plan.postType}`);
-        await sleep(THROTTLE_MS);
+        if (!QUEUE_RUN) await sleep(THROTTLE_MS);
+      }
+
+      if (QUEUE_RUN && !DRY_RUN) {
+        try {
+          queue = await markPosted(plan, item.id);
+          console.log(`  marked posted, ${queue.remaining} item(s) remain`);
+        } catch (err) {
+          throw new Error(`Postiz accepted ${item.id}, but state.json was not updated: ${err.message}`);
+        }
       }
 
       done.push(item.id);
@@ -222,10 +260,18 @@ async function main() {
     }
   }
 
+  const queueLine = QUEUE_RUN
+    ? `\nQueue: ${queue.remaining} remaining${queue.remaining <= QUEUE_LOW_WATER ? " — LOW" : ""}`
+    : "";
   const summary =
     `${plan.series}\n${done.length}/${items.length} done as "${plan.postType}"` +
-    (failed.length ? `\nFailed: ${failed.map((f) => f.id).join(", ")}` : "");
+    (failed.length ? `\nFailed: ${failed.map((f) => f.id).join(", ")}` : "") +
+    queueLine;
   console.log(`\n${summary}`);
+  if (QUEUE_RUN && queue.remaining <= QUEUE_LOW_WATER) {
+    const warning = `Queue low: ${queue.remaining} item(s), at most ${Math.ceil(queue.remaining / 4)} day(s) left`;
+    console.warn(process.env.GITHUB_ACTIONS ? `::warning::${warning}` : `warning  ${warning}`);
+  }
   await writeFile(path.join(OUT, "summary.json"), JSON.stringify({ done, failed }, null, 2));
   await notify(summary);
 

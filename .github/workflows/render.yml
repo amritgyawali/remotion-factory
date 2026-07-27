@@ -1,13 +1,6 @@
 name: Render and schedule
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "plan.json"
-      - "src/**"
-      - "scripts/**"
-      - ".github/workflows/render.yml"
   workflow_dispatch:
     inputs:
       only:

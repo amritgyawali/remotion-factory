@@ -1,5 +1,13 @@
 import { readFile } from "node:fs/promises";
+import { pathToFileURL } from "node:url";
 import { expandSchedule, scheduleErrors } from "./schedule.mjs";
+
+const ITEM_ID = /^[a-z0-9](?:[a-z0-9_-]{0,78}[a-z0-9])?$/;
+const WINDOWS_RESERVED = /^(con|prn|aux|nul|com[1-9]|lpt[1-9])$/;
+
+export function isPortableItemId(value) {
+  return typeof value === "string" && ITEM_ID.test(value) && !WINDOWS_RESERVED.test(value);
+}
 
 const TEMPLATES = {
   StatCard: {
@@ -23,6 +31,17 @@ export async function loadPlan(path = "plan.json") {
 
   const errors = [];
   const warnings = [];
+  const queueMode = plan.mode === "queue";
+
+  if (plan.mode !== undefined && !queueMode) {
+    errors.push(`mode must be "queue" when set — got "${plan.mode}"`);
+  }
+  if (queueMode && plan.schedule) {
+    errors.push("queue mode must not have a schedule block");
+  }
+  if (queueMode && plan.postType === "schedule") {
+    errors.push('queue mode postType must be "draft" or "now", not "schedule"');
+  }
 
   if (!["draft", "schedule", "now"].includes(plan.postType)) {
     errors.push(`postType must be draft, schedule or now — got "${plan.postType}"`);
@@ -39,8 +58,10 @@ export async function loadPlan(path = "plan.json") {
     warnings.push("no channels set anywhere — every video will go to every connected account");
   }
 
-  errors.push(...scheduleErrors(plan.schedule));
-  if (errors.length === 0) plan.items = expandSchedule(plan);
+  if (!queueMode) {
+    errors.push(...scheduleErrors(plan.schedule));
+    if (errors.length === 0) plan.items = expandSchedule(plan);
+  }
 
   // Identifiers aren't unique. If you have two accounts on one platform,
   // naming the platform posts to both.
@@ -50,9 +71,18 @@ export async function loadPlan(path = "plan.json") {
   for (const [i, item] of plan.items.entries()) {
     const at = `items[${i}]${item.id ? ` (${item.id})` : ""}`;
 
-    if (!item.id) errors.push(`${at}: missing id`);
-    else if (seen.has(item.id)) errors.push(`${at}: duplicate id`);
-    seen.add(item.id);
+    if (!item.id) {
+      errors.push(`${at}: missing id`);
+    } else if (!isPortableItemId(item.id)) {
+      errors.push(
+        `${at}: id must be 1–80 lowercase letters, digits, "_" or "-", ` +
+          "must start and end with a letter or digit, and must not be a Windows reserved name",
+      );
+    } else if (seen.has(item.id)) {
+      errors.push(`${at}: duplicate id`);
+    } else {
+      seen.add(item.id);
+    }
 
     const spec = TEMPLATES[item.template];
     if (!spec) {
@@ -60,14 +90,18 @@ export async function loadPlan(path = "plan.json") {
       continue;
     }
 
-    if (!item.publishAt) {
-      errors.push(`${at}: no publishAt and no schedule block to derive one from`);
-    } else if (Number.isNaN(Date.parse(item.publishAt))) {
-      errors.push(`${at}: publishAt is not an ISO 8601 date`);
-    } else if (plan.postType !== "draft" && Date.parse(item.publishAt) < Date.now()) {
-      // With auto-publish on, a past date fires immediately across every
-      // channel at once. That's the spam pattern, so it's an error not a warning.
-      errors.push(`${at}: publishAt is in the past — it would publish instantly`);
+    if (queueMode) {
+      if (item.publishAt) errors.push(`${at}: queue items must not have publishAt`);
+    } else {
+      if (!item.publishAt) {
+        errors.push(`${at}: no publishAt and no schedule block to derive one from`);
+      } else if (Number.isNaN(Date.parse(item.publishAt))) {
+        errors.push(`${at}: publishAt is not an ISO 8601 date`);
+      } else if (plan.postType !== "draft" && Date.parse(item.publishAt) < Date.now()) {
+        // With auto-publish on, a past date fires immediately across every
+        // channel at once. That's the spam pattern, so it's an error not a warning.
+        errors.push(`${at}: publishAt is in the past — it would publish instantly`);
+      }
     }
 
     if (typeof item.caption !== "string" || !item.caption.trim()) {
@@ -113,7 +147,7 @@ export async function loadPlan(path = "plan.json") {
 }
 
 // Run directly: node scripts/validate-plan.mjs [--matrix <size>]
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const args = process.argv.slice(2);
   const matrixAt = args.indexOf("--matrix");
   const chunkSize = matrixAt === -1 ? 0 : Number(args[matrixAt + 1] ?? 12);
