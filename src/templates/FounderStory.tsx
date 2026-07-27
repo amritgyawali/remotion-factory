@@ -53,12 +53,12 @@ export const FounderStory: React.FC<FounderStoryProps> = ({
   });
 
   return (
-    <Frame theme={theme} day={day} eyebrow={eyebrow} kicker={kicker}>
+    <Frame theme={theme}>
       <AbsoluteFill
         style={{
           boxSizing: "border-box",
-          paddingTop: 202,
-          paddingBottom: 350,
+          paddingTop: 120,
+          paddingBottom: 150,
           paddingLeft: CONTENT_MARGIN,
           paddingRight: CONTENT_MARGIN,
           display: "flex",

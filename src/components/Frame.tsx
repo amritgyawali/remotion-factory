@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { display, mono, SERIES_LENGTH, type Theme } from "../theme";
+import { display, mono, type Theme } from "../theme";
 
 const MARGIN = 72;
 
@@ -26,22 +26,17 @@ const GRAIN_SVG =
 const GRAIN_URL = `url("data:image/svg+xml;utf8,${encodeURIComponent(GRAIN_SVG)}")`;
 
 /**
- * The signature element: a ledger rule that measures the video's position
- * in the seven-day run. The numbering is meaningful here: a returning viewer
- * can see where this video sits in the current weekly edition.
+ * The ground every video sits on: colour field, ambient drift, grain, and the
+ * two-second brand close. Deliberately nothing else — see the note by
+ * {children} below.
  */
 export const Frame: React.FC<{
   theme: Theme;
-  day: number;
-  eyebrow: string;
-  kicker?: string;
   children: React.ReactNode;
-}> = ({ theme, day, eyebrow, kicker, children }) => {
+}> = ({ theme, children }) => {
   const frame = useCurrentFrame();
-  const { fps, durationInFrames, width } = useVideoConfig();
+  const { fps, durationInFrames } = useVideoConfig();
 
-  const draw = spring({ frame, fps, config: { damping: 200 }, durationInFrames: 24 });
-  const ruleWidth = (width - MARGIN * 2) * (day / SERIES_LENGTH) * draw;
   const endCardFrame = frame - Math.max(0, durationInFrames - fps * 2);
   const endCard = spring({
     frame: Math.max(0, endCardFrame),
@@ -81,55 +76,18 @@ export const Frame: React.FC<{
         }}
       />
 
-      {/* Eyebrow */}
-      <div
-        style={{
-          position: "absolute",
-          top: MARGIN + 24,
-          left: MARGIN,
-          right: MARGIN,
-          fontFamily: mono,
-          fontSize: 28,
-          letterSpacing: "0.24em",
-          textTransform: "uppercase",
-          color: theme.amber,
-          opacity: draw,
-        }}
-      >
-        {eyebrow}
-      </div>
+      {/*
+        No header and no footer, by design. No eyebrow, no company name, no
+        day counter, no kicker — nothing framing the content. The on-screen
+        text is the entire script, so anything persistent around it competes
+        with the only thing carrying the story.
 
+        The two-second end card below is the exception, and it is the source
+        PDF's one non-negotiable: "the same two seconds close every one of the
+        thirty videos ... written as the final row of every script so it can
+        never be forgotten". It is a brand close, not a frame around the video.
+      */}
       {children}
-
-      {/* Ledger rule */}
-      <div style={{ position: "absolute", left: MARGIN, right: MARGIN, bottom: 232 }}>
-        <div style={{ height: 2, backgroundColor: theme.rule, width: "100%" }} />
-        <div
-          style={{
-            height: 2,
-            backgroundColor: theme.amber,
-            width: ruleWidth,
-            marginTop: -2,
-          }}
-        />
-        <div
-          style={{
-            fontFamily: mono,
-            fontSize: 24,
-            letterSpacing: "0.14em",
-            color: theme.paperDim,
-            marginTop: 22,
-            display: "flex",
-            justifyContent: "space-between",
-            opacity: draw,
-          }}
-        >
-          <span>
-            DAY {String(day).padStart(2, "0")} / {SERIES_LENGTH}
-          </span>
-          {kicker ? <span style={{ color: theme.seaglass }}>{kicker}</span> : null}
-        </div>
-      </div>
 
       {/* Every PDF concept ends on the same two-second brand signature. */}
       <AbsoluteFill

@@ -38,7 +38,7 @@ export const StatCard: React.FC<StatCardProps> = ({
     spring({ frame: frame - delay, fps, config: { damping: 200 }, durationInFrames: 22 });
 
   return (
-    <Frame theme={theme} day={day} eyebrow={eyebrow} kicker={kicker}>
+    <Frame theme={theme}>
       <AbsoluteFill
         style={{
           justifyContent: "center",

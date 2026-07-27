@@ -25,7 +25,7 @@ export const ListReveal: React.FC<ListRevealProps> = ({
   const step = items.length > 1 ? (last - first) / (items.length - 1) : 0;
 
   return (
-    <Frame theme={theme} day={day} eyebrow={eyebrow} kicker={kicker}>
+    <Frame theme={theme}>
       <AbsoluteFill
         style={{
           justifyContent: "center",
