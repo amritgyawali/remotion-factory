@@ -369,6 +369,7 @@ Repository Settings → Secrets and variables → Actions:
 | `R2_SECRET_ACCESS_KEY` | no | Optional cold archive |
 | `R2_ENDPOINT` | no | Optional cold archive |
 | `R2_BUCKET` | no | Optional cold archive |
+| `CLOUDINARY_URL` | no | Optional cold archive, `cloudinary://key:secret@cloud` |
 
 The queue workflow grants its built-in `GITHUB_TOKEN` `contents: write` so it can
 commit `state.json`. Branch protection or repository policy must allow that bot
@@ -517,6 +518,30 @@ The client is ~200 lines of SigV4 in `scripts/r2.mjs` rather than the AWS SDK,
 which would add tens of megabytes to a repository whose only other dependencies
 are React and Remotion. Signing is verified against **AWS's published SigV4 test
 vector**, because a wrong signature surfaces only as an unexplained 403.
+
+### Cloudinary
+
+A second cold copy, and the one that works today — R2 needs enabling on the
+Cloudflare account before its endpoint will complete a TLS handshake.
+
+`scripts/archive-cloudinary.mjs` uploads the **original file with no
+transformation**. Cloudinary will happily re-encode on delivery, and the point
+of this copy is to keep the master exactly as Remotion and the loudness pass
+produced it. Verified by downloading an archived video back and comparing: the
+round trip is **MD5-identical**, and the downloaded file passes the full
+verification suite on its own.
+
+The free plan is 25 monthly credits, where a credit is 1 GB of storage, or 1 GB
+of viewing bandwidth, or 1000 transformations. Storage is capped at 8 GB, which
+leaves the rest of the allowance for delivery — the part that grows when a video
+actually gets watched. Same rolling-window eviction as R2.
+
+Note the free plan's **100 MB per-video ceiling**; these renders are ~2 MB, and
+an oversized file fails with that stated rather than a generic upload error.
+
+```bash
+npm run cloudinary   # plan, objects, storage, bandwidth, credits
+```
 
 Social-platform API pricing is separate from GitHub and Postiz. In particular,
 verify current X API pricing before enabling `"now"`; links in captions can also

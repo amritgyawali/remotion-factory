@@ -8,6 +8,7 @@ import { archiveVideo } from "./archive-video.mjs";
 import { BED_TEMPLATES } from "./audio/beds.mjs";
 import { masterVideoAudio } from "./master-audio.mjs";
 import { archiveToR2 } from "./archive-r2.mjs";
+import { archiveToCloudinary } from "./archive-cloudinary.mjs";
 
 const OUT = "out";
 const DRY_RUN = process.env.DRY_RUN === "1" || process.argv.includes("--dry-run");
@@ -301,9 +302,9 @@ async function main() {
           archived.push(stored.url);
         }
 
-        // Second copy on R2, inside a hard storage budget. Best-effort: the
-        // Release above is the permanent archive, so a cold-storage failure
-        // must not stop a video that is otherwise good from publishing.
+        // Cold copies, each inside a hard storage budget. Both are best-effort:
+        // the Release above is the permanent archive, so neither one failing
+        // may stop a video that is otherwise good from publishing.
         try {
           const cold = await archiveToR2({ file, item, weekId });
           console.log(
@@ -315,6 +316,20 @@ async function main() {
           );
         } catch (error) {
           console.warn(`  R2 archive failed (continuing): ${error.message}`);
+        }
+
+        try {
+          const cdn = await archiveToCloudinary({ file, item, weekId });
+          console.log(
+            cdn.skipped
+              ? `  Cloudinary skipped — ${cdn.reason}`
+              : `  Cloudinary ${cdn.publicId} — ${(cdn.usedBytes / 1024 ** 2).toFixed(0)} MB of ` +
+                `${(cdn.budgetBytes / 1024 ** 3).toFixed(0)} GB used` +
+                (cdn.evicted.length ? `, evicted ${cdn.evicted.length}` : ""),
+          );
+          if (!cdn.skipped) archived.push(cdn.url);
+        } catch (error) {
+          console.warn(`  Cloudinary archive failed (continuing): ${error.message}`);
         }
 
         const media = await uploadToPostiz(file);

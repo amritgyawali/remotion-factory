@@ -113,6 +113,8 @@ jobs:
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          # cloudinary://<api_key>:<api_secret>@<cloud_name>
+          CLOUDINARY_URL: ${{ secrets.CLOUDINARY_URL }}
           # REMOTION_CONCURRENCY is deliberately unset: one video per run means
           # remotion.config.ts can give it every core the runner has.
         run: node scripts/render-all.mjs
