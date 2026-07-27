@@ -82,6 +82,9 @@ jobs:
       - name: Ensure browser
         run: npx remotion browser ensure
 
+      - name: Build the audio pack
+        run: node scripts/build-audio.mjs
+
       - name: Render and schedule
         env:
           POSTIZ_API_URL: ${{ secrets.POSTIZ_API_URL }}

@@ -58,12 +58,14 @@ The `Publish next video` workflow runs at 00:17, 06:17, 12:17, and 18:17 in
 
 1. Validates every accepted week and `state.json`.
 2. Selects the first item whose id is not in `state.json.posted`.
-3. Renders exactly that one item with Remotion, using every core on the runner.
-4. Verifies the MP4 before anything else may touch it (see *Render verification*).
-5. Uploads the MP4 to the week's GitHub Release (see *Where the videos are kept*).
-6. Sends it to every configured Postiz integration.
-7. Adds the id to `state.json` only after Postiz accepts the request.
-8. Commits `state.json` and `archive/manifest.json` back to `main`.
+3. Rebuilds the audio pack for the template in play, then renders exactly that
+   one item with Remotion, using every core on the runner.
+4. Masters the audio to −14 LUFS, delivering ≈ −0.85 dBTP (see *Mastering*).
+5. Verifies the MP4 before anything else may touch it (see *Render verification*).
+6. Uploads the MP4 to the week's GitHub Release (see *Where the videos are kept*).
+7. Sends it to every configured Postiz integration.
+8. Adds the id to `state.json` only after Postiz accepts the request.
+9. Commits `state.json` and `archive/manifest.json` back to `main`.
 
 A dry run renders the same next item but never contacts Postiz and never advances
 the queue. An exhausted queue—where every accepted id is in `state.json`—exits
@@ -87,6 +89,103 @@ Rendering four videos in one job would be cheaper in setup time but would give
 each of them a quarter of the machine and put all four behind a single point of
 failure. Four separate runs is the trade this repository makes.
 
+## Sound
+
+The source PDF is a **silent motion system**, not a silent one: no voice, but
+"every second scored with music and sound effects". With nothing spoken, the
+audio track is the performance.
+
+The whole soundtrack is **synthesised in code**, not licensed. That is a
+deliberate answer to the PDF's own warning: instrumental libraries are "full of
+tracks with faint vocal pads, breaths and chanting", and those count as voice.
+Oscillators and filtered noise cannot produce a voice, so the hardest rule holds
+by construction rather than by listening to every bed and hoping.
+
+```text
+scripts/audio/synth.mjs   oscillators, noise, envelopes, filters, WAV encoding
+scripts/audio/sfx.mjs     the cue catalogue, named after cues in the scripts
+scripts/audio/beds.mjs    one bed per template, rendered as separate layers
+scripts/build-audio.mjs   writes the pack to public/audio/
+src/audio/Score.tsx       places cues on exact frames, ducks the bed
+```
+
+Build it with `npm run audio`. It is a **build artifact, not committed
+binaries** — generation is deterministic, so CI rebuilds it before every render
+and `public/audio/` stays gitignored.
+
+Beds render as **independent layers** rather than one mixed file. That is what
+makes the PDF's bed behaviour expressible: DevJoke "adds a layer per beat",
+SiteRoast "drops out entirely for the rebuild, returns bigger", FounderStory has
+"no music at all for the first three seconds, ever". Mixed down, none of that is
+possible without re-rendering audio per video.
+
+A video's cue list lives on its plan item as `props.score`:
+
+```json
+"score": {
+  "bed": [
+    { "frame": 0, "layers": ["pluck"] },
+    { "frame": 30, "layers": ["pluck", "kick"] },
+    { "frame": 330, "layers": [] }
+  ],
+  "cues": [
+    { "frame": 0, "sfx": "snap", "major": true },
+    { "frame": 30, "sfx": "snap-p2", "major": true },
+    { "frame": 60, "sfx": "snap-p4", "major": true }
+  ]
+}
+```
+
+`frame`, never seconds — the PDF: "Every SFX lands on the first frame of its
+motion. Audio three frames late reads as an amateur edit, and in a silent video
+there is nothing to hide behind." An empty `layers` array is hard silence, which
+the scripts use as a punchline device on nearly all thirty.
+
+`major: true` ducks the bed 4 dB for 6 frames, per the PDF's mix table. Ticks and
+blips are texture and should be left alone, or the bed audibly pumps.
+
+Pitch escalation — "repeat one SFX a semitone higher each beat to imply rising
+absurdity, as on days 1, 8 and 16" — is the `-p2`, `-p4`, `-p6` suffixes.
+
+A day without a transcribed `score` still gets sound: `src/audio/defaultScore.ts`
+generates the template's documented bed behaviour so nothing ships silent by
+accident. A transcribed day always wins.
+
+### Mastering
+
+The PDF's mix table ends with a delivery target the synthesis stage cannot hit
+on its own: "−14 LUFS integrated, true peak −1 dBTP. What every platform
+normalises to."
+
+A scored motion-graphics track is extremely peaky — sparse hits over
+near-silence — so raising it to −14 LUFS by gain alone would clip long before
+it got there. Loudness and peak have to be solved together. Remotion mixes the
+score but has no master bus, so `scripts/master-audio.mjs` runs a two-pass
+`loudnorm` after each render. Measured on a real one: **−25.9 LUFS in, −14 LUFS
+out**.
+
+Two passes, not one: single-pass loudnorm works from a running estimate and
+audibly pumps on material this dynamic. Measuring first and applying the
+measured values is a linear, transparent correction. Video is stream-copied, so
+this costs no image quality and a few seconds.
+
+The filter is told **−2 dBTP, not −1**, and that is deliberate. loudnorm limits
+the signal it sees; the AAC encoder then overshoots it. Mastering to −1 produced
+a delivered file measuring **+0.71 dBTP** — above full scale. Overshoot is about
+1.2 dB and barely moves with bitrate (192k, 256k and 320k all landed within
+0.1 dB of each other), so the fix is headroom in the target, not a fatter audio
+stream. At −2 the delivered file measures about **−0.85 dBTP**, which is what
+the spec actually asks for.
+
+Do not "correct" that back to −1 without re-measuring the delivered MP4. The
+number that matters is the one in the file, not the one in the filter.
+
+Both this and the loudness probe pass `-vn`. Remotion ships an ffmpeg built
+with `--disable-encoders` and a short allow-list, so leaving a video stream
+attached to a null output fails with "Encoder not found" before any analysis
+runs. `volumedetect` is unavailable in that build for the same reason, which is
+why loudness is measured by decoding to PCM rather than by parsing filter output.
+
 ## Render verification
 
 Nobody watches these renders. A run that fails halfway — a font that never
@@ -100,6 +199,12 @@ and fails the run on any of:
 - a frame that is not 1080×1920
 - a duration more than 0.5s from the plan's `durationInSeconds`
 - a file under 100 kB, or a bitrate under 250 kbps
+- **no audio stream, or a mean programme volume under −60 dB**
+
+The audio check is measured with `ffmpeg -af volumedetect`, not read from
+metadata: a muted track still encodes as a perfectly valid AAC stream, so the
+stream existing proves nothing. Deliberately quiet mixes pass — the scripts use
+hard silence as an instrument — but digital black does not.
 
 The bitrate floor is the load-bearing one. A blank or frozen frame costs almost
 nothing to compress, so a broken render collapses to a tiny bitrate while
@@ -413,6 +518,14 @@ Do not remove or work around these:
   with blockers, publishing may not.
 - The bitrate floor in `scripts/verify-video.mjs`; without it a blank render is
   indistinguishable from a good one and posts anyway.
+- The audio-stream and loudness checks in `scripts/verify-video.mjs`; every one
+  of the thirty scripts is scored, so a silent render is a failure.
+- Synthesised audio rather than a music library. The PDF's hardest rule is that
+  nothing may read as a human voice, and it warns that instrumental libraries
+  routinely contain vocal pads and breaths. Swapping in licensed tracks moves
+  that rule from guaranteed to hoped-for.
+- Bed layers rendered separately rather than pre-mixed; the PDF's bed behaviour
+  needs layers to appear and drop out mid-video.
 - The staged-path allowlist in the publish workflow's commit step; video bytes
   belong in a Release, never in git.
 - `postType` changes belong to the repository owner.

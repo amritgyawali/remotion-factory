@@ -139,6 +139,7 @@ export const TechTip: React.FC<TechTipProps> = ({
   result,
   variant,
   kicker,
+  score,
   theme: overrides,
 }) => {
   const theme = resolveTheme(overrides);
@@ -156,7 +157,7 @@ export const TechTip: React.FC<TechTipProps> = ({
   });
 
   return (
-    <Frame theme={theme}>
+    <Frame theme={theme} template="TechTip" score={score}>
       <AbsoluteFill
         style={{
           boxSizing: "border-box",

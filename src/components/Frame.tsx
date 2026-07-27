@@ -1,6 +1,8 @@
 import React from "react";
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { display, mono, type Theme } from "../theme";
+import { Soundtrack } from "../audio/Score";
+import { resolveScore } from "../audio/defaultScore";
 
 const MARGIN = 72;
 
@@ -32,8 +34,12 @@ const GRAIN_URL = `url("data:image/svg+xml;utf8,${encodeURIComponent(GRAIN_SVG)}
  */
 export const Frame: React.FC<{
   theme: Theme;
+  /** Composition id, which is also the bed name in the audio pack. */
+  template: string;
+  /** Beat-exact cue list off the plan. Falls back to the template's bed behaviour. */
+  score?: unknown;
   children: React.ReactNode;
-}> = ({ theme, children }) => {
+}> = ({ theme, template, score, children }) => {
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
 
@@ -57,6 +63,13 @@ export const Frame: React.FC<{
 
   return (
     <AbsoluteFill style={{ backgroundColor: theme.ground, opacity: exit }}>
+      {/*
+        Sound lives here rather than in each template, so no video can ship
+        silent. The PDF is explicit that with no voiceover the audio track is
+        "not decoration, it is the performance".
+      */}
+      <Soundtrack score={resolveScore(score, template, durationInFrames, fps)} />
+
       <AbsoluteFill
         style={{
           background: `radial-gradient(120% 70% at ${18 + drift * 24}% ${

@@ -15,42 +15,46 @@ const MEASURED_BYTES = 2_416_239;
 const MEASURED_BITRATE = 1_134_029;
 
 /** A probe of the kind a healthy 17-second render produces. */
-function goodProbe({ width = 1080, height = 1920, duration = 17, bitRate = MEASURED_BITRATE } = {}) {
+function goodProbe({
+  width = 1080,
+  height = 1920,
+  duration = 17,
+  bitRate = MEASURED_BITRATE,
+  audio = true,
+} = {}) {
   return {
     streams: [
       { codec_type: "video", codec_name: "h264", width, height, duration: String(duration) },
+      ...(audio ? [{ codec_type: "audio", codec_name: "aac", duration: String(duration) }] : []),
       { codec_type: "data", codec_name: "bin_data" },
     ],
     format: { duration: String(duration), bit_rate: String(bitRate) },
   };
 }
 
+/** Programme loudness of a track that actually has something in it. */
+const AUDIBLE = { meanDb: -21.4, maxDb: -1.2 };
+
 const HEALTHY_BYTES = MEASURED_BYTES;
 
 test("accepts a sound render", () => {
-  assert.deepEqual(videoProblems(goodProbe(), HEALTHY_BYTES, { expectedSeconds: 17 }), []);
+  assert.deepEqual(videoProblems(goodProbe(), HEALTHY_BYTES, { expectedSeconds: 17 }, AUDIBLE), []);
 });
 
 test("tolerates the sub-second drift an encoder introduces", () => {
-  const problems = videoProblems(goodProbe({ duration: 17.03 }), HEALTHY_BYTES, {
-    expectedSeconds: 17,
-  });
+  const problems = videoProblems(goodProbe({ duration: 17.03 }), HEALTHY_BYTES, { expectedSeconds: 17 }, AUDIBLE);
   assert.deepEqual(problems, []);
 });
 
 test("rejects a video whose length does not match the plan", () => {
-  const problems = videoProblems(goodProbe({ duration: 9 }), HEALTHY_BYTES, {
-    expectedSeconds: 17,
-  });
+  const problems = videoProblems(goodProbe({ duration: 9 }), HEALTHY_BYTES, { expectedSeconds: 17 }, AUDIBLE);
   assert.equal(problems.length, 1);
   assert.match(problems[0], /duration is 9\.00s, expected 17s/);
 });
 
 test("rejects a blank render that compressed to almost nothing", () => {
   // The failure this whole check exists for: a valid, playable, empty video.
-  const problems = videoProblems(goodProbe({ bitRate: 40_000 }), 90_000, {
-    expectedSeconds: 17,
-  });
+  const problems = videoProblems(goodProbe({ bitRate: 40_000 }), 90_000, { expectedSeconds: 17 }, AUDIBLE);
   assert.equal(problems.length, 2, problems.join("; "));
   assert.match(problems.join(" "), /below the .* floor/);
   assert.match(problems.join(" "), /blank or frozen/);
@@ -63,15 +67,13 @@ test("derives bitrate when the container does not report one", () => {
 
   // 100 kB over 17s is ~47 kbps — far under the floor, and only visible
   // because the check falls back to computing it from the file size.
-  const problems = videoProblems(probe, 100_000, { expectedSeconds: 17 });
+  const problems = videoProblems(probe, 100_000, { expectedSeconds: 17 }, AUDIBLE);
   assert.equal(problems.length, 1);
   assert.match(problems[0], /blank or frozen/);
 });
 
 test("rejects a frame that is not the vertical format", () => {
-  const problems = videoProblems(goodProbe({ width: 1920, height: 1080 }), HEALTHY_BYTES, {
-    expectedSeconds: 17,
-  });
+  const problems = videoProblems(goodProbe({ width: 1920, height: 1080 }), HEALTHY_BYTES, { expectedSeconds: 17 }, AUDIBLE);
   assert.equal(problems.length, 1);
   assert.match(problems[0], /1920x1080, expected 1080x1920/);
 });
@@ -79,8 +81,34 @@ test("rejects a frame that is not the vertical format", () => {
 test("rejects a file with no video stream", () => {
   const probe = goodProbe();
   probe.streams = [{ codec_type: "audio", codec_name: "aac" }];
-  const problems = videoProblems(probe, HEALTHY_BYTES, { expectedSeconds: 17 });
+  const problems = videoProblems(probe, HEALTHY_BYTES, { expectedSeconds: 17 }, AUDIBLE);
   assert.deepEqual(problems, ["expected exactly 1 video stream, found 0"]);
+});
+
+test("rejects a video with no audio stream", () => {
+  // Every one of the thirty scripts is scored. A silent render is a failure,
+  // not a quiet success.
+  const problems = videoProblems(goodProbe({ audio: false }), HEALTHY_BYTES, { expectedSeconds: 17 }, AUDIBLE);
+  assert.equal(problems.length, 1);
+  assert.match(problems[0], /expected exactly 1 audio stream, found 0 — the video is silent/);
+});
+
+test("rejects a muted track that still encoded as a valid stream", () => {
+  // The failure the loudness probe exists for: ffprobe sees a healthy AAC
+  // stream, and every sample in it is zero.
+  const problems = videoProblems(goodProbe(), HEALTHY_BYTES, { expectedSeconds: 17 }, {
+    meanDb: -Infinity,
+    maxDb: -Infinity,
+  });
+  assert.equal(problems.length, 1);
+  assert.match(problems[0], /mean audio volume is -inf dB/);
+});
+
+test("accepts a deliberately quiet mix", () => {
+  // The scripts use hard silence as an instrument; a restrained bed must not
+  // be mistaken for a broken render.
+  const problems = videoProblems(goodProbe(), HEALTHY_BYTES, { expectedSeconds: 17 }, { meanDb: -38, maxDb: -6 });
+  assert.deepEqual(problems, []);
 });
 
 test("thresholds keep clear of what the templates actually produce", () => {

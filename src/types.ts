@@ -13,6 +13,16 @@ export type BaseProps = {
   durationInSeconds: number;
   /** Optional per-video colour overrides. */
   theme?: Partial<Theme>;
+  /**
+   * Beat-exact soundtrack for this video, transcribed from its script page:
+   * which bed layers are audible from which frame, and every SFX cue with the
+   * frame it lands on. Omitted, the template's documented bed behaviour is
+   * generated instead — see src/audio/defaultScore.ts.
+   */
+  score?: {
+    bed: { frame: number; layers: string[]; detune?: number }[];
+    cues: { frame: number; sfx: string; db?: number; major?: boolean }[];
+  };
 };
 
 export type StatCardProps = BaseProps & {

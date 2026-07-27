@@ -18,6 +18,7 @@ export const StatCard: React.FC<StatCardProps> = ({
   label,
   context,
   kicker,
+  score,
   theme: overrides,
 }) => {
   const theme = resolveTheme(overrides);
@@ -38,7 +39,7 @@ export const StatCard: React.FC<StatCardProps> = ({
     spring({ frame: frame - delay, fps, config: { damping: 200 }, durationInFrames: 22 });
 
   return (
-    <Frame theme={theme}>
+    <Frame theme={theme} template="StatCard" score={score}>
       <AbsoluteFill
         style={{
           justifyContent: "center",

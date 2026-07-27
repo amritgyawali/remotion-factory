@@ -1,5 +1,7 @@
 import { spawn } from "node:child_process";
-import { stat } from "node:fs/promises";
+import { readFile, rm, stat } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 /**
@@ -28,9 +30,20 @@ export const MIN_BITRATE = 250_000;
 /** Encoders round durations; anything past this is a genuinely wrong length. */
 export const DURATION_TOLERANCE_SECONDS = 0.5;
 
-function runProbe(args) {
+/**
+ * Every video must carry sound. The source PDF is unambiguous that with no
+ * voiceover the audio track "is not decoration, it is the performance", so a
+ * silent render is a failed render, not a quiet one.
+ *
+ * A muted track still encodes as a valid AAC stream, so the stream existing
+ * proves nothing — mean programme loudness is what separates real audio from
+ * digital black. Anything below this is silence with a codec wrapped round it.
+ */
+export const MIN_MEAN_VOLUME_DB = -60;
+
+function runProbe(args, tool = "ffprobe") {
   return new Promise((resolve, reject) => {
-    const child = spawn("npx", ["remotion", "ffprobe", ...args], {
+    const child = spawn("npx", ["remotion", tool, ...args], {
       shell: process.platform === "win32",
       stdio: ["ignore", "pipe", "pipe"],
     });
@@ -42,10 +55,58 @@ function runProbe(args) {
     child.on("error", reject);
     child.on("close", (code) =>
       code === 0
-        ? resolve(stdout)
-        : reject(new Error(`ffprobe exited with code ${code}: ${stderr.slice(0, 400)}`)),
+        ? resolve(`${stdout}${stderr}`)
+        : reject(new Error(`${tool} exited with code ${code}: ${stderr.slice(0, 400)}`)),
     );
   });
+}
+
+/**
+ * Mean and peak programme volume. ffprobe reports that an audio stream exists
+ * but never whether anything is in it, and a muted track encodes as perfectly
+ * valid AAC.
+ *
+ * Measured by decoding the audio to PCM and doing the arithmetic here, rather
+ * than by parsing ffmpeg's `volumedetect` output: Remotion ships an ffmpeg
+ * built with `--disable-filters` and volumedetect is not among the handful
+ * re-enabled, so that route fails on exactly the machines that matter.
+ * Decoding to wav uses only the pcm_s16le encoder and wav muxer, both of which
+ * that build does include.
+ */
+export async function probeLoudness(file) {
+  const scratch = path.join(
+    tmpdir(),
+    `verify-${process.pid}-${Math.random().toString(36).slice(2)}.wav`,
+  );
+
+  try {
+    // Mono at 16 kHz is ample for a loudness gate and keeps the temp small.
+    await runProbe(
+      ["-v", "error", "-y", "-i", file, "-vn", "-ac", "1", "-ar", "16000", "-f", "wav", scratch],
+      "ffmpeg",
+    );
+
+    const wav = await readFile(scratch);
+    const samples = Math.floor((wav.length - 44) / 2);
+    if (samples <= 0) return { meanDb: -Infinity, maxDb: -Infinity, samples: 0 };
+
+    let sumSquares = 0;
+    let peak = 0;
+    for (let i = 0; i < samples; i++) {
+      const sample = wav.readInt16LE(44 + i * 2) / 32768;
+      sumSquares += sample * sample;
+      peak = Math.max(peak, Math.abs(sample));
+    }
+
+    const toDb = (value) => (value <= 0 ? -Infinity : 20 * Math.log10(value));
+    return {
+      meanDb: Number(toDb(Math.sqrt(sumSquares / samples)).toFixed(1)),
+      maxDb: Number(toDb(peak).toFixed(1)),
+      samples,
+    };
+  } finally {
+    await rm(scratch, { force: true });
+  }
 }
 
 export async function probeVideo(file) {
@@ -90,7 +151,7 @@ function resolveBitrate(probe, bytes, duration) {
   return null;
 }
 
-export function videoProblems(probe, bytes, expected = {}) {
+export function videoProblems(probe, bytes, expected = {}, loudness = null) {
   const {
     expectedSeconds,
     width = EXPECTED_WIDTH,
@@ -98,11 +159,34 @@ export function videoProblems(probe, bytes, expected = {}) {
     minBytes = MIN_BYTES,
     minBitrate = MIN_BITRATE,
     tolerance = DURATION_TOLERANCE_SECONDS,
+    minMeanVolumeDb = MIN_MEAN_VOLUME_DB,
+    requireAudio = true,
   } = expected;
 
   const problems = [];
   const streams = probe?.streams ?? [];
   const videoStreams = streams.filter((stream) => stream.codec_type === "video");
+  const audioStreams = streams.filter((stream) => stream.codec_type === "audio");
+
+  if (requireAudio) {
+    if (audioStreams.length !== 1) {
+      problems.push(`expected exactly 1 audio stream, found ${audioStreams.length} — the video is silent`);
+    } else if (loudness) {
+      // A measurement that failed must fail the run. Treating it as "unknown
+      // and therefore fine" is how a check silently stops protecting anything.
+      if (typeof loudness.meanDb !== "number") {
+        problems.push(
+          `audio loudness could not be measured${loudness.error ? `: ${loudness.error}` : ""}`,
+        );
+      } else if (loudness.meanDb < minMeanVolumeDb) {
+        const shown = loudness.meanDb === -Infinity ? "-inf" : loudness.meanDb.toFixed(1);
+        problems.push(
+          `mean audio volume is ${shown} dB, below the ${minMeanVolumeDb} dB floor — ` +
+            "the track is silent even though a stream is present",
+        );
+      }
+    }
+  }
 
   if (bytes < minBytes) {
     problems.push(`file is ${bytes} bytes, below the ${minBytes}-byte floor — render was truncated`);
@@ -147,8 +231,12 @@ export function videoProblems(probe, bytes, expected = {}) {
 }
 
 export async function verifyVideo(file, expected = {}) {
-  const [{ size }, probe] = await Promise.all([stat(file), probeVideo(file)]);
-  const problems = videoProblems(probe, size, expected);
+  const [{ size }, probe, loudness] = await Promise.all([
+    stat(file),
+    probeVideo(file),
+    probeLoudness(file).catch((error) => ({ error: error.message })),
+  ]);
+  const problems = videoProblems(probe, size, expected, loudness);
   const video = videoStream(probe);
   const duration = resolveDuration(probe);
 
@@ -156,6 +244,7 @@ export async function verifyVideo(file, expected = {}) {
     problems,
     bytes: size,
     duration,
+    meanVolumeDb: loudness?.meanDb ?? null,
     // Same derivation the check used, so the logged figure is the one that
     // was actually measured against the floor.
     bitrate: resolveBitrate(probe, size, duration),
@@ -187,7 +276,8 @@ async function main() {
   });
   console.log(
     `ok  ${file} — ${result.width}x${result.height}, ${result.duration?.toFixed(2)}s, ` +
-      `${(result.bytes / 1e6).toFixed(1)} MB, ${Math.round((result.bitrate ?? 0) / 1000)} kbps`,
+      `${(result.bytes / 1e6).toFixed(1)} MB, ${Math.round((result.bitrate ?? 0) / 1000)} kbps, ` +
+      `audio ${result.meanVolumeDb === null ? "not measured" : `${result.meanVolumeDb} dB mean`}`,
   );
 }
 

@@ -24,6 +24,7 @@ export const CaseStudy: React.FC<CaseStudyProps> = ({
   actions,
   lesson,
   kicker,
+  score,
   theme: overrides,
 }) => {
   const theme = resolveTheme(overrides);
@@ -49,7 +50,7 @@ export const CaseStudy: React.FC<CaseStudyProps> = ({
   });
 
   return (
-    <Frame theme={theme}>
+    <Frame theme={theme} template="CaseStudy" score={score}>
       <AbsoluteFill
         style={{
           boxSizing: "border-box",

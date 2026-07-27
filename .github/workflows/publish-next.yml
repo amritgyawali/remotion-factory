@@ -89,6 +89,13 @@ jobs:
         if: steps.queue.outputs.id != ''
         run: npx remotion browser ensure
 
+      # The soundtrack is synthesised, not licensed, so it is a build artifact
+      # rather than committed binaries. Deterministic: the same cue list always
+      # produces the same bytes.
+      - name: Build the audio pack
+        if: steps.queue.outputs.id != ''
+        run: node scripts/build-audio.mjs
+
       - name: Render and publish one video
         if: steps.queue.outputs.id != ''
         env:

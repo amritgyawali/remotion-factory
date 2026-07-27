@@ -23,6 +23,7 @@ export const FounderStory: React.FC<FounderStoryProps> = ({
   turn,
   lesson,
   kicker,
+  score,
   theme: overrides,
 }) => {
   const theme = resolveTheme(overrides);
@@ -53,7 +54,7 @@ export const FounderStory: React.FC<FounderStoryProps> = ({
   });
 
   return (
-    <Frame theme={theme}>
+    <Frame theme={theme} template="FounderStory" score={score}>
       <AbsoluteFill
         style={{
           boxSizing: "border-box",

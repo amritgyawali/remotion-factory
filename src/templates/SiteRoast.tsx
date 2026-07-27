@@ -24,6 +24,7 @@ export const SiteRoast: React.FC<SiteRoastProps> = ({
   fix,
   verdict,
   kicker,
+  score,
   theme: overrides,
 }) => {
   const theme = resolveTheme(overrides);
@@ -49,7 +50,7 @@ export const SiteRoast: React.FC<SiteRoastProps> = ({
   });
 
   return (
-    <Frame theme={theme}>
+    <Frame theme={theme} template="SiteRoast" score={score}>
       <AbsoluteFill
         style={{
           boxSizing: "border-box",

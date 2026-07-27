@@ -5,6 +5,8 @@ import { loadPlan } from "./validate-plan.mjs";
 import { getArchivedQueue, markArchivedPosted, QUEUE_LOW_WATER } from "./queue.mjs";
 import { assertPlayableVideo } from "./verify-video.mjs";
 import { archiveVideo } from "./archive-video.mjs";
+import { BED_TEMPLATES } from "./audio/beds.mjs";
+import { masterVideoAudio } from "./master-audio.mjs";
 
 const OUT = "out";
 const DRY_RUN = process.env.DRY_RUN === "1" || process.argv.includes("--dry-run");
@@ -52,6 +54,17 @@ async function postiz(pathname, init = {}, attempt = 1) {
   return body ? JSON.parse(body) : null;
 }
 
+/**
+ * Regenerate the soundtrack for what is about to render. Building only the
+ * bed in play keeps the other templates' layers out of the Remotion bundle,
+ * which copies the whole public folder on every render.
+ */
+async function buildAudioFor(items) {
+  const templates = [...new Set(items.map((item) => item.template))];
+  const filter = templates.length === 1 && BED_TEMPLATES.includes(templates[0]) ? templates[0] : null;
+  await run("node", ["scripts/build-audio.mjs", ...(filter ? ["--template", filter] : [])]);
+}
+
 async function renderOne(item) {
   const outFile = path.join(OUT, `${item.id}.mp4`);
   const propsFile = path.join(OUT, `${item.id}.props.json`);
@@ -68,8 +81,13 @@ async function renderOne(item) {
     "--log=error",
   ]);
 
-  // Verify before anything downstream can touch the file. A render that
-  // failed halfway still writes a playable MP4, and nobody is watching.
+  // Master to the PDF's delivery target before verifying. Remotion mixes the
+  // score but has no master bus, and a scored motion-graphics track is far too
+  // peaky to reach -14 LUFS by gain alone.
+  const mastered = await masterVideoAudio(outFile);
+
+  // Verify last, so what gets checked is exactly what gets published. A render
+  // that failed halfway still writes a playable MP4, and nobody is watching.
   const verified = await assertPlayableVideo(outFile, {
     expectedSeconds: item.props?.durationInSeconds,
   });
@@ -77,6 +95,10 @@ async function renderOne(item) {
     `  rendered in ${Math.round((Date.now() - started) / 1000)}s — ` +
       `${verified.width}x${verified.height}, ${verified.duration.toFixed(2)}s, ` +
       `${(verified.bytes / 1e6).toFixed(1)} MB, ${Math.round(verified.bitrate / 1000)} kbps`,
+  );
+  console.log(
+    `  audio mastered ${mastered.inputLufs} -> ${mastered.targetLufs} LUFS, ` +
+      `true peak ${mastered.targetTruePeak} dBTP`,
   );
   return { file: outFile, verified };
 }
@@ -219,6 +241,10 @@ async function main() {
   }
 
   console.log(`Rendering ${items.length} video(s), postType "${plan.postType}"${DRY_RUN ? " (DRY RUN — nothing will reach Postiz)" : ""}\n`);
+
+  // Regenerate the soundtrack before bundling. Every video is scored, so a
+  // stale or missing pack would render silent and fail verification.
+  await buildAudioFor(items);
 
   let integrations = [];
   if (!DRY_RUN) {

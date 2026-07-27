@@ -10,6 +10,7 @@ export const ListReveal: React.FC<ListRevealProps> = ({
   headline,
   items,
   kicker,
+  score,
   theme: overrides,
 }) => {
   const theme = resolveTheme(overrides);
@@ -25,7 +26,7 @@ export const ListReveal: React.FC<ListRevealProps> = ({
   const step = items.length > 1 ? (last - first) / (items.length - 1) : 0;
 
   return (
-    <Frame theme={theme}>
+    <Frame theme={theme} template="ListReveal" score={score}>
       <AbsoluteFill
         style={{
           justifyContent: "center",

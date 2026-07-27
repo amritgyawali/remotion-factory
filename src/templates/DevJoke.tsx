@@ -301,6 +301,7 @@ export const DevJoke: React.FC<DevJokeProps> = ({
   punchline,
   variant,
   kicker,
+  score,
   theme: overrides,
 }) => {
   const theme = resolveTheme(overrides);
@@ -318,7 +319,7 @@ export const DevJoke: React.FC<DevJokeProps> = ({
   });
 
   return (
-    <Frame theme={theme}>
+    <Frame theme={theme} template="DevJoke" score={score}>
       <AbsoluteFill
         style={{
           boxSizing: "border-box",
