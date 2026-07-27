@@ -7,7 +7,7 @@ import {
   useVideoConfig,
 } from "remotion";
 import { CONTENT_MARGIN, Frame } from "../components/Frame";
-import { display, mono, resolveTheme, type Theme } from "../theme";
+import { themeFor, type Theme } from "../theme";
 import type { DevJokeProps } from "../types";
 
 const clamp = {
@@ -57,7 +57,7 @@ const Motif: React.FC<{
         ))}
         <div
           style={{
-            fontFamily: display,
+            fontFamily: theme.display,
             fontWeight: 800,
             fontSize: 82,
             color: theme.paper,
@@ -85,13 +85,13 @@ const Motif: React.FC<{
               transform: `translateY(${(1 - pulse) * (index ? -24 : 24)}px)`,
             }}
           >
-            <div style={{ fontFamily: mono, fontSize: 30, color: panel.color }}>
+            <div style={{ fontFamily: theme.mono, fontSize: 30, color: panel.color }}>
               {panel.label}
             </div>
             <div
               style={{
                 marginTop: 44,
-                fontFamily: mono,
+                fontFamily: theme.mono,
                 fontSize: 42,
                 fontWeight: 700,
                 color: theme.paper,
@@ -129,7 +129,7 @@ const Motif: React.FC<{
                 borderRadius: 18,
                 backgroundColor: index % 2 ? theme.paper : theme.amber,
                 color: theme.ground,
-                fontFamily: mono,
+                fontFamily: theme.mono,
                 fontSize: 32,
                 fontWeight: 700,
                 opacity: enter,
@@ -160,7 +160,7 @@ const Motif: React.FC<{
         />
         <div
           style={{
-            fontFamily: mono,
+            fontFamily: theme.mono,
             fontWeight: 700,
             fontSize: 116,
             letterSpacing: "-0.06em",
@@ -206,7 +206,7 @@ const Motif: React.FC<{
                 borderRadius: 18,
                 backgroundColor: index === labels.length - 1 ? theme.amber : theme.groundLift,
                 color: index === labels.length - 1 ? theme.ground : theme.paper,
-                fontFamily: mono,
+                fontFamily: theme.mono,
                 fontSize: 34,
                 fontWeight: 700,
                 opacity: enter,
@@ -248,7 +248,7 @@ const Motif: React.FC<{
             borderRadius: 12,
             backgroundColor: error,
             color: theme.ground,
-            fontFamily: mono,
+            fontFamily: theme.mono,
             fontSize: 30,
             fontWeight: 800,
           }}
@@ -281,7 +281,7 @@ const Motif: React.FC<{
             borderRadius: 16,
             backgroundColor: index === 2 ? theme.amber : theme.groundLift,
             color: index === 2 ? theme.ground : theme.paper,
-            fontFamily: mono,
+            fontFamily: theme.mono,
             fontSize: 32,
             transform: `translateX(${interpolate(frame, [index * 4, index * 4 + 14], [80, 0], clamp)}px)`,
           }}
@@ -302,9 +302,10 @@ export const DevJoke: React.FC<DevJokeProps> = ({
   variant,
   kicker,
   score,
+  videoId,
   theme: overrides,
 }) => {
-  const theme = resolveTheme(overrides);
+  const theme = themeFor(videoId, overrides);
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
   const punchAt = Math.max(48, Math.floor(durationInFrames * 0.62));
@@ -333,7 +334,7 @@ export const DevJoke: React.FC<DevJokeProps> = ({
       >
         <div
           style={{
-            fontFamily: display,
+            fontFamily: theme.display,
             fontWeight: 800,
             fontSize: 104,
             lineHeight: 0.95,
@@ -369,12 +370,12 @@ export const DevJoke: React.FC<DevJokeProps> = ({
                   transform: `translateX(${(1 - enter) * -28}px)`,
                 }}
               >
-                <span style={{ fontFamily: mono, fontSize: 28, color: theme.amber }}>
+                <span style={{ fontFamily: theme.mono, fontSize: 28, color: theme.amber }}>
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <span
                   style={{
-                    fontFamily: display,
+                    fontFamily: theme.display,
                     fontSize: 46,
                     lineHeight: 1.08,
                     color: theme.paperDim,
@@ -394,7 +395,7 @@ export const DevJoke: React.FC<DevJokeProps> = ({
             borderLeft: `8px solid ${theme.amber}`,
             backgroundColor: theme.paper,
             color: theme.ground,
-            fontFamily: display,
+            fontFamily: theme.display,
             fontWeight: 800,
             fontSize: 60,
             lineHeight: 1,

@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { display, mono, type Theme } from "../theme";
+import { type Theme } from "../theme";
 import { Soundtrack } from "../audio/Score";
 import { resolveScore } from "../audio/defaultScore";
 
@@ -122,7 +122,7 @@ export const Frame: React.FC<{
             placeItems: "center",
             backgroundColor: theme.amber,
             color: "#191919",
-            fontFamily: display,
+            fontFamily: theme.display,
             fontWeight: 900,
             fontSize: 62,
             letterSpacing: "-0.08em",
@@ -134,7 +134,7 @@ export const Frame: React.FC<{
         <div
           style={{
             marginTop: 48,
-            fontFamily: display,
+            fontFamily: theme.display,
             fontWeight: 800,
             fontSize: 74,
             lineHeight: 1,
@@ -149,7 +149,7 @@ export const Frame: React.FC<{
         <div
           style={{
             marginTop: 14,
-            fontFamily: mono,
+            fontFamily: theme.mono,
             fontSize: 25,
             letterSpacing: "0.24em",
             textTransform: "uppercase",
@@ -162,7 +162,7 @@ export const Frame: React.FC<{
           style={{
             position: "absolute",
             bottom: 190,
-            fontFamily: mono,
+            fontFamily: theme.mono,
             fontSize: 27,
             letterSpacing: "0.16em",
             textTransform: "uppercase",

@@ -36,9 +36,51 @@ import {
 
 const BED_RMS_DB = -26;
 
-/** Scale degrees for natural minor and major, as semitone offsets. */
+/** Scale degrees as semitone offsets. Seven modes, so a seeded bed can change
+ * colour without leaving the template's character: dorian and mixolydian read
+ * as brighter minors, phrygian as darker, lydian as a lifted major. */
 const MINOR = [0, 2, 3, 5, 7, 8, 10];
 const MAJOR = [0, 2, 4, 5, 7, 9, 11];
+const DORIAN = [0, 2, 3, 5, 7, 9, 10];
+const PHRYGIAN = [0, 1, 3, 5, 7, 8, 10];
+const LYDIAN = [0, 2, 4, 6, 7, 9, 11];
+const MIXOLYDIAN = [0, 2, 4, 5, 7, 9, 10];
+
+const DARK_MODES = [MINOR, DORIAN, PHRYGIAN];
+const BRIGHT_MODES = [MAJOR, LYDIAN, MIXOLYDIAN];
+
+/**
+ * Per-video musical variation.
+ *
+ * Two videos on the same template must not be the same piece of music. The
+ * seed shifts the key by up to a fifth and swaps the mode within the
+ * template's emotional register, so a DevJoke bed still sounds like DevJoke
+ * while never repeating exactly. Derived from the plan id, so a retried render
+ * produces identical audio.
+ */
+export function seedFrom(id) {
+  let hash = 0x811c9dc5;
+  for (let i = 0; i < String(id).length; i++) {
+    hash ^= String(id).charCodeAt(i);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return hash >>> 0;
+}
+
+/** Transpose within a fifth, so beds stay in a comfortable register. */
+const KEY_OFFSETS = [0, 2, 3, 5, 7, -2, -3, -5];
+
+function variation(seed, bright) {
+  if (seed === null || seed === undefined) {
+    return { keyOffset: 0, mode: bright ? MAJOR : MINOR, patternShift: 0 };
+  }
+  const modes = bright ? BRIGHT_MODES : DARK_MODES;
+  return {
+    keyOffset: KEY_OFFSETS[seed % KEY_OFFSETS.length],
+    mode: modes[Math.floor(seed / 8) % modes.length],
+    patternShift: Math.floor(seed / 64) % 7,
+  };
+}
 
 /**
  * Scale degree to MIDI note. `n` is floored defensively: a fractional index
@@ -144,10 +186,10 @@ const finishLayer = (buffer) => deClick(limitPeak(normalizeRms(softClip(buffer, 
  */
 const BUILDERS = {
   /** Playful plucked synth. Escalates by stacking percussion. */
-  DevJoke(duration, bpm) {
+  DevJoke(duration, bpm, v) {
     const step = gridStep(bpm);
-    const root = 57; // A3
-    const pattern = [0, 2, 4, 2, 5, 4, 2, 0];
+    const root = 57 + v.keyOffset; // A3, transposed
+    const pattern = [0, 2, 4, 2, 5, 4, 2, 0].map((n) => n + v.patternShift);
     const layers = {
       pluck: layerBuffer(duration),
       kick: layerBuffer(duration),
@@ -159,7 +201,7 @@ const BUILDERS = {
     for (let i = 0; step * i < duration; i++) {
       const t = step * i;
       if (i % 2 === 0) {
-        place(layers.pluck, pluck(degree(MINOR, root + 12, pattern[(i / 2) % pattern.length]), step * 2), seconds(t));
+        place(layers.pluck, pluck(degree(v.mode, root + 12, pattern[(i / 2) % pattern.length]), step * 2), seconds(t));
       }
       if (i % 8 === 0) place(layers.kick, kick(), seconds(t));
       if (i % 4 === 2) place(layers.shaker, shaker(13 + i), seconds(t));
@@ -170,9 +212,9 @@ const BUILDERS = {
   },
 
   /** Clean electronic pulse. One stab per reveal is placed by the score. */
-  TechTip(duration, bpm) {
+  TechTip(duration, bpm, v) {
     const step = gridStep(bpm);
-    const root = 55; // G3
+    const root = 55 + v.keyOffset; // G3, transposed
     const layers = {
       pulse: layerBuffer(duration),
       sub: layerBuffer(duration),
@@ -180,7 +222,7 @@ const BUILDERS = {
       hat: layerBuffer(duration),
     };
 
-    place(layers.pad, pad([root + 12, root + 15, root + 19], duration), 0);
+    place(layers.pad, pad([root + 12, root + 12 + v.mode[2], root + 12 + v.mode[4]], duration), 0);
     for (let i = 0; step * i < duration; i++) {
       const t = step * i;
       if (i % 4 === 0) {
@@ -197,9 +239,9 @@ const BUILDERS = {
   },
 
   /** Confident mid-tempo beat for the roasts. */
-  SiteRoast(duration, bpm) {
+  SiteRoast(duration, bpm, v) {
     const step = gridStep(bpm);
-    const root = 53; // F3
+    const root = 53 + v.keyOffset; // F3, transposed
     const layers = {
       kick: layerBuffer(duration),
       bass: layerBuffer(duration),
@@ -212,15 +254,15 @@ const BUILDERS = {
       if (i % 8 === 0 || i % 16 === 6) place(layers.kick, kick(), seconds(t));
       if (i % 4 === 0) place(layers.bass, bassNote(root - 12, step * 4), seconds(t));
       if (i % 2 === 1) place(layers.hat, hat(29 + i), seconds(t));
-      if (i % 8 === 4) place(layers.lead, pluck(degree(MINOR, root + 12, Math.floor(i / 8) % 7), step * 4), seconds(t));
+      if (i % 8 === 4) place(layers.lead, pluck(degree(v.mode, root + 12, Math.floor(i / 8) + v.patternShift), step * 4), seconds(t));
     }
     return layers;
   },
 
   /** Minimal build that grows with the graph. */
-  CaseStudy(duration, bpm) {
+  CaseStudy(duration, bpm, v) {
     const step = gridStep(bpm);
-    const root = 50; // D3
+    const root = 50 + v.keyOffset; // D3, transposed
     const layers = {
       pad: layerBuffer(duration),
       pulse: layerBuffer(duration),
@@ -228,43 +270,43 @@ const BUILDERS = {
       sub: layerBuffer(duration),
     };
 
-    place(layers.pad, pad([root + 12, root + 16, root + 19, root + 23], duration), 0);
+    place(layers.pad, pad([root + 12, root + 12 + v.mode[2], root + 12 + v.mode[4], root + 12 + v.mode[6]], duration), 0);
     for (let i = 0; step * i < duration; i++) {
       const t = step * i;
       if (i % 4 === 0) {
-        place(layers.pulse, gain(pluck(degree(MAJOR, root + 24, (i / 4) % 5), step * 3), 0.55), seconds(t));
+        place(layers.pulse, gain(pluck(degree(v.mode, root + 24, i / 4 + v.patternShift), step * 3), 0.55), seconds(t));
       }
       if (i % 16 === 0) place(layers.sub, bassNote(root - 12, step * 16), seconds(t));
-      if (i % 32 === 8) place(layers.bell, gain(pluck(degree(MAJOR, root + 36, 2), step * 8), 0.4), seconds(t));
+      if (i % 32 === 8) place(layers.bell, gain(pluck(degree(v.mode, root + 36, 2 + v.patternShift), step * 8), 0.4), seconds(t));
     }
     return layers;
   },
 
   /** Piano first, strings later. The score keeps both silent for 3s. */
-  FounderStory(duration, bpm) {
+  FounderStory(duration, bpm, v) {
     const step = gridStep(bpm) * 4; // quarter notes; this bed is free-time
-    const root = 48; // C3
+    const root = 48 + v.keyOffset; // C3, transposed
     const layers = {
       piano: layerBuffer(duration),
       stringsLow: layerBuffer(duration),
       stringsHigh: layerBuffer(duration),
     };
 
-    const melody = [0, 4, 2, 5, 4, 7, 5, 4];
+    const melody = [0, 4, 2, 5, 4, 7, 5, 4].map((n) => n + v.patternShift);
     for (let i = 0; step * i < duration; i++) {
       if (i % 2 === 0) {
-        place(layers.piano, gain(piano(degree(MINOR, root + 12, melody[(i / 2) % melody.length]), step * 3), 0.7), seconds(step * i));
+        place(layers.piano, gain(piano(degree(v.mode, root + 12, melody[(i / 2) % melody.length]), step * 3), 0.7), seconds(step * i));
       }
     }
-    place(layers.stringsLow, strings([root, root + 7, root + 12], duration), 0);
-    place(layers.stringsHigh, strings([root + 15, root + 19, root + 24], duration), 0);
+    place(layers.stringsLow, strings([root, root + v.mode[4], root + 12], duration), 0);
+    place(layers.stringsHigh, strings([root + 12 + v.mode[2], root + 12 + v.mode[4], root + 24], duration), 0);
     return layers;
   },
 
   /** Warm full build for the recap. */
-  Recap(duration, bpm) {
+  Recap(duration, bpm, v) {
     const step = gridStep(bpm);
-    const root = 52; // E3
+    const root = 52 + v.keyOffset; // E3, transposed
     const layers = {
       pad: layerBuffer(duration),
       pluck: layerBuffer(duration),
@@ -273,13 +315,13 @@ const BUILDERS = {
       bass: layerBuffer(duration),
     };
 
-    place(layers.pad, pad([root + 12, root + 16, root + 19], duration), 0);
+    place(layers.pad, pad([root + 12, root + 12 + v.mode[2], root + 12 + v.mode[4]], duration), 0);
     for (let i = 0; step * i < duration; i++) {
       const t = step * i;
-      if (i % 2 === 0) place(layers.pluck, gain(pluck(degree(MAJOR, root + 24, (i / 2) % 6), step * 2), 0.6), seconds(t));
+      if (i % 2 === 0) place(layers.pluck, gain(pluck(degree(v.mode, root + 24, i / 2 + v.patternShift), step * 2), 0.6), seconds(t));
       if (i % 8 === 0) place(layers.kick, kick(), seconds(t));
       if (i % 16 === 0) place(layers.bass, bassNote(root - 12, step * 16), seconds(t));
-      if (i % 32 === 16) place(layers.bell, gain(pluck(degree(MAJOR, root + 36, 4), step * 8), 0.35), seconds(t));
+      if (i % 32 === 16) place(layers.bell, gain(pluck(degree(v.mode, root + 36, 4 + v.patternShift), step * 8), 0.35), seconds(t));
     }
     return layers;
   },
@@ -297,14 +339,21 @@ export const BED_BPM = {
 
 export const BED_TEMPLATES = Object.keys(BUILDERS);
 
-export function buildBed(template, durationSeconds) {
+/** Which templates sit in a major-ish register. */
+const BRIGHT = new Set(["CaseStudy", "Recap", "TechTip"]);
+
+export function buildBed(template, durationSeconds, seedSource = null) {
   const builder = BUILDERS[template];
   if (!builder) throw new Error(`no bed defined for template "${template}"`);
 
   const bpm = BED_BPM[template];
-  const layers = builder(durationSeconds, bpm);
+  const seed = seedSource === null ? null : seedFrom(seedSource);
+  const v = variation(seed, BRIGHT.has(template));
+  const layers = builder(durationSeconds, bpm, v);
   return {
     bpm,
+    key: v.keyOffset,
+    mode: v.mode.join(","),
     layers: Object.fromEntries(Object.entries(layers).map(([name, buffer]) => [name, finishLayer(buffer)])),
   };
 }

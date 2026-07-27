@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { mkdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import { archiveSpread, duplicateProblems } from "./uniqueness.mjs";
 
 /**
  * Permanent storage for every video the factory publishes.
@@ -190,6 +191,21 @@ export async function archiveVideo({
   }
 
   const name = `${item.id}.mp4`;
+
+  // Uniqueness is checked before anything is uploaded or published. The plan
+  // validator can only inspect the plan; this is the check that sees whether
+  // the finished video is actually different from what already shipped.
+  const manifest = await readManifest(manifestPath);
+  const candidate = {
+    id: item.id,
+    visualSignature: verified?.visualSignature ?? null,
+    audioSignature: verified?.audioSignature ?? null,
+  };
+  const duplicates = duplicateProblems(candidate, manifest.videos);
+  if (duplicates.length) {
+    throw new Error(`${item.id} is not unique:\n  - ${duplicates.join("\n  - ")}`);
+  }
+
   const [release, sha256, { size }] = await Promise.all([
     ensureRelease(repo, weekId, token),
     sha256File(file),
@@ -205,12 +221,16 @@ export async function archiveVideo({
     bytes: size,
     durationSeconds: verified?.duration ?? null,
     sha256,
+    // Fingerprints, so every future render can be checked against this one.
+    visualSignature: candidate.visualSignature,
+    audioSignature: candidate.audioSignature,
     url: asset.browser_download_url,
     archivedAt: new Date().toISOString(),
   };
 
-  await writeManifest(mergeManifest(await readManifest(manifestPath), entry), manifestPath);
-  return { skipped: false, url: entry.url, sha256, bytes: size, manifestPath };
+  await writeManifest(mergeManifest(manifest, entry), manifestPath);
+  const spread = archiveSpread([...manifest.videos, entry]);
+  return { skipped: false, url: entry.url, sha256, bytes: size, manifestPath, spread };
 }
 
 async function main() {

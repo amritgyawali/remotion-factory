@@ -7,6 +7,7 @@ import { assertPlayableVideo } from "./verify-video.mjs";
 import { archiveVideo } from "./archive-video.mjs";
 import { BED_TEMPLATES } from "./audio/beds.mjs";
 import { masterVideoAudio } from "./master-audio.mjs";
+import { archiveToR2 } from "./archive-r2.mjs";
 
 const OUT = "out";
 const DRY_RUN = process.env.DRY_RUN === "1" || process.argv.includes("--dry-run");
@@ -62,13 +63,22 @@ async function postiz(pathname, init = {}, attempt = 1) {
 async function buildAudioFor(items) {
   const templates = [...new Set(items.map((item) => item.template))];
   const filter = templates.length === 1 && BED_TEMPLATES.includes(templates[0]) ? templates[0] : null;
-  await run("node", ["scripts/build-audio.mjs", ...(filter ? ["--template", filter] : [])]);
+  // One video per queue run, so its id seeds a bed nothing else will share.
+  const seed = items.length === 1 ? items[0].id : null;
+  await run("node", [
+    "scripts/build-audio.mjs",
+    ...(filter ? ["--template", filter] : []),
+    ...(seed ? ["--seed", seed] : []),
+  ]);
 }
 
 async function renderOne(item) {
   const outFile = path.join(OUT, `${item.id}.mp4`);
   const propsFile = path.join(OUT, `${item.id}.props.json`);
-  await writeFile(propsFile, JSON.stringify(item.props));
+  // videoId is injected rather than authored: it seeds this video's palette,
+  // typeface and musical key, and deriving it from the plan id keeps a retried
+  // render byte-identical to the first attempt.
+  await writeFile(propsFile, JSON.stringify({ ...item.props, videoId: item.id }));
 
   const started = Date.now();
   await run("npx", [
@@ -289,6 +299,22 @@ async function main() {
         } else {
           console.log(`  archived -> ${stored.url}`);
           archived.push(stored.url);
+        }
+
+        // Second copy on R2, inside a hard storage budget. Best-effort: the
+        // Release above is the permanent archive, so a cold-storage failure
+        // must not stop a video that is otherwise good from publishing.
+        try {
+          const cold = await archiveToR2({ file, item, weekId });
+          console.log(
+            cold.skipped
+              ? `  R2 skipped — ${cold.reason}`
+              : `  R2 ${cold.key} — ${(cold.usedBytes / 1024 ** 3).toFixed(2)} GB of ` +
+                `${(cold.budgetBytes / 1024 ** 3).toFixed(0)} GB used` +
+                (cold.evicted.length ? `, evicted ${cold.evicted.length} old object(s)` : ""),
+          );
+        } catch (error) {
+          console.warn(`  R2 archive failed (continuing): ${error.message}`);
         }
 
         const media = await uploadToPostiz(file);

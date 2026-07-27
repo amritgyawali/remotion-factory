@@ -7,7 +7,7 @@ import {
   useVideoConfig,
 } from "remotion";
 import { CONTENT_MARGIN, Frame } from "../components/Frame";
-import { display, mono, resolveTheme } from "../theme";
+import { themeFor } from "../theme";
 import type { FounderStoryProps } from "../types";
 
 const clamp = {
@@ -24,9 +24,10 @@ export const FounderStory: React.FC<FounderStoryProps> = ({
   lesson,
   kicker,
   score,
+  videoId,
   theme: overrides,
 }) => {
-  const theme = resolveTheme(overrides);
+  const theme = themeFor(videoId, overrides);
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
   const line = interpolate(
@@ -68,7 +69,7 @@ export const FounderStory: React.FC<FounderStoryProps> = ({
       >
         <div
           style={{
-            fontFamily: mono,
+            fontFamily: theme.mono,
             fontSize: 29,
             letterSpacing: "0.11em",
             color: theme.paperDim,
@@ -81,7 +82,7 @@ export const FounderStory: React.FC<FounderStoryProps> = ({
           style={{
             marginTop: 30,
             maxWidth: 890,
-            fontFamily: display,
+            fontFamily: theme.display,
             fontWeight: 800,
             fontSize: 108,
             lineHeight: 0.94,
@@ -128,7 +129,7 @@ export const FounderStory: React.FC<FounderStoryProps> = ({
                   minHeight: 72,
                   display: "flex",
                   alignItems: "center",
-                  fontFamily: display,
+                  fontFamily: theme.display,
                   fontSize: 50,
                   lineHeight: 1.08,
                   color: theme.paper,
@@ -166,7 +167,7 @@ export const FounderStory: React.FC<FounderStoryProps> = ({
               padding: "22px 28px",
               borderRadius: 18,
               border: `2px solid ${theme.seaglass}`,
-              fontFamily: mono,
+              fontFamily: theme.mono,
               fontSize: 44,
               lineHeight: 1.12,
               color: theme.seaglass,
@@ -180,7 +181,7 @@ export const FounderStory: React.FC<FounderStoryProps> = ({
             style={{
               padding: "24px 28px",
               backgroundColor: theme.paper,
-              fontFamily: display,
+              fontFamily: theme.display,
               fontWeight: 800,
               fontSize: 59,
               lineHeight: 1.02,

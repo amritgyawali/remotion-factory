@@ -1,7 +1,7 @@
 import React from "react";
 import { AbsoluteFill, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { CONTENT_MARGIN, Frame } from "../components/Frame";
-import { display, mono, resolveTheme } from "../theme";
+import { themeFor } from "../theme";
 import type { ListRevealProps } from "../types";
 
 export const ListReveal: React.FC<ListRevealProps> = ({
@@ -11,9 +11,10 @@ export const ListReveal: React.FC<ListRevealProps> = ({
   items,
   kicker,
   score,
+  videoId,
   theme: overrides,
 }) => {
-  const theme = resolveTheme(overrides);
+  const theme = themeFor(videoId, overrides);
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
 
@@ -37,7 +38,7 @@ export const ListReveal: React.FC<ListRevealProps> = ({
       >
         <div
           style={{
-            fontFamily: display,
+            fontFamily: theme.display,
             fontWeight: 800,
             fontSize: 108,
             lineHeight: 0.98,
@@ -71,7 +72,7 @@ export const ListReveal: React.FC<ListRevealProps> = ({
               >
                 <div
                   style={{
-                    fontFamily: mono,
+                    fontFamily: theme.mono,
                     fontSize: 34,
                     lineHeight: 1.5,
                     color: theme.amber,
@@ -84,7 +85,7 @@ export const ListReveal: React.FC<ListRevealProps> = ({
                 <div
                   style={{
                     flex: 1,
-                    fontFamily: display,
+                    fontFamily: theme.display,
                     fontWeight: 500,
                     fontSize: 56,
                     lineHeight: 1.22,

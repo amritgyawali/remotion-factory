@@ -109,6 +109,10 @@ jobs:
           # Uploads the finished MP4 to the week's GitHub Release. Covered by
           # the contents: write permission this workflow already holds.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           # REMOTION_CONCURRENCY is deliberately unset: one video per run means
           # remotion.config.ts can give it every core the runner has.
         run: node scripts/render-all.mjs
@@ -152,25 +156,10 @@ jobs:
           echo "Could not push state.json after three attempts." >&2
           exit 1
 
-      - name: Archive to Cloudflare R2
-        if: steps.queue.outputs.id != '' && success()
-        continue-on-error: true
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: auto
-          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
-          R2_BUCKET: ${{ secrets.R2_BUCKET }}
-        shell: bash
-        run: |
-          if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ] || \
-             [ -z "$R2_ENDPOINT" ] || [ -z "$R2_BUCKET" ]; then
-            echo "::warning::R2 is incomplete, skipping archive."
-            exit 0
-          fi
-          aws s3 sync out/ "s3://$R2_BUCKET/$(date +%Y-%m)/" \
-            --endpoint-url "$R2_ENDPOINT" --exclude "*.props.json"
-
+      # R2 is a second copy inside a hard 8 GB budget, handled in
+      # scripts/archive-r2.mjs during the render step. The old `aws s3 sync`
+      # step is gone: it had no budget and would grow the bucket past the free
+      # allowance without ever noticing.
       - name: Keep the video for 7 days
         if: always() && steps.queue.outputs.id != ''
         continue-on-error: true

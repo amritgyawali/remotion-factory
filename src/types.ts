@@ -14,6 +14,13 @@ export type BaseProps = {
   /** Optional per-video colour overrides. */
   theme?: Partial<Theme>;
   /**
+   * The plan item's id. Seeds this video's palette, typeface pairing and
+   * musical key, so two videos are never the same picture with new words.
+   * Derived from the id rather than randomised so a retried render is
+   * byte-identical — the duplicate detector compares fingerprints.
+   */
+  videoId?: string;
+  /**
    * Beat-exact soundtrack for this video, transcribed from its script page:
    * which bed layers are audible from which frame, and every SFX cue with the
    * frame it lands on. Omitted, the template's documented bed behaviour is
@@ -103,6 +110,18 @@ export type FounderStoryProps = BaseProps & {
   kicker?: string;
 };
 
+export type RecapProps = BaseProps & {
+  hook: string;
+  /** Headline figures, revealed one at a time. */
+  totals: { label: string; value: number }[];
+  /** Ranked rows; the first is highlighted. */
+  leaderboard: { label: string; value: number }[];
+  lesson: string;
+  /** Tiles in the contact sheet. Defaults to the series length. */
+  gridCount?: number;
+  kicker?: string;
+};
+
 export type TemplateId =
   | "StatCard"
   | "ListReveal"
@@ -110,7 +129,8 @@ export type TemplateId =
   | "TechTip"
   | "SiteRoast"
   | "CaseStudy"
-  | "FounderStory";
+  | "FounderStory"
+  | "Recap";
 
 /** One entry in plan.json. */
 export type PlanItem = {

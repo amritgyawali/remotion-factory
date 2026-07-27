@@ -7,7 +7,7 @@ import {
   useVideoConfig,
 } from "remotion";
 import { CONTENT_MARGIN, Frame } from "../components/Frame";
-import { display, mono, resolveTheme, type Theme } from "../theme";
+import { themeFor, type Theme } from "../theme";
 import type { TechTipProps } from "../types";
 
 const clamp = {
@@ -59,7 +59,7 @@ const ConsoleVisual: React.FC<{
           alignItems: "center",
           gap: 12,
           borderBottom: `2px solid ${theme.rule}`,
-          fontFamily: mono,
+          fontFamily: theme.mono,
           fontSize: 26,
           color: theme.paperDim,
         }}
@@ -114,7 +114,7 @@ const ConsoleVisual: React.FC<{
               </div>
               <div
                 style={{
-                  fontFamily: mono,
+                  fontFamily: theme.mono,
                   fontSize: 27,
                   fontWeight: 700,
                   color: theme.paper,
@@ -140,9 +140,10 @@ export const TechTip: React.FC<TechTipProps> = ({
   variant,
   kicker,
   score,
+  videoId,
   theme: overrides,
 }) => {
-  const theme = resolveTheme(overrides);
+  const theme = themeFor(videoId, overrides);
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
   const resultAt = Math.max(48, Math.floor(durationInFrames * 0.64));
@@ -175,7 +176,7 @@ export const TechTip: React.FC<TechTipProps> = ({
             alignItems: "center",
             gap: 18,
             marginBottom: 22,
-            fontFamily: mono,
+            fontFamily: theme.mono,
             fontSize: 30,
             letterSpacing: "0.1em",
             color: theme.seaglass,
@@ -195,7 +196,7 @@ export const TechTip: React.FC<TechTipProps> = ({
 
         <div
           style={{
-            fontFamily: display,
+            fontFamily: theme.display,
             fontWeight: 800,
             fontSize: 100,
             lineHeight: 0.96,
@@ -245,7 +246,7 @@ export const TechTip: React.FC<TechTipProps> = ({
                     placeItems: "center",
                     border: `2px solid ${theme.seaglass}`,
                     borderRadius: 14,
-                    fontFamily: mono,
+                    fontFamily: theme.mono,
                     fontSize: 28,
                     color: theme.seaglass,
                   }}
@@ -254,7 +255,7 @@ export const TechTip: React.FC<TechTipProps> = ({
                 </div>
                 <div
                   style={{
-                    fontFamily: display,
+                    fontFamily: theme.display,
                     fontSize: 47,
                     lineHeight: 1.08,
                     color: theme.paper,
@@ -274,7 +275,7 @@ export const TechTip: React.FC<TechTipProps> = ({
             borderRadius: 20,
             backgroundColor: theme.seaglass,
             color: theme.ground,
-            fontFamily: display,
+            fontFamily: theme.display,
             fontWeight: 800,
             fontSize: 57,
             lineHeight: 1.02,

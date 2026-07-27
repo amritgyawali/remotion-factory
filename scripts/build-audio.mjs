@@ -102,12 +102,12 @@ function renderSfx() {
   return files;
 }
 
-function renderBeds(only = null) {
+function renderBeds(only = null, seed = null) {
   const files = [];
 
   for (const template of BED_TEMPLATES) {
     if (only && template !== only) continue;
-    const { layers } = buildBed(template, BED_SECONDS);
+    const { layers } = buildBed(template, BED_SECONDS, seed);
     for (const [layer, buffer] of Object.entries(layers)) {
       files.push({
         name: `bed-${template}-${layer}.wav`,
@@ -126,8 +126,8 @@ function renderBeds(only = null) {
  * other five out of the bundle. Measurably faster; nothing is lost, because
  * the pack is regenerated per render anyway.
  */
-export function renderPack({ template = null } = {}) {
-  return [...renderSfx(), ...renderBeds(template)];
+export function renderPack({ template = null, seed = null } = {}) {
+  return [...renderSfx(), ...renderBeds(template, seed)];
 }
 
 function argumentValue(name) {
@@ -138,12 +138,14 @@ function argumentValue(name) {
 async function main() {
   const listOnly = process.argv.includes("--list");
   const template = argumentValue("--template") ?? process.env.AUDIO_TEMPLATE ?? null;
+  // Seeds the bed's key, mode and phrasing so no two videos share music.
+  const seed = argumentValue("--seed") ?? process.env.AUDIO_SEED ?? null;
   if (template && !BED_TEMPLATES.includes(template)) {
     throw new Error(`unknown template "${template}" — have ${BED_TEMPLATES.join(", ")}`);
   }
 
   const started = Date.now();
-  const files = renderPack({ template });
+  const files = renderPack({ template, seed });
 
   if (listOnly) {
     for (const file of files) {
@@ -187,7 +189,7 @@ async function main() {
     `${files.length} file(s) — ${sfxCount} SFX, ${files.length - sfxCount} bed layers — ` +
       `${(bytes / 1e6).toFixed(1)} MB in ${((Date.now() - started) / 1000).toFixed(1)}s`,
   );
-  console.log(`beds at ${Object.entries(BED_BPM).map(([t, b]) => `${t} ${b}bpm`).join(", ")}`);
+  console.log(seed ? `bed seeded from "${seed}"` : "beds unseeded (default key)");
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

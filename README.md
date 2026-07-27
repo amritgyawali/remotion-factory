@@ -200,11 +200,76 @@ and fails the run on any of:
 - a duration more than 0.5s from the plan's `durationInSeconds`
 - a file under 100 kB, or a bitrate under 250 kbps
 - **no audio stream, or a mean programme volume under −60 dB**
+- **frames that never change, a blank composition, or a missing end card**
 
-The audio check is measured with `ffmpeg -af volumedetect`, not read from
-metadata: a muted track still encodes as a perfectly valid AAC stream, so the
-stream existing proves nothing. Deliberately quiet mixes pass — the scripts use
-hard silence as an instrument — but digital black does not.
+The audio check decodes the track and measures the PCM. A muted track still
+encodes as a perfectly valid AAC stream, so the stream existing proves nothing.
+Deliberately quiet mixes pass — the scripts use hard silence as an instrument —
+but digital black does not.
+
+### Looking at the pixels
+
+`scripts/inspect-frames.mjs` decodes **every frame** at thumbnail size in one
+ffmpeg pass and measures what the video actually shows. Container metadata only
+proves a file is well-formed: a render where the fonts never loaded or the
+composition froze after two seconds still produces a healthy 1080×1920 stream at
+a plausible bitrate.
+
+Calibrated against a real DevJoke render — peak variance 2301, max frame delta
+1.11, 21 motion frames, motion spanning 0–73% of the body, end card luma 26.2:
+
+| Check | Limit | Measured |
+|---|---|---|
+| blank composition | peak variance ≥ 12 | 2301 |
+| still image | max delta ≥ 0.3 | 1.11 |
+| nothing animating | ≥ 3 motion frames | 21 |
+| froze mid-render | motion reaches ≥ 25% in | 73% |
+| end card present | last 2s luma ≤ 90 | 26.2 |
+
+**Mean frame-to-frame change is deliberately not a limit.** It measured 0.048 on
+a perfectly good video, because these scripts hold still on purpose — *"All
+motion freezes ... for a full second"*. Judging a video on its average would
+fail the ones following the brief most closely. What separates a freeze from a
+held beat is whether motion ever resumes.
+
+```bash
+npm run inspect -- out/d01-a.mp4 30
+```
+
+## Every video is unique
+
+Three layers, because "unique" fails in three different ways.
+
+**Concept** — the weekly validator already refuses repeated ids, sources,
+captions, hooks and visible copy.
+
+**Look and sound** — each video derives a seed from its plan id
+(`src/seed.ts`) and uses it to pick from **8 palettes × 7 typeface pairings**
+and to transpose its music into a different key and mode. Derived from the id
+rather than randomised, so a retried render is identical to the first attempt —
+which matters because the duplicate detector compares fingerprints.
+
+56 combinations does not mean 28 videos get 28 distinct looks. Drawing
+independently collides, and measured across the current week it gives 23
+distinct looks with 5 repeats — what the birthday problem predicts. That is
+acceptable: two videos sharing a palette and typeface are still different
+templates carrying different words in a different key. Uniqueness is enforced on
+the finished file, not assumed from a hash.
+
+**The finished file** — `scripts/uniqueness.mjs` fingerprints every published
+video and compares each new render against the whole archive:
+
+- a **visual signature**: perceptual hashes of 8 evenly spaced frames, 512 bits
+- an **audio signature**: a 32-bucket loudness envelope
+
+A video is only rejected when **both** match an existing one. Two DevJoke videos
+legitimately share a bed, and a series legitimately shares a visual language —
+it is the combination being identical that means nothing new was made. Both
+signatures are stored in `archive/manifest.json`, so the check strengthens with
+every video published.
+
+This is the layer that catches what the plan validator cannot: a template
+ignoring half its props, or a score falling back to the same default every time.
 
 The bitrate floor is the load-bearing one. A blank or frozen frame costs almost
 nothing to compress, so a broken render collapses to a tiny bitrate while
@@ -441,8 +506,17 @@ a 24-second `SiteRoast` costs about 40% more than a 17-second `DevJoke`.
 
 Rendered MP4s are 2–4 MB each, so 120 videos add roughly 300–500 MB per month of
 GitHub Release storage. That is release storage, not repository size — clones
-stay small. If R2 is also enabled, use a 90-day lifecycle rule so the second
-copy does not grow forever.
+stay small. R2 is a second copy with a hard **8 GB budget** (`scripts/archive-r2.mjs`).
+The free tier allows 10 GB-month and bills on peak usage during the month, not
+the figure at the end, so the cap sits below the allowance. Before each upload
+the bucket is listed and the **oldest objects are evicted** until the new file
+fits, making it a rolling window rather than an unbounded archive. Nothing is
+lost that matters: the GitHub Release is the permanent copy.
+
+The client is ~200 lines of SigV4 in `scripts/r2.mjs` rather than the AWS SDK,
+which would add tens of megabytes to a repository whose only other dependencies
+are React and Remotion. Signing is verified against **AWS's published SigV4 test
+vector**, because a wrong signature surfaces only as an unexplained 403.
 
 Social-platform API pricing is separate from GitHub and Postiz. In particular,
 verify current X API pricing before enabling `"now"`; links in captions can also

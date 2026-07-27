@@ -7,7 +7,7 @@ import {
   useVideoConfig,
 } from "remotion";
 import { CONTENT_MARGIN, Frame } from "../components/Frame";
-import { display, mono, resolveTheme } from "../theme";
+import { themeFor } from "../theme";
 import type { SiteRoastProps } from "../types";
 
 const clamp = {
@@ -25,9 +25,10 @@ export const SiteRoast: React.FC<SiteRoastProps> = ({
   verdict,
   kicker,
   score,
+  videoId,
   theme: overrides,
 }) => {
-  const theme = resolveTheme(overrides);
+  const theme = themeFor(videoId, overrides);
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
   const marker = interpolate(frame, [2, 20], [0, 1], clamp);
@@ -72,7 +73,7 @@ export const SiteRoast: React.FC<SiteRoastProps> = ({
         >
           <div
             style={{
-              fontFamily: mono,
+              fontFamily: theme.mono,
               fontSize: 30,
               letterSpacing: "0.1em",
               color: theme.amber,
@@ -85,7 +86,7 @@ export const SiteRoast: React.FC<SiteRoastProps> = ({
               padding: "10px 18px",
               borderRadius: 999,
               border: `2px solid ${theme.amber}`,
-              fontFamily: mono,
+              fontFamily: theme.mono,
               fontSize: 28,
               color: theme.paper,
             }}
@@ -97,7 +98,7 @@ export const SiteRoast: React.FC<SiteRoastProps> = ({
         <div
           style={{
             marginTop: 24,
-            fontFamily: display,
+            fontFamily: theme.display,
             fontWeight: 800,
             fontSize: 98,
             lineHeight: 0.96,
@@ -197,7 +198,7 @@ export const SiteRoast: React.FC<SiteRoastProps> = ({
               padding: "12px 18px",
               backgroundColor: "#E94F57",
               borderRadius: 10,
-              fontFamily: mono,
+              fontFamily: theme.mono,
               fontSize: 30,
               fontWeight: 800,
               color: theme.paper,
@@ -231,7 +232,7 @@ export const SiteRoast: React.FC<SiteRoastProps> = ({
                   padding: "18px 20px",
                   border: `2px solid ${theme.rule}`,
                   borderRadius: 16,
-                  fontFamily: display,
+                  fontFamily: theme.display,
                   fontSize: 44,
                   lineHeight: 1.05,
                   color: theme.paper,
@@ -259,7 +260,7 @@ export const SiteRoast: React.FC<SiteRoastProps> = ({
               padding: "22px 24px",
               borderRadius: 18,
               backgroundColor: theme.paper,
-              fontFamily: display,
+              fontFamily: theme.display,
               fontWeight: 700,
               fontSize: 47,
               lineHeight: 1.05,
@@ -278,7 +279,7 @@ export const SiteRoast: React.FC<SiteRoastProps> = ({
               display: "grid",
               placeItems: "center",
               textAlign: "center",
-              fontFamily: mono,
+              fontFamily: theme.mono,
               fontWeight: 800,
               fontSize: 36,
               lineHeight: 1.05,

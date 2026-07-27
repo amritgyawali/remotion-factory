@@ -3,6 +3,7 @@ import { readFile, rm, stat } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import { frameProblems, inspectFrames } from "./inspect-frames.mjs";
 
 /**
  * Nothing reads these videos before they reach a real audience. A render that
@@ -73,6 +74,37 @@ function runProbe(args, tool = "ffprobe") {
  * Decoding to wav uses only the pcm_s16le encoder and wav muxer, both of which
  * that build does include.
  */
+/** Buckets in the audio fingerprint. Enough shape to tell two scores apart. */
+const SIGNATURE_BUCKETS = 32;
+
+/**
+ * A coarse loudness-envelope fingerprint: RMS per time bucket, quantised to
+ * one hex digit relative to the loudest bucket.
+ *
+ * Two videos scored differently have different envelopes even when their beds
+ * share a template, and the relative scaling makes it survive the master pass.
+ * This is not content identification — it is a cheap way to notice that two
+ * videos in the archive sound the same.
+ */
+export function loudnessSignature(wav, samples) {
+  const perBucket = Math.max(1, Math.floor(samples / SIGNATURE_BUCKETS));
+  const buckets = [];
+
+  for (let b = 0; b < SIGNATURE_BUCKETS; b++) {
+    let sum = 0;
+    let counted = 0;
+    for (let i = b * perBucket; i < Math.min(samples, (b + 1) * perBucket); i++) {
+      const sample = wav.readInt16LE(44 + i * 2) / 32768;
+      sum += sample * sample;
+      counted += 1;
+    }
+    buckets.push(counted ? Math.sqrt(sum / counted) : 0);
+  }
+
+  const loudest = Math.max(...buckets, 1e-9);
+  return buckets.map((value) => Math.round((value / loudest) * 15).toString(16)).join("");
+}
+
 export async function probeLoudness(file) {
   const scratch = path.join(
     tmpdir(),
@@ -103,6 +135,7 @@ export async function probeLoudness(file) {
       meanDb: Number(toDb(Math.sqrt(sumSquares / samples)).toFixed(1)),
       maxDb: Number(toDb(peak).toFixed(1)),
       samples,
+      signature: loudnessSignature(wav, samples),
     };
   } finally {
     await rm(scratch, { force: true });
@@ -231,12 +264,21 @@ export function videoProblems(probe, bytes, expected = {}, loudness = null) {
 }
 
 export async function verifyVideo(file, expected = {}) {
-  const [{ size }, probe, loudness] = await Promise.all([
+  const [{ size }, probe, loudness, frames] = await Promise.all([
     stat(file),
     probeVideo(file),
     probeLoudness(file).catch((error) => ({ error: error.message })),
+    // Pixel inspection is the only check that sees what the video shows.
+    inspectFrames(file, { fps: expected.fps ?? 30 }).catch((error) => ({ error: error.message })),
   ]);
+
   const problems = videoProblems(probe, size, expected, loudness);
+  if (frames.error) {
+    problems.push(`frames could not be inspected: ${frames.error}`);
+  } else {
+    problems.push(...frameProblems(frames, expected));
+  }
+
   const video = videoStream(probe);
   const duration = resolveDuration(probe);
 
@@ -245,6 +287,9 @@ export async function verifyVideo(file, expected = {}) {
     bytes: size,
     duration,
     meanVolumeDb: loudness?.meanDb ?? null,
+    audioSignature: loudness?.signature ?? null,
+    visualSignature: frames?.signature ?? null,
+    frames: frames.error ? null : frames,
     // Same derivation the check used, so the logged figure is the one that
     // was actually measured against the floor.
     bitrate: resolveBitrate(probe, size, duration),
@@ -277,7 +322,12 @@ async function main() {
   console.log(
     `ok  ${file} — ${result.width}x${result.height}, ${result.duration?.toFixed(2)}s, ` +
       `${(result.bytes / 1e6).toFixed(1)} MB, ${Math.round((result.bitrate ?? 0) / 1000)} kbps, ` +
-      `audio ${result.meanVolumeDb === null ? "not measured" : `${result.meanVolumeDb} dB mean`}`,
+      `audio ${result.meanVolumeDb === null ? "not measured" : `${result.meanVolumeDb} dB mean`}
+` +
+      `    frames ${result.frames ? `${result.frames.frames}, ${result.frames.motionFrames} with motion, ` +
+        `end card luma ${result.frames.endCardMeanLuma.toFixed(0)}` : "not inspected"}
+` +
+      `    visual ${String(result.visualSignature).slice(0, 24)}…  audio ${result.audioSignature}`,
   );
 }
 

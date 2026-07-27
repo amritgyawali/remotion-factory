@@ -7,7 +7,7 @@ import {
   useVideoConfig,
 } from "remotion";
 import { CONTENT_MARGIN, Frame } from "../components/Frame";
-import { display, mono, resolveTheme } from "../theme";
+import { themeFor } from "../theme";
 import type { CaseStudyProps } from "../types";
 
 const clamp = {
@@ -25,9 +25,10 @@ export const CaseStudy: React.FC<CaseStudyProps> = ({
   lesson,
   kicker,
   score,
+  videoId,
   theme: overrides,
 }) => {
-  const theme = resolveTheme(overrides);
+  const theme = themeFor(videoId, overrides);
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
   const graph = interpolate(frame, [8, 54], [0, 1], clamp);
@@ -64,7 +65,7 @@ export const CaseStudy: React.FC<CaseStudyProps> = ({
       >
         <div
           style={{
-            fontFamily: mono,
+            fontFamily: theme.mono,
             fontSize: 30,
             letterSpacing: "0.1em",
             color: theme.seaglass,
@@ -76,7 +77,7 @@ export const CaseStudy: React.FC<CaseStudyProps> = ({
         <div
           style={{
             marginTop: 22,
-            fontFamily: display,
+            fontFamily: theme.display,
             fontWeight: 800,
             fontSize: 98,
             lineHeight: 0.96,
@@ -127,7 +128,7 @@ export const CaseStudy: React.FC<CaseStudyProps> = ({
               position: "absolute",
               left: 28,
               bottom: 24,
-              fontFamily: mono,
+              fontFamily: theme.mono,
               fontSize: 26,
               color: theme.paperDim,
             }}
@@ -156,11 +157,11 @@ export const CaseStudy: React.FC<CaseStudyProps> = ({
               backgroundColor: theme.groundLift,
             }}
           >
-            <div style={{ fontFamily: mono, fontSize: 27, color: theme.paperDim }}>BEFORE</div>
+            <div style={{ fontFamily: theme.mono, fontSize: 27, color: theme.paperDim }}>BEFORE</div>
             <div
               style={{
                 marginTop: 12,
-                fontFamily: display,
+                fontFamily: theme.display,
                 fontSize: 49,
                 lineHeight: 1.02,
                 fontWeight: 700,
@@ -178,13 +179,13 @@ export const CaseStudy: React.FC<CaseStudyProps> = ({
               backgroundColor: theme.seaglass,
             }}
           >
-            <div style={{ fontFamily: mono, fontSize: 27, color: theme.ground }}>
+            <div style={{ fontFamily: theme.mono, fontSize: 27, color: theme.ground }}>
               AFTER
             </div>
             <div
               style={{
                 marginTop: 12,
-                fontFamily: display,
+                fontFamily: theme.display,
                 fontSize: 49,
                 lineHeight: 1.02,
                 fontWeight: 800,
@@ -219,7 +220,7 @@ export const CaseStudy: React.FC<CaseStudyProps> = ({
                   gridTemplateColumns: "48px 1fr",
                   gap: 18,
                   alignItems: "center",
-                  fontFamily: display,
+                  fontFamily: theme.display,
                   fontSize: 45,
                   lineHeight: 1.06,
                   color: theme.paper,
@@ -227,7 +228,7 @@ export const CaseStudy: React.FC<CaseStudyProps> = ({
                   transform: `translateX(${(1 - enter) * -28}px)`,
                 }}
               >
-                <span style={{ fontFamily: mono, fontSize: 28, color: theme.amber }}>
+                <span style={{ fontFamily: theme.mono, fontSize: 28, color: theme.amber }}>
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 {action}
@@ -241,7 +242,7 @@ export const CaseStudy: React.FC<CaseStudyProps> = ({
             marginTop: "auto",
             padding: "22px 28px",
             borderTop: `3px solid ${theme.amber}`,
-            fontFamily: display,
+            fontFamily: theme.display,
             fontWeight: 700,
             fontSize: 55,
             lineHeight: 1.04,

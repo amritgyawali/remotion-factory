@@ -1,7 +1,7 @@
 import React from "react";
 import { AbsoluteFill, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { CONTENT_MARGIN, Frame } from "../components/Frame";
-import { display, mono, resolveTheme } from "../theme";
+import { themeFor } from "../theme";
 import type { StatCardProps } from "../types";
 
 /** "$2.4M" -> { pre: "$", num: "2.4", post: "M" } */
@@ -19,9 +19,10 @@ export const StatCard: React.FC<StatCardProps> = ({
   context,
   kicker,
   score,
+  videoId,
   theme: overrides,
 }) => {
-  const theme = resolveTheme(overrides);
+  const theme = themeFor(videoId, overrides);
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
@@ -50,7 +51,7 @@ export const StatCard: React.FC<StatCardProps> = ({
       >
         <div
           style={{
-            fontFamily: display,
+            fontFamily: theme.display,
             fontWeight: 800,
             fontSize: 320,
             lineHeight: 0.82,
@@ -66,7 +67,7 @@ export const StatCard: React.FC<StatCardProps> = ({
 
         <div
           style={{
-            fontFamily: display,
+            fontFamily: theme.display,
             fontWeight: 600,
             fontSize: 76,
             lineHeight: 1.08,
@@ -87,7 +88,7 @@ export const StatCard: React.FC<StatCardProps> = ({
               <div
                 key={line}
                 style={{
-                  fontFamily: mono,
+                  fontFamily: theme.mono,
                   fontSize: 34,
                   lineHeight: 1.4,
                   color: theme.paperDim,

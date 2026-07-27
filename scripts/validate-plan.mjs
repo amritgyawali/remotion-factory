@@ -58,6 +58,10 @@ const TEMPLATES = {
     limits: { hook: 52, before: 54, after: 54, lesson: 62, eyebrow: 26, kicker: 20 },
     array: { key: "actions", min: 3, max: 3, line: 50 },
   },
+  Recap: {
+    required: ["eyebrow", "day", "durationInSeconds", "hook", "totals", "leaderboard", "lesson"],
+    limits: { hook: 52, lesson: 62, eyebrow: 26, kicker: 20 },
+  },
   FounderStory: {
     required: ["eyebrow", "day", "durationInSeconds", "hook", "moments", "turn", "lesson"],
     limits: { hook: 52, turn: 58, lesson: 62, eyebrow: 26, kicker: 20 },

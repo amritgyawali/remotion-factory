@@ -3,6 +3,7 @@ import { Composition } from "remotion";
 import { CaseStudy } from "./templates/CaseStudy";
 import { DevJoke } from "./templates/DevJoke";
 import { FounderStory } from "./templates/FounderStory";
+import { Recap } from "./templates/Recap";
 import { ListReveal } from "./templates/ListReveal";
 import { SiteRoast } from "./templates/SiteRoast";
 import { StatCard } from "./templates/StatCard";
@@ -145,6 +146,32 @@ export const RemotionRoot: React.FC = () => (
         turn: "Send the Friday update.",
         lesson: "Communication is part of delivery.",
         kicker: "FOUNDER NOTE",
+      }}
+    />
+    <Composition
+      id="Recap"
+      component={Recap}
+      {...VERTICAL}
+      durationInFrames={27 * FPS}
+      calculateMetadata={durationFrom}
+      defaultProps={{
+        eyebrow: "MERITBYTE / RECAP",
+        day: 30,
+        durationInSeconds: 27,
+        videoId: "recap-preview",
+        hook: "30 days. 30 videos.",
+        totals: [
+          { label: "videos shipped", value: 30 },
+          { label: "motion beats", value: 370 },
+        ],
+        leaderboard: [
+          { label: "Roast my website", value: 41200 },
+          { label: "It works on my machine", value: 28400 },
+          { label: "Fired in four days", value: 19100 },
+        ],
+        lesson: "Boring consistency beat every clever idea.",
+        gridCount: 30,
+        kicker: "RECAP",
       }}
     />
   </>
