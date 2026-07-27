@@ -1,78 +1,115 @@
-# Queue script prompt
+# Weekly plan prompt
 
-Paste this into Claude or Gemini, fill the blanks, and append the returned objects
-to the `items` array in `plan.json`. Keep `mode`, `postType`, `channels`, and
-`channelSettings` unchanged.
-
-You can do this entirely from your phone in the GitHub web editor. Append new
-items; do not replace items whose ids already appear in `state.json`.
+Use this prompt to replace the `week` and `items` values in `plan.json` once a
+week. Keep `mode`, `postType`, `channels`, and `channelSettings` exactly as they
+are. The **Accept weekly plan** workflow validates and archives the new week;
+never edit files under `plans/` yourself.
 
 ---
 
-You are writing content for a vertical short-form video series.
-The videos are motion graphics only — no voiceover, footage, or music cues.
-All meaning has to survive on screen, silently, on a phone.
+You are writing one unattended week of vertical, silent motion-graphics videos
+for MeritByte. Return only a JSON object with `week` and `items`; no prose and no
+Markdown fence.
 
-**Series topic:** `<TOPIC>`
-**Audience:** `<WHO>`
-**Unique id prefix:** `<SHORT_PREFIX>`
-**How many videos:** `<N>` (4 per day × 30 days = 120 for a full run)
+**Topic:** `<TOPIC>`
+**Audience:** `<AUDIENCE>`
+**ISO week:** `<YYYY-wNN>`
+**Week order:** `<YYYYNN>`
+**Unique id prefix:** `<PREFIX-YYYYwNN>`
+**Already-used source ids:** `<PASTE FROM plans/>`
 
-Return **only** a JSON array, with no prose or markdown fences. Do not include
-`publishAt`. Array order is queue order, and every id must be unique across all
-items already present in `plan.json` and `state.json`.
-
-Ids are portable lowercase slugs: 1–80 letters, digits, `_`, or `-`; begin and
-end with a letter or digit. Do not use Windows reserved names such as `con`,
-`prn`, `aux`, `nul`, `com1`–`com9`, or `lpt1`–`lpt9`.
+Required shape:
 
 ```json
-[
-  {
-    "id": "eye-d01-a",
-    "template": "StatCard",
-    "caption": "string, ends with 3 hashtags, under 280 characters",
-    "props": {}
-  }
-]
+{
+  "week": { "id": "2026-w32", "order": 202632 },
+  "items": [
+    {
+      "id": "mb-2026w32-d01-a",
+      "sourceId": "topic-2026w32-01",
+      "template": "DevJoke",
+      "caption": "One or two useful sentences.\n\n#TagOne #TagTwo #TagThree",
+      "props": {}
+    }
+  ]
+}
 ```
 
-For a 30-day run, ids advance through four slots per day:
-`<prefix>-d01-a`, `-d01-b`, `-d01-c`, `-d01-d`, then day 2. The `props.day`
-value stays between 1 and 30 because it drives the shared ledger rule.
+Generate exactly 28 items in this order: Day 1 slots `a`, `b`, `c`, `d`, then
+Day 2, through Day 7. `props.day` must match the id. Every id and `sourceId` must
+be a new portable lowercase slug containing only letters, digits, `_`, and `-`.
 
-Two templates are available. Alternate them so each four-video day contains two
-of each template, ideally `StatCard`, `ListReveal`, `StatCard`, `ListReveal`.
+The validator compares the new week with every accepted archive. Do not repeat
+an id, source, normalized caption, hook, or full visible-copy idea. Changing
+punctuation, case, or hashtags does not make a duplicate new.
 
-**StatCard** — one number that stops the scroll. Props:
+All templates share:
 
-- `eyebrow`: the series name, identical on every video, under 26 characters
-- `day`: 1–30
-- `durationInSeconds`: 7–9
-- `value`: the number as it should read, under 12 characters, for example `"43%"`, `"1 in 6"`, `"20-20-20"`
-- `label`: what the number is, under 46 characters, no full stop
-- `context`: exactly two lines, each under 48 characters, that pay the number off
-- `kicker`: 2–3 words in caps, for example `"SAVE THIS"`
+- `eyebrow`: `"MeritByte — Build Better"` (under 26 characters)
+- `day`: integer 1–7
+- `durationInSeconds`: total duration including the final two-second end card
+- `kicker`: concise uppercase label, under 20 characters
 
-**ListReveal** — a short list that earns a rewatch. Props:
+Available templates:
 
-- `eyebrow`, `day` as above
-- `durationInSeconds`: 9–12
-- `headline`: under 60 characters
-- `items`: exactly 4 strings, each under 52 characters, with parallel grammar
-- `kicker`: 2–3 words in caps
+**DevJoke**
 
-Rules:
+- `hook`: at most 7 words and 52 characters
+- `beats`: 3–5 short strings, each under 46 characters
+- `punchline`: under 58 characters
+- `variant`: one of `logo`, `terminal`, `qa`, `timer`, `scope`, `deploy`,
+  `comments`, `cache`
+- recommended duration: 15–18 seconds
 
-- **These may publish automatically with no human review.** Every claim must be
-  one a careful professional would defend in front of a colleague. If you are
-  not confident in a statistic, choose a different angle rather than inventing
-  or softening a number.
-- No diagnosis, dosing, or "you have". Describe patterns, name the threshold at
-  which someone should see a professional, and stop there.
-- No hedging language on screen. Put necessary nuance in the caption.
-- Each video stands alone. Someone landing on day 19 should get full value.
-- The four videos in one day must use four distinct angles.
-- Vary the opening word across the run. If eight start with "Why", redo them.
-- Captions carry the nuance the on-screen text cannot: one or two sentences,
-  followed by exactly three hashtags. Keep each caption under 280 characters.
+**TechTip**
+
+- `hook`: at most 7 words and 52 characters
+- `steps`: exactly 3 strings, each under 52 characters
+- `result`: under 62 characters
+- `variant`: one of `security`, `devtools`, `tool-audit`, `vitals`,
+  `index-check`, `design-code`
+- recommended duration: 18–22 seconds
+
+**SiteRoast**
+
+- `hook`: at most 7 words and 52 characters
+- `episode`: short label such as `"EP 04"`
+- `problems`: exactly 3 strings, each under 52 characters
+- `fix`: under 62 characters
+- `verdict`: under 44 characters
+- recommended duration: 20–24 seconds
+
+**CaseStudy**
+
+- `hook`: at most 7 words and 52 characters
+- `before` and `after`: each under 54 characters
+- `actions`: exactly 3 strings, each under 50 characters
+- `lesson`: under 62 characters
+- recommended duration: 20–24 seconds
+
+**FounderStory**
+
+- `hook`: at most 7 words and 52 characters
+- `moments`: exactly 3 strings, each under 50 characters
+- `turn`: under 58 characters
+- `lesson`: under 62 characters
+- recommended duration: 18–22 seconds
+
+Content rules:
+
+- These videos may run for a week without human content review. Never invent a
+  client result, testimonial, revenue number, security incident, or founder
+  anecdote. If evidence is missing, teach a defensible principle instead.
+- Security clues are not proof of compromise. Tell viewers to confirm with the
+  relevant logs, tools, or professional review.
+- Do not present Core Web Vitals as the entire ranking system.
+- Every video must stand alone and deliver a different useful idea.
+- Within each day, use at least three template families and four distinct angles.
+- Do not place the same template in adjacent queue positions when another
+  suitable family exists.
+- Hooks are readable immediately, use active language, and contain no more than
+  seven words.
+- Captions contain one or two plain-language sentences, exactly three hashtags,
+  no URL, and stay under 280 characters.
+- No voiceover, footage, screen recording, photographs, music instructions, or
+  sound-effect instructions. The templates carry the story visually.

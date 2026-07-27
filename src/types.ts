@@ -33,11 +33,80 @@ export type ListRevealProps = BaseProps & {
   kicker?: string;
 };
 
-export type TemplateId = "StatCard" | "ListReveal";
+export type DevJokeVariant =
+  | "logo"
+  | "terminal"
+  | "qa"
+  | "timer"
+  | "scope"
+  | "deploy"
+  | "comments"
+  | "cache";
+
+export type DevJokeProps = BaseProps & {
+  hook: string;
+  beats: string[];
+  punchline: string;
+  variant: DevJokeVariant;
+  kicker?: string;
+};
+
+export type TechTipVariant =
+  | "security"
+  | "devtools"
+  | "tool-audit"
+  | "vitals"
+  | "index-check"
+  | "design-code";
+
+export type TechTipProps = BaseProps & {
+  hook: string;
+  steps: string[];
+  result: string;
+  variant: TechTipVariant;
+  kicker?: string;
+};
+
+export type SiteRoastProps = BaseProps & {
+  hook: string;
+  episode: string;
+  problems: string[];
+  fix: string;
+  verdict: string;
+  kicker?: string;
+};
+
+export type CaseStudyProps = BaseProps & {
+  hook: string;
+  before: string;
+  after: string;
+  actions: string[];
+  lesson: string;
+  kicker?: string;
+};
+
+export type FounderStoryProps = BaseProps & {
+  hook: string;
+  moments: string[];
+  turn: string;
+  lesson: string;
+  kicker?: string;
+};
+
+export type TemplateId =
+  | "StatCard"
+  | "ListReveal"
+  | "DevJoke"
+  | "TechTip"
+  | "SiteRoast"
+  | "CaseStudy"
+  | "FounderStory";
 
 /** One entry in plan.json. */
 export type PlanItem = {
   id: string;
+  /** Stable provenance slug used to reject recycled weekly ideas. */
+  sourceId?: string;
   template: TemplateId;
   /** ISO 8601 for legacy calendar plans. Queue items deliberately omit it. */
   publishAt?: string;
@@ -52,6 +121,11 @@ export type Plan = {
   series: string;
   /** Queue mode renders the first id not listed in state.json. */
   mode?: "queue";
+  /** One replaceable seven-day inbox; accepted copies live under plans/. */
+  week?: {
+    id: string;
+    order: number;
+  };
   /** "draft" | "schedule" | "now" — start on draft. */
   postType: "draft" | "schedule" | "now";
   /**

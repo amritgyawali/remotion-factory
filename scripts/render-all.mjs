@@ -1,12 +1,15 @@
 import { spawn } from "node:child_process";
-import { mkdir, readFile, writeFile, stat } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { loadPlan } from "./validate-plan.mjs";
-import { getQueue, markPosted, QUEUE_LOW_WATER } from "./queue.mjs";
+import { getArchivedQueue, markArchivedPosted, QUEUE_LOW_WATER } from "./queue.mjs";
+import { assertPlayableVideo } from "./verify-video.mjs";
+import { archiveVideo } from "./archive-video.mjs";
 
 const OUT = "out";
 const DRY_RUN = process.env.DRY_RUN === "1" || process.argv.includes("--dry-run");
 const QUEUE_RUN = process.env.QUEUE_RUN === "1";
+const PLAN_PATH = process.env.PLAN_PATH;
 const ONLY = (process.env.ONLY ?? "").split(",").map((s) => s.trim()).filter(Boolean);
 const THROTTLE_MS = Number(process.env.POSTIZ_THROTTLE_MS ?? 2000);
 
@@ -65,11 +68,17 @@ async function renderOne(item) {
     "--log=error",
   ]);
 
-  const { size } = await stat(outFile);
+  // Verify before anything downstream can touch the file. A render that
+  // failed halfway still writes a playable MP4, and nobody is watching.
+  const verified = await assertPlayableVideo(outFile, {
+    expectedSeconds: item.props?.durationInSeconds,
+  });
   console.log(
-    `  rendered in ${Math.round((Date.now() - started) / 1000)}s, ${(size / 1e6).toFixed(1)} MB`,
+    `  rendered in ${Math.round((Date.now() - started) / 1000)}s — ` +
+      `${verified.width}x${verified.height}, ${verified.duration.toFixed(2)}s, ` +
+      `${(verified.bytes / 1e6).toFixed(1)} MB, ${Math.round(verified.bitrate / 1000)} kbps`,
   );
-  return outFile;
+  return { file: outFile, verified };
 }
 
 async function uploadToPostiz(file) {
@@ -162,33 +171,43 @@ async function notify(text) {
 }
 
 async function main() {
-  const { plan, errors, warnings } = await loadPlan("plan.json");
-  warnings.forEach((w) => console.warn(`warning  ${w}`));
-  if (errors.length) {
-    errors.forEach((e) => console.error(`error    ${e}`));
-    throw new Error(`plan.json has ${errors.length} error(s)`);
-  }
-
   await mkdir(OUT, { recursive: true });
 
   let queue = null;
+  let plan;
   let items;
+  let publishBlockers = [];
 
   if (QUEUE_RUN) {
-    if (plan.mode !== "queue") throw new Error('QUEUE_RUN requires plan mode "queue"');
-    queue = await getQueue(plan);
+    queue = await getArchivedQueue();
     if (!queue.next) {
-      const empty = `${plan.series}\nQueue is empty. Nothing rendered.`;
+      const empty = "Weekly video queue\nQueue is empty. Nothing rendered.";
       console.warn(empty);
       await writeFile(path.join(OUT, "summary.json"), JSON.stringify({ done: [], failed: [] }, null, 2));
       await notify(empty);
       return;
+    }
+    plan = queue.nextPlan;
+    publishBlockers = queue.nextPublishBlockers;
+    if (plan.mode !== "queue") throw new Error('QUEUE_RUN requires plan mode "queue"');
+    if (PLAN_PATH && path.normalize(PLAN_PATH) !== path.normalize(queue.nextPlanPath)) {
+      throw new Error(
+        `queue moved — expected plan "${PLAN_PATH}", next accepted plan is "${queue.nextPlanPath}"`,
+      );
     }
     if (ONLY.length && (ONLY.length !== 1 || ONLY[0] !== queue.next.id)) {
       throw new Error(`queue moved — expected "${ONLY.join(",")}", next item is "${queue.next.id}"`);
     }
     items = [queue.next];
   } else {
+    const loaded = await loadPlan("plan.json");
+    loaded.warnings.forEach((warning) => console.warn(`warning  ${warning}`));
+    if (loaded.errors.length) {
+      loaded.errors.forEach((error) => console.error(`error    ${error}`));
+      throw new Error(`plan.json has ${loaded.errors.length} error(s)`);
+    }
+    plan = loaded.plan;
+    publishBlockers = loaded.publishBlockers;
     items = ONLY.length ? plan.items.filter((i) => ONLY.includes(i.id)) : plan.items;
   }
 
@@ -203,6 +222,13 @@ async function main() {
 
   let integrations = [];
   if (!DRY_RUN) {
+    // The last gate before anything can reach a real social account. A plan
+    // with placeholder channels renders fine but must never publish.
+    if (publishBlockers.length) {
+      throw new Error(
+        `refusing to publish — ${publishBlockers.length} unresolved issue(s):\n  - ${publishBlockers.join("\n  - ")}`,
+      );
+    }
     if (!POSTIZ_KEY || !POSTIZ_BASE) throw new Error("POSTIZ_API_KEY and POSTIZ_API_URL are required");
     integrations = await postiz("/integrations");
     for (const i of integrations) {
@@ -220,13 +246,25 @@ async function main() {
 
   const done = [];
   const failed = [];
+  const archived = [];
+  const weekId = (QUEUE_RUN ? queue.nextWeek?.id : plan.week?.id) ?? "unfiled";
 
   for (const [index, item] of items.entries()) {
     console.log(`[${index + 1}/${items.length}] ${item.id} — ${item.template}`);
     try {
-      const file = await renderOne(item);
+      const { file, verified } = await renderOne(item);
 
       if (!DRY_RUN) {
+        // Store the master in GitHub before publishing. If Postiz is down the
+        // video still exists, and a retry re-uploads the same id in place.
+        const stored = await archiveVideo({ file, item, weekId, verified });
+        if (stored.skipped) {
+          console.warn(`  not archived — ${stored.reason}`);
+        } else {
+          console.log(`  archived -> ${stored.url}`);
+          archived.push(stored.url);
+        }
+
         const media = await uploadToPostiz(file);
         await postiz("/posts", {
           method: "POST",
@@ -245,7 +283,7 @@ async function main() {
 
       if (QUEUE_RUN && !DRY_RUN) {
         try {
-          queue = await markPosted(plan, item.id);
+          queue = await markArchivedPosted(item.id);
           console.log(`  marked posted, ${queue.remaining} item(s) remain`);
         } catch (err) {
           throw new Error(`Postiz accepted ${item.id}, but state.json was not updated: ${err.message}`);
@@ -254,7 +292,7 @@ async function main() {
 
       done.push(item.id);
     } catch (err) {
-      // One bad day shouldn't cost you the other 29.
+      // One bad item should not hide failures in the rest of a manual dry batch.
       console.error(`  FAILED: ${err.message}`);
       failed.push({ id: item.id, reason: err.message });
     }
@@ -265,6 +303,7 @@ async function main() {
     : "";
   const summary =
     `${plan.series}\n${done.length}/${items.length} done as "${plan.postType}"` +
+    (archived.length ? `\nArchived to GitHub: ${archived.join(", ")}` : "") +
     (failed.length ? `\nFailed: ${failed.map((f) => f.id).join(", ")}` : "") +
     queueLine;
   console.log(`\n${summary}`);
@@ -272,7 +311,10 @@ async function main() {
     const warning = `Queue low: ${queue.remaining} item(s), at most ${Math.ceil(queue.remaining / 4)} day(s) left`;
     console.warn(process.env.GITHUB_ACTIONS ? `::warning::${warning}` : `warning  ${warning}`);
   }
-  await writeFile(path.join(OUT, "summary.json"), JSON.stringify({ done, failed }, null, 2));
+  await writeFile(
+    path.join(OUT, "summary.json"),
+    JSON.stringify({ done, failed, archived, week: weekId }, null, 2),
+  );
   await notify(summary);
 
   if (failed.length) process.exitCode = 1;

@@ -1,12 +1,13 @@
 # remotion-factory
 
-Keep a JSON queue full. GitHub renders one video every six hours and hands it to
-Postiz. Four runs a day, with no laptop or local renderer left online.
+Prepare one seven-day JSON plan. GitHub accepts it into an immutable queue,
+renders one video every six hours, and hands four videos a day to Postiz. The
+laptop and local Studio can stay off for the rest of the week.
 
 ```text
-plan.json → GitHub Actions → Remotion → Postiz → six social accounts
-                    ↓
-                state.json
+plan.json weekly inbox → plans/<week>.json → Remotion → Postiz
+                                  ↑              ↓
+                         four daily cron runs  state.json
 ```
 
 The Oracle box only runs Postiz and its database. It never renders video, so the
@@ -18,34 +19,139 @@ GitHub-hosted runner does the expensive work and then disappears.
 
 ## Queue behavior
 
-`plan.json` is an ordered queue:
+`plan.json` is a replaceable weekly inbox:
 
 ```json
 {
   "mode": "queue",
+  "week": { "id": "2026-w31", "order": 202631 },
   "postType": "draft",
   "items": [
-    { "id": "d01-a", "template": "StatCard", "caption": "...", "props": {} }
+    {
+      "id": "d01-a",
+      "sourceId": "meritbyte-pdf-01",
+      "template": "DevJoke",
+      "caption": "...",
+      "props": { "day": 1 }
+    }
   ]
 }
 ```
 
+Pushing a changed `plan.json` runs **Accept weekly plan**. It validates exactly
+seven days × four ordered slots, checks all accepted weeks for duplicate ids,
+sources, captions, and visible copy, then writes `plans/<week-id>.json`.
+Accepted weeks are the real queue; do not edit or delete them. A newer week waits
+behind any unfinished older week, so an early weekly edit cannot lose a delayed
+video. An accepted week's **content** becomes immutable as soon as its first item
+posts.
+
+`postType` is the one field exempt from that freeze. It is not content — it is
+the owner's standing decision about how anything is delivered, and freezing it to
+whatever happened to be set when the first item posted would mean a running week
+could never be paused to drafts or released live. Content and `postType` are
+compared separately, so a `postType` edit cannot smuggle a caption change past
+the freeze.
+
 The `Publish next video` workflow runs at 00:17, 06:17, 12:17, and 18:17 in
 `Asia/Kathmandu`. Each run:
 
-1. Validates the whole plan and `state.json`.
+1. Validates every accepted week and `state.json`.
 2. Selects the first item whose id is not in `state.json.posted`.
-3. Renders exactly that one item with Remotion.
-4. Sends it to every configured Postiz integration.
-5. Adds the id to `state.json` only after Postiz accepts the request.
-6. Commits only `state.json` back to `main`.
+3. Renders exactly that one item with Remotion, using every core on the runner.
+4. Verifies the MP4 before anything else may touch it (see *Render verification*).
+5. Uploads the MP4 to the week's GitHub Release (see *Where the videos are kept*).
+6. Sends it to every configured Postiz integration.
+7. Adds the id to `state.json` only after Postiz accepts the request.
+8. Commits `state.json` and `archive/manifest.json` back to `main`.
 
 A dry run renders the same next item but never contacts Postiz and never advances
-the queue. An exhausted queue—where every plan id is in `state.json`—exits
+the queue. An exhausted queue—where every accepted id is in `state.json`—exits
 without installing Chrome or rendering.
 
 GitHub cron is best-effort and may start late during heavy load. It never performs
 a catch-up burst: one workflow run can process at most one queue item.
+
+## One video per run, at full power
+
+Each run renders exactly one video, so that video gets the whole machine.
+`remotion.config.ts` sets concurrency to the runner's full core count, JPEG
+frames at quality 100, CRF 18, and the `slow` x264 preset. Social platforms
+re-encode whatever they receive, so the master handed to them is what survives
+that second pass.
+
+Override the core count only to debug: `REMOTION_CONCURRENCY=1 npm run render`.
+The publish workflow deliberately leaves it unset.
+
+Rendering four videos in one job would be cheaper in setup time but would give
+each of them a quarter of the machine and put all four behind a single point of
+failure. Four separate runs is the trade this repository makes.
+
+## Render verification
+
+Nobody watches these renders. A run that fails halfway — a font that never
+loaded, a blank page, a truncated encode — still writes a playable MP4, and
+unattended that mistake repeats four times a day for a week.
+
+Before a file may be archived or published, `scripts/verify-video.mjs` probes it
+and fails the run on any of:
+
+- fewer or more than one video stream, or a codec other than h264
+- a frame that is not 1080×1920
+- a duration more than 0.5s from the plan's `durationInSeconds`
+- a file under 100 kB, or a bitrate under 250 kbps
+
+The bitrate floor is the load-bearing one. A blank or frozen frame costs almost
+nothing to compress, so a broken render collapses to a tiny bitrate while
+remaining a perfectly valid MP4. Real renders from these templates sit in the
+millions of bits per second, an order of magnitude clear of the floor.
+
+Check any file by hand:
+
+```bash
+npm run verify -- out/d01-a.mp4 17
+```
+
+## Where the videos are kept
+
+Finished MP4s are uploaded to a **GitHub Release**, one release per week, tagged
+`videos-<week-id>`. Each asset is named after its item id, so
+`videos-2026-w31` holds `d01-a.mp4` through `d07-d.mp4` with permanent download
+URLs.
+
+They are not committed. Four videos a day is roughly 1.2 GB a month; committing
+that would grow the repository without bound and every future clone would pay
+for it. Release assets are hosted indefinitely and stay out of the git history.
+
+What *is* committed is `archive/manifest.json` — a few hundred bytes per video:
+
+```json
+{
+  "videos": [
+    {
+      "id": "d01-a",
+      "week": "2026-w31",
+      "template": "DevJoke",
+      "sourceId": "meritbyte-pdf-01",
+      "bytes": 8523104,
+      "durationSeconds": 17.0,
+      "sha256": "…",
+      "url": "https://github.com/<owner>/<repo>/releases/download/videos-2026-w31/d01-a.mp4",
+      "archivedAt": "2026-07-28T00:32:11.004Z"
+    }
+  ]
+}
+```
+
+That keeps the repository itself the answer to "what have we published" while
+the bytes stay in release storage. The `sha256` makes a re-download verifiable.
+
+Archiving needs no new secret: the workflow's built-in `GITHUB_TOKEN` already
+holds `contents: write`. Uploads happen **before** the Postiz call, so a video
+is safely stored even if Postiz is down, and a retry replaces the asset in place
+rather than duplicating it.
+
+The 7-day artifact and the optional R2 sync are unchanged and still run.
 
 ## Setup
 
@@ -68,6 +174,12 @@ npm run channels
 ```
 
 Paste the returned `"channels"` array into `plan.json`.
+
+The shipped placeholder blocks **publishing**, not rendering. `npm run validate`
+reports it under `PUBLISHING IS BLOCKED`, every non-dry run refuses to contact
+Postiz while it is present, and dry runs render normally — so a video can be
+previewed before any account is connected. Before the first post, the acceptance
+workflow safely updates the first-week archive.
 
 **Use integration ids, not identifiers.** Two Instagram accounts can both report
 `instagram-standalone`. `resolveChannels` deliberately refuses an ambiguous
@@ -108,20 +220,26 @@ When the visual and channel setup are verified, run it manually without dry-run.
 With `"postType": "draft"`, the item is stored in Postiz drafts and is then marked
 done in the queue.
 
-Changing `postType` is an owner decision:
+Changing `postType` is an owner decision, and can be made mid-week:
 
 - `"draft"` creates four drafts per day for review.
 - `"now"` publishes four items per day immediately after each render.
 - `"schedule"` is rejected in queue mode; the GitHub cron is already the clock.
+
+Edit it in `plan.json` and push; **Accept weekly plan** updates the archive even
+while the week is running. Under `"now"` there is no review step — four posts a
+day reach every configured account until the queue empties.
 
 ## Local commands
 
 ```bash
 npm run studio       # live Remotion preview
 npm run channels     # list Postiz integrations and ids
-npm run validate     # validate the plan and queue state
+npm run validate     # validate inbox, accepted weeks, and queue state
+npm test             # exercise acceptance, rollover, verification, archiving
 npm run queue        # show posted, remaining, and next id
 npm run render:dry   # render the whole plan locally without Postiz
+npm run verify -- out/d01-a.mp4 17   # probe one rendered file
 ```
 
 Before any commit or push:
@@ -147,28 +265,29 @@ Remove-Item Env:DRY_RUN, Env:ONLY
 `npm run queue` shows the current position. Telegram warns at 12 remaining items,
 which is at most three days of runway at four per day.
 
-To top up from a phone:
+Once a week, from a phone or laptop:
 
-1. Open `prompt.md` and generate the next content batch.
-2. Copy the returned JSON objects.
-3. Open `plan.json` on GitHub and append them to `items`.
-4. Commit the edit.
+1. Open `prompt.md` and generate one complete 28-item week.
+2. Give it a new ISO week id and increasing order.
+3. Replace the `week` and `items` values in `plan.json`; leave `mode`,
+   `postType`, `channels`, and `channelSettings` unchanged.
+4. Commit the edit and check that **Accept weekly plan** succeeds.
 
-Append; do not replace. `state.json` tracks posted work by id, so ids must remain
-unique forever. Ids must also be portable lowercase slugs containing only
-letters, digits, `_`, and `-`; the validator rejects path characters and
-Windows-reserved filenames. Editing `plan.json` does not trigger the manual
-batch renderer. The next cron run simply sees the longer queue.
+The acceptance workflow creates the archive for you; never hand-edit `plans/`.
+Ids and `sourceId` values must be globally unique. Ids are portable lowercase
+slugs containing only letters, digits, `_`, and `-`; future weeks should include
+the week id, for example `mb-2026w32-d01-a`. The validator rejects duplicate
+ideas even when punctuation, case, or hashtags differ.
 
-A full 30-day run is 120 items: four slots per day, `a` through `d`.
-`SERIES_LENGTH` remains 30 because it measures days in the ledger rule, not the
-number of videos.
+One accepted week is exactly 28 items: four slots per day, `a` through `d`.
+`SERIES_LENGTH` is 7 because it measures days in the ledger rule, not videos.
 
 ## Failure behavior
 
 If validation, rendering, upload, or Postiz fails, the id is not intentionally
 added to `state.json`; a later run retries the same front item. The workflow uses
-one shared concurrency group, so queue and manual batch renders cannot overlap.
+one shared concurrency group, so weekly acceptance, queue publishing, and manual
+batch renders cannot overlap.
 
 Postiz and Git cannot form one atomic transaction. If Postiz accepts a post and
 the runner dies before the state commit reaches GitHub, the next run can retry and
@@ -188,7 +307,7 @@ large dry render cannot fit inside one six-hour GitHub job. In queue mode, a
 non-dry batch is rejected in `scripts/render-all.mjs`; only `Publish next video`
 may send a queue item to Postiz.
 
-This separation is deliberate: appending 500 items must not publish 500 items.
+This separation is deliberate: accepting a new week must not publish 28 items.
 
 ## Capacity and cost
 
@@ -201,14 +320,24 @@ This separation is deliberate: appending 500 items must not publish 500 items.
 | Postiz storage | Your server disk | Published media |
 | Cloudflare R2 | Optional free allowance | Cold archive |
 
-At four videos per day, a 30-day queue contains 120 videos. Budget roughly
-700–1,200 GitHub Actions minutes per month when each render takes 4–8 minutes and
-each single-video run also pays setup time. A private repository must stay within
-its Actions allowance; a public repository avoids that minutes limit but exposes
-the source and plan.
+At four videos per day, each week contains 28 videos and a 30-day month is about
+120 videos.
 
-At about 10 MB per MP4, 120 videos add roughly 1.2 GB per month. If R2 is enabled,
-use a 90-day lifecycle rule so the archive does not grow forever.
+A 17-second video measures about 3.5 minutes of render on 8 cores. GitHub's
+standard runners have 2 or 4, and each single-video run also pays checkout,
+`npm install`, and browser setup, so budget roughly 8–12 minutes per run and
+1,000–1,400 Actions minutes per month. A private repository must stay within its
+Actions allowance — that is close enough to the 2,000-minute free tier to be
+worth watching. A public repository avoids the minutes limit entirely but
+exposes the source and plan.
+
+Longer videos cost proportionally more: render time scales with frame count, so
+a 24-second `SiteRoast` costs about 40% more than a 17-second `DevJoke`.
+
+Rendered MP4s are 2–4 MB each, so 120 videos add roughly 300–500 MB per month of
+GitHub Release storage. That is release storage, not repository size — clones
+stay small. If R2 is also enabled, use a 90-day lifecycle rule so the second
+copy does not grow forever.
 
 Social-platform API pricing is separate from GitHub and Postiz. In particular,
 verify current X API pricing before enabling `"now"`; links in captions can also
@@ -226,13 +355,16 @@ server is offline.
 
 Vercel is not part of the render path: free-tier functions are unsuitable for a
 1080×1920 Remotion/FFmpeg render and provide no persistent render disk. A useful
-future Vercel project would be a small editor that validates and appends
-`plan.json`; actual rendering remains on GitHub.
+future Vercel project would be a small editor that validates and writes the next
+weekly `plan.json`; actual rendering remains on GitHub.
 
 Pexels B-roll is intentionally absent because this is motion graphics only. If
 footage is added later, cache it instead of fetching during a long render.
 Voiceover is also intentionally absent; adding narration requires a real audio,
 timing, and caption pipeline rather than a small template change.
+The source PDF also proposes licensed music and sound effects. They are not
+invented or downloaded by this repository; the current deliverable is the
+PDF's silent, motion-graphics version.
 
 ## Channel settings
 
@@ -276,6 +408,13 @@ Do not remove or work around these:
 - The past-publish-date error in `scripts/validate-plan.mjs`; legacy calendar
   plans with stale dates could otherwise release a whole backlog.
 - The queue non-dry batch guard; one run must never drain the whole queue.
+- The `publishBlockers` check in `scripts/render-all.mjs`; it is the last gate
+  between an unresolved channel list and a real audience. Rendering may proceed
+  with blockers, publishing may not.
+- The bitrate floor in `scripts/verify-video.mjs`; without it a blank render is
+  indistinguishable from a good one and posts anyway.
+- The staged-path allowlist in the publish workflow's commit step; video bytes
+  belong in a Release, never in git.
 - `postType` changes belong to the repository owner.
 
 Never commit secrets or `.env`. Never trigger a non-dry workflow for testing.
@@ -300,8 +439,17 @@ Bricolage Grotesque is the display face; JetBrains Mono handles labels and
 numerals.
 
 The ledger rule at the bottom fills in proportion to `day / SERIES_LENGTH`.
-Changing a run from 30 days requires changing `SERIES_LENGTH` in `src/theme.ts`,
+Changing the weekly run length requires changing `SERIES_LENGTH` in `src/theme.ts`,
 or the bar will fill at the wrong point.
+
+The grain in `src/components/Frame.tsx` is a repeating 256px data-URI tile, not
+a full-frame SVG filter. It looks the same — the tile uses identical
+`feTurbulence` parameters, and a flat region of the finished frame carries the
+same noise density either way — but it is rasterised once instead of on every
+frame. Measured on this project, the full-frame version accounted for most of
+total render time: the same 17-second video took 553s with it and 217s with the
+tile, producing an all-but-identical file (1134 vs 1133 kbps). Do not convert it
+back to a per-frame filter.
 
 Remotion is free for individuals and companies under four people; larger
 companies require its commercial licence. Rendering remains on GitHub-hosted

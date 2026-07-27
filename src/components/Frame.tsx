@@ -1,13 +1,34 @@
 import React from "react";
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { mono, SERIES_LENGTH, type Theme } from "../theme";
+import { display, mono, SERIES_LENGTH, type Theme } from "../theme";
 
 const MARGIN = 72;
 
 /**
+ * Grain, as a repeating tile rather than a full-frame SVG filter.
+ *
+ * The grain never changes, but an feTurbulence filter covering the whole
+ * 1080x1920 frame is re-evaluated on every single frame, and Perlin noise over
+ * two million pixels is expensive: measured on this project it accounted for
+ * roughly three quarters of total render time.
+ *
+ * A data-URI SVG is rasterised once and cached as an image, so the filter runs
+ * a single time over a 256px tile — about 1/32nd of the pixels — and every
+ * frame after that is a blit. The noise is high-frequency enough at this
+ * baseFrequency that the tile seam is not visible.
+ */
+const GRAIN_TILE = 256;
+const GRAIN_SVG =
+  `<svg xmlns="http://www.w3.org/2000/svg" width="${GRAIN_TILE}" height="${GRAIN_TILE}">` +
+  '<filter id="g"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3"/></filter>' +
+  '<rect width="100%" height="100%" filter="url(#g)"/>' +
+  "</svg>";
+const GRAIN_URL = `url("data:image/svg+xml;utf8,${encodeURIComponent(GRAIN_SVG)}")`;
+
+/**
  * The signature element: a ledger rule that measures the video's position
- * in the 30-day run. The numbering is meaningful here — this genuinely is
- * a sequence, and day 24 of 30 tells a returning viewer something true.
+ * in the seven-day run. The numbering is meaningful here: a returning viewer
+ * can see where this video sits in the current weekly edition.
  */
 export const Frame: React.FC<{
   theme: Theme;
@@ -21,6 +42,13 @@ export const Frame: React.FC<{
 
   const draw = spring({ frame, fps, config: { damping: 200 }, durationInFrames: 24 });
   const ruleWidth = (width - MARGIN * 2) * (day / SERIES_LENGTH) * draw;
+  const endCardFrame = frame - Math.max(0, durationInFrames - fps * 2);
+  const endCard = spring({
+    frame: Math.max(0, endCardFrame),
+    fps,
+    config: { damping: 200, mass: 0.65 },
+    durationInFrames: 10,
+  });
 
   // Slow ambient drift so a static composition never looks frozen.
   const drift = interpolate(frame, [0, durationInFrames], [0, 1]);
@@ -43,14 +71,15 @@ export const Frame: React.FC<{
       />
 
       {/* Grain. Keeps flat colour fields from banding after platform re-encode. */}
-      <AbsoluteFill style={{ opacity: 0.11, mixBlendMode: "overlay" }}>
-        <svg width="100%" height="100%">
-          <filter id="grain">
-            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves={3} />
-          </filter>
-          <rect width="100%" height="100%" filter="url(#grain)" />
-        </svg>
-      </AbsoluteFill>
+      <AbsoluteFill
+        style={{
+          opacity: 0.11,
+          mixBlendMode: "overlay",
+          backgroundImage: GRAIN_URL,
+          backgroundRepeat: "repeat",
+          backgroundSize: `${GRAIN_TILE}px ${GRAIN_TILE}px`,
+        }}
+      />
 
       {/* Eyebrow */}
       <div
@@ -101,6 +130,77 @@ export const Frame: React.FC<{
           {kicker ? <span style={{ color: theme.seaglass }}>{kicker}</span> : null}
         </div>
       </div>
+
+      {/* Every PDF concept ends on the same two-second brand signature. */}
+      <AbsoluteFill
+        style={{
+          zIndex: 20,
+          backgroundColor: "#191919",
+          alignItems: "center",
+          justifyContent: "center",
+          opacity: endCard,
+          pointerEvents: "none",
+        }}
+      >
+        <div
+          style={{
+            width: 142,
+            height: 142,
+            borderRadius: 34,
+            display: "grid",
+            placeItems: "center",
+            backgroundColor: theme.amber,
+            color: "#191919",
+            fontFamily: display,
+            fontWeight: 900,
+            fontSize: 62,
+            letterSpacing: "-0.08em",
+            transform: `scale(${0.82 + endCard * 0.18}) rotate(${(1 - endCard) * -5}deg)`,
+          }}
+        >
+          MB
+        </div>
+        <div
+          style={{
+            marginTop: 48,
+            fontFamily: display,
+            fontWeight: 800,
+            fontSize: 74,
+            lineHeight: 1,
+            letterSpacing: "-0.03em",
+            color: theme.paper,
+            textAlign: "center",
+            transform: `translateY(${(1 - endCard) * 24}px)`,
+          }}
+        >
+          MeritByte
+        </div>
+        <div
+          style={{
+            marginTop: 14,
+            fontFamily: mono,
+            fontSize: 25,
+            letterSpacing: "0.24em",
+            textTransform: "uppercase",
+            color: theme.paperDim,
+          }}
+        >
+          Technologies
+        </div>
+        <div
+          style={{
+            position: "absolute",
+            bottom: 190,
+            fontFamily: mono,
+            fontSize: 27,
+            letterSpacing: "0.16em",
+            textTransform: "uppercase",
+            color: theme.seaglass,
+          }}
+        >
+          MERITBYTE.COM
+        </div>
+      </AbsoluteFill>
     </AbsoluteFill>
   );
 };

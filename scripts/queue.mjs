@@ -1,26 +1,28 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
-import { isPortableItemId, loadPlan } from "./validate-plan.mjs";
+import { isPortableItemId } from "./validate-plan.mjs";
+import { loadAcceptedWeeks } from "./weekly-plan.mjs";
 
 export const QUEUE_LOW_WATER = 12;
 const STATE_PATH = "state.json";
+const PLANS_DIR = "plans";
 
 export async function loadQueueState(path = STATE_PATH) {
   let raw;
   try {
     raw = await readFile(path, "utf8");
-  } catch (err) {
-    if (err.code === "ENOENT") {
+  } catch (error) {
+    if (error.code === "ENOENT") {
       throw new Error(`${path} is missing — refusing to guess what has already posted`);
     }
-    throw err;
+    throw error;
   }
 
   let state;
   try {
     state = JSON.parse(raw);
-  } catch (err) {
-    throw new Error(`${path} is not valid JSON: ${err.message}`);
+  } catch (error) {
+    throw new Error(`${path} is not valid JSON: ${error.message}`);
   }
 
   if (!state || !Array.isArray(state.posted)) {
@@ -55,14 +57,64 @@ export function queueSnapshot(plan, state) {
   };
 }
 
-export async function getQueue(plan, path = STATE_PATH) {
-  const queue = queueSnapshot(plan, await loadQueueState(path));
+export function archivedQueueSnapshot(weeks, state) {
+  const entries = weeks.flatMap((week) =>
+    week.plan.items.map((item) => ({
+      item,
+      plan: week.plan,
+      planPath: week.path,
+      week: week.plan.week,
+      publishBlockers: week.publishBlockers ?? [],
+    })),
+  );
+  const known = new Set(entries.map((entry) => entry.item.id));
+  const posted = new Set(state.posted);
+  const unknown = state.posted.filter((id) => !known.has(id));
+  const pendingEntries = entries.filter((entry) => !posted.has(entry.item.id));
+  const nextEntry = pendingEntries[0] ?? null;
+
+  return {
+    posted: state.posted.length,
+    pending: pendingEntries.map((entry) => entry.item),
+    pendingEntries,
+    remaining: pendingEntries.length,
+    next: nextEntry?.item ?? null,
+    nextEntry,
+    nextPlan: nextEntry?.plan ?? null,
+    nextPlanPath: nextEntry?.planPath ?? null,
+    nextWeek: nextEntry?.week ?? null,
+    nextPublishBlockers: nextEntry?.publishBlockers ?? [],
+    unknown,
+    weeks,
+  };
+}
+
+function assertNoUnknownPosted(queue, description) {
   if (queue.unknown.length) {
     throw new Error(
-      `state.json contains ids no longer in plan.json — append items; do not replace them: ${queue.unknown.join(", ")}`,
+      `state.json contains ids no longer in ${description}: ${queue.unknown.join(", ")}`,
     );
   }
   return queue;
+}
+
+export async function getQueue(plan, path = STATE_PATH) {
+  const queue = queueSnapshot(plan, await loadQueueState(path));
+  return assertNoUnknownPosted(queue, "plan.json — append items; do not replace them");
+}
+
+export async function getArchivedQueue({
+  plansDir = PLANS_DIR,
+  statePath = STATE_PATH,
+} = {}) {
+  const [weeks, state] = await Promise.all([
+    loadAcceptedWeeks(plansDir),
+    loadQueueState(statePath),
+  ]);
+  return assertNoUnknownPosted(
+    archivedQueueSnapshot(weeks, state),
+    "the accepted weekly plans — never delete an accepted week",
+  );
 }
 
 export async function markPosted(plan, id, path = STATE_PATH) {
@@ -79,32 +131,64 @@ export async function markPosted(plan, id, path = STATE_PATH) {
   return queueSnapshot(plan, state);
 }
 
-async function main() {
-  const { plan, errors, warnings } = await loadPlan("plan.json");
-  warnings.forEach((warning) => console.error(`warning  ${warning}`));
-  if (errors.length) {
-    errors.forEach((error) => console.error(`error    ${error}`));
-    throw new Error(`plan.json has ${errors.length} error(s)`);
+export async function markArchivedPosted(
+  id,
+  { plansDir = PLANS_DIR, statePath = STATE_PATH } = {},
+) {
+  const weeks = await loadAcceptedWeeks(plansDir);
+  if (!weeks.some((week) => week.plan.items.some((item) => item.id === id))) {
+    throw new Error(`cannot mark unknown accepted plan item "${id}"`);
   }
 
-  const queue = await getQueue(plan);
+  const state = await loadQueueState(statePath);
+  if (!state.posted.includes(id)) {
+    state.posted.push(id);
+    await writeFile(statePath, `${JSON.stringify(state, null, 2)}\n`);
+  }
+
+  return assertNoUnknownPosted(
+    archivedQueueSnapshot(weeks, state),
+    "the accepted weekly plans — never delete an accepted week",
+  );
+}
+
+async function main() {
+  const queue = await getArchivedQueue();
+  for (const week of queue.weeks) {
+    week.warnings.forEach((warning) => console.error(`warning  ${week.path}: ${warning}`));
+  }
   const githubOutput = process.argv.includes("--github-output");
 
   if (githubOutput) {
-    process.stdout.write(`id=${queue.next?.id ?? ""}\nremaining=${queue.remaining}\n`);
+    const planPath = queue.nextPlanPath?.replaceAll("\\", "/") ?? "";
+    process.stdout.write(
+      [
+        `id=${queue.next?.id ?? ""}`,
+        `remaining=${queue.remaining}`,
+        `plan_path=${planPath}`,
+        `week_id=${queue.nextWeek?.id ?? ""}`,
+        "",
+      ].join("\n"),
+    );
     return;
   }
 
   console.log(`${queue.posted} posted, ${queue.remaining} remaining.`);
-  console.log(queue.next ? `Next: ${queue.next.id}` : "Queue is empty.");
+  console.log(
+    queue.next
+      ? `Next: ${queue.next.id} (${queue.nextWeek.id}, ${queue.nextPlanPath})`
+      : "Queue is empty.",
+  );
   if (queue.remaining <= QUEUE_LOW_WATER) {
-    console.warn(`warning  queue is low — ${queue.remaining} item(s), at most ${Math.ceil(queue.remaining / 4)} day(s)`);
+    console.warn(
+      `warning  queue is low — ${queue.remaining} item(s), at most ${Math.ceil(queue.remaining / 4)} day(s)`,
+    );
   }
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  main().catch((err) => {
-    console.error(err.message);
+  main().catch((error) => {
+    console.error(error.message);
     process.exit(1);
   });
 }

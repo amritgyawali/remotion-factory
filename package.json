@@ -5,8 +5,11 @@
   "type": "module",
   "scripts": {
     "studio": "remotion studio",
-    "validate": "node scripts/validate-plan.mjs && node scripts/queue.mjs --check",
+    "validate": "node scripts/validate-plan.mjs && node scripts/accept-week.mjs --check && node scripts/queue.mjs --check",
+    "test": "node --test scripts/queue.test.mjs scripts/archive.test.mjs",
+    "verify": "node scripts/verify-video.mjs",
     "queue": "node scripts/queue.mjs",
+    "accept-week": "node scripts/accept-week.mjs",
     "channels": "node scripts/channels.mjs",
     "render": "node scripts/render-all.mjs",
     "render:dry": "node scripts/render-all.mjs --dry-run"

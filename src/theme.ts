@@ -4,8 +4,14 @@ import { loadFont as loadMonoFont } from "@remotion/google-fonts/JetBrainsMono";
 // If either import above ever breaks (Google Fonts renames things
 // occasionally), swap to "@remotion/google-fonts/Anton" and
 // "@remotion/google-fonts/IBMPlexMono" — nothing else needs to change.
-export const display = loadDisplayFont().fontFamily;
-export const mono = loadMonoFont().fontFamily;
+export const display = loadDisplayFont("normal", {
+  weights: ["500", "600", "700", "800"],
+  subsets: ["latin"],
+}).fontFamily;
+export const mono = loadMonoFont("normal", {
+  weights: ["400", "700"],
+  subsets: ["latin"],
+}).fontFamily;
 
 /**
  * Aubergine ground, warm paper type, amber signal.
@@ -30,4 +36,4 @@ export const resolveTheme = (overrides?: Partial<Theme>): Theme => ({
   ...(overrides ?? {}),
 });
 
-export const SERIES_LENGTH = 30;
+export const SERIES_LENGTH = 7;

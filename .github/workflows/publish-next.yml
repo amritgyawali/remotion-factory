@@ -40,7 +40,7 @@ jobs:
           node-version: 20
 
       - id: queue
-        name: Pick the next unposted item
+        name: Pick the next item from accepted weekly plans
         shell: bash
         run: node scripts/queue.mjs --github-output >> "$GITHUB_OUTPUT"
 
@@ -52,12 +52,12 @@ jobs:
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         shell: bash
         run: |
-          echo "::warning::Queue is empty. Append new items to plan.json."
+          echo "::warning::Queue is empty. Submit a new 28-item weekly plan."
           if [ -n "$TELEGRAM_BOT_TOKEN" ] && [ -n "$TELEGRAM_CHAT_ID" ]; then
             curl -fsS -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
               -d chat_id="$TELEGRAM_CHAT_ID" \
               -d disable_web_page_preview=true \
-              -d text="Video queue is empty. Append new items to plan.json.
+              -d text="Video queue is empty. Submit a new 28-item weekly plan.
           $RUN_URL" || true
           fi
 
@@ -97,11 +97,16 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           ONLY: ${{ steps.queue.outputs.id }}
+          PLAN_PATH: ${{ steps.queue.outputs.plan_path }}
           QUEUE_RUN: "1"
-          REMOTION_CONCURRENCY: 2
+          # Uploads the finished MP4 to the week's GitHub Release. Covered by
+          # the contents: write permission this workflow already holds.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # REMOTION_CONCURRENCY is deliberately unset: one video per run means
+          # remotion.config.ts can give it every core the runner has.
         run: node scripts/render-all.mjs
 
-      - name: Commit queue state
+      - name: Commit queue state and archive record
         if: steps.queue.outputs.id != '' && env.DRY_RUN != '1'
         env:
           ITEM_ID: ${{ steps.queue.outputs.id }}
@@ -110,11 +115,23 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -- state.json
+          if [ -f archive/manifest.json ]; then
+            git add -- archive/manifest.json
+          fi
 
-          staged="$(git diff --cached --name-only)"
-          if [ "$staged" != "state.json" ]; then
-            echo "Expected only state.json to be staged; got: $staged" >&2
+          # The video bytes live in a Release, never in git. Anything else
+          # showing up staged means something wrote where it should not have.
+          unexpected="$(git diff --cached --name-only \
+            | grep -vx -e 'state.json' -e 'archive/manifest.json' || true)"
+          if [ -n "$unexpected" ]; then
+            echo "Refusing to commit unexpected paths:" >&2
+            echo "$unexpected" >&2
             exit 1
+          fi
+
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+            exit 0
           fi
 
           git commit -m "chore(queue): mark $ITEM_ID posted"

@@ -88,7 +88,8 @@ jobs:
           POSTIZ_API_KEY: ${{ secrets.POSTIZ_API_KEY }}
           DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
           ONLY: ${{ matrix.chunk }}
-          REMOTION_CONCURRENCY: 2
+          # Each matrix job has its own runner, so a chunk gets the full core
+          # count for whichever video it is currently working on.
         run: node scripts/render-all.mjs
 
       - name: Archive to Cloudflare R2

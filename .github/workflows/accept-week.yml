@@ -1,0 +1,66 @@
+name: Accept weekly plan
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - plan.json
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  # Plan acceptance and publishing both write to main. Serialising them keeps
+  # each accepted week and each posted-id update on one linear history.
+  group: render
+  cancel-in-progress: false
+
+jobs:
+  accept:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Manual runs must inspect reviewed main, never an arbitrary branch.
+          ref: ${{ github.event_name == 'push' && github.sha || 'main' }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - id: accept
+        name: Validate and archive the weekly plan
+        shell: bash
+        run: node scripts/accept-week.mjs --github-output "$GITHUB_OUTPUT"
+
+      - name: Commit accepted week
+        if: steps.accept.outputs.changed == 'true'
+        env:
+          ARCHIVE: ${{ steps.accept.outputs.archive }}
+          WEEK_ID: ${{ steps.accept.outputs.week_id }}
+          ACTION: ${{ steps.accept.outputs.action }}
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- "$ARCHIVE"
+
+          staged="$(git diff --cached --name-only)"
+          if [ "$staged" != "$ARCHIVE" ]; then
+            echo "Expected only $ARCHIVE to be staged; got: $staged" >&2
+            exit 1
+          fi
+
+          git commit -m "chore(queue): $ACTION weekly plan $WEEK_ID"
+          for attempt in 1 2 3; do
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            echo "Push attempt $attempt failed; rebasing onto current main."
+            git fetch origin main
+            git rebase origin/main
+          done
+          echo "Could not push accepted week after three attempts." >&2
+          exit 1
