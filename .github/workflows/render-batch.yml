@@ -38,10 +38,16 @@ concurrency:
 jobs:
   render:
     runs-on: ubuntu-latest
-    # One render is ~4.5 minutes plus a few for install and the browser. The
-    # ceiling is for a bad day, not the expected one, but it no longer has to
-    # cover four renders back to back.
-    timeout-minutes: 60
+    # A scheduled run renders one video: ~4.5 minutes on a developer machine,
+    # rather longer on a two-core runner doing software GL with x264 preset
+    # "slow". Sixty minutes is a bad day for one video, not the expected one.
+    #
+    # A manual run is the catch-up path and may ask for four. Four renders that
+    # each take twelve minutes plus install and the browser lands within a
+    # whisker of the same ceiling, and a timeout kills the job *after* the
+    # earlier videos have already been archived — paying for the render and
+    # discarding the run. The manual ceiling is sized for the input it accepts.
+    timeout-minutes: ${{ github.event_name == 'workflow_dispatch' && 180 || 60 }}
     env:
       DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && '1' || '0' }}
       RENDER_COUNT: ${{ github.event_name == 'workflow_dispatch' && inputs.count || '1' }}
@@ -56,6 +62,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          # Restores ~/.npm between runs. Four runs a day each pulling the
+          # Remotion tree from the registry is the slowest step that buys
+          # nothing.
+          cache: npm
 
       - name: Install Chrome runtime libraries
         shell: bash
