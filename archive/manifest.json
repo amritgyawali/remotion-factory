@@ -12,6 +12,58 @@
       "audioSignature": "72357779999987998988978778782f96",
       "url": "https://github.com/amritgyawali/remotion-factory/releases/download/videos-2026-w31/d01-b.mp4",
       "archivedAt": "2026-07-28T02:27:29.280Z"
+    },
+    {
+      "id": "d01-c",
+      "week": "2026-w31",
+      "template": "SiteRoast",
+      "sourceId": "meritbyte-pdf-03",
+      "bytes": 2993349,
+      "durationSeconds": 24.1,
+      "sha256": "edb392afaece3bfcb4eab035bda8132cb299fa13fa6e04bee8ec35066799d62c",
+      "visualSignature": "34b48000d40a080434b48000d5130804b4b4808091130804b4b4808091240010b4b480c0b3a20010b4b480c0b1a20010b4b480c0b0c2025cb4b480c0b0c2025c",
+      "audioSignature": "82233329334333933333338333332f92",
+      "url": "https://github.com/amritgyawali/remotion-factory/releases/download/videos-2026-w31/d01-c.mp4",
+      "archivedAt": "2026-07-28T20:25:23Z"
+    },
+    {
+      "id": "d01-d",
+      "week": "2026-w31",
+      "template": "FounderStory",
+      "sourceId": "meritbyte-pdf-04",
+      "bytes": 2998294,
+      "durationSeconds": 22.1,
+      "sha256": "d666181564096e589e8475a696b8e31beb99e7c6e59eae323eadb5b9fb6f0bd6",
+      "visualSignature": "04a8a0000000000004a8a0910000000004a8a090ac00000084a8a090ac00000084a8a090a400000084a8a090a400000084a8a090a496000084a8a090a4965c5b",
+      "audioSignature": "30002101110021111111322232331f72",
+      "url": "https://github.com/amritgyawali/remotion-factory/releases/download/videos-2026-w31/d01-d.mp4",
+      "archivedAt": "2026-07-28T20:30:21Z"
+    },
+    {
+      "id": "d02-a",
+      "week": "2026-w31",
+      "template": "DevJoke",
+      "sourceId": "meritbyte-pdf-05",
+      "bytes": 2116596,
+      "durationSeconds": 15.061,
+      "sha256": "f9fe79096ede72ae253599380334b9d08e90307d031d110df63821be49fa6df0",
+      "visualSignature": "520a800050022000528ae000f0422310728ae000e80a2310728ae040e8022110728ae040e4192310728ae040e41d4210728ae040e41d783b728ae040e41d783b",
+      "audioSignature": "5111131221332213323122331337f732",
+      "url": "https://github.com/amritgyawali/remotion-factory/releases/download/videos-2026-w31/d02-a.mp4",
+      "archivedAt": "2026-07-28T20:33:56Z"
+    },
+    {
+      "id": "d02-b",
+      "week": "2026-w31",
+      "template": "CaseStudy",
+      "sourceId": "meritbyte-pdf-06",
+      "bytes": 3369112,
+      "durationSeconds": 22.1,
+      "sha256": "1f2d2a34c61101627dd1581f692806d59b624c643d8b18258545219f0c8aac4f",
+      "visualSignature": "14a864000051000014a864209050000014a864209000000054a864289411110054a864a0944c110054a864a0944c110054a864a0944c692f54a864a0944c692f",
+      "audioSignature": "70001114111321621122263212221f61",
+      "url": "https://github.com/amritgyawali/remotion-factory/releases/download/videos-2026-w31/d02-b.mp4",
+      "archivedAt": "2026-07-28T20:38:56Z"
     }
   ]
 }
