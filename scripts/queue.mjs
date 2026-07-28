@@ -1,6 +1,8 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
+import { APPROVAL_STATES, approvalOf, requiresApproval } from "./approval.mjs";
 import { isPortableItemId } from "./validate-plan.mjs";
+import { weekIdOf } from "./week-id.mjs";
 import { loadAcceptedWeeks } from "./weekly-plan.mjs";
 
 export const QUEUE_LOW_WATER = 12;
@@ -68,13 +70,38 @@ export async function loadQueueState(path = STATE_PATH) {
     }
   }
 
+  // The slots already promised to Postiz. nextSlot() reads this to find the
+  // next free one, so a malformed entry would silently hand out a slot that is
+  // already taken and put two videos on the same minute.
+  if (state.scheduled !== undefined) {
+    if (!Array.isArray(state.scheduled)) {
+      throw new Error(`${path} "scheduled" must be an array`);
+    }
+    for (const entry of state.scheduled) {
+      if (!entry || typeof entry !== "object") {
+        throw new Error(`${path} scheduled entries must be objects`);
+      }
+      if (!isPortableItemId(entry.id)) {
+        throw new Error(`${path} scheduled entry has an invalid id: ${JSON.stringify(entry.id)}`);
+      }
+      if (Number.isNaN(Date.parse(entry.at))) {
+        throw new Error(`${path} scheduled entry "${entry.id}" has no ISO timestamp on "at"`);
+      }
+    }
+    const slotIds = state.scheduled.map((entry) => entry.id);
+    if (new Set(slotIds).size !== slotIds.length) {
+      throw new Error(`${path} contains duplicate scheduled ids`);
+    }
+  }
+
   return state;
 }
 
-export const APPROVAL_STATES = ["pending", "approved", "rejected"];
-
 /**
- * Whether a human has to approve a video before it can be published.
+ * Re-exported so every existing caller keeps importing the review gate from
+ * here. It is *defined* in approval.mjs because this module imports
+ * validate-plan.mjs, and the validator needs to ask whether the gate is on —
+ * see the note there.
  *
  * On by default: a rendered video sits in the buffer as "pending" until it is
  * approved in the dashboard. Set REQUIRE_APPROVAL=0 to go back to fully
@@ -82,9 +109,7 @@ export const APPROVAL_STATES = ["pending", "approved", "rejected"];
  * existed. The trade is real — with approval on, nothing posts while nobody is
  * looking, which is the point of it and also its cost.
  */
-export const requiresApproval = () => process.env.REQUIRE_APPROVAL !== "0";
-
-export const approvalOf = (entry) => entry.approval ?? "pending";
+export { APPROVAL_STATES, approvalOf, requiresApproval };
 
 /** Everything rendered and not yet posted, oldest first — the review queue. */
 export function buffered(state) {
@@ -176,7 +201,12 @@ export function archivedQueueSnapshot(weeks, state) {
       item,
       plan: week.plan,
       planPath: week.path,
+      // Both shapes, named for what they are. `week` is the metadata object
+      // ({ id, order }) that callers read `.order` off; `weekId` is the string
+      // storage paths are built from. They used to be one field, and passing
+      // it to an archive produced "videos-[object Object]" — see week-id.mjs.
       week: week.plan.week,
+      weekId: weekIdOf(week.plan.week, `plans/${week.plan.week?.id ?? "?"} week.id`),
       publishBlockers: week.publishBlockers ?? [],
     })),
   );
@@ -196,6 +226,7 @@ export function archivedQueueSnapshot(weeks, state) {
     nextPlan: nextEntry?.plan ?? null,
     nextPlanPath: nextEntry?.planPath ?? null,
     nextWeek: nextEntry?.week ?? null,
+    nextWeekId: nextEntry?.weekId ?? null,
     nextPublishBlockers: nextEntry?.publishBlockers ?? [],
     unknown,
     weeks,
@@ -266,7 +297,7 @@ export async function markRendered(entry, { statePath = STATE_PATH } = {}) {
 
 export async function markArchivedPosted(
   id,
-  { plansDir = PLANS_DIR, statePath = STATE_PATH } = {},
+  { plansDir = PLANS_DIR, statePath = STATE_PATH, scheduledFor = null } = {},
 ) {
   const weeks = await loadAcceptedWeeks(plansDir);
   if (!weeks.some((week) => week.plan.items.some((item) => item.id === id))) {
@@ -276,6 +307,16 @@ export async function markArchivedPosted(
   const state = await loadQueueState(statePath);
   if (!state.posted.includes(id)) {
     state.posted.push(id);
+
+    // The slot Postiz was told to publish at. Recorded because it is the only
+    // record of when this video actually goes live — "posted" here means
+    // "handed over", which from 25 August onwards is weeks earlier.
+    if (scheduledFor) {
+      const scheduled = (state.scheduled ?? []).filter((entry) => entry.id !== id);
+      scheduled.push({ id, at: new Date(scheduledFor).toISOString() });
+      scheduled.sort((a, b) => a.at.localeCompare(b.at));
+      state.scheduled = scheduled;
+    }
     // Stamped so the workflow can tell a catch-up run from a duplicate one.
     // GitHub drops and delays scheduled runs, so "did we already post for this
     // slot" cannot be answered from the clock alone.

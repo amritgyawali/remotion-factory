@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { loadEnvFile } from "./env.mjs";
+import { assertWithinEmbargo, describeSlot } from "./slots.mjs";
 
 /**
  * The Postiz client, shared by the render batch's preflight and the publish
@@ -129,21 +130,40 @@ export function buildPosts(item, media, integrations, plan) {
   }));
 }
 
-/** Send one finished video to every channel the plan names for it. */
-export async function publishVideo({ file, item, plan, integrations }) {
+/**
+ * Hand one finished video to Postiz, to be published at `date`.
+ *
+ * `date` is required and has no default. It used to be `new Date()` — post on
+ * receipt — and a default like that is exactly how an embargoed post escapes:
+ * one caller forgets the argument and the video goes out immediately. A missing
+ * date is now a failure, and the date it is given is checked against the
+ * embargo before a single byte is uploaded.
+ */
+export async function publishVideo({ file, item, plan, integrations, date }) {
+  if (date === undefined) {
+    throw new Error(
+      `publishVideo({ date }) is required — ${item.id} has no scheduled slot. ` +
+        "See scripts/slots.mjs::nextSlot.",
+    );
+  }
+
+  // Before the upload, not after. A rejected schedule should cost nothing, and
+  // an upload that is never referenced by a post is litter in the media library.
+  const when = assertWithinEmbargo(date, { postType: plan.postType });
+
   const media = await uploadToPostiz(file);
   await postiz("/posts", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       type: plan.postType,
-      date: new Date().toISOString(),
+      date: when.toISOString(),
       shortLink: false,
       tags: [],
       posts: buildPosts(item, media, integrations, plan),
     }),
   });
-  return { mediaId: media.id };
+  return { mediaId: media.id, scheduledFor: when.toISOString(), readable: describeSlot(when) };
 }
 
 /** Telegram is optional and stays optional; a missing token is not an error. */

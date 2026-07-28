@@ -10,6 +10,11 @@ plan.json weekly inbox → plans/<week>.json → Remotion → Postiz
                          four posts a day      state.json
 ```
 
+Videos are handed to Postiz with a scheduled date, not published on handover.
+The grid starts at an embargo date and steps every six hours, so nothing appears
+before it however early it was rendered — see
+[When each video goes live](#when-each-video-goes-live).
+
 The Oracle box only runs Postiz and its database. It never renders video, so the
 GitHub-hosted runner does the expensive work and then disappears.
 
@@ -25,7 +30,7 @@ GitHub-hosted runner does the expensive work and then disappears.
 {
   "mode": "queue",
   "week": { "id": "2026-w31", "order": 202631 },
-  "postType": "draft",
+  "postType": "schedule",
   "items": [
     {
       "id": "d01-a",
@@ -438,18 +443,51 @@ Download the artifact and watch it on a phone. Text that is comfortable at desk
 size can disappear in a social feed.
 
 When the visual and channel setup are verified, run it manually without dry-run.
-With `"postType": "draft"`, the item is stored in Postiz drafts and is then marked
-done in the queue.
+With `"postType": "schedule"`, the item is handed to Postiz with a future date
+and is then marked done in the queue.
 
 Changing `postType` is an owner decision, and can be made mid-week:
 
-- `"draft"` creates four drafts per day for review.
-- `"now"` publishes four items per day immediately after each render.
-- `"schedule"` is rejected in queue mode; the GitHub cron is already the clock.
+- `"schedule"` hands each video to Postiz with its assigned slot; Postiz owns
+  the clock from there. This is the default.
+- `"draft"` creates drafts for review, published by hand.
+- `"now"` publishes immediately on receipt, ignoring the slot — refused by
+  `scripts/slots.mjs` while an embargo is in force.
 
 Edit it in `plan.json` and push; **Accept weekly plan** updates the archive even
-while the week is running. Under `"now"` there is no review step — four posts a
-day reach every configured account until the queue empties.
+while the week is running.
+
+### When each video goes live
+
+Publishing and *appearing* are separate. The publisher does not post a video; it
+hands Postiz the video plus the date to post it on, taken from a fixed grid in
+`scripts/slots.mjs`:
+
+```text
+slot 0   2026-08-25 09:00 +0545      <- the embargo: nothing appears before this
+slot 1   2026-08-25 15:00
+slot 2   2026-08-25 21:00
+slot 3   2026-08-26 03:00            ... four a day, six hours apart
+```
+
+Each publish takes the next free slot and records it in `state.json` under
+`scheduled`, so a run that failed after Postiz accepted the post cannot hand the
+same slot out twice on the retry. An idle spell snaps forward to the next
+*future* slot, still aligned to the grid, rather than dumping a backlog of
+overdue posts into Postiz at once.
+
+This matters because GitHub's scheduler is best effort — on this repository one
+run fired ninety minutes late and the next was dropped outright. Under the old
+`date: new Date()` model that moved the post. Now it moves only the handover;
+the video still appears on its slot.
+
+Two independent guards enforce the embargo, because arithmetic can be wrong:
+`nextSlot()` never returns a slot before it, and `assertWithinEmbargo()`
+re-checks whatever is actually about to be sent, before a byte is uploaded. It
+also refuses `postType: "now"`, which would make Postiz ignore the date.
+
+Override for a later campaign with `POSTIZ_FIRST_SLOT` (ISO 8601, with offset)
+and `POSTIZ_SLOT_GAP_HOURS`.
 
 ## Local commands
 

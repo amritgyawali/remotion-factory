@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { deleteObject, listObjects, putObject, r2ConfigFromEnv } from "./r2.mjs";
+import { weekIdOf } from "./week-id.mjs";
 
 /**
  * Cold archive on Cloudflare R2, with a hard storage budget.
@@ -20,8 +21,15 @@ import { deleteObject, listObjects, putObject, r2ConfigFromEnv } from "./r2.mjs"
 /** Two gigabytes below the free allowance, so a busy month cannot overshoot. */
 export const BUDGET_BYTES = 8 * 1024 ** 3;
 
-/** Objects live under a month prefix so pruning is chronological by key. */
-export const keyFor = (weekId, id) => `${weekId}/${id}.mp4`;
+/**
+ * Objects live under a week prefix so pruning is chronological by key.
+ *
+ * The week is validated rather than interpolated. Unlike GitHub, S3 accepts
+ * "[object Object]/d01-c.mp4" without complaint — every week would collapse
+ * into one prefix and the chronological ordering this eviction depends on
+ * would quietly stop being chronological.
+ */
+export const keyFor = (weekId, id) => `${weekIdOf(weekId, "R2 keyFor(weekId)")}/${id}.mp4`;
 
 /**
  * Which objects to remove so that `incoming` bytes fit inside the budget.

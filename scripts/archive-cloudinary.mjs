@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import { weekIdOf } from "./week-id.mjs";
 
 /**
  * Cold archive on Cloudinary, storing the original file at full quality.
@@ -149,7 +150,9 @@ export async function archiveToCloudinary({
     );
   }
 
-  const publicId = `${folder}/${weekId}/${item.id}`;
+  // Validated, not interpolated: Cloudinary would accept an "[object Object]"
+  // segment and file every week under it. See scripts/week-id.mjs.
+  const publicId = `${folder}/${weekIdOf(weekId, "archiveToCloudinary({ weekId })")}/${item.id}`;
   const existing = await listVideos(config, `${folder}/`);
   const others = existing.filter((resource) => resource.publicId !== publicId);
 

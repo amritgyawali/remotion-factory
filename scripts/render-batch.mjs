@@ -13,20 +13,25 @@ import { getArchivedQueue, loadQueueState, markRendered, pendingRender } from ".
 import { assertPlayableVideo } from "./verify-video.mjs";
 
 /**
- * The morning batch: render a day's videos, one after another, and park them.
+ * Render the next video off the queue and park it for the publisher.
  *
  * Rendering and publishing used to be the same run, which tied the two to the
  * same clock — a six-hour gap between posts meant a six-hour gap between
  * renders, and a Postiz outage threw away a finished render. They are now
- * separate: this renders four videos at 09:30 Kathmandu and records where it
- * put them; scripts/publish-one.mjs sends one every six hours.
+ * separate: this renders and records where it put the master;
+ * scripts/publish-one.mjs hands one to Postiz with a scheduled slot.
  *
- * Sequential on purpose. remotion.config.ts hands every core to whichever
- * render is running, so four at once would be four times slower each and peak
- * four times the memory for no gain. Four renders at roughly four and a half
- * minutes is about twenty minutes in one job, well inside the six-hour cap.
+ * One video per run, four runs a day, six hours apart. The batch-of-four this
+ * replaced put a day's work inside one job's lifetime, so a single failure part
+ * way through cost every video after it — which is exactly what happened when
+ * a malformed release tag failed all four after they had already rendered.
  *
- *   node scripts/render-batch.mjs [--count 4] [--dry-run]
+ * The loop below still handles a count above one, because a manual catch-up run
+ * is occasionally worth it. Sequential either way: remotion.config.ts hands
+ * every core to whichever render is running, so two at once would be twice as
+ * slow each and peak twice the memory for no gain.
+ *
+ *   node scripts/render-batch.mjs [--count 1] [--dry-run]
  */
 
 loadEnvFile();
@@ -41,7 +46,9 @@ function argValue(flag, fallback) {
   return Number.isFinite(value) && value > 0 ? value : fallback;
 }
 
-const COUNT = argValue("--count", Number(process.env.RENDER_COUNT ?? 4));
+// One per run by default. The schedule fires four times a day rather than
+// asking one job to produce four videos — see .github/workflows/render-batch.yml.
+const COUNT = argValue("--count", Number(process.env.RENDER_COUNT ?? 1));
 
 function run(cmd, args) {
   return new Promise((resolve, reject) => {
@@ -150,7 +157,7 @@ async function main() {
         ? "Queue is empty. Submit a new 28-item weekly plan."
         : `Nothing to render — ${(state.rendered ?? []).length} video(s) already waiting to post.`;
     console.log(message);
-    await jobSummary(`## Render batch\n\n${message}`);
+    await jobSummary(`## Render\n\n${message}`);
     await notify(`Weekly video factory\n${message}`);
     return;
   }
@@ -163,17 +170,23 @@ async function main() {
   const failed = [];
 
   for (const [index, entry] of batch.entries()) {
-    const { item, week } = entry;
-    console.log(`[${index + 1}/${batch.length}] ${item.id} — ${item.template}`);
+    // weekId, not week: the entry carries both, and the archives take the
+    // string. Destructuring `week` here passed the { id, order } object all
+    // the way into a release tag and cost a full batch. See week-id.mjs.
+    const { item, weekId } = entry;
+    console.log(`[${index + 1}/${batch.length}] ${item.id} — ${item.template} (${weekId})`);
     try {
-      const { verified, stored } = await renderOne(item, week);
+      const { verified, stored } = await renderOne(item, weekId);
 
       if (!DRY_RUN) {
         // Recorded one at a time, so a failure on video three does not throw
         // away the two that already rendered.
         await markRendered({
           id: item.id,
-          week,
+          // The string, so publish-one.mjs can print it and the dashboard can
+          // group by it. state.json is committed; an object here would have
+          // been "[object Object]" in the repository history too.
+          week: weekId,
           template: item.template,
           url: stored.url,
           sha256: stored.sha256,
@@ -203,7 +216,7 @@ async function main() {
     path.join(OUT, "batch.json"),
     JSON.stringify({ done, failed, waiting: waiting.map((w) => w.id) }, null, 2),
   );
-  await jobSummary(`## Render batch\n\n\`\`\`\n${summary}\n\`\`\``);
+  await jobSummary(`## Render\n\n\`\`\`\n${summary}\n\`\`\``);
   await notify(`Weekly video factory\n${summary}`);
 
   if (failed.length) process.exitCode = 1;
@@ -212,8 +225,8 @@ async function main() {
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main().catch(async (error) => {
     console.error(error);
-    await jobSummary(`## Render batch failed\n\n\`\`\`\n${error.message}\n\`\`\``);
-    await notify(`Render batch failed before finishing:\n${error.message}`);
+    await jobSummary(`## Render failed\n\n\`\`\`\n${error.message}\n\`\`\``);
+    await notify(`Render failed before finishing:\n${error.message}`);
     process.exit(1);
   });
 }

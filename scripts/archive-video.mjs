@@ -3,6 +3,7 @@ import { mkdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { archiveSpread, duplicateProblems } from "./uniqueness.mjs";
+import { weekIdOf } from "./week-id.mjs";
 
 /**
  * Permanent storage for every video the factory publishes.
@@ -22,8 +23,13 @@ import { archiveSpread, duplicateProblems } from "./uniqueness.mjs";
 const API = "https://api.github.com";
 const MANIFEST_PATH = "archive/manifest.json";
 
+/**
+ * Validated here as well as at the entry point. This is the line that actually
+ * minted "videos-[object Object]" and lost a morning's renders to a 422, so it
+ * checks its own input rather than trusting that someone upstream did.
+ */
 function releaseTag(weekId) {
-  return `videos-${weekId}`;
+  return `videos-${weekIdOf(weekId, "release tag weekId")}`;
 }
 
 export async function sha256File(file) {
@@ -186,6 +192,12 @@ export async function archiveVideo({
   repo = process.env.GITHUB_REPOSITORY,
   token = process.env.GITHUB_TOKEN,
 } = {}) {
+  // Before the credential check, not after: a malformed week is a bug in the
+  // caller and must fail the same way whether or not this machine can reach
+  // GitHub. Skipping quietly on a laptop and throwing in CI is how the object
+  // reached the release tag in the first place.
+  const week = weekIdOf(weekId, "archiveVideo({ weekId })");
+
   if (!repo || !token) {
     return { skipped: true, reason: "GITHUB_REPOSITORY and GITHUB_TOKEN are not both set" };
   }
@@ -207,7 +219,7 @@ export async function archiveVideo({
   }
 
   const [release, sha256, { size }] = await Promise.all([
-    ensureRelease(repo, weekId, token),
+    ensureRelease(repo, week, token),
     sha256File(file),
     stat(file),
   ]);
@@ -215,7 +227,7 @@ export async function archiveVideo({
   const asset = await uploadAsset(repo, release, file, name, token);
   const entry = {
     id: item.id,
-    week: weekId,
+    week,
     template: item.template,
     sourceId: item.sourceId ?? null,
     bytes: size,

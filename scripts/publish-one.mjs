@@ -14,15 +14,21 @@ import {
   QUEUE_LOW_WATER,
   requiresApproval,
 } from "./queue.mjs";
+import { describeSlot, FIRST_SLOT_ISO, nextSlot } from "./slots.mjs";
 
 /**
  * Send one already-rendered video to Postiz.
  *
- * This is the second half of the split: the morning batch rendered four videos
- * and parked them in the week's GitHub Release, and this posts the oldest one
- * still waiting. It downloads a finished master rather than making one, so a
- * publish is about a minute instead of six — and a Postiz outage costs a retry
- * rather than a wasted render.
+ * This is the second half of the split: the render workflow parked a finished
+ * master in the week's GitHub Release, and this hands the oldest one still
+ * waiting to Postiz. It downloads a finished master rather than making one, so
+ * a publish is about a minute instead of six — and a Postiz outage costs a
+ * retry rather than a wasted render.
+ *
+ * It does not publish immediately. Each video is given a slot on the six-hourly
+ * grid that starts at the embargo date (scripts/slots.mjs) and Postiz is asked
+ * to hold it until then, so GitHub's unreliable scheduler affects when a video
+ * is handed over, never when it appears.
  *
  *   node scripts/publish-one.mjs [--dry-run]
  */
@@ -89,7 +95,7 @@ async function main() {
         : rejected.length && inBuffer.length === rejected.length
           ? `Every buffered video is rejected (${rejected.map((entry) => entry.id).join(", ")}). ` +
             "Discard them in the dashboard so the next batch re-renders."
-          : "Nothing rendered is waiting to post. The morning batch renders the next four.";
+          : "Nothing rendered is waiting to post. The render workflow adds one every six hours.";
 
     console.log(message);
     await jobSummary(`## Publish\n\n${message}`);
@@ -108,7 +114,12 @@ async function main() {
     );
   }
 
+  // Assigned before anything is uploaded, so a dry run reports the real slot
+  // and a failure part-way through does not consume one.
+  const slot = nextSlot(state);
+
   console.log(`Publishing ${entry.id} (${entry.template}) from ${entry.week}`);
+  console.log(`  slot: ${describeSlot(slot)} Kathmandu (${slot.toISOString()})`);
 
   if (DRY_RUN) {
     console.log("DRY RUN — nothing sent to Postiz, state.json untouched");
@@ -119,17 +130,18 @@ async function main() {
   const integrations = await listIntegrations();
   const file = await fetchMaster(entry);
 
-  await publishVideo({
+  const sent = await publishVideo({
     file,
     item: planned.item,
     plan: planned.plan,
     integrations,
+    date: slot,
   });
-  console.log(`  sent to Postiz as ${planned.plan.postType}`);
+  console.log(`  scheduled in Postiz as ${planned.plan.postType} for ${sent.readable}`);
 
   let remaining = "unknown";
   try {
-    const after = await markArchivedPosted(entry.id);
+    const after = await markArchivedPosted(entry.id, { scheduledFor: sent.scheduledFor });
     remaining = String(after.remaining);
     console.log(`  marked posted, ${after.remaining} item(s) remain in the plan`);
   } catch (error) {
@@ -140,7 +152,7 @@ async function main() {
 
   const stillWaiting = publishable(await loadQueueState()).length;
   const summary =
-    `Posted ${entry.id} as ${planned.plan.postType}.\n` +
+    `Scheduled ${entry.id} as ${planned.plan.postType} for ${sent.readable} Kathmandu.\n` +
     `${stillWaiting} rendered video(s) still waiting, ${remaining} left in the plan.`;
 
   console.log(`\n${summary}`);

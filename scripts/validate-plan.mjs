@@ -1,6 +1,10 @@
 import { readFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
+// Both are leaves: neither imports this module, so the summary below can state
+// the two facts that actually govern publishing without creating a cycle.
+import { requiresApproval } from "./approval.mjs";
 import { expandSchedule, scheduleErrors } from "./schedule.mjs";
+import { describeSlot, FIRST_SLOT_ISO } from "./slots.mjs";
 
 const ITEM_ID = /^[a-z0-9](?:[a-z0-9_-]{0,78}[a-z0-9])?$/;
 const WINDOWS_RESERVED = /^(con|prn|aux|nul|com[1-9]|lpt[1-9])$/;
@@ -94,8 +98,28 @@ export async function loadPlan(path = "plan.json") {
   if (queueMode && plan.schedule) {
     errors.push("queue mode must not have a schedule block");
   }
-  if (queueMode && plan.postType === "schedule") {
-    errors.push('queue mode postType must be "draft" or "now", not "schedule"');
+  // "schedule" was rejected here for as long as queue items had no date to be
+  // scheduled to: they carry no publishAt by design, and the publisher sent
+  // `date: new Date()`, so "schedule" would have meant "post now" through a
+  // code path claiming otherwise. scripts/slots.mjs now assigns every video a
+  // real future slot, which is what makes "schedule" correct in queue mode.
+  //
+  // "now" is the dangerous setting under an embargo — Postiz ignores the date
+  // and publishes on receipt — so it is refused at send time by
+  // slots.mjs::assertWithinEmbargo rather than banned outright here.
+  if (queueMode && !["draft", "schedule", "now"].includes(plan.postType)) {
+    errors.push(`queue mode postType must be "draft", "schedule" or "now" — got "${plan.postType}"`);
+  }
+  if (queueMode && plan.postType === "now") {
+    // A blocker rather than an error, so the week still renders and can still
+    // be previewed. But it is caught here, at accept time, instead of at 3am
+    // four weeks from now: assertWithinEmbargo refuses "now" at send time, so
+    // a week accepted this way renders perfectly and then fails every single
+    // publish run until somebody notices and edits postType.
+    publishBlockers.push(
+      'postType "now" tells Postiz to publish on receipt and ignore the scheduled ' +
+        'date, which would breach the embargo. Use "schedule".',
+    );
   }
   if (queueMode) {
     if (!plan.week || typeof plan.week !== "object") {
@@ -323,8 +347,22 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   const last = plan.items[plan.items.length - 1]?.publishAt;
   console.log(`\n${plan.items.length} videos ready. postType is "${plan.postType}".`);
   if (first && last) console.log(`First publishes ${first}, last publishes ${last}.`);
+
+  // This used to read "Auto-publish is ON — these go live without review",
+  // which is now false twice over: a review gate stands in front of the
+  // publisher, and every slot sits behind an embargo. A summary line that
+  // overstates the risk is not harmless — it is the line an operator reads
+  // instead of checking, so it has to describe the system that exists.
   if (plan.postType !== "draft") {
-    console.log("Auto-publish is ON — these go live without review.");
+    console.log(
+      requiresApproval()
+        ? "Review gate is ON — each render waits for approval in the dashboard."
+        : "Review gate is OFF (REQUIRE_APPROVAL=0) — renders publish unattended.",
+    );
+    console.log(
+      `Nothing publishes before ${describeSlot(FIRST_SLOT_ISO)} Kathmandu; ` +
+        "four a day, six hours apart, from then on.",
+    );
   }
 
   // Structure is valid and every video can be rendered. Publishing is a

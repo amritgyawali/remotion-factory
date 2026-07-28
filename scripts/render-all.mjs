@@ -1,15 +1,34 @@
 import { spawn } from "node:child_process";
-import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
+import { appendFile, mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { loadEnvFile } from "./env.mjs";
 import { loadPlan } from "./validate-plan.mjs";
-import { getArchivedQueue, markArchivedPosted, QUEUE_LOW_WATER } from "./queue.mjs";
+import {
+  getArchivedQueue,
+  loadQueueState,
+  markArchivedPosted,
+  QUEUE_LOW_WATER,
+} from "./queue.mjs";
 import { assertPlayableVideo } from "./verify-video.mjs";
 import { archiveVideo } from "./archive-video.mjs";
 import { BED_TEMPLATES } from "./audio/beds.mjs";
 import { masterVideoAudio } from "./master-audio.mjs";
 import { archiveToR2 } from "./archive-r2.mjs";
 import { archiveToCloudinary } from "./archive-cloudinary.mjs";
+// Every post the factory can send goes through publishVideo, which refuses a
+// date before the embargo. This file used to carry its own copy of the Postiz
+// client — its own upload, its own POST /posts, its own `date: new Date()` —
+// so the embargo guard in slots.mjs simply did not apply to it. One duplicated
+// client is one publishing path nobody remembers to fix.
+import {
+  assertConfigured,
+  listIntegrations,
+  notify,
+  publishVideo,
+  resolveChannels,
+} from "./postiz.mjs";
+import { nextSlot } from "./slots.mjs";
+import { weekIdOf } from "./week-id.mjs";
 
 // Before any process.env is read below, so a local .env can supply the same
 // values the workflow gets from secrets. Never overrides a real environment.
@@ -22,15 +41,6 @@ const PLAN_PATH = process.env.PLAN_PATH;
 const ONLY = (process.env.ONLY ?? "").split(",").map((s) => s.trim()).filter(Boolean);
 const THROTTLE_MS = Number(process.env.POSTIZ_THROTTLE_MS ?? 2000);
 
-const POSTIZ_KEY = process.env.POSTIZ_API_KEY;
-const POSTIZ_BASE = normaliseBase(process.env.POSTIZ_API_URL);
-
-function normaliseBase(url) {
-  if (!url) return null;
-  const trimmed = url.replace(/\/+$/, "");
-  return trimmed.endsWith("/public/v1") ? trimmed : `${trimmed}/public/v1`;
-}
-
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 function run(cmd, args) {
@@ -41,24 +51,6 @@ function run(cmd, args) {
       code === 0 ? resolve() : reject(new Error(`${cmd} exited with code ${code}`)),
     );
   });
-}
-
-async function postiz(pathname, init = {}, attempt = 1) {
-  const res = await fetch(`${POSTIZ_BASE}${pathname}`, {
-    ...init,
-    headers: { Authorization: POSTIZ_KEY, ...(init.headers ?? {}) },
-  });
-
-  if (res.status === 429 && attempt <= 5) {
-    const wait = attempt * 60_000;
-    console.warn(`  rate limited, waiting ${wait / 1000}s then retrying`);
-    await sleep(wait);
-    return postiz(pathname, init, attempt + 1);
-  }
-
-  const body = await res.text();
-  if (!res.ok) throw new Error(`Postiz ${pathname} -> ${res.status}: ${body.slice(0, 400)}`);
-  return body ? JSON.parse(body) : null;
 }
 
 /**
@@ -117,95 +109,6 @@ async function renderOne(item) {
       `true peak ${mastered.targetTruePeak} dBTP`,
   );
   return { file: outFile, verified };
-}
-
-async function uploadToPostiz(file) {
-  const buf = await readFile(file);
-  const form = new FormData();
-  form.append("file", new Blob([buf], { type: "video/mp4" }), path.basename(file));
-  // Do not set Content-Type — fetch writes the multipart boundary itself.
-  const uploaded = await postiz("/upload", { method: "POST", body: form });
-  const media = Array.isArray(uploaded) ? uploaded[0] : uploaded;
-  if (!media?.id) throw new Error(`Upload returned no id: ${JSON.stringify(uploaded).slice(0, 300)}`);
-  return media;
-}
-
-/**
- * Resolve the channel list for one item. IDs are the safe way to name a
- * channel: identifiers are not unique — two Instagram accounts both report
- * "instagram-standalone", and matching on that would publish to both.
- */
-export function resolveChannels(item, plan, integrations) {
-  const live = integrations.filter((i) => !i.disabled);
-  const wanted = item.channels ?? plan.channels ?? [];
-
-  if (wanted.length === 0) {
-    console.warn(`  no channels specified — posting to all ${live.length} connected channels`);
-    return live;
-  }
-
-  const resolved = [];
-  for (const ref of wanted) {
-    const byId = live.find((i) => i.id === ref);
-    if (byId) {
-      resolved.push(byId);
-      continue;
-    }
-
-    const byIdentifier = live.filter((i) => i.identifier === ref);
-    if (byIdentifier.length === 1) {
-      resolved.push(byIdentifier[0]);
-    } else if (byIdentifier.length > 1) {
-      throw new Error(
-        `"${ref}" matches ${byIdentifier.length} channels (${byIdentifier
-          .map((i) => `${i.name} = ${i.id}`)
-          .join(", ")}). Use the integration id so the post lands on the right account.`,
-      );
-    } else {
-      throw new Error(`"${ref}" matches no connected channel. Run: npm run channels`);
-    }
-  }
-
-  // Same id listed twice would post twice.
-  return [...new Map(resolved.map((i) => [i.id, i])).values()];
-}
-
-function buildPosts(item, media, integrations, plan) {
-  const wanted = resolveChannels(item, plan, integrations);
-  if (wanted.length === 0) throw new Error(`no live channels for ${item.id}`);
-
-  const settingsFor = (i) => ({
-    __type: i.identifier,
-    // Keyed by id first so two accounts on the same platform can differ.
-    ...(plan.channelSettings?.[i.identifier] ?? {}),
-    ...(plan.channelSettings?.[i.id] ?? {}),
-  });
-
-  return wanted.map((integration) => ({
-    integration: { id: integration.id },
-    value: [
-      {
-        content: item.caption,
-        image: [{ id: media.id, path: media.path }],
-      },
-    ],
-    settings: settingsFor(integration),
-  }));
-}
-
-async function notify(text) {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
-  const chat = process.env.TELEGRAM_CHAT_ID;
-  if (!token || !chat) return;
-  try {
-    await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chat_id: chat, text, disable_web_page_preview: true }),
-    });
-  } catch (err) {
-    console.warn(`Telegram notify failed: ${err.message}`);
-  }
 }
 
 async function main() {
@@ -271,8 +174,8 @@ async function main() {
         `refusing to publish — ${publishBlockers.length} unresolved issue(s):\n  - ${publishBlockers.join("\n  - ")}`,
       );
     }
-    if (!POSTIZ_KEY || !POSTIZ_BASE) throw new Error("POSTIZ_API_KEY and POSTIZ_API_URL are required");
-    integrations = await postiz("/integrations");
+    assertConfigured();
+    integrations = await listIntegrations();
     for (const i of integrations) {
       console.log(`  ${i.disabled ? "off" : " on"}  ${i.identifier.padEnd(22)} ${i.name}  ${i.id}`);
     }
@@ -289,10 +192,16 @@ async function main() {
   const done = [];
   const failed = [];
   const archived = [];
-  const weekId = (QUEUE_RUN ? queue.nextWeek?.id : plan.week?.id) ?? "unfiled";
+  // Normalised, not interpolated. `queue.nextWeek` is the { id, order } object
+  // and passing it straight through is what minted "videos-[object Object]".
+  // A plan with no week at all is a legacy non-queue plan, which files under
+  // "unfiled" rather than failing.
+  const rawWeek = QUEUE_RUN ? queue.nextWeekId : plan.week;
+  const weekId = rawWeek ? weekIdOf(rawWeek, "render-all weekId") : "unfiled";
 
   for (const [index, item] of items.entries()) {
     console.log(`[${index + 1}/${items.length}] ${item.id} — ${item.template}`);
+    let scheduledFor = null;
     try {
       const { file, verified } = await renderOne(item);
 
@@ -337,25 +246,30 @@ async function main() {
           console.warn(`  Cloudinary archive failed (continuing): ${error.message}`);
         }
 
-        const media = await uploadToPostiz(file);
-        await postiz("/posts", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            type: plan.postType,
-            date: item.publishAt ? new Date(item.publishAt).toISOString() : new Date().toISOString(),
-            shortLink: false,
-            tags: [],
-            posts: buildPosts(item, media, integrations, plan),
-          }),
-        });
-        console.log(`  sent to Postiz as ${plan.postType}`);
+        // A slot on the six-hourly grid that starts at the embargo, never
+        // "now". `item.publishAt` is still honoured for legacy dated plans,
+        // but it goes through the same guard below: a date before 25 August is
+        // refused rather than published and regretted.
+        //
+        // Only one branch can repeat within a run, and neither collides. A
+        // queue run publishes exactly one item (asserted above), and a
+        // non-queue plan's items each carry their own publishAt — the
+        // validator refuses one that does not.
+        const slot = item.publishAt
+          ? new Date(item.publishAt)
+          : nextSlot(await loadQueueState());
+
+        const sent = await publishVideo({ file, item, plan, integrations, date: slot });
+        console.log(`  sent to Postiz as ${plan.postType} for ${sent.readable} Kathmandu`);
+        scheduledFor = sent.scheduledFor;
         if (!QUEUE_RUN) await sleep(THROTTLE_MS);
       }
 
       if (QUEUE_RUN && !DRY_RUN) {
         try {
-          queue = await markArchivedPosted(item.id);
+          // scheduledFor is what makes the slot count as taken; without it the
+          // next video would be handed the same one.
+          queue = await markArchivedPosted(item.id, { scheduledFor });
           console.log(`  marked posted, ${queue.remaining} item(s) remain`);
         } catch (err) {
           throw new Error(`Postiz accepted ${item.id}, but state.json was not updated: ${err.message}`);
