@@ -1,0 +1,150 @@
+name: Render the day's videos
+
+on:
+  schedule:
+    # 03:25 UTC = 09:10 Asia/Kathmandu (UTC+5:45), off the top of the hour
+    # where GitHub's scheduler is busiest. A late start costs nothing here:
+    # publishing reads the buffer, so it only has to finish before the first
+    # post of the day, not at any particular minute.
+    - cron: "25 3 * * *"
+  workflow_dispatch:
+    inputs:
+      count:
+        description: "How many videos to render"
+        type: string
+        default: "4"
+      dry_run:
+        description: "Render only; archive nothing and leave state.json alone"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  # Shares the group with publishing so the two never write state.json at once.
+  group: render
+  cancel-in-progress: false
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    # Four renders at ~4.5 minutes is about twenty; the ceiling is for a bad
+    # day, not the expected one.
+    timeout-minutes: 180
+    env:
+      DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && '1' || '0' }}
+      RENDER_COUNT: ${{ github.event_name == 'workflow_dispatch' && inputs.count || '4' }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Production secrets must only ever run against reviewed code on main.
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Chrome runtime libraries
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            libnss3 libdbus-1-3 libatk1.0-0 libatk-bridge2.0-0 \
+            libcups2 libxkbcommon0 libxdamage1 libgbm1 libpango-1.0-0 \
+            libcairo2 fonts-liberation || true
+          sudo apt-get install -y libasound2t64 || sudo apt-get install -y libasound2 || true
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Cache Chrome Headless Shell
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/remotion
+            node_modules/.remotion
+          key: remotion-browser-${{ runner.os }}-v1
+
+      - name: Ensure browser
+        run: npx remotion browser ensure
+
+      - name: Render the batch
+        env:
+          # Uploads each finished master to the week's GitHub Release, which is
+          # where the publish workflow fetches it from hours later.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          CLOUDINARY_URL: ${{ secrets.CLOUDINARY_URL }}
+          # REMOTION_CONCURRENCY is deliberately unset: renders run one at a
+          # time, so remotion.config.ts gives each every core on the runner.
+        run: node scripts/render-batch.mjs
+
+      - name: Commit the render buffer
+        if: env.DRY_RUN != '1'
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- state.json
+          if [ -f archive/manifest.json ]; then git add -- archive/manifest.json; fi
+
+          unexpected="$(git diff --cached --name-only \
+            | grep -vx -e 'state.json' -e 'archive/manifest.json' || true)"
+          if [ -n "$unexpected" ]; then
+            echo "Refusing to commit unexpected paths:" >&2
+            echo "$unexpected" >&2
+            exit 1
+          fi
+
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+            exit 0
+          fi
+
+          git commit -m "chore(render): buffer the day's videos"
+          for attempt in 1 2 3; do
+            if git push origin HEAD:main; then exit 0; fi
+            echo "Push attempt $attempt failed; rebasing onto current main."
+            git pull --rebase origin main
+          done
+          echo "Could not push state.json after three attempts." >&2
+          exit 1
+
+      - name: Keep the masters for 7 days
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: batch-${{ github.run_id }}
+          path: |
+            out/*.mp4
+            out/batch.json
+          retention-days: 7
+          if-no-files-found: warn
+
+  notify-failure:
+    needs: render
+    if: ${{ always() && needs.render.result == 'failure' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Telegram
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        shell: bash
+        run: |
+          [ -z "$TELEGRAM_BOT_TOKEN" ] && exit 0
+          curl -fsS -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
+            -d chat_id="$TELEGRAM_CHAT_ID" \
+            -d disable_web_page_preview=true \
+            -d text="Render batch failed. The reason is in the run's job summary.
+          $RUN_URL" || true

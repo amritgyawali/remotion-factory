@@ -17,7 +17,7 @@
 import { pathToFileURL } from "node:url";
 import { loadQueueState } from "./queue.mjs";
 
-const MIN_GAP_HOURS = Number(process.env.MIN_GAP_HOURS ?? 5);
+const MIN_GAP_HOURS = Number(process.env.MIN_GAP_HOURS ?? 6);
 
 export function publishDecision(state, { now = Date.now(), minGapHours = MIN_GAP_HOURS } = {}) {
   if (!state.lastPostedAt) {

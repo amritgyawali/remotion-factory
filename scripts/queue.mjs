@@ -38,7 +38,48 @@ export async function loadQueueState(path = STATE_PATH) {
     throw new Error(`${path} lastPostedAt must be an ISO timestamp`);
   }
 
+  // Rendering and publishing are separate workflows: the batch renders four
+  // videos each morning, the publisher sends one every six hours. This is the
+  // handover between them, so a malformed entry must not reach the publisher.
+  if (state.rendered !== undefined) {
+    if (!Array.isArray(state.rendered)) {
+      throw new Error(`${path} "rendered" must be an array`);
+    }
+    for (const entry of state.rendered) {
+      if (!entry || typeof entry !== "object") {
+        throw new Error(`${path} rendered entries must be objects`);
+      }
+      if (!isPortableItemId(entry.id)) {
+        throw new Error(`${path} rendered entry has an invalid id: ${JSON.stringify(entry.id)}`);
+      }
+      if (typeof entry.url !== "string" || !entry.url.startsWith("http")) {
+        throw new Error(`${path} rendered entry "${entry.id}" has no downloadable url`);
+      }
+    }
+    const ids = state.rendered.map((entry) => entry.id);
+    if (new Set(ids).size !== ids.length) {
+      throw new Error(`${path} contains duplicate rendered ids`);
+    }
+  }
+
   return state;
+}
+
+/** Rendered but not yet posted, oldest first — the publisher's work queue. */
+export function publishable(state) {
+  const posted = new Set(state.posted);
+  return (state.rendered ?? []).filter((entry) => !posted.has(entry.id));
+}
+
+/**
+ * The next `count` items that need rendering: not posted, and not already
+ * sitting in the rendered buffer waiting to go out.
+ */
+export function pendingRender(queue, state, count) {
+  const alreadyRendered = new Set((state.rendered ?? []).map((entry) => entry.id));
+  return queue.pendingEntries
+    .filter((entry) => !alreadyRendered.has(entry.item.id))
+    .slice(0, count);
 }
 
 export function queueSnapshot(plan, state) {
@@ -134,6 +175,26 @@ export async function markPosted(plan, id, path = STATE_PATH) {
   return queueSnapshot(plan, state);
 }
 
+/**
+ * Record a finished master so the publisher can find it later.
+ *
+ * Re-rendering an id replaces its entry rather than appending, so a retried
+ * batch cannot leave two pointers to the same video.
+ */
+export async function markRendered(entry, { statePath = STATE_PATH } = {}) {
+  if (!isPortableItemId(entry?.id)) {
+    throw new Error(`cannot record a rendered entry without a portable id`);
+  }
+
+  const state = await loadQueueState(statePath);
+  const rendered = (state.rendered ?? []).filter((existing) => existing.id !== entry.id);
+  rendered.push({ ...entry, renderedAt: entry.renderedAt ?? new Date().toISOString() });
+
+  state.rendered = rendered;
+  await writeFile(statePath, `${JSON.stringify(state, null, 2)}\n`);
+  return state;
+}
+
 export async function markArchivedPosted(
   id,
   { plansDir = PLANS_DIR, statePath = STATE_PATH } = {},
@@ -150,6 +211,11 @@ export async function markArchivedPosted(
     // GitHub drops and delays scheduled runs, so "did we already post for this
     // slot" cannot be answered from the clock alone.
     state.lastPostedAt = new Date().toISOString();
+    // Its turn in the render buffer is over. The master stays in the Release;
+    // only the pointer that says "waiting to be posted" is dropped.
+    if (Array.isArray(state.rendered)) {
+      state.rendered = state.rendered.filter((entry) => entry.id !== id);
+    }
     await writeFile(statePath, `${JSON.stringify(state, null, 2)}\n`);
   }
 
