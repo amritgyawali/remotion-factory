@@ -407,8 +407,8 @@ previewed before any account is connected. Before the first post, the acceptance
 workflow safely updates the first-week archive.
 
 **Use integration ids, not identifiers.** Two Instagram accounts can both report
-`instagram-standalone`. `resolveChannels` deliberately refuses an ambiguous
-identifier so a post cannot land on the wrong account.
+`instagram-standalone`. `resolveChannels` in `scripts/postiz.mjs` deliberately
+refuses an ambiguous identifier so a post cannot land on the wrong account.
 
 ### 3. Configure GitHub secrets
 
@@ -563,12 +563,15 @@ workflow from the Actions tab after adding content.
 
 ## Manual batch renderer
 
-`Render and schedule` is manual-only. Its chunked matrix is retained because a
-large dry render cannot fit inside one six-hour GitHub job. In queue mode, a
-non-dry batch is rejected in `scripts/render-all.mjs`; only `Publish next video`
-may send a queue item to Postiz.
+`scripts/render-all.mjs` survives as a local tool — `npm run render:dry` renders
+a whole plan for preview. The `Render and schedule` workflow that wrapped it is
+gone. It rendered the plan across four parallel runners and handed each finished
+video to Postiz on receipt, which contradicts both the one-at-a-time rule and
+the embargo, and it sat one click away in the Actions tab.
 
-This separation is deliberate: accepting a new week must not publish 28 items.
+In queue mode a non-dry batch is rejected outright; only `Publish next video`
+may send a queue item to Postiz. This separation is deliberate: accepting a new
+week must not publish 28 items.
 
 ## Capacity and cost
 
@@ -695,9 +698,17 @@ There is no `"reel"` value. Captions for X must stay under 280 characters.
 
 Do not remove or work around these:
 
-- The chunked matrix in `.github/workflows/render.yml`; large batches exceed one
-  job's six-hour limit.
-- `resolveChannels` in `scripts/render-all.mjs`; integration identifiers are not
+- `publishVideo` in `scripts/postiz.mjs` being the *only* thing that can create
+  a post. `scripts/render-all.mjs` once carried a second, complete Postiz client
+  with its own `date: new Date()`, so the embargo below simply did not apply to
+  it. A test asserts no other module reaches `POST /posts`.
+- `assertWithinEmbargo` in `scripts/slots.mjs`; the last check before a video is
+  sent, holding the 25 August date even if the slot arithmetic is wrong. It also
+  refuses `postType: "now"`, which makes Postiz ignore the date entirely.
+- `weekIdOf` in `scripts/week-id.mjs`; every storage identifier is normalised
+  there. Passing the week *object* produced the release tag
+  `videos-[object Object]` and lost a rendered batch to a 422.
+- `resolveChannels` in `scripts/postiz.mjs`; integration identifiers are not
   necessarily unique.
 - The past-publish-date error in `scripts/validate-plan.mjs`; legacy calendar
   plans with stale dates could otherwise release a whole backlog.
