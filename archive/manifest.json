@@ -64,6 +64,19 @@
       "audioSignature": "70001114111321621122263212221f61",
       "url": "https://github.com/amritgyawali/remotion-factory/releases/download/videos-2026-w31/d02-b.mp4",
       "archivedAt": "2026-07-28T20:38:56Z"
+    },
+    {
+      "id": "d02-c",
+      "week": "2026-w31",
+      "template": "TechTip",
+      "sourceId": "meritbyte-pdf-07",
+      "bytes": 2882283,
+      "durationSeconds": 20.1,
+      "sha256": "72aed2f9d4fd6b4cb8d96f40faa080141b4f7f3a73b6a60067e1cc77a8305a72",
+      "visualSignature": "00c080109a00000000c080109a00000000c080109856000000c080109812000000c08050989a000000c08070989a483b00c08070989a483b80c08070989a483b",
+      "audioSignature": "70012215222232533332353232327f52",
+      "url": "https://github.com/amritgyawali/remotion-factory/releases/download/videos-2026-w31/d02-c.mp4",
+      "archivedAt": "2026-07-28T22:46:28.112Z"
     }
   ]
 }
