@@ -180,6 +180,59 @@ export async function getJobLog(jobId: number): Promise<string | null> {
   return text.trim() ? text : null;
 }
 
+export interface FailureReport {
+  run: WorkflowRun;
+  jobId: number;
+  jobName: string;
+  stepName: string | null;
+  /** The error lines themselves, already stripped of Actions' timestamps. */
+  lines: string[];
+}
+
+const ERROR_LINE =
+  /##\[error\]|^\s*Error:|\bError:\s|Process completed with exit code|FAILED:|refusing to publish|is not unique|matches no connected channel/;
+
+/**
+ * Why the most recent failure failed, pulled out of the job log.
+ *
+ * Without Telegram configured there is no notification channel at all, so the
+ * dashboard is the only place a failure can surface. Reading it here rather
+ * than making the operator open GitHub, download a log archive and search it
+ * is the entire reason this dashboard exists.
+ */
+export async function lastFailure(runs: WorkflowRun[]): Promise<FailureReport | null> {
+  const failed = runs.find((run) => run.status === "completed" && run.conclusion === "failure");
+  if (!failed) return null;
+
+  const jobs = await listJobs(failed.id);
+  const job = jobs.find((entry) => entry.conclusion === "failure") ?? jobs[0];
+  if (!job) return null;
+
+  const step = job.steps?.find((entry) => entry.conclusion === "failure") ?? null;
+
+  let lines: string[] = [];
+  try {
+    const log = await getJobLog(job.id);
+    if (log) {
+      lines = log
+        .split(/\r?\n/)
+        .map((line) => line.replace(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+Z\s?/, ""))
+        .filter((line) => ERROR_LINE.test(line))
+        .map((line) => line.replace(/^##\[error\]/, "").trim())
+        .filter(Boolean)
+        // The exit-code line is noise once the real message is present.
+        .filter((line, _index, all) =>
+          all.length > 1 ? !/^Process completed with exit code/.test(line) : true,
+        )
+        .slice(0, 8);
+    }
+  } catch {
+    // An expired log still leaves the run, job and step worth reporting.
+  }
+
+  return { run: failed, jobId: job.id, jobName: job.name, stepName: step?.name ?? null, lines };
+}
+
 export async function dispatchWorkflow(
   workflowFile: string,
   inputs: Record<string, string>,

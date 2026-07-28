@@ -18,6 +18,21 @@ loadEnvFile();
 
 const TIMEOUT_MS = Number(process.env.POSTIZ_TIMEOUT_MS ?? 20_000);
 
+/**
+ * AbortSignal.timeout leaves its timer armed after the response lands, and
+ * exiting with one still pending trips a libuv assertion on Windows. An
+ * explicit controller lets the timer be cleared the moment it is not needed.
+ */
+async function fetchWithTimeout(url, init = {}) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+  try {
+    return await fetch(url, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 /** Everything wrong with how the two variables were entered, before any network call. */
 function inspectCredentials() {
   const rawUrl = process.env.POSTIZ_API_URL;
@@ -69,7 +84,7 @@ function describeTransportError(error, base) {
     }
   })();
 
-  if (error?.name === "TimeoutError" || error?.name === "AbortError") {
+  if (error?.name === "TimeoutError" || error?.name === "AbortError" || code === "ABORT_ERR") {
     return `Postiz did not answer within ${TIMEOUT_MS / 1000}s (${host}). If this is a self-hosted instance, check it is awake.`;
   }
   switch (code) {
@@ -140,9 +155,8 @@ async function main() {
 
   let res;
   try {
-    res = await fetch(`${base}/integrations`, {
+    res = await fetchWithTimeout(`${base}/integrations`, {
       headers: { Authorization: key },
-      signal: AbortSignal.timeout(TIMEOUT_MS),
     });
   } catch (error) {
     await fail([describeTransportError(error, base)]);

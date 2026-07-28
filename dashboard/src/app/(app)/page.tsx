@@ -12,7 +12,7 @@ import {
   nextAttempt,
   queueSnapshot,
 } from "@/lib/factory";
-import { listRuns, type WorkflowRun } from "@/lib/github";
+import { lastFailure, listRuns, type FailureReport, type WorkflowRun } from "@/lib/github";
 import { checkPostiz } from "@/lib/postiz";
 import { formatBytes, formatDateTime, relativeTime } from "@/lib/format";
 
@@ -33,7 +33,9 @@ async function load() {
         loadManifest(),
         archiveFootprint(),
       ]);
-      return { state, weeks, runs, manifest, footprint };
+      // Depends on `runs`, so it cannot join the batch above.
+      const failure = await lastFailure(runs).catch(() => null);
+      return { state, weeks, runs, manifest, footprint, failure };
     })(),
     checkPostiz(),
   ]);
@@ -53,7 +55,7 @@ export default async function OverviewPage() {
     );
   }
 
-  const { state, weeks, runs, manifest, footprint } = github.value;
+  const { state, weeks, runs, manifest, footprint, failure } = github.value;
 
   if (!state) {
     return (
@@ -124,6 +126,8 @@ export default async function OverviewPage() {
           }
         />
       </Grid>
+
+      {failure ? <FailureCard failure={failure} /> : null}
 
       {!health?.ok && health ? (
         <ErrorNote title="Postiz is not answering" detail={health.reason} />
@@ -234,6 +238,61 @@ export default async function OverviewPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * The most recent failure, with the reason lifted out of the job log.
+ *
+ * There is no Telegram on this deployment, so this card is the notification.
+ * It shows the failing step and the error lines themselves — not a link to a
+ * place where the error can be found.
+ */
+function FailureCard({ failure }: { failure: FailureReport }) {
+  return (
+    <section className="surface overflow-hidden" style={{ borderColor: "var(--color-status-critical)" }}>
+      <header className="flex flex-wrap items-center justify-between gap-2 border-b px-4 py-3">
+        <h2 className="flex items-center gap-2 text-sm font-semibold">
+          <span aria-hidden="true" style={{ color: "var(--color-status-critical)" }}>
+            ✕
+          </span>
+          Last run failed
+          {failure.stepName ? <span className="font-normal secondary">at “{failure.stepName}”</span> : null}
+        </h2>
+        <span className="text-xs muted">
+          {failure.run.name} #{failure.run.run_number} · {relativeTime(failure.run.created_at)}
+        </span>
+      </header>
+
+      <div className="flex flex-col gap-3 p-4">
+        {failure.lines.length > 0 ? (
+          <pre
+            className="scroll-x rounded-lg p-3 font-mono text-[11px] leading-relaxed"
+            style={{ background: "var(--plane)" }}
+          >
+            {failure.lines.map((line, index) => (
+              <div key={index} className="whitespace-pre-wrap">
+                {line}
+              </div>
+            ))}
+          </pre>
+        ) : (
+          <p className="text-xs secondary">
+            GitHub has expired this run’s logs, so the reason is no longer retrievable. The step that
+            failed was “{failure.stepName ?? failure.jobName}”.
+          </p>
+        )}
+
+        <div className="flex flex-wrap items-center gap-3 text-xs">
+          <Link href={`/runs/${failure.run.id}`} style={{ color: "var(--accent)" }}>
+            Full log and step timings →
+          </Link>
+          <a href={failure.run.html_url} target="_blank" rel="noreferrer" className="muted">
+            Open on GitHub
+          </a>
+        </div>
+      </div>
+    </section>
   );
 }
 
