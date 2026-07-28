@@ -18,7 +18,7 @@ import { assertPlayableVideo } from "./verify-video.mjs";
  * Rendering and publishing used to be the same run, which tied the two to the
  * same clock — a six-hour gap between posts meant a six-hour gap between
  * renders, and a Postiz outage threw away a finished render. They are now
- * separate: this renders four videos at 09:10 Kathmandu and records where it
+ * separate: this renders four videos at 09:30 Kathmandu and records where it
  * put them; scripts/publish-one.mjs sends one every six hours.
  *
  * Sequential on purpose. remotion.config.ts hands every core to whichever

@@ -2,11 +2,11 @@ name: Render the day's videos
 
 on:
   schedule:
-    # 03:25 UTC = 09:10 Asia/Kathmandu (UTC+5:45), off the top of the hour
+    # 03:45 UTC = 09:30 Asia/Kathmandu (UTC+5:45), off the top of the hour
     # where GitHub's scheduler is busiest. A late start costs nothing here:
-    # publishing reads the buffer, so it only has to finish before the first
-    # post of the day, not at any particular minute.
-    - cron: "25 3 * * *"
+    # publishing reads the buffer, so the batch only has to finish before the
+    # first post of the day, not at any particular minute.
+    - cron: "45 3 * * *"
   workflow_dispatch:
     inputs:
       count:
