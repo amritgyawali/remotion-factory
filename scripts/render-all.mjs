@@ -1,6 +1,7 @@
 import { spawn } from "node:child_process";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { loadEnvFile } from "./env.mjs";
 import { loadPlan } from "./validate-plan.mjs";
 import { getArchivedQueue, markArchivedPosted, QUEUE_LOW_WATER } from "./queue.mjs";
 import { assertPlayableVideo } from "./verify-video.mjs";
@@ -9,6 +10,10 @@ import { BED_TEMPLATES } from "./audio/beds.mjs";
 import { masterVideoAudio } from "./master-audio.mjs";
 import { archiveToR2 } from "./archive-r2.mjs";
 import { archiveToCloudinary } from "./archive-cloudinary.mjs";
+
+// Before any process.env is read below, so a local .env can supply the same
+// values the workflow gets from secrets. Never overrides a real environment.
+loadEnvFile();
 
 const OUT = "out";
 const DRY_RUN = process.env.DRY_RUN === "1" || process.argv.includes("--dry-run");
@@ -389,6 +394,14 @@ async function main() {
 
 main().catch(async (err) => {
   console.error(err);
+  // The job summary is the only place the reason is visible to someone who
+  // cannot download run logs, and it does not depend on Telegram being set up.
+  if (process.env.GITHUB_STEP_SUMMARY) {
+    await appendFile(
+      process.env.GITHUB_STEP_SUMMARY,
+      `## Publish failed\n\n\`\`\`\n${err.message}\n\`\`\`\n`,
+    ).catch(() => {});
+  }
   await notify(`Render run failed before finishing:\n${err.message}`);
   process.exit(1);
 });

@@ -34,6 +34,9 @@ export async function loadQueueState(path = STATE_PATH) {
   if (new Set(state.posted).size !== state.posted.length) {
     throw new Error(`${path} contains duplicate posted ids`);
   }
+  if (state.lastPostedAt !== undefined && Number.isNaN(Date.parse(state.lastPostedAt))) {
+    throw new Error(`${path} lastPostedAt must be an ISO timestamp`);
+  }
 
   return state;
 }
@@ -143,6 +146,10 @@ export async function markArchivedPosted(
   const state = await loadQueueState(statePath);
   if (!state.posted.includes(id)) {
     state.posted.push(id);
+    // Stamped so the workflow can tell a catch-up run from a duplicate one.
+    // GitHub drops and delays scheduled runs, so "did we already post for this
+    // slot" cannot be answered from the clock alone.
+    state.lastPostedAt = new Date().toISOString();
     await writeFile(statePath, `${JSON.stringify(state, null, 2)}\n`);
   }
 

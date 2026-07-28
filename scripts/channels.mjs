@@ -5,6 +5,10 @@
  *
  *   POSTIZ_API_URL=... POSTIZ_API_KEY=... npm run channels
  */
+import { loadEnvFile } from "./env.mjs";
+
+loadEnvFile();
+
 const base = (process.env.POSTIZ_API_URL ?? "").replace(/\/+$/, "");
 const url = base.endsWith("/public/v1") ? base : `${base}/public/v1`;
 const key = process.env.POSTIZ_API_KEY;

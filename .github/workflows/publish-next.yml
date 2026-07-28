@@ -2,15 +2,23 @@ name: Publish next video
 
 on:
   schedule:
-    # Four local runs a day, away from GitHub's busy top-of-hour window.
-    # 00:17/06:17/12:17/18:17 Asia/Kathmandu = 18:32/00:32/06:32/12:32 UTC.
-    - cron: "32 0,6,12,18 * * *"
+    # Attempted every two hours, away from GitHub's busy top-of-hour window.
+    # This is not the posting rate: scripts/due.mjs holds it to four a day by
+    # requiring MIN_GAP_HOURS since the last post. Scheduled runs on a free
+    # public repo are best effort — one fired 90 minutes late here and the
+    # next was dropped — so the extra attempts are what make the four land.
+    # On time, :32 UTC lands at :17 past the hour in Asia/Kathmandu.
+    - cron: "32 */2 * * *"
   workflow_dispatch:
     inputs:
       dry_run:
         description: "Render one video only; never touch Postiz or state.json"
         type: boolean
         default: true
+      force:
+        description: "Publish even if the minimum gap since the last post has not passed"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -39,13 +47,50 @@ jobs:
         with:
           node-version: 20
 
+      # Runs on every attempt, including the ones that exist only to catch a
+      # dropped schedule. Everything below is gated on it, so a run that is not
+      # due costs about fifteen seconds and touches nothing.
+      - id: due
+        name: Is a post due?
+        shell: bash
+        env:
+          FORCE: ${{ github.event_name == 'workflow_dispatch' && (inputs.force || inputs.dry_run) && '1' || '0' }}
+        run: |
+          if [ "$FORCE" = "1" ]; then
+            node scripts/due.mjs --github-output --force | tee -a "$GITHUB_OUTPUT"
+          else
+            node scripts/due.mjs --github-output | tee -a "$GITHUB_OUTPUT"
+          fi
+
+      - name: Not due yet
+        if: steps.due.outputs.due != '1'
+        shell: bash
+        # Through the environment rather than ${{ }} interpolation, which would
+        # paste the reason into the script itself.
+        env:
+          REASON: ${{ steps.due.outputs.reason }}
+        run: |
+          echo "::notice::Skipping — $REASON"
+          echo "Nothing to do: $REASON" >> "$GITHUB_STEP_SUMMARY"
+
       - id: queue
+        if: steps.due.outputs.due == '1'
         name: Pick the next item from accepted weekly plans
         shell: bash
         run: node scripts/queue.mjs --github-output >> "$GITHUB_OUTPUT"
 
+      # Credentials and channel wiring, before apt, npm and the browser
+      # download. Costs a second or two and writes its verdict to the job
+      # summary, which is readable without permission to download run logs.
+      - name: Check Postiz before spending a runner on it
+        if: steps.queue.outputs.id != '' && env.DRY_RUN != '1'
+        env:
+          POSTIZ_API_URL: ${{ secrets.POSTIZ_API_URL }}
+          POSTIZ_API_KEY: ${{ secrets.POSTIZ_API_KEY }}
+        run: node scripts/preflight-postiz.mjs
+
       - name: Queue is empty
-        if: steps.queue.outputs.id == ''
+        if: steps.due.outputs.due == '1' && steps.queue.outputs.id == ''
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -190,5 +235,5 @@ jobs:
           curl -fsS -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
             -d chat_id="$TELEGRAM_CHAT_ID" \
             -d disable_web_page_preview=true \
-            -d text="Publish-next run failed. Check Postiz before retrying: a failure during the state push can mean Postiz already accepted the video.
+            -d text="Publish-next run failed. The reason is in the run's job summary. Check Postiz before retrying: a failure during the state push can mean Postiz already accepted the video.
           $RUN_URL" || true

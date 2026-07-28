@@ -7,7 +7,7 @@ laptop and local Studio can stay off for the rest of the week.
 ```text
 plan.json weekly inbox → plans/<week>.json → Remotion → Postiz
                                   ↑              ↓
-                         four daily cron runs  state.json
+                         four posts a day      state.json
 ```
 
 The Oracle box only runs Postiz and its database. It never renders video, so the
@@ -53,26 +53,44 @@ could never be paused to drafts or released live. Content and `postType` are
 compared separately, so a `postType` edit cannot smuggle a caption change past
 the freeze.
 
-The `Publish next video` workflow runs at 00:17, 06:17, 12:17, and 18:17 in
-`Asia/Kathmandu`. Each run:
+The `Publish next video` workflow is attempted every two hours and publishes four
+times a day, landing near 00:17, 06:17, 12:17, and 18:17 in `Asia/Kathmandu`.
+Each run:
 
-1. Validates every accepted week and `state.json`.
-2. Selects the first item whose id is not in `state.json.posted`.
-3. Rebuilds the audio pack for the template in play, then renders exactly that
+1. Asks `scripts/due.mjs` whether the minimum gap since the last post has passed.
+   If not, the run stops here, having installed nothing.
+2. Validates every accepted week and `state.json`.
+3. Checks Postiz credentials and channel wiring before apt, npm and the browser
+   download, so a misconfiguration costs seconds rather than a whole runner.
+4. Selects the first item whose id is not in `state.json.posted`.
+5. Rebuilds the audio pack for the template in play, then renders exactly that
    one item with Remotion, using every core on the runner.
-4. Masters the audio to −14 LUFS, delivering ≈ −0.85 dBTP (see *Mastering*).
-5. Verifies the MP4 before anything else may touch it (see *Render verification*).
-6. Uploads the MP4 to the week's GitHub Release (see *Where the videos are kept*).
-7. Sends it to every configured Postiz integration.
-8. Adds the id to `state.json` only after Postiz accepts the request.
-9. Commits `state.json` and `archive/manifest.json` back to `main`.
+6. Masters the audio to −14 LUFS, delivering ≈ −0.85 dBTP (see *Mastering*).
+7. Verifies the MP4 before anything else may touch it (see *Render verification*).
+8. Uploads the MP4 to the week's GitHub Release (see *Where the videos are kept*).
+9. Sends it to every configured Postiz integration.
+10. Adds the id to `state.json`, with a `lastPostedAt` stamp, only after Postiz
+    accepts the request.
+11. Commits `state.json` and `archive/manifest.json` back to `main`.
 
 A dry run renders the same next item but never contacts Postiz and never advances
 the queue. An exhausted queue—where every accepted id is in `state.json`—exits
 without installing Chrome or rendering.
 
-GitHub cron is best-effort and may start late during heavy load. It never performs
-a catch-up burst: one workflow run can process at most one queue item.
+### Why every two hours, for four posts
+
+GitHub's scheduled runs are best effort. On this repo one fired 90 minutes late
+and the next was dropped outright, which is ordinary for a free public repo and
+not something a cron expression can correct. Asking for exactly four runs a day
+therefore yields fewer than four.
+
+The workflow instead attempts twelve times a day and lets `MIN_GAP_HOURS`
+(default 5) decide. A post at 00:00 permits the next at 05:00, which the 06:00
+attempt takes; if GitHub drops that one, 08:00 catches it. The rate stays at four
+a day and the cadence self-corrects back onto the grid rather than drifting.
+
+One run still processes at most one queue item, so a delayed run never becomes a
+catch-up burst. A manual run can tick `force` to ignore the gap.
 
 ## One video per run, at full power
 
@@ -409,6 +427,8 @@ npm run channels     # list Postiz integrations and ids
 npm run validate     # validate inbox, accepted weeks, and queue state
 npm test             # exercise acceptance, rollover, verification, archiving
 npm run queue        # show posted, remaining, and next id
+npm run due          # show whether the next post is due yet, and why
+npm run preflight    # prove Postiz is reachable and the next item's channels resolve
 npm run render:dry   # render the whole plan locally without Postiz
 npm run verify -- out/d01-a.mp4 17   # probe one rendered file
 ```
