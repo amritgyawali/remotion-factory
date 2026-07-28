@@ -7,10 +7,12 @@ import { GitHubError, cancelRun, dispatchWorkflow, rerunFailedJobs } from "@/lib
  * Authentication is handled by the middleware — nothing reaches here signed out.
  */
 
+// render.yml is deliberately absent: the workflow was deleted for rendering the
+// whole plan in parallel and publishing each video on receipt. Leaving it in
+// the allowlist would mean a button that returns a bare 404 from GitHub.
 const ALLOWED_WORKFLOWS = new Set([
   "publish-next.yml",
   "render-batch.yml",
-  "render.yml",
   "accept-week.yml",
 ]);
 
