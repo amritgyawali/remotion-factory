@@ -1,0 +1,17 @@
+{
+  "videos": [
+    {
+      "id": "d01-b",
+      "week": "2026-w31",
+      "template": "TechTip",
+      "sourceId": "meritbyte-pdf-02",
+      "bytes": 2402605,
+      "durationSeconds": 22.1,
+      "sha256": "e767b6577796aa746fd046e0f65b7c03700bb68962ace43d72925372c0ecd819",
+      "visualSignature": "a8d0d4c000000000a8d0d4c000000000a8d0d4c040000000a8d0d4d040000000a8d0d4d040000000a8d0d4d040000000a8d0d4d06000d6faa8d0d4d06000d6fa",
+      "audioSignature": "72357779999987998988978778782f96",
+      "url": "https://github.com/amritgyawali/remotion-factory/releases/download/videos-2026-w31/d01-b.mp4",
+      "archivedAt": "2026-07-28T02:27:29.280Z"
+    }
+  ]
+}
