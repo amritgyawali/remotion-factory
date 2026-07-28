@@ -377,3 +377,31 @@ export interface RepoInfo {
 export async function getRepo(): Promise<RepoInfo> {
   return gh<RepoInfo>(`/repos/${repoSlug()}`, { revalidate: 300 });
 }
+
+/**
+ * Whether the publisher is waiting for a human, read from the same repository
+ * variable the workflow reads.
+ *
+ * The dashboard used to answer this from its own `process.env.REQUIRE_APPROVAL`
+ * on Vercel, which is a different setting in a different system that happens to
+ * share a name. Setting the Vercel one to "1" would have relabelled the page to
+ * say review was required while `publish-next.yml`, reading the repository
+ * variable, went on publishing unattended — the failure mode being a UI that
+ * confidently reports a gate nobody is standing at.
+ *
+ * Unset means unattended, matching the workflow's `vars.REQUIRE_APPROVAL || '0'`
+ * default. A GitHub outage should not flip the label, so a failed read falls
+ * back to the same default rather than throwing.
+ */
+export async function approvalRequired(): Promise<boolean> {
+  try {
+    const variable = await gh<{ value?: string }>(
+      `/repos/${repoSlug()}/actions/variables/REQUIRE_APPROVAL`,
+      { revalidate: 60 },
+    );
+    return variable.value?.trim() !== "0" && Boolean(variable.value?.trim());
+  } catch {
+    // 404 is the ordinary case: the variable has never been created.
+    return false;
+  }
+}

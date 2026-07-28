@@ -15,7 +15,13 @@ import {
   nextAttempt,
   queueSnapshot,
 } from "@/lib/factory";
-import { lastFailure, listRuns, type FailureReport, type WorkflowRun } from "@/lib/github";
+import {
+  approvalRequired,
+  lastFailure,
+  listRuns,
+  type FailureReport,
+  type WorkflowRun,
+} from "@/lib/github";
 import { checkPostiz } from "@/lib/postiz";
 import { formatBytes, formatDateTime, relativeTime } from "@/lib/format";
 
@@ -29,16 +35,17 @@ export const revalidate = 0;
 async function load() {
   const [github, postiz] = await Promise.allSettled([
     (async () => {
-      const [state, weeks, runs, manifest, footprint] = await Promise.all([
+      const [state, weeks, runs, manifest, footprint, needsApproval] = await Promise.all([
         loadState(),
         loadWeeks(),
         listRuns(8),
         loadManifest(),
         archiveFootprint(),
+        approvalRequired(),
       ]);
       // Depends on `runs`, so it cannot join the batch above.
       const failure = await lastFailure(runs).catch(() => null);
-      return { state, weeks, runs, manifest, footprint, failure };
+      return { state, weeks, runs, manifest, footprint, failure, needsApproval };
     })(),
     checkPostiz(),
   ]);
@@ -148,7 +155,7 @@ export default async function OverviewPage() {
 
       {failure ? <FailureCard failure={failure} /> : null}
 
-      <ReviewQueue entries={buffer} approvalRequired={process.env.REQUIRE_APPROVAL !== "0"} />
+      <ReviewQueue entries={buffer} approvalRequired={github.value.needsApproval} />
 
       {!health?.ok && health ? (
         <ErrorNote title="Postiz is not answering" detail={health.reason} />
