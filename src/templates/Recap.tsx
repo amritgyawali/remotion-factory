@@ -1,121 +1,51 @@
 import React from "react";
-import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { CONTENT_MARGIN, Frame } from "../components/Frame";
+import { AbsoluteFill, spring, useCurrentFrame, useVideoConfig } from "remotion";
+import { Frame } from "../components/Frame";
+import { BLEED_MARGIN, Eyebrow, KineticHeadline, PayoffBlock, fittedSize } from "../components/Kinetic";
 import { themeFor, type Theme } from "../theme";
 import type { RecapProps } from "../types";
 
-const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
-
 /**
- * The transparency recap: day 30, and the only script that needs the other
- * twenty-nine to exist first. Its components are the PDF's ThumbnailGrid,
- * Leaderboard and BlurCounter.
+ * Day 30: the numbers, stated plainly.
+ *
+ * This is the one template whose marks are real — every bar length is the
+ * row's own value over the largest value in its set, so the picture is the
+ * data rather than a decoration sized by the frame counter.
  */
-
-/** A grid of the series so far. Abstract tiles — no humans, per the hard rules. */
-const ThumbnailGrid: React.FC<{ theme: Theme; frame: number; fps: number; count: number }> = ({
-  theme,
-  frame,
-  fps,
-  count,
-}) => (
-  <div
-    style={{
-      display: "grid",
-      gridTemplateColumns: "repeat(6, 1fr)",
-      gap: 10,
-    }}
-  >
-    {Array.from({ length: count }, (_, index) => {
-      // Staggered so the grid fills like a contact sheet rather than appearing.
-      const enter = spring({
-        frame: frame - index * 1.2,
-        fps,
-        config: { damping: 200, mass: 0.5 },
-        durationInFrames: 14,
-      });
-      const accent = index % 7 === 0 ? theme.amber : index % 5 === 0 ? theme.seaglass : theme.groundLift;
-      return (
-        <div
-          key={index}
-          style={{
-            aspectRatio: "9 / 16",
-            borderRadius: 8,
-            backgroundColor: accent,
-            opacity: 0.25 + enter * 0.75,
-            transform: `scale(${0.7 + enter * 0.3})`,
-          }}
-        />
-      );
-    })}
-  </div>
-);
-
-/** Counter that resolves from blur into a legible number. */
-const BlurCounter: React.FC<{
+const Rows: React.FC<{
+  rows: { label: string; value: number }[];
   theme: Theme;
-  frame: number;
-  fps: number;
-  value: number;
-  label: string;
-  delay: number;
-}> = ({ theme, frame, fps, value, label, delay }) => {
-  const local = Math.max(0, frame - delay);
-  const progress = spring({ frame: local, fps, config: { damping: 200 }, durationInFrames: 30 });
-  const shown = Math.round(interpolate(progress, [0, 1], [0, value]));
-  const blur = interpolate(progress, [0, 0.85, 1], [14, 2, 0], clamp);
+  from: number;
+  every: number;
+  highlightFirst?: boolean;
+}> = ({ rows, theme, from, every, highlightFirst = false }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+
+  const peak = Math.max(1, ...rows.map((row) => row.value));
+  const longest = rows.reduce((a, b) => (a.label.length >= b.label.length ? a : b), rows[0]);
+  const size = fittedSize({
+    text: longest?.label ?? "",
+    boxWidth: 620,
+    maxLines: 1,
+    fontFamily: theme.display,
+    fontWeight: theme.weightMid,
+    letterSpacing: "-0.02em",
+    min: 34,
+    max: 58,
+  });
 
   return (
-    <div style={{ opacity: progress }}>
-      <div
-        style={{
-          fontFamily: theme.display,
-          fontWeight: theme.weightHeavy,
-          fontSize: 92,
-          lineHeight: 1,
-          letterSpacing: theme.displayTracking,
-          color: theme.paper,
-          filter: `blur(${blur}px)`,
-          fontVariantNumeric: "tabular-nums",
-        }}
-      >
-        {shown.toLocaleString("en")}
-      </div>
-      <div
-        style={{
-          marginTop: 10,
-          fontFamily: theme.mono,
-          fontSize: 26,
-          letterSpacing: "0.14em",
-          textTransform: "uppercase",
-          color: theme.paperDim,
-        }}
-      >
-        {label}
-      </div>
-    </div>
-  );
-};
-
-/** Ranked rows, bars growing in proportion to the top entry. */
-const Leaderboard: React.FC<{
-  theme: Theme;
-  frame: number;
-  fps: number;
-  rows: RecapProps["leaderboard"];
-  delay: number;
-}> = ({ theme, frame, fps, rows, delay }) => {
-  const top = Math.max(...rows.map((row) => row.value), 1);
-
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: size * 0.5 }}>
       {rows.map((row, index) => {
         const enter = spring({
-          frame: frame - delay - index * 6,
+          frame: frame - (from + index * every),
           fps,
           config: { damping: 200, mass: 0.6 },
           durationInFrames: 22,
         });
+        const tone = highlightFirst && index === 0 ? theme.amber : theme.seaglass;
+
         return (
           <div key={row.label} style={{ opacity: enter }}>
             <div
@@ -123,24 +53,39 @@ const Leaderboard: React.FC<{
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "baseline",
-                fontFamily: theme.mono,
-                fontSize: 27,
-                color: theme.paperDim,
-                marginBottom: 8,
+                marginBottom: size * 0.24,
               }}
             >
-              <span style={{ color: theme.paper }}>{row.label}</span>
-              <span style={{ color: theme.amber, fontVariantNumeric: "tabular-nums" }}>
-                {row.value.toLocaleString("en")}
+              <span
+                style={{
+                  fontFamily: theme.display,
+                  fontWeight: theme.weightMid,
+                  fontSize: size,
+                  letterSpacing: "-0.02em",
+                  color: theme.paper,
+                }}
+              >
+                {row.label}
+              </span>
+              <span
+                style={{
+                  fontFamily: theme.mono,
+                  fontSize: size * 0.92,
+                  color: tone,
+                  fontVariantNumeric: "tabular-nums",
+                }}
+              >
+                {Math.round(row.value * enter).toLocaleString()}
               </span>
             </div>
-            <div style={{ height: 12, borderRadius: 6, backgroundColor: theme.rule }}>
+            <div style={{ height: size * 0.28, backgroundColor: theme.groundLift, borderRadius: 999 }}>
               <div
                 style={{
-                  height: 12,
-                  borderRadius: 6,
-                  width: `${(row.value / top) * 100 * enter}%`,
-                  backgroundColor: index === 0 ? theme.amber : theme.seaglass,
+                  // Real proportion: this row against the largest in the set.
+                  width: `${(row.value / peak) * 100 * enter}%`,
+                  height: "100%",
+                  borderRadius: 999,
+                  backgroundColor: tone,
                 }}
               />
             </div>
@@ -156,88 +101,47 @@ export const Recap: React.FC<RecapProps> = ({
   totals,
   leaderboard,
   lesson,
-  gridCount = 30,
-  videoId,
   score,
+  videoId,
   theme: overrides,
 }) => {
   const theme = themeFor(videoId, overrides);
-  const frame = useCurrentFrame();
-  const { fps, durationInFrames } = useVideoConfig();
+  const { durationInFrames } = useVideoConfig();
 
-  const body = durationInFrames - fps * 2;
-  const lessonAt = Math.max(0, body - fps * 4);
-  const lessonIn = spring({
-    frame: frame - lessonAt,
-    fps,
-    config: { damping: 200, mass: 0.7 },
-    durationInFrames: 20,
-  });
+  const lessonAt = Math.max(80, Math.floor(durationInFrames * 0.76));
+  const totalsFrom = 22;
+  const boardFrom = totalsFrom + Math.max(30, totals.length * 12);
 
   return (
     <Frame theme={theme} template="Recap" score={score}>
       <AbsoluteFill
         style={{
           boxSizing: "border-box",
-          paddingTop: 120,
-          paddingBottom: 150,
-          paddingLeft: CONTENT_MARGIN,
-          paddingRight: CONTENT_MARGIN,
+          padding: `104px ${BLEED_MARGIN}px 0`,
           display: "flex",
           flexDirection: "column",
           gap: 34,
         }}
       >
-        <div
-          style={{
-            fontFamily: theme.display,
-            fontWeight: theme.weightHeavy,
-            fontSize: 96,
-            lineHeight: 0.96,
-            letterSpacing: theme.displayTracking,
-            color: theme.paper,
-            transform: `scale(${interpolate(frame, [0, 8], [1.02, 1], clamp)})`,
-            transformOrigin: "left top",
-          }}
-        >
-          {hook}
+        <div style={{ display: "flex", flexDirection: "column", gap: 26 }}>
+          <Eyebrow text="THE REAL NUMBERS" theme={theme} color={theme.amber} />
+          <KineticHeadline text={hook} theme={theme} from={4} maxLines={2} max={132} />
         </div>
-
-        <ThumbnailGrid theme={theme} frame={frame} fps={fps} count={gridCount} />
-
-        <div style={{ display: "flex", gap: 48 }}>
-          {totals.map((total, index) => (
-            <BlurCounter
-              key={total.label}
-              theme={theme}
-              frame={frame}
-              fps={fps}
-              value={total.value}
-              label={total.label}
-              delay={fps * (2 + index * 0.8)}
-            />
-          ))}
-        </div>
-
-        <Leaderboard theme={theme} frame={frame} fps={fps} rows={leaderboard} delay={fps * 5} />
 
         <div
           style={{
-            marginTop: "auto",
-            padding: "22px 26px",
-            borderLeft: `8px solid ${theme.amber}`,
-            backgroundColor: theme.paper,
-            color: theme.ground,
-            fontFamily: theme.display,
-            fontWeight: theme.weightHeavy,
-            fontSize: 52,
-            lineHeight: 1.05,
-            opacity: lessonIn,
-            transform: `translateY(${(1 - lessonIn) * 28}px)`,
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            gap: 46,
           }}
         >
-          {lesson}
+          <Rows rows={totals} theme={theme} from={totalsFrom} every={11} />
+          <Rows rows={leaderboard} theme={theme} from={boardFrom} every={9} highlightFirst />
         </div>
+
+        <PayoffBlock text={lesson} theme={theme} from={lessonAt} />
       </AbsoluteFill>
     </Frame>
   );

@@ -1,105 +1,45 @@
 import React from "react";
-import { AbsoluteFill, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { CONTENT_MARGIN, Frame } from "../components/Frame";
+import { AbsoluteFill, useVideoConfig } from "remotion";
+import { Frame } from "../components/Frame";
+import { BLEED_MARGIN, Eyebrow, KineticHeadline, MarchingList } from "../components/Kinetic";
 import { themeFor } from "../theme";
 import type { ListRevealProps } from "../types";
 
+/** A headline and its list, both filling the frame. */
 export const ListReveal: React.FC<ListRevealProps> = ({
   eyebrow,
-  day,
   headline,
   items,
-  kicker,
   score,
   videoId,
   theme: overrides,
 }) => {
   const theme = themeFor(videoId, overrides);
-  const frame = useCurrentFrame();
-  const { fps, durationInFrames } = useVideoConfig();
+  const { durationInFrames } = useVideoConfig();
 
-  const head = spring({ frame, fps, config: { damping: 200 }, durationInFrames: 24 });
-
-  // Spread the items across the middle 70% of the video so the last one
-  // still has time to breathe before the exit fade.
-  const first = 20;
-  const last = Math.max(first + 12, durationInFrames - 60);
-  const step = items.length > 1 ? (last - first) / (items.length - 1) : 0;
+  const from = 22;
+  // Spread across the middle so the last item is still readable before the
+  // end card takes the frame.
+  const every = Math.max(11, Math.floor((durationInFrames - 70 - from) / Math.max(1, items.length)));
 
   return (
     <Frame theme={theme} template="ListReveal" score={score}>
       <AbsoluteFill
         style={{
-          justifyContent: "center",
-          paddingLeft: CONTENT_MARGIN,
-          paddingRight: CONTENT_MARGIN,
-          paddingBottom: 140,
+          boxSizing: "border-box",
+          padding: `104px ${BLEED_MARGIN}px 108px`,
+          display: "flex",
+          flexDirection: "column",
+          gap: 46,
         }}
       >
-        <div
-          style={{
-            fontFamily: theme.display,
-            fontWeight: theme.weightHeavy,
-            fontSize: 108,
-            lineHeight: 0.98,
-            letterSpacing: "-0.035em",
-            color: theme.paper,
-            opacity: head,
-            transform: `translateY(${(1 - head) * 32}px)`,
-          }}
-        >
-          {headline}
+        <div style={{ display: "flex", flexDirection: "column", gap: 30 }}>
+          <Eyebrow text={eyebrow} theme={theme} color={theme.amber} />
+          <KineticHeadline text={headline} theme={theme} from={4} maxLines={3} max={156} />
         </div>
 
-        <div style={{ marginTop: 76, display: "flex", flexDirection: "column", gap: 40 }}>
-          {items.map((item, i) => {
-            const p = spring({
-              frame: frame - (first + i * step),
-              fps,
-              config: { damping: 200, mass: 0.6 },
-              durationInFrames: 20,
-            });
-            return (
-              <div
-                key={item}
-                style={{
-                  display: "flex",
-                  gap: 32,
-                  alignItems: "flex-start",
-                  opacity: p,
-                  transform: `translateX(${(1 - p) * -40}px)`,
-                }}
-              >
-                <div
-                  style={{
-                    fontFamily: theme.mono,
-                    fontSize: 34,
-                    lineHeight: 1.5,
-                    color: theme.amber,
-                    fontVariantNumeric: "tabular-nums",
-                    paddingTop: 8,
-                  }}
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </div>
-                <div
-                  style={{
-                    flex: 1,
-                    fontFamily: theme.display,
-                    fontWeight: theme.weightBody,
-                    fontSize: 56,
-                    lineHeight: 1.22,
-                    letterSpacing: "-0.015em",
-                    color: theme.paper,
-                    borderBottom: `2px solid ${theme.rule}`,
-                    paddingBottom: 28,
-                  }}
-                >
-                  {item}
-                </div>
-              </div>
-            );
-          })}
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+          <MarchingList items={items} theme={theme} from={from} every={every} accent={theme.amber} />
         </div>
       </AbsoluteFill>
     </Frame>

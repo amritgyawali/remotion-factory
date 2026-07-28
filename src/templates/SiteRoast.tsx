@@ -1,296 +1,77 @@
 import React from "react";
-import {
-  AbsoluteFill,
-  interpolate,
-  spring,
-  useCurrentFrame,
-  useVideoConfig,
-} from "remotion";
-import { CONTENT_MARGIN, Frame } from "../components/Frame";
+import { AbsoluteFill, useVideoConfig } from "remotion";
+import { Frame } from "../components/Frame";
+import { BLEED_MARGIN, Eyebrow, KineticHeadline, MarchingList, PayoffBlock } from "../components/Kinetic";
 import { themeFor } from "../theme";
 import type { SiteRoastProps } from "../types";
 
-const clamp = {
-  extrapolateLeft: "clamp",
-  extrapolateRight: "clamp",
-} as const;
-
+/**
+ * Problems, then the rebuild, then the score.
+ *
+ * The PDF has the bed drop out for the rebuild and return bigger for the
+ * verdict, so the fix and the verdict are two separate arrivals rather than
+ * one block: the pause between them is where the music does its work.
+ */
 export const SiteRoast: React.FC<SiteRoastProps> = ({
-  eyebrow,
-  day,
   hook,
   episode,
   problems,
   fix,
   verdict,
-  kicker,
   score,
   videoId,
   theme: overrides,
 }) => {
   const theme = themeFor(videoId, overrides);
-  const frame = useCurrentFrame();
-  const { fps, durationInFrames } = useVideoConfig();
-  const marker = interpolate(frame, [2, 20], [0, 1], clamp);
-  const fixAt = Math.max(44, Math.floor(durationInFrames * 0.56));
-  const problemFirst = 18;
-  const problemLast = Math.max(problemFirst, fixAt - 22);
-  const problemGap =
-    problems.length > 1 ? (problemLast - problemFirst) / (problems.length - 1) : 0;
-  const fixIn = spring({
-    frame: frame - fixAt,
-    fps,
-    config: { damping: 16, mass: 0.7 },
-    durationInFrames: 22,
-  });
-  const verdictIn = spring({
-    frame: frame - (fixAt + 18),
-    fps,
-    config: { damping: 200 },
-    durationInFrames: 18,
-  });
+  const { durationInFrames } = useVideoConfig();
+
+  const verdictAt = Math.max(70, Math.floor(durationInFrames * 0.72));
+  const fixAt = Math.max(52, verdictAt - 46);
+  const problemsFrom = 24;
+  const problemEvery = Math.max(
+    9,
+    Math.floor((fixAt - problemsFrom - 16) / Math.max(1, problems.length)),
+  );
 
   return (
     <Frame theme={theme} template="SiteRoast" score={score}>
       <AbsoluteFill
         style={{
           boxSizing: "border-box",
-          paddingTop: 120,
-          paddingBottom: 150,
-          paddingLeft: CONTENT_MARGIN,
-          paddingRight: CONTENT_MARGIN,
+          padding: `104px ${BLEED_MARGIN}px 0`,
           display: "flex",
           flexDirection: "column",
+          gap: 36,
         }}
       >
+        <div style={{ display: "flex", flexDirection: "column", gap: 30 }}>
+          <Eyebrow text={`ROAST ${episode}`} theme={theme} />
+          <KineticHeadline text={hook} theme={theme} from={4} maxLines={3} max={156} />
+        </div>
+
         <div
           style={{
+            flex: 1,
             display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: 24,
+            flexDirection: "column",
+            justifyContent: "center",
+            gap: 44,
           }}
         >
-          <div
-            style={{
-              fontFamily: theme.mono,
-              fontSize: 30,
-              letterSpacing: "0.1em",
-              color: theme.amber,
-            }}
-          >
-            SITE AUDIT
-          </div>
-          <div
-            style={{
-              padding: "10px 18px",
-              borderRadius: 999,
-              border: `2px solid ${theme.amber}`,
-              fontFamily: theme.mono,
-              fontSize: 28,
-              color: theme.paper,
-            }}
-          >
-            {episode}
-          </div>
+          <MarchingList items={problems} theme={theme} from={problemsFrom} every={problemEvery} />
+          <KineticHeadline
+            text={fix}
+            theme={theme}
+            from={fixAt}
+            maxLines={2}
+            min={48}
+            max={86}
+            color={theme.seaglass}
+            stagger={2}
+          />
         </div>
 
-        <div
-          style={{
-            marginTop: 24,
-            fontFamily: theme.display,
-            fontWeight: theme.weightHeavy,
-            fontSize: 98,
-            lineHeight: 0.96,
-            letterSpacing: "-0.04em",
-            color: theme.paper,
-          }}
-        >
-          {hook}
-        </div>
-
-        <div
-          style={{
-            marginTop: 32,
-            height: 292,
-            borderRadius: 24,
-            backgroundColor: theme.paper,
-            padding: 28,
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
-          <div style={{ height: 22, display: "flex", gap: 9 }}>
-            {[0, 1, 2].map((dot) => (
-              <div
-                key={dot}
-                style={{
-                  width: 18,
-                  height: 18,
-                  borderRadius: 999,
-                  backgroundColor: dot === 0 ? "#FF736F" : theme.groundLift,
-                }}
-              />
-            ))}
-          </div>
-          <div
-            style={{
-              marginTop: 25,
-              height: 42,
-              width: "42%",
-              borderRadius: 8,
-              backgroundColor: theme.ground,
-            }}
-          />
-          <div
-            style={{
-              marginTop: 18,
-              height: 18,
-              width: "70%",
-              borderRadius: 8,
-              backgroundColor: "rgba(34, 16, 51, 0.2)",
-            }}
-          />
-          <div
-            style={{
-              marginTop: 12,
-              height: 18,
-              width: "55%",
-              borderRadius: 8,
-              backgroundColor: "rgba(34, 16, 51, 0.2)",
-            }}
-          />
-          <div
-            style={{
-              marginTop: 28,
-              width: 180,
-              height: 48,
-              borderRadius: 10,
-              backgroundColor: theme.groundLift,
-            }}
-          />
-          <svg
-            width="100%"
-            height="100%"
-            viewBox="0 0 900 292"
-            style={{ position: "absolute", inset: 0 }}
-          >
-            <ellipse
-              cx="250"
-              cy="147"
-              rx="180"
-              ry="90"
-              fill="none"
-              stroke="#E94F57"
-              strokeWidth="12"
-              pathLength={1}
-              strokeDasharray={1}
-              strokeDashoffset={1 - marker}
-              strokeLinecap="round"
-              transform="rotate(-7 250 147)"
-            />
-          </svg>
-          <div
-            style={{
-              position: "absolute",
-              right: 24,
-              bottom: 24,
-              padding: "12px 18px",
-              backgroundColor: "#E94F57",
-              borderRadius: 10,
-              fontFamily: theme.mono,
-              fontSize: 30,
-              fontWeight: theme.weightHeavy,
-              color: theme.paper,
-              transform: `rotate(-3deg) scale(${0.9 + marker * 0.1})`,
-            }}
-          >
-            NEEDS WORK
-          </div>
-        </div>
-
-        <div
-          style={{
-            marginTop: 24,
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 14,
-          }}
-        >
-          {problems.map((problem, index) => {
-            const enter = spring({
-              frame: frame - (problemFirst + index * problemGap),
-              fps,
-              config: { damping: 200, mass: 0.55 },
-              durationInFrames: 17,
-            });
-            return (
-              <div
-                key={`${problem}-${index}`}
-                style={{
-                  minHeight: 90,
-                  padding: "18px 20px",
-                  border: `2px solid ${theme.rule}`,
-                  borderRadius: 16,
-                  fontFamily: theme.display,
-                  fontSize: 44,
-                  lineHeight: 1.05,
-                  color: theme.paper,
-                  opacity: enter,
-                  transform: `translateY(${(1 - enter) * 20}px)`,
-                }}
-              >
-                <span style={{ color: "#FF8B87" }}>{index + 1}. </span>
-                {problem}
-              </div>
-            );
-          })}
-        </div>
-
-        <div
-          style={{
-            marginTop: "auto",
-            display: "grid",
-            gridTemplateColumns: "1.3fr 0.7fr",
-            gap: 16,
-          }}
-        >
-          <div
-            style={{
-              padding: "22px 24px",
-              borderRadius: 18,
-              backgroundColor: theme.paper,
-              fontFamily: theme.display,
-              fontWeight: theme.weightMid,
-              fontSize: 47,
-              lineHeight: 1.05,
-              color: theme.ground,
-              opacity: fixIn,
-              transform: `translateX(${(1 - fixIn) * -34}px)`,
-            }}
-          >
-            {fix}
-          </div>
-          <div
-            style={{
-              padding: "22px 20px",
-              borderRadius: 18,
-              backgroundColor: theme.amber,
-              display: "grid",
-              placeItems: "center",
-              textAlign: "center",
-              fontFamily: theme.mono,
-              fontWeight: theme.weightHeavy,
-              fontSize: 36,
-              lineHeight: 1.05,
-              color: theme.ground,
-              opacity: verdictIn,
-              transform: `scale(${0.9 + verdictIn * 0.1}) rotate(-2deg)`,
-            }}
-          >
-            {verdict}
-          </div>
-        </div>
+        <PayoffBlock text={verdict} theme={theme} from={verdictAt} background={theme.amber} />
       </AbsoluteFill>
     </Frame>
   );
