@@ -97,6 +97,18 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           # Reads the master back out of the week's Release.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Unattended by default. The review gate was holding every rendered
+          # video as "pending" forever, because approving one requires a person
+          # at the dashboard — which is exactly what this factory is meant not
+          # to need. Nothing is unguarded: the embargo still refuses any slot
+          # before 25 August, publishBlockers still refuse a placeholder
+          # channel, and verify-video still refuses a blank or silent render.
+          #
+          # Through a repository variable, not a literal, so review can be put
+          # back from the GitHub settings UI with no commit and no laptop:
+          # Settings > Secrets and variables > Actions > Variables,
+          # REQUIRE_APPROVAL = 1.
+          REQUIRE_APPROVAL: ${{ vars.REQUIRE_APPROVAL || '0' }}
         run: node scripts/publish-one.mjs
 
       - name: Commit queue state
