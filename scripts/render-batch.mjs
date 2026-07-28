@@ -179,6 +179,9 @@ async function main() {
           sha256: stored.sha256,
           bytes: stored.bytes,
           durationSeconds: verified.duration,
+          // Lands awaiting review. With REQUIRE_APPROVAL=0 the publisher
+          // ignores this and sends it anyway.
+          approval: "pending",
         });
       }
       done.push(item.id);

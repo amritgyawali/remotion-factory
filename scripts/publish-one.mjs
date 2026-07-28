@@ -4,7 +4,16 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { loadEnvFile } from "./env.mjs";
 import { assertConfigured, jobSummary, listIntegrations, notify, publishVideo } from "./postiz.mjs";
-import { getArchivedQueue, loadQueueState, markArchivedPosted, publishable, QUEUE_LOW_WATER } from "./queue.mjs";
+import {
+  approvalOf,
+  buffered,
+  getArchivedQueue,
+  loadQueueState,
+  markArchivedPosted,
+  publishable,
+  QUEUE_LOW_WATER,
+  requiresApproval,
+} from "./queue.mjs";
 
 /**
  * Send one already-rendered video to Postiz.
@@ -67,8 +76,21 @@ async function main() {
   const waiting = publishable(state);
 
   if (waiting.length === 0) {
+    // Distinguish "nothing rendered" from "rendered but nobody approved it".
+    // They look identical from the outside and need opposite responses.
+    const inBuffer = buffered(state);
+    const awaitingReview = inBuffer.filter((entry) => approvalOf(entry) === "pending");
+    const rejected = inBuffer.filter((entry) => approvalOf(entry) === "rejected");
+
     const message =
-      "Nothing rendered is waiting to post. The morning batch renders the next four.";
+      awaitingReview.length && requiresApproval()
+        ? `${awaitingReview.length} video(s) rendered and waiting for approval: ` +
+          `${awaitingReview.map((entry) => entry.id).join(", ")}. Approve one in the dashboard to publish it.`
+        : rejected.length && inBuffer.length === rejected.length
+          ? `Every buffered video is rejected (${rejected.map((entry) => entry.id).join(", ")}). ` +
+            "Discard them in the dashboard so the next batch re-renders."
+          : "Nothing rendered is waiting to post. The morning batch renders the next four.";
+
     console.log(message);
     await jobSummary(`## Publish\n\n${message}`);
     return;

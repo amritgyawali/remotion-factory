@@ -12,10 +12,20 @@ import type { PlanItem, WeeklyPlan } from "./plan-schema";
  * Mirrors scripts/queue.mjs and scripts/due.mjs.
  */
 
-export interface QueueState {
-  posted: string[];
-  lastPostedAt?: string;
-}
+// The buffer's shape and pure helpers live in ./buffer, which imports nothing
+// server-only, so client components can use them without pulling the GitHub
+// token into the browser bundle. Re-exported here so server code has one
+// import site, and imported too because a re-export alone is not in scope.
+import type { QueueState } from "./buffer";
+
+export {
+  approvalOf,
+  bufferedVideos,
+  publishableVideos,
+  type Approval,
+  type BufferEntry,
+  type QueueState,
+} from "./buffer";
 
 export interface ArchiveEntry {
   id: string;

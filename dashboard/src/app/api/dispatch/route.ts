@@ -7,10 +7,15 @@ import { GitHubError, cancelRun, dispatchWorkflow, rerunFailedJobs } from "@/lib
  * Authentication is handled by the middleware — nothing reaches here signed out.
  */
 
-const ALLOWED_WORKFLOWS = new Set(["publish-next.yml", "render.yml", "accept-week.yml"]);
+const ALLOWED_WORKFLOWS = new Set([
+  "publish-next.yml",
+  "render-batch.yml",
+  "render.yml",
+  "accept-week.yml",
+]);
 
 type Body =
-  | { action: "dispatch"; workflow: string; dryRun?: boolean; force?: boolean }
+  | { action: "dispatch"; workflow: string; dryRun?: boolean; force?: boolean; count?: number }
   | { action: "rerun"; runId: number }
   | { action: "cancel"; runId: number };
 
@@ -30,10 +35,20 @@ export async function POST(request: NextRequest) {
         if (!ALLOWED_WORKFLOWS.has(body.workflow)) {
           return NextResponse.json({ error: `Unknown workflow "${body.workflow}"` }, { status: 400 });
         }
-        await dispatchWorkflow(body.workflow, {
-          dry_run: String(Boolean(body.dryRun)),
-          force: String(Boolean(body.force)),
-        });
+        // Each workflow declares its own inputs; sending one it does not
+        // define is a 422 from GitHub, so they are built per workflow.
+        const inputs: Record<string, string> =
+          body.workflow === "render-batch.yml"
+            ? {
+                dry_run: String(Boolean(body.dryRun)),
+                count: String(Math.min(8, Math.max(1, Number(body.count) || 4))),
+              }
+            : {
+                dry_run: String(Boolean(body.dryRun)),
+                force: String(Boolean(body.force)),
+              };
+
+        await dispatchWorkflow(body.workflow, inputs);
         break;
       }
       case "rerun": {

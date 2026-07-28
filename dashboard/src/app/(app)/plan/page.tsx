@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { PlanEditor } from "@/components/PlanEditor";
 import { EmptyState, ErrorNote } from "@/components/ui";
 import { loadState, loadWeeks } from "@/lib/factory";
@@ -22,10 +23,26 @@ export default async function PlanPage() {
     return (
       <EmptyState
         title="No accepted weeks"
-        detail="Nothing in plans/ on the publishing branch. Accept a 28-item week first — the dashboard edits accepted weeks, it does not create them."
+        detail={
+          <>
+            Nothing in <code>plans/</code> on the publishing branch.{" "}
+            <Link href="/plan/new" style={{ color: "var(--accent)" }}>
+              Compose the first week →
+            </Link>
+          </>
+        }
       />
     );
   }
 
-  return <PlanEditor weeks={weeks} posted={state?.data.posted ?? []} />;
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex justify-end">
+        <Link href="/plan/new" className="btn">
+          + New week
+        </Link>
+      </div>
+      <PlanEditor weeks={weeks} posted={state?.data.posted ?? []} />
+    </div>
+  );
 }

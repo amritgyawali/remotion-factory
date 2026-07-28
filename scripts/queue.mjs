@@ -55,6 +55,12 @@ export async function loadQueueState(path = STATE_PATH) {
       if (typeof entry.url !== "string" || !entry.url.startsWith("http")) {
         throw new Error(`${path} rendered entry "${entry.id}" has no downloadable url`);
       }
+      if (entry.approval !== undefined && !APPROVAL_STATES.includes(entry.approval)) {
+        throw new Error(
+          `${path} rendered entry "${entry.id}" has approval "${entry.approval}" — ` +
+            `must be one of ${APPROVAL_STATES.join(", ")}`,
+        );
+      }
     }
     const ids = state.rendered.map((entry) => entry.id);
     if (new Set(ids).size !== ids.length) {
@@ -65,10 +71,73 @@ export async function loadQueueState(path = STATE_PATH) {
   return state;
 }
 
-/** Rendered but not yet posted, oldest first — the publisher's work queue. */
-export function publishable(state) {
+export const APPROVAL_STATES = ["pending", "approved", "rejected"];
+
+/**
+ * Whether a human has to approve a video before it can be published.
+ *
+ * On by default: a rendered video sits in the buffer as "pending" until it is
+ * approved in the dashboard. Set REQUIRE_APPROVAL=0 to go back to fully
+ * unattended publishing, which is what this factory did before a review step
+ * existed. The trade is real — with approval on, nothing posts while nobody is
+ * looking, which is the point of it and also its cost.
+ */
+export const requiresApproval = () => process.env.REQUIRE_APPROVAL !== "0";
+
+export const approvalOf = (entry) => entry.approval ?? "pending";
+
+/** Everything rendered and not yet posted, oldest first — the review queue. */
+export function buffered(state) {
   const posted = new Set(state.posted);
   return (state.rendered ?? []).filter((entry) => !posted.has(entry.id));
+}
+
+/**
+ * What the publisher may actually send, oldest first.
+ *
+ * Rejected videos are never publishable. Pending ones are publishable only
+ * when approval is switched off.
+ */
+export function publishable(state, { approvalRequired = requiresApproval() } = {}) {
+  return buffered(state).filter((entry) => {
+    const approval = approvalOf(entry);
+    if (approval === "rejected") return false;
+    return approvalRequired ? approval === "approved" : true;
+  });
+}
+
+/** Set or clear the approval on one buffered video. */
+export async function setApproval(id, approval, { statePath = STATE_PATH } = {}) {
+  if (!APPROVAL_STATES.includes(approval)) {
+    throw new Error(`approval must be one of ${APPROVAL_STATES.join(", ")} — got "${approval}"`);
+  }
+
+  const state = await loadQueueState(statePath);
+  const entry = (state.rendered ?? []).find((candidate) => candidate.id === id);
+  if (!entry) throw new Error(`"${id}" is not in the render buffer`);
+
+  entry.approval = approval;
+  entry.reviewedAt = new Date().toISOString();
+  await writeFile(statePath, `${JSON.stringify(state, null, 2)}\n`);
+  return entry;
+}
+
+/**
+ * Drop a video from the buffer so the batch will render it again.
+ *
+ * The master stays in its Release — deleting the pointer is what makes the id
+ * eligible for a re-render, and keeping the bytes means a mistaken discard
+ * costs nothing.
+ */
+export async function discardRendered(id, { statePath = STATE_PATH } = {}) {
+  const state = await loadQueueState(statePath);
+  const before = (state.rendered ?? []).length;
+  state.rendered = (state.rendered ?? []).filter((entry) => entry.id !== id);
+
+  if (state.rendered.length === before) throw new Error(`"${id}" is not in the render buffer`);
+
+  await writeFile(statePath, `${JSON.stringify(state, null, 2)}\n`);
+  return state;
 }
 
 /**

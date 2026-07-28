@@ -1,10 +1,13 @@
 import Link from "next/link";
+import { ReviewQueue } from "@/components/ReviewQueue";
 import { TriggerPanel } from "@/components/TriggerPanel";
 import { StatusPill, runLabel, runRole } from "@/components/Status";
 import { Card, ErrorNote, Grid, Meter, StatTile } from "@/components/ui";
 import {
   QUEUE_LOW_WATER,
+  approvalOf,
   archiveFootprint,
+  bufferedVideos,
   dueDecision,
   loadManifest,
   loadState,
@@ -74,6 +77,11 @@ export default async function OverviewPage() {
 
   const daysOfRunway = Math.floor(queue.remaining / 4);
 
+  // The review buffer sits between the morning render and the publish slots.
+  const buffer = bufferedVideos(state.data);
+  const awaitingReview = buffer.filter((entry) => approvalOf(entry) === "pending").length;
+  const approved = buffer.filter((entry) => approvalOf(entry) === "approved").length;
+
   return (
     <div className="flex flex-col gap-4">
       <Grid min="200px">
@@ -106,9 +114,20 @@ export default async function OverviewPage() {
         />
 
         <StatTile
-          label="Next attempt"
-          value={formatDateTime(attempt)}
-          hint={`GitHub tries every 2 h — ${relativeTime(attempt)}`}
+          label="Awaiting review"
+          value={awaitingReview}
+          hint={
+            buffer.length
+              ? `${buffer.length} rendered, ${approved} approved`
+              : `next batch ${relativeTime(attempt)}`
+          }
+          status={
+            awaitingReview > 0 ? (
+              <StatusPill role="warning" label="Needs you" />
+            ) : approved > 0 ? (
+              <StatusPill role="good" label="Ready" />
+            ) : undefined
+          }
         />
 
         <StatTile
@@ -128,6 +147,8 @@ export default async function OverviewPage() {
       </Grid>
 
       {failure ? <FailureCard failure={failure} /> : null}
+
+      <ReviewQueue entries={buffer} approvalRequired={process.env.REQUIRE_APPROVAL !== "0"} />
 
       {!health?.ok && health ? (
         <ErrorNote title="Postiz is not answering" detail={health.reason} />

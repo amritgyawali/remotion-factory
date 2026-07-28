@@ -18,14 +18,19 @@ export function TriggerPanel({ due, queueEmpty }: { due: boolean; queueEmpty: bo
   const [message, setMessage] = useState<{ tone: "good" | "bad"; text: string } | null>(null);
   const [confirming, setConfirming] = useState(false);
 
-  async function dispatch(dryRun: boolean, force: boolean) {
+  async function dispatch(
+    dryRun: boolean,
+    force: boolean,
+    workflow: "publish-next.yml" | "render-batch.yml" = "publish-next.yml",
+    count?: number,
+  ) {
     setBusy(true);
     setMessage(null);
     try {
       const response = await fetch("/api/dispatch", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "dispatch", workflow: "publish-next.yml", dryRun, force }),
+        body: JSON.stringify({ action: "dispatch", workflow, dryRun, force, count }),
       });
       const body = (await response.json()) as { note?: string; error?: string };
 
@@ -49,9 +54,19 @@ export function TriggerPanel({ due, queueEmpty }: { due: boolean; queueEmpty: bo
     <Card title="Run now">
       <div className="flex flex-col gap-3">
         <p className="text-xs secondary">
-          A dry run renders the next item and touches neither Postiz nor{" "}
-          <code>state.json</code>. A live run publishes it and advances the queue.
+          The batch renders videos into the review queue; publishing sends an approved one to
+          Postiz. They are separate workflows, so rendering never waits on the posting clock.
         </p>
+
+        <button
+          type="button"
+          className="btn justify-center"
+          disabled={disabled}
+          onClick={() => void dispatch(false, false, "render-batch.yml", 4)}
+          title="Renders the next four videos one after another, about twenty minutes"
+        >
+          {busy ? "Dispatching…" : "Render next 4 now"}
+        </button>
 
         <button
           type="button"
@@ -59,7 +74,7 @@ export function TriggerPanel({ due, queueEmpty }: { due: boolean; queueEmpty: bo
           disabled={disabled}
           onClick={() => void dispatch(true, false)}
         >
-          {busy ? "Dispatching…" : "Dry run"}
+          {busy ? "Dispatching…" : "Publish dry run"}
         </button>
 
         {confirming ? (
