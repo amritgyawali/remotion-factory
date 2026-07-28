@@ -133,7 +133,19 @@ jobs:
           for attempt in 1 2 3; do
             if git push origin HEAD:main; then exit 0; fi
             echo "Push attempt $attempt failed; rebasing onto current main."
-            git pull --rebase origin main
+            # --autostash is load-bearing, not tidiness. `npm install` rewrites
+            # package-lock.json, so by this point the tree is dirty through no
+            # fault of ours, and a plain `git pull --rebase` aborts with
+            # "cannot pull with rebase: You have unstaged changes". That turned
+            # a routine lost race into a failed run that had already rendered
+            # and uploaded four videos — the masters were in the Release and
+            # nothing on main knew they existed.
+            git fetch origin main
+            if ! git rebase --autostash origin/main; then
+              git rebase --abort || true
+              echo "Rebase onto origin/main conflicted; not forcing." >&2
+              exit 1
+            fi
           done
           echo "Could not push state.json after three attempts." >&2
           exit 1
