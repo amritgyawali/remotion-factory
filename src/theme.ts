@@ -23,6 +23,27 @@ import { pick, variationFor } from "./seed";
 // its own union of supported weights, and Anton ships a single one.
 const latin = ["latin"] as ("latin")[];
 
+/**
+ * The weights each pairing can actually render, named by role.
+ *
+ * This exists because asking for a weight a family does not ship does not
+ * fail — the browser synthesises it by smearing each glyph sideways. On Anton,
+ * which is ultra-condensed and ships only 400, a hardcoded `fontWeight: 800`
+ * made adjacent letters collide and shipped a headline that read as a broken
+ * font. Two of the first six videos drew Anton, so roughly one video in seven
+ * went out mangled.
+ *
+ * Components ask for `theme.weightHeavy`, never a number. A family can then
+ * only ever be asked for a weight it has.
+ */
+type WeightScale = { heavy: number; mid: number; body: number };
+
+const SCALE_800: WeightScale = { heavy: 800, mid: 700, body: 600 };
+const SCALE_BRICOLAGE: WeightScale = { heavy: 800, mid: 700, body: 500 };
+const SCALE_700: WeightScale = { heavy: 700, mid: 600, body: 600 };
+/** Anton has exactly one weight. Every role resolves to it, and that is correct. */
+const SCALE_SINGLE: WeightScale = { heavy: 400, mid: 400, body: 400 };
+
 const jetBrains = loadJetBrainsMono("normal", { weights: ["400", "700"], subsets: latin }).fontFamily;
 const plexMono = loadIBMPlexMono("normal", { weights: ["400", "700"], subsets: latin }).fontFamily;
 const spaceMono = loadSpaceMono("normal", { weights: ["400", "700"], subsets: latin }).fontFamily;
@@ -33,42 +54,49 @@ export const TYPEFACES = [
     display: loadBricolage("normal", { weights: ["500", "600", "700", "800"], subsets: latin }).fontFamily,
     mono: jetBrains,
     displayTracking: "-0.04em",
+    weights: SCALE_BRICOLAGE,
   },
   {
     name: "unbounded",
     display: loadUnbounded("normal", { weights: ["600", "700", "800"], subsets: latin }).fontFamily,
     mono: spaceMono,
     displayTracking: "-0.03em",
+    weights: SCALE_800,
   },
   {
     name: "syne",
     display: loadSyne("normal", { weights: ["600", "700", "800"], subsets: latin }).fontFamily,
     mono: plexMono,
     displayTracking: "-0.02em",
+    weights: SCALE_800,
   },
   {
     name: "anton",
     display: loadAnton("normal", { weights: ["400"], subsets: latin }).fontFamily,
     mono: jetBrains,
     displayTracking: "-0.01em",
+    weights: SCALE_SINGLE,
   },
   {
     name: "spaceGrotesk",
     display: loadSpaceGrotesk("normal", { weights: ["600", "700"], subsets: latin }).fontFamily,
     mono: spaceMono,
     displayTracking: "-0.035em",
+    weights: SCALE_700,
   },
   {
     name: "sora",
     display: loadSora("normal", { weights: ["600", "700", "800"], subsets: latin }).fontFamily,
     mono: plexMono,
     displayTracking: "-0.03em",
+    weights: SCALE_800,
   },
   {
     name: "chivo",
     display: loadChivo("normal", { weights: ["600", "700", "800"], subsets: latin }).fontFamily,
     mono: jetBrains,
     displayTracking: "-0.035em",
+    weights: SCALE_800,
   },
 ] as const;
 
@@ -118,6 +146,10 @@ const withDerived = (
   display: type.display as string,
   mono: type.mono as string,
   displayTracking: type.displayTracking as string,
+  // Named roles, never raw numbers — see WeightScale for why.
+  weightHeavy: type.weights.heavy as number,
+  weightMid: type.weights.mid as number,
+  weightBody: type.weights.body as number,
 });
 
 /** Aubergine ground, warm paper type, amber signal — the original identity. */

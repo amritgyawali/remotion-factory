@@ -39,7 +39,7 @@ export const ListReveal: React.FC<ListRevealProps> = ({
         <div
           style={{
             fontFamily: theme.display,
-            fontWeight: 800,
+            fontWeight: theme.weightHeavy,
             fontSize: 108,
             lineHeight: 0.98,
             letterSpacing: "-0.035em",
@@ -86,7 +86,7 @@ export const ListReveal: React.FC<ListRevealProps> = ({
                   style={{
                     flex: 1,
                     fontFamily: theme.display,
-                    fontWeight: 500,
+                    fontWeight: theme.weightBody,
                     fontSize: 56,
                     lineHeight: 1.22,
                     letterSpacing: "-0.015em",

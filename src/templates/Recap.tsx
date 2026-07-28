@@ -70,7 +70,7 @@ const BlurCounter: React.FC<{
       <div
         style={{
           fontFamily: theme.display,
-          fontWeight: 800,
+          fontWeight: theme.weightHeavy,
           fontSize: 92,
           lineHeight: 1,
           letterSpacing: theme.displayTracking,
@@ -191,7 +191,7 @@ export const Recap: React.FC<RecapProps> = ({
         <div
           style={{
             fontFamily: theme.display,
-            fontWeight: 800,
+            fontWeight: theme.weightHeavy,
             fontSize: 96,
             lineHeight: 0.96,
             letterSpacing: theme.displayTracking,
@@ -229,7 +229,7 @@ export const Recap: React.FC<RecapProps> = ({
             backgroundColor: theme.paper,
             color: theme.ground,
             fontFamily: theme.display,
-            fontWeight: 800,
+            fontWeight: theme.weightHeavy,
             fontSize: 52,
             lineHeight: 1.05,
             opacity: lessonIn,

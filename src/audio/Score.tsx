@@ -17,20 +17,35 @@ import { Audio, Sequence, staticFile, useVideoConfig } from "remotion";
 
 const dbToGain = (db: number) => 10 ** (db / 20);
 
-/** "Duck the bed 4 dB for 6 frames under every major SFX hit." */
-export const DUCK_DB = -4;
-export const DUCK_FRAMES = 6;
-
-/** Bed sits below the effects because the effects are carrying the dialogue. */
-export const BED_DB = -6;
+/**
+ * The bed ducks under every major hit, but gently and over a longer window
+ * than the PDF's 6 frames. A 4 dB step on and off in a tenth of a second is
+ * inaudible under a loud close mix and obvious under a quiet distant one —
+ * it reads as the music breathing at you. Shallower and slower disappears.
+ */
+export const DUCK_DB = -3;
+export const DUCK_FRAMES = 10;
+/** Fast in so the duck is already there when the hit lands, slow back out. */
+export const DUCK_ATTACK_FRAMES = 2;
 
 /**
- * Individual cues are already normalised into the PDF's -8 to -12 dBFS window,
- * but several can overlap and the bed sums on top. Measured on a real render,
- * unity here peaked at -0.6 dBFS, over the -1 dBTP master ceiling the PDF
- * specifies. This is the headroom that keeps the sum under it.
+ * Bed level, well under the effects.
+ *
+ * The PDF's -6 was written for a bed that carries the video. In practice it
+ * competed with the on-screen text, which is the entire narration — there is
+ * no voiceover to sit beneath, so "under the dialogue" has no floor to find.
+ * At -13 the music is atmosphere: present if you listen for it, never the
+ * reason you stop watching.
  */
-export const SFX_DB = -2;
+export const BED_DB = -13;
+
+/**
+ * Individual cues are already normalised into their own window, but several
+ * can overlap and the bed sums on top. Lowered along with the bed: with the
+ * master no longer pushing everything to -14 LUFS, effects at -2 became the
+ * loudest thing in a calm mix and undid the point of quieting the music.
+ */
+export const SFX_DB = -7;
 
 export type Cue = {
   /** Frame this cue starts on. The PDF's row start second times fps. */
@@ -81,14 +96,29 @@ function allLayers(bed: BedStep[]): string[] {
 }
 
 /**
- * Total duck applied at `frame`. Overlapping major hits do not stack — two
- * cues a frame apart would otherwise duck 8 dB and audibly pump the bed.
+ * Total duck applied at `frame`, ramped rather than switched.
+ *
+ * Overlapping major hits do not stack — two cues a frame apart would otherwise
+ * duck twice as deep and audibly pump. The deepest single duck wins, and it
+ * fades in over two frames and back out across the rest, so the bed dips
+ * around the hit instead of being chopped out from under it.
  */
 function duckGainAt(cues: Cue[], frame: number): number {
-  const ducking = cues.some(
-    (cue) => cue.major && frame >= cue.frame && frame < cue.frame + DUCK_FRAMES,
-  );
-  return ducking ? dbToGain(DUCK_DB) : 1;
+  let depth = 0;
+
+  for (const cue of cues) {
+    if (!cue.major) continue;
+    const since = frame - cue.frame;
+    if (since < 0 || since >= DUCK_FRAMES) continue;
+
+    const shape =
+      since < DUCK_ATTACK_FRAMES
+        ? since / DUCK_ATTACK_FRAMES
+        : 1 - (since - DUCK_ATTACK_FRAMES) / (DUCK_FRAMES - DUCK_ATTACK_FRAMES);
+    depth = Math.max(depth, shape);
+  }
+
+  return dbToGain(DUCK_DB * depth);
 }
 
 export const Soundtrack: React.FC<{ score: Score }> = ({ score }) => {

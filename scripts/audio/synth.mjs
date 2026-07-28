@@ -151,6 +151,44 @@ export function resonantLowpass(input, cutoffHz, q = 4) {
   return out;
 }
 
+/**
+ * Push a sound into the distance.
+ *
+ * Distance is not volume. Turning a close-mic'd bed down just produces a quiet
+ * close bed — still all transient and top end, still sitting on top of the
+ * viewer. What actually reads as far away is three things happening together:
+ * air absorbs high frequencies over range, reflections arrive spread out
+ * behind the direct sound, and by any real distance there is no attack left,
+ * only a diffuse wash arriving from everywhere at once.
+ *
+ * Applied before RMS normalisation, so the level stays predictable no matter
+ * how much energy the reflections add.
+ */
+export function distant(input, { cutoffHz = 1500, diffusionMs = 90, wet = 0.5 } = {}) {
+  // Air absorption. Two poles: one is too gentle to read as anything but a
+  // slightly dull mix.
+  const absorbed = lowpass(lowpass(input, cutoffHz), cutoffHz * 1.6);
+
+  // Diffusion. Irregular tap spacing matters — evenly spaced taps comb-filter
+  // into a metallic ring, which sounds like a broken plugin, not a field.
+  const diffuse = new Float32Array(absorbed.length);
+  const spacing = [1, 1.7, 2.6, 3.9, 5.3, 7.1];
+  for (const [index, multiple] of spacing.entries()) {
+    const delay = seconds((diffusionMs / 1000) * multiple);
+    if (delay >= absorbed.length) break;
+    const decay = 0.62 ** (index + 1);
+    for (let i = delay; i < absorbed.length; i++) diffuse[i] += absorbed[i - delay] * decay;
+  }
+
+  // Reflections have travelled further than the direct sound, so they are
+  // duller again.
+  const tail = lowpass(diffuse, cutoffHz * 0.7);
+
+  const out = new Float32Array(absorbed.length);
+  for (let i = 0; i < out.length; i++) out[i] = absorbed[i] * (1 - wet) + tail[i] * wet;
+  return out;
+}
+
 /** Sum buffers of differing lengths into one the length of the longest. */
 export function mix(...buffers) {
   const flat = buffers.flat().filter(Boolean);

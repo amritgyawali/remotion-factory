@@ -8,12 +8,21 @@
     "Remotion only: every pixel is a rendered React component. No footage, screen recording, or photographs."
   ],
   "mix": {
-    "musicBedLufs": -16,
-    "sfxDbfs": [-12, -8],
-    "duckDb": 4,
-    "duckFrames": 6,
-    "masterLufs": -14,
-    "truePeakDbtp": -1
+    "note": "Revised away from the PDF's table after the first published draft was rejected for being too loud. The PDF's numbers assume a voiceover the videos do not have: with no speech, normalising to -14 LUFS puts wall-to-wall music at full loudness for the entire runtime. The bed is atmosphere, not performance.",
+    "pdfOriginal": { "musicBedLufs": -16, "sfxDbfs": [-12, -8], "duckDb": 4, "duckFrames": 6, "masterLufs": -14 },
+    "bedDb": -13,
+    "sfxDb": -7,
+    "duckDb": 3,
+    "duckFrames": 10,
+    "duckAttackFrames": 2,
+    "masterLufs": -23,
+    "truePeakDbtp": -1,
+    "distance": {
+      "lowpassHz": 1500,
+      "diffusionMs": 90,
+      "wet": 0.5,
+      "intent": "The bed should sound like it is coming from a long way off, not like a close mix turned down. Air absorption above 1.5 kHz, diffuse reflections behind the direct sound, no transient left."
+    }
   },
   "endCard": {
     "seconds": 2,

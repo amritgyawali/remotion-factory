@@ -1,6 +1,7 @@
 import {
   decayTo,
   deClick,
+  distant,
   envelope,
   gain,
   highpass,
@@ -178,7 +179,30 @@ function strings(midis, length) {
   return lowpass(mix(voices), 2400);
 }
 
-const finishLayer = (buffer) => deClick(limitPeak(normalizeRms(softClip(buffer, 1.2), BED_RMS_DB), -3));
+/**
+ * How far away the music sits.
+ *
+ * The first cut of these videos mixed the bed close and loud, and it buried
+ * the thing the viewer is actually there to read. The bed is atmosphere, not
+ * performance: it should sound like it is coming from somewhere else entirely,
+ * a long way off, and never ask for attention.
+ *
+ * 1500 Hz is the working number for "very distant" — past about a kilometre of
+ * air there is essentially nothing above it left to hear.
+ */
+export const BED_DISTANCE = { cutoffHz: 1500, diffusionMs: 90, wet: 0.5 };
+
+/**
+ * Normalise first, then apply distance — not the other way round.
+ *
+ * Normalising afterwards would undo the physics: the hat layer is noise
+ * high-passed at 8 kHz, so almost nothing survives a 1.5 kHz low-pass, and
+ * RMS-matching that residue back up to the others turns a hi-hat into
+ * amplified hiss. Attenuating layers by how much of them survives the air is
+ * the entire point. A hi-hat a mile away is inaudible, and it should be.
+ */
+const finishLayer = (buffer) =>
+  deClick(limitPeak(distant(normalizeRms(softClip(buffer, 1.2), BED_RMS_DB), BED_DISTANCE), -3));
 
 /**
  * Each builder returns named layers of equal length. The score decides which

@@ -65,7 +65,7 @@ Each run:
 4. Selects the first item whose id is not in `state.json.posted`.
 5. Rebuilds the audio pack for the template in play, then renders exactly that
    one item with Remotion, using every core on the runner.
-6. Masters the audio to −14 LUFS, delivering ≈ −0.85 dBTP (see *Mastering*).
+6. Masters the audio to −23 LUFS, delivering ≈ −0.85 dBTP (see *Mastering*).
 7. Verifies the MP4 before anything else may touch it (see *Render verification*).
 8. Uploads the MP4 to the week's GitHub Release (see *Where the videos are kept*).
 9. Sends it to every configured Postiz integration.
@@ -159,8 +159,31 @@ motion. Audio three frames late reads as an amateur edit, and in a silent video
 there is nothing to hide behind." An empty `layers` array is hard silence, which
 the scripts use as a punchline device on nearly all thirty.
 
-`major: true` ducks the bed 4 dB for 6 frames, per the PDF's mix table. Ticks and
-blips are texture and should be left alone, or the bed audibly pumps.
+`major: true` ducks the bed 3 dB across 10 frames, ramped in over two and back
+out across the rest. Ticks and blips are texture and should be left alone, or
+the bed audibly pumps. The PDF's 4 dB hard step over 6 frames was inaudible
+under a loud close mix and obvious under a quiet distant one.
+
+### Distance
+
+The bed is atmosphere, not performance, and it is mixed to sound like it is
+coming from a long way off — see *Mastering* for why the first draft was not.
+
+Distance is not volume. Turning a close-mic'd bed down produces a quiet close
+bed: still all transient and top end, still sitting on the viewer. `distant()`
+in `scripts/audio/synth.mjs` does the three things that actually read as far
+away — a two-pole low-pass at 1.5 kHz for air absorption, six irregularly
+spaced decaying taps for diffusion, and a duller filter again on the
+reflections. Tap spacing is irregular on purpose: even spacing comb-filters
+into a metallic ring.
+
+It is applied **after** each layer's RMS normalisation, not before. Normalising
+afterwards would undo the physics — the hat layer is noise high-passed at
+8 kHz, so almost nothing survives the low-pass, and RMS-matching that residue
+back up to the other layers turns a hi-hat into amplified hiss. Attenuating
+each layer by how much of it survives the air is the whole point. Measured on
+the TechTip bed, the hat lands at −55 dB and the pad at −35 dB. A hi-hat a mile
+away is inaudible, and it should be.
 
 Pitch escalation — "repeat one SFX a semitone higher each beat to imply rising
 absurdity, as on days 1, 8 and 16" — is the `-p2`, `-p4`, `-p6` suffixes.
@@ -171,16 +194,25 @@ accident. A transcribed day always wins.
 
 ### Mastering
 
-The PDF's mix table ends with a delivery target the synthesis stage cannot hit
-on its own: "−14 LUFS integrated, true peak −1 dBTP. What every platform
-normalises to."
+**The delivery target is −23 LUFS, not the PDF's −14.** This is the one place
+the mix table is deliberately overridden, and the reason is worth keeping.
 
-A scored motion-graphics track is extremely peaky — sparse hits over
-near-silence — so raising it to −14 LUFS by gain alone would clip long before
-it got there. Loudness and peak have to be solved together. Remotion mixes the
-score but has no master bus, so `scripts/master-audio.mjs` runs a two-pass
-`loudnorm` after each render. Measured on a real one: **−25.9 LUFS in, −14 LUFS
-out**.
+−14 LUFS is the streaming norm, and it is correct for content where speech
+carries the loudness: dialogue peaks pull the integrated measurement up while
+the music sits underneath. These videos have no voice at all. Normalising
+wall-to-wall instrumental to −14 puts every second at full loudness with
+nothing dynamic beneath it. The first draft published to Postiz was rejected
+for exactly that.
+
+Worse, it was silently defeating the mix. The pre-master measurement was −26
+LUFS, so the old target applied **+12 dB** of gain — no level decision made
+upstream survived it. At −23 the correction is about 3 dB and the mix arrives
+roughly as it was balanced.
+
+Loudness and peak still have to be solved together — a scored motion-graphics
+track is extremely peaky, sparse hits over near-silence — and every video must
+land at the same loudness. Remotion mixes the score but has no master bus, so
+`scripts/master-audio.mjs` runs a two-pass `loudnorm` after each render.
 
 Two passes, not one: single-pass loudnorm works from a running estimate and
 audibly pumps on material this dynamic. Measuring first and applying the

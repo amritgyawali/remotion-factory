@@ -58,7 +58,7 @@ const Motif: React.FC<{
         <div
           style={{
             fontFamily: theme.display,
-            fontWeight: 800,
+            fontWeight: theme.weightHeavy,
             fontSize: 82,
             color: theme.paper,
             transform: `scale(${0.82 + pulse * 0.18})`,
@@ -93,7 +93,7 @@ const Motif: React.FC<{
                 marginTop: 44,
                 fontFamily: theme.mono,
                 fontSize: 42,
-                fontWeight: 700,
+                fontWeight: theme.weightMid,
                 color: theme.paper,
               }}
             >
@@ -131,7 +131,7 @@ const Motif: React.FC<{
                 color: theme.ground,
                 fontFamily: theme.mono,
                 fontSize: 32,
-                fontWeight: 700,
+                fontWeight: theme.weightMid,
                 opacity: enter,
                 transform: `rotate(${index * 3 - 5}deg) translateY(${(1 - enter) * 70}px)`,
               }}
@@ -161,7 +161,7 @@ const Motif: React.FC<{
         <div
           style={{
             fontFamily: theme.mono,
-            fontWeight: 700,
+            fontWeight: theme.weightMid,
             fontSize: 116,
             letterSpacing: "-0.06em",
             color: minutes > 15 ? error : theme.paper,
@@ -208,7 +208,7 @@ const Motif: React.FC<{
                 color: index === labels.length - 1 ? theme.ground : theme.paper,
                 fontFamily: theme.mono,
                 fontSize: 34,
-                fontWeight: 700,
+                fontWeight: theme.weightMid,
                 opacity: enter,
                 transform: `translateX(${(1 - enter) * (index % 2 ? 50 : -50)}px)`,
               }}
@@ -250,7 +250,7 @@ const Motif: React.FC<{
             color: theme.ground,
             fontFamily: theme.mono,
             fontSize: 30,
-            fontWeight: 800,
+            fontWeight: theme.weightHeavy,
           }}
         >
           ERRORS
@@ -335,7 +335,7 @@ export const DevJoke: React.FC<DevJokeProps> = ({
         <div
           style={{
             fontFamily: theme.display,
-            fontWeight: 800,
+            fontWeight: theme.weightHeavy,
             fontSize: 104,
             lineHeight: 0.95,
             letterSpacing: "-0.04em",
@@ -396,7 +396,7 @@ export const DevJoke: React.FC<DevJokeProps> = ({
             backgroundColor: theme.paper,
             color: theme.ground,
             fontFamily: theme.display,
-            fontWeight: 800,
+            fontWeight: theme.weightHeavy,
             fontSize: 60,
             lineHeight: 1,
             opacity: punch,

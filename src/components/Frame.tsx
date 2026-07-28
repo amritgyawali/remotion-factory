@@ -123,7 +123,7 @@ export const Frame: React.FC<{
             backgroundColor: theme.amber,
             color: "#191919",
             fontFamily: theme.display,
-            fontWeight: 900,
+            fontWeight: theme.weightHeavy,
             fontSize: 62,
             letterSpacing: "-0.08em",
             transform: `scale(${0.82 + endCard * 0.18}) rotate(${(1 - endCard) * -5}deg)`,
@@ -135,7 +135,7 @@ export const Frame: React.FC<{
           style={{
             marginTop: 48,
             fontFamily: theme.display,
-            fontWeight: 800,
+            fontWeight: theme.weightHeavy,
             fontSize: 74,
             lineHeight: 1,
             letterSpacing: "-0.03em",

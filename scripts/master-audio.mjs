@@ -6,12 +6,12 @@ import { pathToFileURL } from "node:url";
 /**
  * The master bus.
  *
- * The PDF's mix table ends with a target the synthesis stage cannot hit on its
- * own: "-14 LUFS integrated, true peak -1 dBTP. What every platform normalises
- * to." A scored motion-graphics track is extremely peaky — sparse hits over
- * near-silence — so raising it to -14 LUFS by gain alone would clip long
- * before it got there. Loudness and peak have to be solved together, which is
- * what loudness normalisation does and a gain stage cannot.
+ * Every video has to land at the same loudness, and a scored motion-graphics
+ * track is extremely peaky — sparse hits over near-silence — so loudness and
+ * peak have to be solved together. That is what loudness normalisation does
+ * and a gain stage cannot.
+ *
+ * See TARGET_LUFS for why the target is not the PDF's -14.
  *
  * Run as two passes. A single-pass loudnorm works from a running estimate and
  * audibly pumps on material this dynamic; measuring first and then applying
@@ -20,7 +20,26 @@ import { pathToFileURL } from "node:url";
  * Video is stream-copied, so this costs no image quality and only seconds.
  */
 
-export const TARGET_LUFS = -14;
+/**
+ * A deliberate departure from the PDF, which specifies -14 LUFS.
+ *
+ * -14 is the streaming norm, and it is the right number for content where
+ * speech carries the loudness and music sits underneath: dialogue peaks pull
+ * the integrated measurement up while the bed stays low. These videos have no
+ * voice at all. Normalising wall-to-wall instrumental to -14 means every
+ * second sits at full loudness with nothing dynamic underneath it, which is
+ * exactly as tiring as it sounds — the first published draft was rejected for
+ * it.
+ *
+ * The mix already measured -26 LUFS before mastering, so the old target was
+ * applying +12 dB of gain and defeating every level decision made upstream.
+ * At -23 the correction is about 3 dB, the mix arrives roughly as it was
+ * balanced, and the result is background music rather than a soundtrack.
+ *
+ * Still normalised rather than left alone: every video must land at the same
+ * loudness, and true peak still has to be solved with it.
+ */
+export const TARGET_LUFS = -23;
 
 /**
  * The PDF asks for -1 dBTP *delivered*, but loudnorm limits the signal it sees

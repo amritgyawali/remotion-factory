@@ -116,7 +116,7 @@ const ConsoleVisual: React.FC<{
                 style={{
                   fontFamily: theme.mono,
                   fontSize: 27,
-                  fontWeight: 700,
+                  fontWeight: theme.weightMid,
                   color: theme.paper,
                   textAlign: "center",
                 }}
@@ -197,7 +197,7 @@ export const TechTip: React.FC<TechTipProps> = ({
         <div
           style={{
             fontFamily: theme.display,
-            fontWeight: 800,
+            fontWeight: theme.weightHeavy,
             fontSize: 100,
             lineHeight: 0.96,
             letterSpacing: "-0.04em",
@@ -276,7 +276,7 @@ export const TechTip: React.FC<TechTipProps> = ({
             backgroundColor: theme.seaglass,
             color: theme.ground,
             fontFamily: theme.display,
-            fontWeight: 800,
+            fontWeight: theme.weightHeavy,
             fontSize: 57,
             lineHeight: 1.02,
             opacity: resultIn,

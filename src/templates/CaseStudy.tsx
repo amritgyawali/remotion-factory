@@ -78,7 +78,7 @@ export const CaseStudy: React.FC<CaseStudyProps> = ({
           style={{
             marginTop: 22,
             fontFamily: theme.display,
-            fontWeight: 800,
+            fontWeight: theme.weightHeavy,
             fontSize: 98,
             lineHeight: 0.96,
             letterSpacing: "-0.04em",
@@ -164,7 +164,7 @@ export const CaseStudy: React.FC<CaseStudyProps> = ({
                 fontFamily: theme.display,
                 fontSize: 49,
                 lineHeight: 1.02,
-                fontWeight: 700,
+                fontWeight: theme.weightMid,
                 color: theme.paper,
               }}
             >
@@ -188,7 +188,7 @@ export const CaseStudy: React.FC<CaseStudyProps> = ({
                 fontFamily: theme.display,
                 fontSize: 49,
                 lineHeight: 1.02,
-                fontWeight: 800,
+                fontWeight: theme.weightHeavy,
                 color: theme.ground,
               }}
             >
@@ -243,7 +243,7 @@ export const CaseStudy: React.FC<CaseStudyProps> = ({
             padding: "22px 28px",
             borderTop: `3px solid ${theme.amber}`,
             fontFamily: theme.display,
-            fontWeight: 700,
+            fontWeight: theme.weightMid,
             fontSize: 55,
             lineHeight: 1.04,
             color: theme.amber,

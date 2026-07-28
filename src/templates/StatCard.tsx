@@ -52,7 +52,7 @@ export const StatCard: React.FC<StatCardProps> = ({
         <div
           style={{
             fontFamily: theme.display,
-            fontWeight: 800,
+            fontWeight: theme.weightHeavy,
             fontSize: 320,
             lineHeight: 0.82,
             letterSpacing: "-0.05em",
@@ -68,7 +68,7 @@ export const StatCard: React.FC<StatCardProps> = ({
         <div
           style={{
             fontFamily: theme.display,
-            fontWeight: 600,
+            fontWeight: theme.weightBody,
             fontSize: 76,
             lineHeight: 1.08,
             letterSpacing: "-0.02em",

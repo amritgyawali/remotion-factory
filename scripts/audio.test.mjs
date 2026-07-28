@@ -117,9 +117,15 @@ test("a silent track cannot be loudness-normalised and is reported, not guessed"
   assert.equal(parseMeasurement("no json here at all"), null);
 });
 
-test("master targets deliver the PDF's spec after encoder overshoot", () => {
-  // "-14 LUFS integrated, true peak -1 dBTP. What every platform normalises to."
-  assert.equal(TARGET_LUFS, -14);
+test("master targets deliver a calm mix after encoder overshoot", () => {
+  // Deliberately below the PDF's -14. These videos carry no voice, so
+  // normalising wall-to-wall music to the speech-content norm puts every
+  // second at full loudness -- the first published draft was rejected for it.
+  assert.equal(TARGET_LUFS, -23);
+  assert.ok(
+    TARGET_LUFS <= -20,
+    "music-only videos must not be mastered to the speech-content norm",
+  );
 
   // The filter target is deliberately below the spec, not equal to it: AAC
   // overshoots loudnorm's ceiling by ~1.2 dB, so mastering to -1 delivered a
