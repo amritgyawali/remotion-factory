@@ -1,0 +1,250 @@
+name: Render a campaign in parallel
+
+# Standing up a 30-day campaign is 120 videos. The scheduled workflow renders
+# one per run, four times a day, which is the right shape for a steady drip and
+# the wrong shape for filling an empty buffer — at that rate the last video of
+# the campaign lands thirty days after the first.
+#
+# This is the other shape: split the pending queue into shards and let GitHub
+# run them as a parallel matrix. The work is identical, so the Actions minutes
+# are too; what changes is that they are spent at the same time instead of one
+# after another. Wall clock for the whole campaign becomes roughly the slowest
+# shard rather than the sum of all 120 renders.
+#
+# Manual only. It is deliberately not on a schedule: it writes state.json and
+# uploads to Releases, and something that can fill the buffer in half an hour
+# should be a decision somebody makes, not something that fires at 3am.
+
+on:
+  workflow_dispatch:
+    inputs:
+      shards:
+        description: "How many shards to split the work across (1-20)"
+        type: string
+        default: "10"
+      limit:
+        description: "Render at most this many videos (0 = the whole pending queue)"
+        type: string
+        default: "0"
+      dry_run:
+        description: "Render only; archive nothing and leave state.json alone"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  # Shares the group with the scheduled renderer and the publisher, so a
+  # campaign run and a 03:45 render can never write state.json at once.
+  group: render
+  cancel-in-progress: false
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Work out what to render, and split it. One cheap job so the twenty
+  # expensive ones all start from the same answer.
+  # ---------------------------------------------------------------------------
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      matrix: ${{ steps.split.outputs.matrix }}
+      count: ${{ steps.split.outputs.count }}
+      empty: ${{ steps.split.outputs.empty }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm install --no-audit --no-fund
+
+      # Every accepted week is validated before anything is rendered. A shard
+      # that discovers a malformed item has already paid for a runner, a
+      # checkout and an install to find it out.
+      - name: Validate every accepted plan
+        run: npm run validate
+
+      - name: Split the pending queue into shards
+        id: split
+        run: node scripts/shard-plan.mjs --shards "${{ inputs.shards }}" --limit "${{ inputs.limit }}" --github-output >> "$GITHUB_OUTPUT"
+
+  # ---------------------------------------------------------------------------
+  # The renders. Each shard is an independent job on its own runner.
+  # ---------------------------------------------------------------------------
+  render:
+    needs: plan
+    if: needs.plan.outputs.empty != 'true'
+    runs-on: ubuntu-latest
+    # A shard of twelve videos at roughly 8-12 minutes each, plus install and
+    # browser setup. GitHub caps a job at six hours regardless; this ceiling is
+    # sized so a wedged shard fails and reports rather than burning the cap.
+    timeout-minutes: 330
+    strategy:
+      # One bad video must not cancel the other nineteen shards. Every shard
+      # that can finish, finishes; the summary at the end says what did not.
+      fail-fast: false
+      # Twenty concurrent jobs is the standard-runner ceiling on the free plan.
+      # Asking for more does not make it faster, it makes the extra shards queue.
+      max-parallel: 20
+      matrix:
+        shard: ${{ fromJson(needs.plan.outputs.matrix) }}
+    env:
+      DRY_RUN: ${{ inputs.dry_run && '1' || '0' }}
+      SHARD_NAME: ${{ matrix.shard.name }}
+      SHARD_IDS: ${{ matrix.shard.ids }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Production secrets only ever run against reviewed code on main.
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install Chrome runtime libraries
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            libnss3 libdbus-1-3 libatk1.0-0 libatk-bridge2.0-0 \
+            libcups2 libxkbcommon0 libxdamage1 libgbm1 libpango-1.0-0 \
+            libcairo2 fonts-liberation || true
+          sudo apt-get install -y libasound2t64 || sudo apt-get install -y libasound2 || true
+
+      - run: npm install --no-audit --no-fund
+
+      - name: Cache Chrome Headless Shell
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/remotion
+            node_modules/.remotion
+          key: remotion-browser-${{ runner.os }}-v1
+
+      - name: Ensure browser
+        run: npx remotion browser ensure
+
+      - name: Render the shard
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          CLOUDINARY_URL: ${{ secrets.CLOUDINARY_URL }}
+          # REMOTION_CONCURRENCY is deliberately unset. Renders inside a shard
+          # run one at a time, so each gets every core on the runner.
+        run: node scripts/render-shard.mjs
+
+      # state.json is NOT committed here. Twenty jobs racing to push the same
+      # file is twenty rebases and nineteen lost races; the collect job below
+      # merges every shard's result in one commit instead.
+      - name: Publish what this shard recorded
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shard-${{ matrix.shard.name }}
+          path: |
+            state.json
+            out/shard-*.json
+          retention-days: 7
+          if-no-files-found: warn
+
+      - name: Keep the masters for 7 days
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: masters-${{ matrix.shard.name }}
+          path: out/*.mp4
+          retention-days: 7
+          if-no-files-found: warn
+
+  # ---------------------------------------------------------------------------
+  # Merge every shard's buffer entries into one commit on main.
+  # ---------------------------------------------------------------------------
+  collect:
+    needs: [plan, render]
+    if: ${{ always() && needs.plan.outputs.empty != 'true' && inputs.dry_run != true }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Download every shard's result
+        uses: actions/download-artifact@v4
+        with:
+          pattern: shard-*
+          path: shards
+
+      - name: Merge the shard buffers into state.json
+        run: node scripts/merge-shards.mjs --from shards
+
+      - name: Commit the render buffer
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- state.json
+          if [ -f archive/manifest.json ]; then git add -- archive/manifest.json; fi
+
+          unexpected="$(git diff --cached --name-only \
+            | grep -vx -e 'state.json' -e 'archive/manifest.json' || true)"
+          if [ -n "$unexpected" ]; then
+            echo "Refusing to commit unexpected paths:" >&2
+            echo "$unexpected" >&2
+            exit 1
+          fi
+
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+            exit 0
+          fi
+
+          git commit -m "chore(render): buffer a campaign shard batch"
+          for attempt in 1 2 3; do
+            if git push origin HEAD:main; then exit 0; fi
+            echo "Push attempt $attempt failed; rebasing onto current main."
+            git fetch origin main
+            if ! git rebase --autostash origin/main; then
+              git rebase --abort || true
+              echo "Rebase onto origin/main conflicted; not forcing." >&2
+              exit 1
+            fi
+          done
+          echo "Could not push state.json after three attempts." >&2
+          exit 1
+
+      - name: Report
+        if: always()
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        shell: bash
+        run: |
+          [ -z "$TELEGRAM_BOT_TOKEN" ] && exit 0
+          curl -fsS -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
+            -d chat_id="$TELEGRAM_CHAT_ID" \
+            -d disable_web_page_preview=true \
+            -d text="Campaign render finished. Shard results are in the run summary.
+          $RUN_URL" || true

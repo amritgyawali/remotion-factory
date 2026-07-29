@@ -1,0 +1,442 @@
+{
+  "week": 33,
+  "year": 2026,
+  "note": "Campaign days 1-7. Four videos a day, in slot order a/b/c/d. Slot A carries the day's anchor from the PDF's 30-day emotion sequence; B is the quick win, C is the evidence, D is the release. Item ids, day numbers, eyebrows, runtimes and the week block are all derived by scripts/build-campaign.mjs.",
+  "items": [
+    {
+      "template": "DevJoke",
+      "sourceId": "c30-d01-premium",
+      "caption": "Every round of \"make it more premium\" added something. The version that finally shipped had removed four things instead.\n\n#WebDesign #DesignProcess #DevHumor",
+      "props": {
+        "hook": "Make it look more premium",
+        "beats": [
+          "Round one: a gold gradient",
+          "Round two: a serif nobody could read",
+          "Round three: both, at once",
+          "Round four: back to the first draft"
+        ],
+        "punchline": "Premium is fewer things, done properly.",
+        "variant": "logo",
+        "kicker": "DEV LIFE"
+      }
+    },
+    {
+      "template": "TechTip",
+      "sourceId": "c30-d01-hero-weight",
+      "caption": "Your largest paint is almost always the hero image. Three checks that tell you in under a minute.\n\n#WebPerformance #CoreWebVitals #FrontEnd",
+      "props": {
+        "hook": "Your hero image is the wait",
+        "steps": [
+          "Open DevTools, throttle to Fast 3G",
+          "Find the Largest Contentful Paint element",
+          "If it is the hero, resize and preload it"
+        ],
+        "result": "Most sites lose two seconds to one image.",
+        "variant": "vitals",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "template": "StatCard",
+      "sourceId": "c30-d01-bounce-stat",
+      "caption": "The jump from one second to three is where most of the loss happens. Everything after that is a rounding error.\n\n#WebPerformance #UX #SiteSpeed",
+      "props": {
+        "value": "32%",
+        "label": "more visitors leave at three seconds",
+        "context": ["The first second buys attention.", "The third one spends it."],
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "template": "ListReveal",
+      "sourceId": "c30-d01-brief-gaps",
+      "caption": "Four questions that stop a project going sideways in month two. Ask them before the quote, not after.\n\n#ClientWork #Agency #WebDesign",
+      "props": {
+        "headline": "Four questions to ask before you quote",
+        "items": [
+          "Who signs off, and who else will comment?",
+          "What is already written, and what is not?",
+          "Which date is real and which is hoped for?",
+          "What happens to this site after launch?"
+        ],
+        "kicker": "FOLLOW FOR MORE"
+      }
+    },
+
+    {
+      "template": "TechTip",
+      "sourceId": "c30-d02-exposed-paths",
+      "caption": "Four paths worth testing on your own domain right now. Each one should answer 403 or 404 and nothing else.\n\n#WebSecurity #DevOps #SiteAudit",
+      "props": {
+        "hook": "Four paths you should test today",
+        "steps": [
+          "Try /.env and /.git/config in a browser",
+          "Try /backup.zip and /db.sql",
+          "Anything that loads needs removing today"
+        ],
+        "result": "A public .env is a live credential leak.",
+        "variant": "security",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "template": "CaseStudy",
+      "sourceId": "c30-d02-form-abandon",
+      "caption": "The form was not broken. It was just long enough that people decided to do it later, and later never came.\n\n#UX #ConversionRate #WebDesign",
+      "props": {
+        "hook": "Eleven fields, then a decision",
+        "before": "An eleven-field enquiry form",
+        "after": "Three fields and a follow-up email",
+        "actions": [
+          "Cut every field sales could ask later",
+          "Move the phone number to optional",
+          "Confirm on the page, not by redirect"
+        ],
+        "lesson": "Ask for what you need to reply, not to file.",
+        "kicker": "FIELD NOTE"
+      }
+    },
+    {
+      "template": "DevJoke",
+      "sourceId": "c30-d02-works-in-staging",
+      "caption": "Staging had the data, the flags and the patience. Production had real users and none of the three.\n\n#DevLife #DevOps #SoftwareEngineering",
+      "props": {
+        "hook": "But it worked in staging",
+        "beats": [
+          "Staging had four rows of test data",
+          "Production had four hundred thousand",
+          "Staging had one user, clicking slowly"
+        ],
+        "punchline": "Staging was a rehearsal, not a promise.",
+        "variant": "terminal",
+        "kicker": "DEV LIFE"
+      }
+    },
+    {
+      "template": "StatCard",
+      "sourceId": "c30-d02-mobile-share",
+      "caption": "Most reviews still happen on a laptop. Most visits do not. Design where the traffic actually is.\n\n#MobileFirst #WebDesign #UX",
+      "props": {
+        "value": "63%",
+        "label": "of visits arrive on a phone",
+        "context": ["Almost every sign-off happens on a laptop.", "That gap is where the bugs live."],
+        "kicker": "SAVE THIS"
+      }
+    },
+
+    {
+      "template": "SiteRoast",
+      "sourceId": "c30-d03-roast-04",
+      "caption": "Roast 04. A good-looking homepage that never says what the company does. Three fixes, none of them a redesign.\n\n#SiteRoast #WebDesign #UX",
+      "props": {
+        "hook": "Beautiful, and completely unclear",
+        "episode": "04",
+        "problems": [
+          "The headline describes a feeling, not a service",
+          "The first real fact is below three screens",
+          "Two buttons compete on the same row"
+        ],
+        "fix": "Say the job in the headline. Keep one button.",
+        "verdict": "Clear is a design decision.",
+        "kicker": "ROAST 04"
+      }
+    },
+    {
+      "template": "TechTip",
+      "sourceId": "c30-d03-layout-shift",
+      "caption": "If the page moves while you are reading it, you are watching an element load without reserved space. Here is how to find it.\n\n#CoreWebVitals #FrontEnd #WebPerformance",
+      "props": {
+        "hook": "Find what makes your page jump",
+        "steps": [
+          "Open the Performance panel and record a load",
+          "Turn on Layout Shift Regions",
+          "Give every shifted element fixed dimensions"
+        ],
+        "result": "Images and ad slots cause most of it.",
+        "variant": "devtools",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "template": "ListReveal",
+      "sourceId": "c30-d03-launch-checks",
+      "caption": "Five things that are embarrassing to find the week after launch and trivial to check the week before.\n\n#WebDev #Launch #QualityAssurance",
+      "props": {
+        "headline": "Five checks nobody does before launch",
+        "items": [
+          "Does the 404 page have navigation?",
+          "Does the contact form actually send?",
+          "Is the staging site blocked from search?",
+          "Do the social preview images exist?",
+          "Does the favicon load on mobile?"
+        ],
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "template": "DevJoke",
+      "sourceId": "c30-d03-cannot-reproduce",
+      "caption": "The bug report said \"it's broken\". Four hours later we learned it was one browser, one zoom level and one very specific Tuesday.\n\n#QA #DevLife #Testing",
+      "props": {
+        "hook": "Cannot reproduce, closing ticket",
+        "beats": [
+          "Reported: the button does nothing",
+          "Tested: the button does everything",
+          "Reopened: only at 110% zoom",
+          "Root cause: one overflow rule"
+        ],
+        "punchline": "Every unreproducible bug has a condition.",
+        "variant": "qa",
+        "kicker": "DEV LIFE"
+      }
+    },
+
+    {
+      "template": "FounderStory",
+      "sourceId": "c30-d04-first-refund",
+      "caption": "The first refund we ever issued taught us more than the ten projects before it. We had been selling a deliverable and they had bought an outcome.\n\n#Founder #AgencyLife #Lessons",
+      "props": {
+        "hook": "The first refund we ever gave",
+        "moments": [
+          "We delivered exactly what was written",
+          "They asked what it was supposed to do",
+          "Nobody had ever written that down"
+        ],
+        "turn": "We started every project with the outcome instead.",
+        "lesson": "A spec describes the work, not the point of it.",
+        "kicker": "FOUNDER NOTE"
+      }
+    },
+    {
+      "template": "TechTip",
+      "sourceId": "c30-d04-index-audit",
+      "caption": "Search engines index whatever you let them. Three minutes here usually finds pages you forgot existed.\n\n#SEO #TechnicalSEO #WebDev",
+      "props": {
+        "hook": "Check what Google actually indexed",
+        "steps": [
+          "Search site:yourdomain.com and read page two",
+          "Look for staging, tags and old campaigns",
+          "Noindex what should never have been public"
+        ],
+        "result": "Most sites index three things they should not.",
+        "variant": "index-check",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "template": "CaseStudy",
+      "sourceId": "c30-d04-image-payload",
+      "caption": "Nobody had resized anything in two years. The fix was a build step, not a redesign, and the homepage got four times lighter.\n\n#WebPerformance #ImageOptimization #WebDev",
+      "props": {
+        "hook": "Eight megabytes of homepage",
+        "before": "Full-resolution photography, straight from the shoot",
+        "after": "A homepage under two megabytes",
+        "actions": [
+          "Resize to the largest size actually displayed",
+          "Serve modern formats with a fallback",
+          "Lazy-load everything below the fold"
+        ],
+        "lesson": "Nobody uploads a huge image on purpose.",
+        "kicker": "FIELD NOTE"
+      }
+    },
+    {
+      "template": "DevJoke",
+      "sourceId": "c30-d04-quick-call",
+      "caption": "The quick call is never the quick call. Put it in writing first and the call becomes genuinely quick.\n\n#AgencyLife #ClientWork #DevHumor",
+      "props": {
+        "hook": "Got five minutes for a quick call",
+        "beats": [
+          "Minute five: still setting context",
+          "Minute twenty: a new requirement appears",
+          "Minute forty: someone joins late",
+          "Minute fifty: let's follow up by email"
+        ],
+        "punchline": "The email would have taken four minutes.",
+        "variant": "timer",
+        "kicker": "DEV LIFE"
+      }
+    },
+
+    {
+      "template": "WorksOnMyMachine",
+      "sourceId": "c30-d05-ran-fine-locally",
+      "caption": "It ran fine locally because locally had your node version, your env file and your cached dependencies. Production had none of them.\n\n#DevLife #Docker #SoftwareEngineering",
+      "props": {
+        "hook": "IT RAN FINE LOCALLY"
+      }
+    },
+    {
+      "template": "TechTip",
+      "sourceId": "c30-d05-dependency-audit",
+      "caption": "Half the tools on a typical monthly bill are doing something a tool you already pay for also does. Here is the audit.\n\n#SaaS #Agency #ToolStack",
+      "props": {
+        "hook": "Audit your stack in ten minutes",
+        "steps": [
+          "Export twelve months of card statements",
+          "Write what each tool does in five words",
+          "Cancel every duplicate description"
+        ],
+        "result": "Duplicate descriptions mean duplicate spend.",
+        "variant": "tool-audit",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "template": "CaseStudy",
+      "sourceId": "c30-d05-search-nothing",
+      "caption": "Their site search returned nothing for the product they sell most. The index had never been rebuilt after the catalogue import.\n\n#Ecommerce #SiteSearch #WebDev",
+      "props": {
+        "hook": "Their best seller returned no results",
+        "before": "Site search with a stale index",
+        "after": "Search rebuilt nightly, with synonyms",
+        "actions": [
+          "Log every query that returns nothing",
+          "Rebuild the index on every catalogue change",
+          "Map the words customers actually use"
+        ],
+        "lesson": "Empty search results are a list of missed sales.",
+        "kicker": "FIELD NOTE"
+      }
+    },
+    {
+      "template": "StatCard",
+      "sourceId": "c30-d05-abandoned-search",
+      "caption": "People who use site search are further along than people who browse. Losing them costs more than losing a first-time visit.\n\n#Ecommerce #UX #Analytics",
+      "props": {
+        "value": "2.4x",
+        "label": "more likely to buy after a search",
+        "context": ["Searchers already know what they want.", "A bad result sends them somewhere else."],
+        "kicker": "SAVE THIS"
+      }
+    },
+
+    {
+      "template": "CaseStudy",
+      "sourceId": "c30-d06-eleven-to-one",
+      "caption": "Eleven seconds to first paint on a phone. No redesign, no rebuild, just three changes to what loads first.\n\n#WebPerformance #CoreWebVitals #CaseStudy",
+      "props": {
+        "hook": "Eleven seconds down to one",
+        "before": "Eleven seconds before anything appeared",
+        "after": "First paint in just over a second",
+        "actions": [
+          "Defer every script that is not the page",
+          "Inline the styles the first screen needs",
+          "Cache the parts that never change"
+        ],
+        "lesson": "Measure first, then fix the longest wait.",
+        "kicker": "FIELD NOTE"
+      }
+    },
+    {
+      "template": "TechTip",
+      "sourceId": "c30-d06-design-handoff",
+      "caption": "Most handoff pain is three missing pieces. Ask for them once and the build stops guessing.\n\n#DesignSystems #Frontend #Handoff",
+      "props": {
+        "hook": "Three things every handoff misses",
+        "steps": [
+          "The empty state for every list",
+          "The longest realistic string, not the demo one",
+          "What each thing does on a narrow phone"
+        ],
+        "result": "Guessing these is where rework comes from.",
+        "variant": "design-code",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "template": "ListReveal",
+      "sourceId": "c30-d06-copy-smells",
+      "caption": "Four phrases that appear on almost every homepage and tell a visitor nothing at all.\n\n#Copywriting #WebDesign #Marketing",
+      "props": {
+        "headline": "Four homepage phrases that say nothing",
+        "items": [
+          "Solutions tailored to your needs",
+          "We are passionate about quality",
+          "Industry-leading, best-in-class results",
+          "Welcome to our website"
+        ],
+        "kicker": "FOLLOW FOR MORE"
+      }
+    },
+    {
+      "template": "DevJoke",
+      "sourceId": "c30-d06-cache-again",
+      "caption": "Explaining cache to a client for the fourth time this month. It is not that they forget, it is that nothing on their screen suggests it exists.\n\n#DevLife #WebDev #ClientWork",
+      "props": {
+        "hook": "But I cannot see the change",
+        "beats": [
+          "Cleared the server cache",
+          "Cleared the CDN cache",
+          "Cleared the browser cache",
+          "They were looking at the old tab"
+        ],
+        "punchline": "There is always one more layer.",
+        "variant": "cache",
+        "kicker": "DEV LIFE"
+      }
+    },
+
+    {
+      "template": "TechTip",
+      "sourceId": "c30-d07-headers-check",
+      "caption": "Five security headers, one command, thirty seconds. Missing ones are the cheapest fix on any site.\n\n#WebSecurity #DevOps #HTTP",
+      "props": {
+        "hook": "Check your headers in one command",
+        "steps": [
+          "Run curl -I against your own homepage",
+          "Look for Strict-Transport-Security",
+          "Add the ones that are missing at the edge"
+        ],
+        "result": "Headers are configuration, not development.",
+        "variant": "security",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "template": "SiteRoast",
+      "sourceId": "c30-d07-roast-05",
+      "caption": "Roast 05. A booking page that asks for commitment before it has earned any. Three changes, all above the fold.\n\n#SiteRoast #UX #ConversionRate",
+      "props": {
+        "hook": "It asks before it explains",
+        "episode": "05",
+        "problems": [
+          "The price appears after the calendar",
+          "Cancellation terms are in a linked PDF",
+          "The only proof is a stock photograph"
+        ],
+        "fix": "Answer cost, risk and proof before the form.",
+        "verdict": "Trust comes first, always.",
+        "kicker": "ROAST 05"
+      }
+    },
+    {
+      "template": "StatCard",
+      "sourceId": "c30-d07-alt-text",
+      "caption": "Alt text is the accessibility fix with the best ratio of effort to impact, and it is still the most skipped.\n\n#Accessibility #A11y #WebDev",
+      "props": {
+        "value": "55%",
+        "label": "of homepage images have no alt text",
+        "context": ["It takes about a minute per image.", "It is also read by every search engine."],
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "template": "DevJoke",
+      "sourceId": "c30-d07-one-small-thing",
+      "caption": "The small thing is never the small thing, because the small thing has never been looked at before.\n\n#AgencyLife #ScopeCreep #DevHumor",
+      "props": {
+        "hook": "Just one small thing before launch",
+        "beats": [
+          "The small thing needs a new field",
+          "The new field needs a new screen",
+          "The new screen needs a decision",
+          "The decision needs a meeting"
+        ],
+        "punchline": "Small is a description of the sentence.",
+        "variant": "scope",
+        "kicker": "DEV LIFE"
+      }
+    }
+  ]
+}

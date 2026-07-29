@@ -111,6 +111,54 @@ export async function loadQueueState(path = STATE_PATH) {
  */
 export { APPROVAL_STATES, approvalOf, requiresApproval };
 
+/**
+ * The UTC day a timestamp falls on.
+ *
+ * UTC rather than Kathmandu deliberately: the four scheduled renders fire at
+ * 03:45, 09:45, 15:45 and 21:45 UTC, so a UTC day holds exactly one full set of
+ * them. In Kathmandu (UTC+5:45) the last of those is 03:30 the next morning,
+ * which would split a day's quota across two and make every fourth run think it
+ * was the first of a new day.
+ */
+export const utcDay = (value = Date.now()) => new Date(value).toISOString().slice(0, 10);
+
+/**
+ * How many videos have already been rendered today.
+ *
+ * Read from a small counter rather than by filtering `state.rendered`, because
+ * that array is the *buffer* and posting removes entries from it. A video
+ * rendered at 03:45 and posted at 15:32 would vanish from it, the next run
+ * would believe fewer had been rendered, and the day would overshoot its quota.
+ * The counter is durable: it only ever resets when the day changes.
+ */
+export function rendersToday(state, now = Date.now()) {
+  const quota = state?.renderQuota;
+  if (!quota || quota.day !== utcDay(now)) return 0;
+  return Number.isSafeInteger(quota.count) && quota.count > 0 ? quota.count : 0;
+}
+
+/**
+ * How many videos a run should render to keep the day on rate.
+ *
+ * An explicit count always wins — that is what makes a manual dispatch a usable
+ * override. Otherwise the run renders whatever today still owes, which is what
+ * makes the schedule self-healing when GitHub drops a run.
+ */
+export function dailyRenderCount(state, { target = 4, explicit = null, now = Date.now() } = {}) {
+  if (Number.isFinite(explicit) && explicit > 0) {
+    return { count: Math.floor(explicit), reason: "requested" };
+  }
+
+  const done = rendersToday(state, now);
+  return {
+    count: Math.max(0, target - done),
+    reason:
+      done === 0
+        ? `first run of the day, target ${target}`
+        : `${done}/${target} already rendered today`,
+  };
+}
+
 /** Everything rendered and not yet posted, oldest first — the review queue. */
 export function buffered(state) {
   const posted = new Set(state.posted);
@@ -291,6 +339,15 @@ export async function markRendered(entry, { statePath = STATE_PATH } = {}) {
   rendered.push({ ...entry, renderedAt: entry.renderedAt ?? new Date().toISOString() });
 
   state.rendered = rendered;
+
+  // Every renderer records here, which is what makes the daily quota
+  // self-healing: a run that finds only two rendered today renders two. A
+  // re-render counts as well — it spent the same runner minutes, and the quota
+  // is a budget for the day's work, not a count of distinct videos.
+  const day = utcDay();
+  const count = state.renderQuota?.day === day ? (state.renderQuota.count ?? 0) : 0;
+  state.renderQuota = { day, count: count + 1 };
+
   await writeFile(statePath, `${JSON.stringify(state, null, 2)}\n`);
   return state;
 }

@@ -112,6 +112,72 @@ Rendering four videos in one job would be cheaper in setup time but would give
 each of them a quarter of the machine and put all four behind a single point of
 failure. Four separate runs is the trade this repository makes.
 
+## Rendering happens on GitHub, never locally
+
+`scripts/render-guard.mjs` refuses to render outside CI, and both renderers call
+it before doing anything. This is enforced rather than documented because the
+reasons are not stylistic:
+
+- **A local master is a different file.** `remotion.config.ts` pins the software
+  GL path and takes concurrency from the core count so every render is
+  reproducible. A laptop has a different core count, GPU, font stack and ffmpeg.
+- **Rendering writes the archive.** A non-dry run uploads to a Release, writes
+  `state.json` and appends to `archive/manifest.json`. Doing that locally races
+  the scheduled workflow, and the loser's work is discarded on the next rebase.
+- **The duplicate detector compares fingerprints.** A file built somewhere else
+  is a fingerprint nothing in the archive can be meaningfully compared against.
+
+To preview, use `npm run studio`. To render, dispatch a workflow. The escape
+hatch for debugging one composition is `ALLOW_LOCAL_RENDER=1` together with
+`--dry-run`, and it prints a warning so its output is never mistaken for a
+master.
+
+## Rendering a 30-day campaign in parallel
+
+The scheduled workflow renders one video per run, four times a day. That is the
+right shape for a steady drip and the wrong shape for filling an empty buffer: a
+30-day campaign is 120 videos, and at four a day the last one lands a month
+after the first.
+
+`.github/workflows/render-campaign.yml` is the other shape. It splits the
+pending queue into shards and runs them as a parallel matrix:
+
+```bash
+gh workflow run render-campaign.yml -f shards=20
+npm run shards          # preview the split first, locally
+```
+
+The same Actions minutes are spent either way — the work is identical. What
+changes is that they are spent concurrently, so wall clock becomes roughly the
+slowest shard rather than the sum of all 120 renders. Twenty concurrent standard
+runners is the free-plan ceiling; asking for more just queues the extra shards.
+
+Three things make a shard faster than N separate `npx remotion render` calls,
+all of them work the CLI repeats on every invocation:
+
+| | `npx remotion render` | `scripts/render-shard.mjs` |
+|---|---|---|
+| webpack bundle | once per video | once per shard |
+| Chrome launch | once per video | once per shard |
+| audio synthesis | one child process per video | one pass per shard |
+
+Bundling once is what per-video bed paths bought. Every video's bed is a
+different piece of music, so while beds shared the name
+`bed-<template>-<layer>.wav` the public folder had to be rewritten — and the
+project re-bundled — between every render. Beds now live at
+`audio/beds/<video-id>/<layer>.wav`, so a shard writes all of its audio once and
+renders every video against one serve URL.
+
+Frames still render at full concurrency and videos still run one at a time
+inside a shard: two at once would halve each other's cores and double peak
+memory for no gain.
+
+Shards do **not** commit `state.json`. Twenty jobs racing to push the same file
+is nineteen lost races, and a lost race means a finished master sitting in a
+Release with nothing on `main` pointing at it. Each shard uploads its state as
+an artifact and the `collect` job merges them into one commit —
+`scripts/merge-shards.mjs`, unioned by id.
+
 ## Sound
 
 The source PDF is a **silent motion system**, not a silent one: no voice, but
@@ -298,18 +364,58 @@ Three layers, because "unique" fails in three different ways.
 **Concept** — the weekly validator already refuses repeated ids, sources,
 captions, hooks and visible copy.
 
-**Look and sound** — each video derives a seed from its plan id
-(`src/seed.ts`) and uses it to pick from **8 palettes × 7 typeface pairings**
-and to transpose its music into a different key and mode. Derived from the id
-rather than randomised, so a retried render is identical to the first attempt —
-which matters because the duplicate detector compares fingerprints.
+**Look and sound** — every video's appearance and music are derived from its
+plan id, never randomised, so a retried render is identical to the first attempt
+— which matters because the duplicate detector compares fingerprints.
 
-56 combinations does not mean 28 videos get 28 distinct looks. Drawing
-independently collides, and measured across the current week it gives 23
-distinct looks with 5 repeats — what the birthday problem predicts. That is
-acceptable: two videos sharing a palette and typeface are still different
-templates carrying different words in a different key. Uniqueness is enforced on
-the finished file, not assumed from a hash.
+How that derivation works changed when the series grew past a week, because the
+original scheme provably cannot cover a month.
+
+*The old scheme, still used by weeks 31 and 32.* Hash the id, then draw a
+palette and a typeface independently from **8 × 7 = 56** combinations. Drawing
+independently collides: measured across week 31 it gives 23 distinct looks with
+5 repeats, which is what the birthday problem predicts. Over 120 videos it is
+worse than untidy — 56 combinations cannot hold 120 videos at all, so by the
+pigeonhole principle at least 64 of them would be wearing a look another video
+already has.
+
+*The campaign scheme, from week 33 on* (`src/variation.ts`). Two changes:
+
+1. **The space grew past the campaign.** A **motion signature** joins palette and
+   typeface — 8 × 7 × 6 = **336** combinations. Motion is a real axis, not a
+   tiebreak: a signature changes the direction type arrives from, the stagger
+   between words, the spring character, and the backdrop grid's cell size and
+   skew. Two videos on one palette and one typeface still do not produce
+   matching frames.
+2. **Assignment became a walk, not a draw.** Every video's position in the
+   campaign is a dense ordinal — week, day and slot are all in the id — and its
+   look is `ordinal × 149 mod 336`. Because 149 is coprime to 336 that map is a
+   bijection over any 336 consecutive ordinals, so a campaign's 120 videos are
+   distinct **by construction** rather than by luck.
+
+Music works identically (`scripts/variation.mjs`): key, mode, phrase offset and
+tempo walk a space of 8 × 3 × 7 × 7 = **1176** with a coprime stride, so no two
+videos in a campaign share a piece of music. Tempo stays within ±6 BPM of the
+rate the PDF gives each template, so a bed varies without leaving its brief.
+
+Weeks 31 and 32 deliberately keep the old scheme. They are rendered and
+fingerprinted, and rewriting their looks would mean a re-render no longer
+matches the fingerprint already recorded for that id — the exact alarm the
+duplicate detector exists to raise.
+
+**Before rendering** — `npm run campaign:check` proves the claim against the
+plan in about a second, with no browser and no render:
+
+```
+Look space: 8 palettes x 7 typefaces x 6 motion signatures = 336 combinations, stride 149.
+Planned: 176 video(s) — 120 on the campaign walk, 56 legacy.
+  distinct looks   120/120
+  distinct music   120/120
+```
+
+This matters because the fingerprint check below runs *after* a render — over
+120 videos, discovering a collision that way costs eight minutes of runner time
+per duplicate, and the file has already been uploaded to a Release.
 
 **The finished file** — `scripts/uniqueness.mjs` fingerprints every published
 video and compares each new render against the whole archive:
@@ -499,27 +605,69 @@ npm test             # exercise acceptance, rollover, verification, archiving
 npm run queue        # show posted, remaining, and next id
 npm run due          # show whether the next post is due yet, and why
 npm run preflight    # prove Postiz is reachable and the next item's channels resolve
-npm run render:dry   # render the whole plan locally without Postiz
+npm run campaign     # rebuild plans/ from the campaign scripts
+npm run campaign:check   # prove no two planned videos share a look or music
+npm run shards       # preview how a parallel render would be split
 npm run verify -- out/d01-a.mp4 17   # probe one rendered file
 ```
+
+None of these render. Rendering is a GitHub job — see *Rendering happens on
+GitHub, never locally* above for why, and for the debugging escape hatch.
 
 Before any commit or push:
 
 ```bash
-npm run validate
-DRY_RUN=1 ONLY=d01-a npm run render
+npm run validate     # inbox, accepted weeks, queue state, campaign, uniqueness
+npm test
+npx tsc --noEmit
 ```
 
-Watch `out/d01-a.mp4` before committing. Never use a non-dry workflow as a test.
+To see a change in motion, use `npm run studio` and scrub the composition. To
+produce a real file, dispatch a dry run and download the artifact:
 
-PowerShell uses the equivalent environment syntax:
-
-```powershell
-$env:DRY_RUN = "1"
-$env:ONLY = "d01-a"
-npm run render
-Remove-Item Env:DRY_RUN, Env:ONLY
+```bash
+gh workflow run render-campaign.yml -f shards=1 -f limit=1 -f dry_run=true
 ```
+
+A dry run renders and verifies but archives nothing and leaves `state.json`
+alone, so it is safe to use as a test. Never use a non-dry workflow as one.
+
+## The 30-day campaign
+
+A month of content, planned up front rather than a week at a time. 30 days × 4
+posts = **120 videos**, held in `plan-source/campaign/`:
+
+```
+plan-source/campaign/w33.json    days 1-7     28 items
+plan-source/campaign/w34.json    days 8-14    28 items
+plan-source/campaign/w35.json    days 15-21   28 items
+plan-source/campaign/w36.json    days 22-28   28 items
+plan-source/campaign/w37.json    days 29-30    8 items   ← partial
+```
+
+Those files carry only what a person writes: the template, the copy, the caption
+and a provenance slug. `npm run campaign` derives everything mechanical — item
+ids, day numbers, eyebrows, runtimes, week metadata and the channel block — and
+writes `plans/2026-w33.json` through `w37.json`.
+
+That split exists because the derived fields are the ones the validators check
+hardest and a human is worst at: `props.day` must equal the item's day within
+its week, the id must end in `dNN-x` matching its queue position, `week.order`
+must be the year and week number concatenated, and the filename must match
+`week.id`. The build is deterministic, so regenerating produces no diff, and
+`npm run validate` fails if `plans/` has drifted from its source.
+
+**The short week is deliberate.** 30 days is four weeks and a two-day remainder,
+so `w37` holds 8 items and declares `week.partial: true`. Without that flag the
+28-item rule reads it as an under-filled week — which is the failure that rule
+exists to catch, since a week quietly one item short starves the queue a month
+later with nothing in the logs to explain why. A partial week must still be a
+whole number of days, because day and slot positions are derived from an item's
+index and a half-day would misnumber everything after it.
+
+Each day is built to a fixed rhythm: slot **A** carries that day's anchor from
+the PDF's 30-day emotion sequence, **B** is the quick win, **C** is the
+evidence, **D** is the release.
 
 ## Keeping the queue full
 

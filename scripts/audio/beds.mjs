@@ -18,6 +18,7 @@ import {
   silence,
   softClip,
 } from "./synth.mjs";
+import { BPM_OFFSETS, campaignMusic } from "../variation.mjs";
 
 /**
  * Music beds, one per template, so "the account becomes recognisable by ear
@@ -71,15 +72,42 @@ export function seedFrom(id) {
 /** Transpose within a fifth, so beds stay in a comfortable register. */
 const KEY_OFFSETS = [0, 2, 3, 5, 7, -2, -3, -5];
 
-function variation(seed, bright) {
-  if (seed === null || seed === undefined) {
-    return { keyOffset: 0, mode: bright ? MAJOR : MINOR, patternShift: 0 };
-  }
+/**
+ * Which piece of music a video gets.
+ *
+ * Two schemes, chosen by whether the id has a position in a campaign.
+ *
+ * A **campaign id** walks the space in scripts/variation.mjs, which guarantees
+ * that no two of a campaign's 120 videos share a key, mode, phrase offset and
+ * tempo. Hashing cannot promise that: three numbers read out of one hash
+ * collide over 120 draws the same way an independently drawn palette and
+ * typeface do, and two videos on one template with all three equal are not two
+ * pieces of music.
+ *
+ * **Anything else** keeps the original hash — weeks 31 and 32 are rendered and
+ * fingerprinted, and their audio signatures are already in the archive.
+ */
+function variation(seed, bright, campaign) {
   const modes = bright ? BRIGHT_MODES : DARK_MODES;
+
+  if (campaign) {
+    return {
+      keyOffset: KEY_OFFSETS[campaign.keyIndex],
+      mode: modes[campaign.modeIndex],
+      patternShift: campaign.shiftIndex,
+      bpmOffset: BPM_OFFSETS[campaign.bpmIndex],
+    };
+  }
+
+  if (seed === null || seed === undefined) {
+    return { keyOffset: 0, mode: bright ? MAJOR : MINOR, patternShift: 0, bpmOffset: 0 };
+  }
+
   return {
     keyOffset: KEY_OFFSETS[seed % KEY_OFFSETS.length],
     mode: modes[Math.floor(seed / 8) % modes.length],
     patternShift: Math.floor(seed / 64) % 7,
+    bpmOffset: 0,
   };
 }
 
@@ -370,14 +398,18 @@ export function buildBed(template, durationSeconds, seedSource = null) {
   const builder = BUILDERS[template];
   if (!builder) throw new Error(`no bed defined for template "${template}"`);
 
-  const bpm = BED_BPM[template];
   const seed = seedSource === null ? null : seedFrom(seedSource);
-  const v = variation(seed, BRIGHT.has(template));
+  const v = variation(seed, BRIGHT.has(template), campaignMusic(seedSource));
+  // Tempo is part of what makes two beds different pieces rather than one
+  // piece in two keys. Every layer locks to the same grid, so shifting the BPM
+  // moves the whole bed together and nothing drifts against anything else.
+  const bpm = BED_BPM[template] + v.bpmOffset;
   const layers = builder(durationSeconds, bpm, v);
   return {
     bpm,
     key: v.keyOffset,
     mode: v.mode.join(","),
+    patternShift: v.patternShift,
     layers: Object.fromEntries(Object.entries(layers).map(([name, buffer]) => [name, finishLayer(buffer)])),
   };
 }

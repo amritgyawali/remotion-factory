@@ -1,0 +1,600 @@
+{
+  "series": "MeritByte — Build Better",
+  "mode": "queue",
+  "week": {
+    "id": "2026-w34",
+    "order": 202634
+  },
+  "postType": "schedule",
+  "channels": [
+    "cmruyn0l40003of9gif9fkkvz",
+    "cmru3v02i0001qh6tba0sefis",
+    "cmruzqbfl0007ph7uso34siqt",
+    "cmruzbsts0001ph7ujfzqsh29"
+  ],
+  "channelSettings": {
+    "instagram-standalone": {
+      "__type": "instagram-standalone",
+      "post_type": "post"
+    },
+    "x": {
+      "__type": "x",
+      "who_can_reply_post": "everyone"
+    },
+    "threads": {
+      "__type": "threads"
+    },
+    "facebook": {
+      "__type": "facebook",
+      "post_type": "post"
+    },
+    "linkedin": {
+      "__type": "linkedin"
+    }
+  },
+  "items": [
+    {
+      "id": "w34-d01-a",
+      "sourceId": "c30-d08-tester-bar",
+      "template": "DevJoke",
+      "caption": "The classic tester joke works because it is the whole job in four lines: try the sensible input, then every other one.\n\n#QA #Testing #DevHumor",
+      "props": {
+        "eyebrow": "MERITBYTE / DEV LIFE",
+        "day": 1,
+        "durationInSeconds": 15,
+        "hook": "A tester walks into a bar",
+        "beats": [
+          "Orders one beer",
+          "Orders zero beers",
+          "Orders minus one beer",
+          "Orders a lizard"
+        ],
+        "punchline": "The bar burns down. Nobody tried the door.",
+        "variant": "qa",
+        "kicker": "DEV LIFE"
+      }
+    },
+    {
+      "id": "w34-d01-b",
+      "sourceId": "c30-d08-redirect-chains",
+      "template": "TechTip",
+      "caption": "Every hop in a redirect chain is a round trip. Most sites are carrying two or three they do not know about.\n\n#TechnicalSEO #WebPerformance #WebDev",
+      "props": {
+        "eyebrow": "MERITBYTE / QUICK WIN",
+        "day": 1,
+        "durationInSeconds": 20,
+        "hook": "Your redirects are costing seconds",
+        "steps": [
+          "Run curl -IL on your most-shared link",
+          "Count how many 301s appear before the 200",
+          "Point the first hop straight at the last"
+        ],
+        "result": "Chains grow quietly with every site migration.",
+        "variant": "index-check",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w34-d01-c",
+      "sourceId": "c30-d08-checkout-step",
+      "template": "CaseStudy",
+      "caption": "One removed step. No new features, no redesign, no discount. The step existed because a form once needed it and nobody asked again.\n\n#Ecommerce #ConversionRate #UX",
+      "props": {
+        "eyebrow": "MERITBYTE / FIELD NOTE",
+        "day": 1,
+        "durationInSeconds": 22,
+        "hook": "We deleted one checkout step",
+        "before": "Five steps, with an account required",
+        "after": "Three steps, guest checkout first",
+        "actions": [
+          "Let people buy before they register",
+          "Ask for the address once, not twice",
+          "Show the total before the payment screen"
+        ],
+        "lesson": "Every extra step is a chance to reconsider.",
+        "kicker": "FIELD NOTE"
+      }
+    },
+    {
+      "id": "w34-d01-d",
+      "sourceId": "c30-d08-cart-abandon",
+      "template": "StatCard",
+      "caption": "Most abandoned carts are not lost sales, they are unfinished ones. The reasons are usually boring and fixable.\n\n#Ecommerce #ConversionRate #Retail",
+      "props": {
+        "eyebrow": "MERITBYTE / NUMBERS",
+        "day": 1,
+        "durationInSeconds": 8,
+        "value": "70%",
+        "label": "of carts are abandoned before payment",
+        "context": [
+          "Surprise costs are the top reason.",
+          "Forced accounts are the second."
+        ],
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w34-d02-a",
+      "sourceId": "c30-d09-roast-06",
+      "template": "SiteRoast",
+      "caption": "Roast 06. A services page that lists everything and recommends nothing. Three fixes, and one of them is deleting.\n\n#SiteRoast #WebDesign #Marketing",
+      "props": {
+        "eyebrow": "MERITBYTE / SITE ROAST",
+        "day": 2,
+        "durationInSeconds": 22,
+        "hook": "Nineteen services, no recommendation",
+        "episode": "06",
+        "problems": [
+          "Nineteen equal cards in one grid",
+          "No pricing signal anywhere on the page",
+          "Every card links to the same contact form"
+        ],
+        "fix": "Lead with three. Let the rest be a list.",
+        "verdict": "Choice without guidance is work.",
+        "kicker": "ROAST 06"
+      }
+    },
+    {
+      "id": "w34-d02-b",
+      "sourceId": "c30-d09-font-loading",
+      "template": "TechTip",
+      "caption": "Invisible text during load is a font problem, not a network one. One CSS line fixes it on most sites.\n\n#WebPerformance #Typography #FrontEnd",
+      "props": {
+        "eyebrow": "MERITBYTE / QUICK WIN",
+        "day": 2,
+        "durationInSeconds": 20,
+        "hook": "Why your text loads invisible",
+        "steps": [
+          "Look for a flash of nothing before text appears",
+          "Add font-display: swap to every @font-face",
+          "Preload only the weights above the fold"
+        ],
+        "result": "Fallback text beats no text, every time.",
+        "variant": "vitals",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w34-d02-c",
+      "sourceId": "c30-d09-handover-list",
+      "template": "ListReveal",
+      "caption": "The handover pack that stops a client calling you in eighteen months asking who owns the domain.\n\n#Agency #ClientWork #WebDev",
+      "props": {
+        "eyebrow": "MERITBYTE / CHECKLIST",
+        "day": 2,
+        "durationInSeconds": 10,
+        "headline": "What a real handover pack contains",
+        "items": [
+          "Where the domain is registered, and who pays",
+          "Every login, in a shared vault, not an email",
+          "How to deploy, written for a stranger",
+          "What breaks if the renewal is missed"
+        ],
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w34-d02-d",
+      "sourceId": "c30-d09-final-final",
+      "template": "DevJoke",
+      "caption": "The filename is a changelog nobody agreed to write. Version control exists precisely so this never has to happen.\n\n#DevLife #DesignProcess #DevHumor",
+      "props": {
+        "eyebrow": "MERITBYTE / DEV LIFE",
+        "day": 2,
+        "durationInSeconds": 15,
+        "hook": "Final, final, actually final",
+        "beats": [
+          "homepage-final.psd",
+          "homepage-final-v2.psd",
+          "homepage-final-USE-THIS.psd",
+          "homepage-final-USE-THIS-old.psd"
+        ],
+        "punchline": "The newest file is never the one named final.",
+        "variant": "comments",
+        "kicker": "DEV LIFE"
+      }
+    },
+    {
+      "id": "w34-d03-a",
+      "sourceId": "c30-d10-one-client",
+      "template": "FounderStory",
+      "caption": "Sixty percent of revenue from one client feels like stability right up until the month it is not.\n\n#Founder #AgencyLife #BusinessLessons",
+      "props": {
+        "eyebrow": "MERITBYTE / FOUNDER",
+        "day": 3,
+        "durationInSeconds": 20,
+        "hook": "One client was sixty percent",
+        "moments": [
+          "The biggest account never had to be sold to",
+          "Their new director wanted their own agency",
+          "Thirty days notice, contractually correct"
+        ],
+        "turn": "We capped any one client at a quarter of revenue.",
+        "lesson": "Concentration feels like security until it moves.",
+        "kicker": "FOUNDER NOTE"
+      }
+    },
+    {
+      "id": "w34-d03-b",
+      "sourceId": "c30-d10-email-spf",
+      "template": "TechTip",
+      "caption": "If your contact form emails land in spam, it is almost never the form. It is three DNS records.\n\n#EmailDeliverability #DNS #WebDev",
+      "props": {
+        "eyebrow": "MERITBYTE / QUICK WIN",
+        "day": 3,
+        "durationInSeconds": 20,
+        "hook": "Why your form emails hit spam",
+        "steps": [
+          "Check you have SPF, DKIM and DMARC records",
+          "Send from your domain, not the visitor's address",
+          "Put the visitor in reply-to instead"
+        ],
+        "result": "Sending as the visitor is why you are filtered.",
+        "variant": "security",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w34-d03-c",
+      "sourceId": "c30-d10-support-deflect",
+      "template": "CaseStudy",
+      "caption": "Six questions accounted for most of their support load. Answering them properly on the site did more than any chatbot.\n\n#CustomerSupport #UX #ContentDesign",
+      "props": {
+        "eyebrow": "MERITBYTE / FIELD NOTE",
+        "day": 3,
+        "durationInSeconds": 22,
+        "hook": "Six questions, most of the tickets",
+        "before": "A help centre nobody could search",
+        "after": "Six answers, on the pages that raise them",
+        "actions": [
+          "Rank tickets by how often they repeat",
+          "Answer the top six where they are asked",
+          "Delete every article nobody ever opened"
+        ],
+        "lesson": "Support volume is a content problem first.",
+        "kicker": "FIELD NOTE"
+      }
+    },
+    {
+      "id": "w34-d03-d",
+      "sourceId": "c30-d10-standup-fifteen",
+      "template": "DevJoke",
+      "caption": "Fifteen minutes, standing up, so it stays short. Both of those turn out to be optional.\n\n#DevLife #Agile #DevHumor",
+      "props": {
+        "eyebrow": "MERITBYTE / DEV LIFE",
+        "day": 3,
+        "durationInSeconds": 15,
+        "hook": "The fifteen minute standup",
+        "beats": [
+          "Minute two: everyone is seated",
+          "Minute nine: two people are debugging",
+          "Minute twenty-five: a roadmap appears",
+          "Minute forty: let's take this offline"
+        ],
+        "punchline": "Offline was where it belonged at minute nine.",
+        "variant": "timer",
+        "kicker": "DEV LIFE"
+      }
+    },
+    {
+      "id": "w34-d04-a",
+      "sourceId": "c30-d11-tool-cancel",
+      "template": "TechTip",
+      "caption": "We cancelled a two hundred a month tool and replaced it with a scheduled job. Not every subscription is buying you something.\n\n#SaaS #Agency #CostControl",
+      "props": {
+        "eyebrow": "MERITBYTE / QUICK WIN",
+        "day": 4,
+        "durationInSeconds": 20,
+        "hook": "We cancelled a costly tool",
+        "steps": [
+          "Write down what it does in one sentence",
+          "Ask what breaks the day you turn it off",
+          "If nothing does, that is the answer"
+        ],
+        "result": "Half a stack is habit, not requirement.",
+        "variant": "tool-audit",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w34-d04-b",
+      "sourceId": "c30-d11-tool-sprawl",
+      "template": "StatCard",
+      "caption": "Tool sprawl is not a big decision going wrong. It is a hundred small ones nobody revisits.\n\n#SaaS #Operations #Agency",
+      "props": {
+        "eyebrow": "MERITBYTE / NUMBERS",
+        "day": 4,
+        "durationInSeconds": 8,
+        "value": "$4.2k",
+        "label": "average yearly spend on unused seats",
+        "context": [
+          "Nobody cancels the seat of someone who left.",
+          "Nobody audits what nobody owns."
+        ],
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w34-d04-c",
+      "sourceId": "c30-d11-roast-07",
+      "template": "SiteRoast",
+      "caption": "Roast 07. A blog with three years of posts and no way to tell which one to read. Three fixes, no rewrite.\n\n#SiteRoast #ContentStrategy #UX",
+      "props": {
+        "eyebrow": "MERITBYTE / SITE ROAST",
+        "day": 4,
+        "durationInSeconds": 22,
+        "hook": "Three years of posts, no entry point",
+        "episode": "07",
+        "problems": [
+          "Reverse chronological, and nothing else",
+          "No indication which posts still apply",
+          "Every post ends without a next step"
+        ],
+        "fix": "Pick five posts. Link them from everywhere.",
+        "verdict": "An archive is not a library.",
+        "kicker": "ROAST 07"
+      }
+    },
+    {
+      "id": "w34-d04-d",
+      "sourceId": "c30-d11-just-push",
+      "template": "DevJoke",
+      "caption": "The change was one line. One line changes are how you learn what else depended on that line.\n\n#DevLife #DevOps #SoftwareEngineering",
+      "props": {
+        "eyebrow": "MERITBYTE / DEV LIFE",
+        "day": 4,
+        "durationInSeconds": 15,
+        "hook": "It is only a one line change",
+        "beats": [
+          "One line, no review needed",
+          "One line, straight to production",
+          "One line, and the build is red",
+          "One line, and a rollback at midnight"
+        ],
+        "punchline": "Size of change, size of confidence. Unrelated.",
+        "variant": "deploy",
+        "kicker": "DEV LIFE"
+      }
+    },
+    {
+      "id": "w34-d05-a",
+      "sourceId": "c30-d12-tabs-open",
+      "template": "DevJoke",
+      "caption": "Every tab was load-bearing at the moment it was opened. That moment was eleven days ago.\n\n#DevLife #Productivity #DevHumor",
+      "props": {
+        "eyebrow": "MERITBYTE / DEV LIFE",
+        "day": 5,
+        "durationInSeconds": 15,
+        "hook": "I need all of these tabs",
+        "beats": [
+          "Four are the same documentation page",
+          "Six are for a bug fixed last week",
+          "One is playing audio, location unknown"
+        ],
+        "punchline": "Closing them is the only real refactor.",
+        "variant": "terminal",
+        "kicker": "DEV LIFE"
+      }
+    },
+    {
+      "id": "w34-d05-b",
+      "sourceId": "c30-d12-console-tricks",
+      "template": "TechTip",
+      "caption": "Three console commands that answer questions faster than reading the source. All built in, no extensions.\n\n#DevTools #Frontend #WebDev",
+      "props": {
+        "eyebrow": "MERITBYTE / QUICK WIN",
+        "day": 5,
+        "durationInSeconds": 20,
+        "hook": "Three console tricks worth knowing",
+        "steps": [
+          "Use $0 to reference the selected element",
+          "Use console.table on any array of objects",
+          "Use monitorEvents to see what actually fires"
+        ],
+        "result": "All three ship with the browser already.",
+        "variant": "devtools",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w34-d05-c",
+      "sourceId": "c30-d12-deleted-pages",
+      "template": "CaseStudy",
+      "caption": "Forty thin pages removed. Traffic went up, because what was left was finally the best answer on the site.\n\n#SEO #ContentStrategy #CaseStudy",
+      "props": {
+        "eyebrow": "MERITBYTE / FIELD NOTE",
+        "day": 5,
+        "durationInSeconds": 22,
+        "hook": "We deleted forty pages",
+        "before": "Forty near-identical location pages",
+        "after": "Six pages that each say something",
+        "actions": [
+          "Find pages with no clicks in a year",
+          "Merge the ones covering the same thing",
+          "Redirect every removed page somewhere useful"
+        ],
+        "lesson": "Thin pages compete with your good ones.",
+        "kicker": "FIELD NOTE"
+      }
+    },
+    {
+      "id": "w34-d05-d",
+      "sourceId": "c30-d12-review-list",
+      "template": "ListReveal",
+      "caption": "Four things worth checking in every code review, before anything about style.\n\n#CodeReview #SoftwareEngineering #BestPractices",
+      "props": {
+        "eyebrow": "MERITBYTE / CHECKLIST",
+        "day": 5,
+        "durationInSeconds": 10,
+        "headline": "Four things to check before style",
+        "items": [
+          "What happens when this input is empty?",
+          "What happens when this call fails?",
+          "Does this run once, or on every render?",
+          "Can a reader tell why, not just what?"
+        ],
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w34-d06-a",
+      "sourceId": "c30-d13-mobile-nav",
+      "template": "CaseStudy",
+      "caption": "The menu worked. It just took four taps to reach the thing most people came for, and the analytics said so.\n\n#UX #MobileFirst #WebDesign",
+      "props": {
+        "eyebrow": "MERITBYTE / FIELD NOTE",
+        "day": 6,
+        "durationInSeconds": 22,
+        "hook": "Four taps to the main page",
+        "before": "A nested menu, four levels deep",
+        "after": "The top three destinations, one tap away",
+        "actions": [
+          "Rank pages by what people actually open",
+          "Promote the top three out of the menu",
+          "Keep the rest, one level down"
+        ],
+        "lesson": "Navigation should match traffic, not the org chart.",
+        "kicker": "FIELD NOTE"
+      }
+    },
+    {
+      "id": "w34-d06-b",
+      "sourceId": "c30-d13-tap-targets",
+      "template": "TechTip",
+      "caption": "If a control is hard to tap, it is usually a few pixels short of the minimum. Two minutes to check.\n\n#Accessibility #MobileFirst #UX",
+      "props": {
+        "eyebrow": "MERITBYTE / QUICK WIN",
+        "day": 6,
+        "durationInSeconds": 20,
+        "hook": "Your buttons are too small",
+        "steps": [
+          "Open device mode and pick a real phone",
+          "Measure every control you expect a tap on",
+          "Anything under forty-four pixels needs padding"
+        ],
+        "result": "Small targets read as a broken page.",
+        "variant": "design-code",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w34-d06-c",
+      "sourceId": "c30-d13-keyboard-nav",
+      "template": "StatCard",
+      "caption": "Keyboard navigation is not a niche case. It is also how every screen reader and half of all power users move.\n\n#Accessibility #A11y #WebDev",
+      "props": {
+        "eyebrow": "MERITBYTE / NUMBERS",
+        "day": 6,
+        "durationInSeconds": 8,
+        "value": "1 in 4",
+        "label": "adults live with a disability",
+        "context": [
+          "Most accessibility fixes help everyone.",
+          "Almost none of them are expensive."
+        ],
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w34-d06-d",
+      "sourceId": "c30-d13-forty-seven-comments",
+      "template": "DevJoke",
+      "caption": "Forty-seven comments in a document, twelve of them arguing with each other, none of them a decision.\n\n#ClientWork #DesignProcess #DevHumor",
+      "props": {
+        "eyebrow": "MERITBYTE / DEV LIFE",
+        "day": 6,
+        "durationInSeconds": 15,
+        "hook": "Forty-seven comments, no decision",
+        "beats": [
+          "Twelve comments agree with each other",
+          "Nine disagree, politely, in threads",
+          "Four say what does everyone else think",
+          "One says ignore my last comment"
+        ],
+        "punchline": "Feedback needs an owner, not a quorum.",
+        "variant": "comments",
+        "kicker": "DEV LIFE"
+      }
+    },
+    {
+      "id": "w34-d07-a",
+      "sourceId": "c30-d14-nobody-coming",
+      "template": "FounderStory",
+      "caption": "Waiting to be discovered is a strategy with no steps in it. The month we stopped waiting was the month it changed.\n\n#Founder #Motivation #AgencyLife",
+      "props": {
+        "eyebrow": "MERITBYTE / FOUNDER",
+        "day": 7,
+        "durationInSeconds": 20,
+        "hook": "Nobody was coming to find us",
+        "moments": [
+          "Great work, and a silent inbox",
+          "We assumed the work would speak",
+          "It had nowhere to speak from"
+        ],
+        "turn": "We wrote one useful thing every single week.",
+        "lesson": "Being good is invisible until you are findable.",
+        "kicker": "FOUNDER NOTE"
+      }
+    },
+    {
+      "id": "w34-d07-b",
+      "sourceId": "c30-d14-backup-restore",
+      "template": "TechTip",
+      "caption": "A backup you have never restored is a belief, not a backup. Test it on a schedule.\n\n#DevOps #Backups #Reliability",
+      "props": {
+        "eyebrow": "MERITBYTE / QUICK WIN",
+        "day": 7,
+        "durationInSeconds": 20,
+        "hook": "Your backup is untested",
+        "steps": [
+          "Restore last night's backup somewhere else",
+          "Time how long the whole restore takes",
+          "Write that number where the team sees it"
+        ],
+        "result": "Recovery time is the number that matters.",
+        "variant": "security",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w34-d07-c",
+      "sourceId": "c30-d14-maintenance-list",
+      "template": "ListReveal",
+      "caption": "What a maintenance retainer should actually cover, written so a client can tell whether they are getting it.\n\n#Agency #ClientWork #WebDev",
+      "props": {
+        "eyebrow": "MERITBYTE / CHECKLIST",
+        "day": 7,
+        "durationInSeconds": 10,
+        "headline": "What maintenance should actually include",
+        "items": [
+          "Security updates, applied and verified",
+          "A restore test, not just a backup",
+          "Uptime checks that alert a human",
+          "A monthly note on what changed"
+        ],
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w34-d07-d",
+      "sourceId": "c30-d14-friday-deploy",
+      "template": "DevJoke",
+      "caption": "Friday afternoon deploys are fine. It is Friday evening rollbacks that ruin the weekend.\n\n#DevOps #DevLife #DevHumor",
+      "props": {
+        "eyebrow": "MERITBYTE / DEV LIFE",
+        "day": 7,
+        "durationInSeconds": 15,
+        "hook": "Friday, five o'clock, ship it",
+        "beats": [
+          "Deployed at five past five",
+          "First error report at twenty past",
+          "Team channel wakes up at six",
+          "Rolled back, in the dark, alone"
+        ],
+        "punchline": "The deploy was fine. The timing was the bug.",
+        "variant": "deploy",
+        "kicker": "DEV LIFE"
+      }
+    }
+  ]
+}

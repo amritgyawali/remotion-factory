@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "studio": "node scripts/build-audio.mjs && remotion studio",
-    "validate": "node scripts/validate-plan.mjs && node scripts/accept-week.mjs --check && node scripts/queue.mjs --check",
-    "test": "node --test scripts/queue.test.mjs scripts/typography.test.mjs scripts/due.test.mjs scripts/buffer.test.mjs scripts/archive.test.mjs scripts/audio.test.mjs scripts/archive-r2.test.mjs scripts/archive-cloudinary.test.mjs scripts/week-id.test.mjs scripts/slots.test.mjs scripts/timeline.test.mjs",
+    "validate": "node scripts/validate-plan.mjs && node scripts/accept-week.mjs --check && node scripts/queue.mjs --check && node scripts/build-campaign.mjs --check && node scripts/uniqueness-matrix.mjs",
+    "test": "node --test scripts/queue.test.mjs scripts/typography.test.mjs scripts/due.test.mjs scripts/buffer.test.mjs scripts/archive.test.mjs scripts/audio.test.mjs scripts/archive-r2.test.mjs scripts/archive-cloudinary.test.mjs scripts/week-id.test.mjs scripts/slots.test.mjs scripts/timeline.test.mjs scripts/variation.test.mjs scripts/shard.test.mjs scripts/daily.test.mjs",
     "verify": "node scripts/verify-video.mjs",
     "queue": "node scripts/queue.mjs",
     "due": "node scripts/due.mjs",
@@ -20,6 +20,9 @@
     "inspect": "node scripts/inspect-frames.mjs",
     "cloudinary": "node scripts/archive-cloudinary.mjs",
     "render:batch": "node scripts/render-batch.mjs",
+    "campaign": "node scripts/build-campaign.mjs",
+    "campaign:check": "node scripts/uniqueness-matrix.mjs",
+    "shards": "node scripts/shard-plan.mjs",
     "publish": "node scripts/publish-one.mjs"
   },
   "dependencies": {

@@ -9,6 +9,7 @@ import { loadFont as loadSpaceMono } from "@remotion/google-fonts/SpaceMono";
 import { loadFont as loadSyne } from "@remotion/google-fonts/Syne";
 import { loadFont as loadUnbounded } from "@remotion/google-fonts/Unbounded";
 import { pick, variationFor } from "./seed";
+import { campaignLook, MOTION_SIGNATURES, type MotionSignature } from "./variation";
 
 /**
  * Typeface pairings.
@@ -135,7 +136,22 @@ export const PALETTES = [
 const withDerived = (
   base: (typeof PALETTES)[number],
   type: (typeof TYPEFACES)[number] = TYPEFACES[0],
+  motion: MotionSignature = MOTION_SIGNATURES[0],
 ) => ({
+  /**
+   * How this video moves, riding along with what it is painted in.
+   *
+   * Motion is not a paint value and it does not belong here on the merits. It
+   * is here because `theme` is already the one per-video object that reaches
+   * every component including the nested motifs — the same argument the
+   * typeface fields above are here for — and threading a second prop through
+   * ten templates and their children is how one component ends up still moving
+   * on the default signature while the rest of the video changes.
+   *
+   * `resolveTheme` and `lookFor` both apply plan overrides *before* this field,
+   * so `props.theme` can retint a video but can never restyle its motion.
+   */
+  motion,
   ground: base.ground,
   groundLift: base.groundLift,
   paper: base.paper,
@@ -157,31 +173,54 @@ export const palette = withDerived(PALETTES[0]);
 
 export type Theme = typeof palette;
 
-/** plan.json can override any single token per video. */
+/**
+ * plan.json can override any single colour token per video.
+ *
+ * `motion` is reinstated after the spread rather than being left to it: a plan
+ * that sets `props.theme` is choosing colours, and letting that same field
+ * smuggle in a motion signature would put timing values a template springs
+ * against under the control of a JSON file nobody type-checks.
+ */
 export const resolveTheme = (overrides?: Partial<Theme>): Theme => ({
   ...palette,
   ...(overrides ?? {}),
+  motion: palette.motion,
 });
 
 export type Look = {
   theme: Theme;
   paletteName: string;
   typefaceName: string;
+  /**
+   * How this video moves. Travels beside the theme rather than inside it
+   * because it is not a paint value — components read it to time springs and
+   * choose entrance vectors, and burying it in `Theme` would let a plan
+   * override motion through the same `props.theme` escape hatch that exists
+   * for colour, which is not something a plan should be able to do.
+   */
+  motion: MotionSignature;
 };
 
 /**
  * The full visual identity for one video, derived from its id.
  *
- * Eight palettes against seven pairings is 56 combinations. That does NOT mean
- * 28 videos get 28 distinct ones: drawing independently from 56 produces
- * collisions, and measured across the current week it gives 23 distinct looks
- * with 5 repeats, which is what the birthday problem predicts.
+ * Two schemes, and which one applies is decided by the id.
  *
- * That is fine and deliberate. Two videos sharing a palette and a typeface are
- * still different templates carrying different words in a different musical
- * key, so they do not read as the same video. Actual uniqueness is enforced on
- * the finished file by comparing frame and audio fingerprints — see
- * scripts/uniqueness.mjs — not by assuming a hash spreads perfectly.
+ * **Campaign ids** (`w33-d01-a` and later) walk a 336-combination space of
+ * palette x typeface x motion signature with a coprime stride, so every video
+ * in a 120-video campaign is guaranteed a look no other video in it has. See
+ * src/variation.ts for why a draw cannot do this and a walk can.
+ *
+ * **Everything else** — weeks 31 and 32, previews, probes — keeps the original
+ * hashed draw. Eight palettes against seven pairings is 56 combinations, and
+ * drawing 28 times from 56 collides: measured across week 31 it gives 23
+ * distinct looks with 5 repeats, which is what the birthday problem predicts.
+ * Those videos are already rendered and fingerprinted, so their looks are not
+ * ours to change any more.
+ *
+ * Either way this is only the first line of defence. Actual uniqueness is
+ * enforced on the finished file by comparing frame and audio fingerprints —
+ * see scripts/uniqueness.mjs — not by assuming an assignment spreads perfectly.
  */
 export function lookFor(id: string | undefined, overrides?: Partial<Theme>): Look {
   if (!id) {
@@ -189,21 +228,28 @@ export function lookFor(id: string | undefined, overrides?: Partial<Theme>): Loo
       theme: resolveTheme(overrides),
       paletteName: PALETTES[0].name,
       typefaceName: TYPEFACES[0].name,
+      motion: MOTION_SIGNATURES[0],
     };
   }
 
-  const variation = variationFor(id, {
-    palettes: PALETTES.length,
-    typefaces: TYPEFACES.length,
-    keys: 1,
-  });
-  const chosenPalette = PALETTES[variation.paletteIndex];
-  const chosenType = TYPEFACES[variation.typeIndex];
+  const campaign = campaignLook(id);
+  const legacy = campaign
+    ? null
+    : variationFor(id, {
+        palettes: PALETTES.length,
+        typefaces: TYPEFACES.length,
+        keys: 1,
+      });
+
+  const chosenPalette = PALETTES[campaign ? campaign.paletteIndex : legacy!.paletteIndex];
+  const chosenType = TYPEFACES[campaign ? campaign.typefaceIndex : legacy!.typeIndex];
+  const motion = MOTION_SIGNATURES[campaign ? campaign.motionIndex : 0];
 
   return {
-    theme: { ...withDerived(chosenPalette, chosenType), ...(overrides ?? {}) },
+    theme: { ...withDerived(chosenPalette, chosenType, motion), ...(overrides ?? {}), motion },
     paletteName: chosenPalette.name,
     typefaceName: chosenType.name,
+    motion,
   };
 }
 

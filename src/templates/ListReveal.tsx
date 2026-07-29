@@ -23,7 +23,7 @@ export const ListReveal: React.FC<ListRevealProps> = ({
   const every = Math.max(11, Math.floor((durationInFrames - 70 - from) / Math.max(1, items.length)));
 
   return (
-    <Frame theme={theme} template="ListReveal" score={score}>
+    <Frame theme={theme} template="ListReveal" score={score} videoId={videoId}>
       <AbsoluteFill
         style={{
           boxSizing: "border-box",

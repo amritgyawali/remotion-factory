@@ -35,7 +35,7 @@ export const FounderStory: React.FC<FounderStoryProps> = ({
   );
 
   return (
-    <Frame theme={theme} template="FounderStory" score={score}>
+    <Frame theme={theme} template="FounderStory" score={score} videoId={videoId}>
       <AbsoluteFill
         style={{
           boxSizing: "border-box",

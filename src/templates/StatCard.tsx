@@ -32,7 +32,7 @@ export const StatCard: React.FC<StatCardProps> = ({
   const contextFrom = Math.max(40, Math.floor(durationInFrames * 0.34));
 
   return (
-    <Frame theme={theme} template="StatCard" score={score}>
+    <Frame theme={theme} template="StatCard" score={score} videoId={videoId}>
       <AbsoluteFill
         style={{
           boxSizing: "border-box",

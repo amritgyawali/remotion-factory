@@ -49,7 +49,7 @@ export const CaseStudy: React.FC<CaseStudyProps> = ({
   );
 
   return (
-    <Frame theme={theme} template="CaseStudy" score={score}>
+    <Frame theme={theme} template="CaseStudy" score={score} videoId={videoId}>
       <AbsoluteFill
         style={{
           boxSizing: "border-box",

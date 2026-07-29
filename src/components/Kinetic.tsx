@@ -26,6 +26,33 @@ export const SAFE_WIDTH = 1080 - BLEED_MARGIN * 2;
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
 /**
+ * Where an element sits when it has not arrived yet.
+ *
+ * `distance` is how far away it starts and `progress` closes that gap, so at
+ * progress 1 every signature returns the identity transform and the finished
+ * layout is the same whichever direction the video moves in. That is the whole
+ * constraint on this axis: motion may vary, composition may not.
+ */
+function enterOffset(
+  entry: Theme["motion"]["entry"],
+  distance: number,
+  progress: number,
+): string {
+  const away = (1 - progress) * distance;
+  switch (entry) {
+    case "down":
+      return `translateY(${-away}px)`;
+    case "left":
+      return `translateX(${-away}px)`;
+    case "right":
+      return `translateX(${away}px)`;
+    case "up":
+    default:
+      return `translateY(${away}px)`;
+  }
+}
+
+/**
  * The largest size at which `text` fits `maxLines` lines of `boxWidth`.
  *
  * Clamped at both ends: a two-word hook would otherwise render at 400px and
@@ -90,10 +117,15 @@ export const KineticHeadline: React.FC<{
   min = 62,
   max = 178,
   color,
-  stagger = 3,
+  stagger,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  // Per-video motion. A caller may still pass an explicit stagger where a
+  // script's beats are timed against a specific rhythm — WorksOnMyMachine and
+  // LogoLadder both do — and an explicit value always wins.
+  const motion = theme.motion;
+  const step = stagger ?? motion.stagger;
 
   const fontSize = fittedSize({
     text,
@@ -126,9 +158,9 @@ export const KineticHeadline: React.FC<{
     >
       {words.map((word, index) => {
         const enter = spring({
-          frame: frame - (from + index * stagger),
+          frame: frame - (from + index * step),
           fps,
-          config: { damping: 200, mass: 0.5 },
+          config: { damping: motion.springDamping, mass: motion.springMass },
           durationInFrames: 16,
         });
         return (
@@ -137,7 +169,7 @@ export const KineticHeadline: React.FC<{
             style={{
               display: "inline-block",
               opacity: enter,
-              transform: `translateY(${(1 - enter) * fontSize * 0.42}px)`,
+              transform: enterOffset(motion.entry, fontSize * motion.travel, enter),
             }}
           >
             {word}
@@ -197,7 +229,7 @@ export const MarchingList: React.FC<{
         const enter = spring({
           frame: frame - (from + index * every),
           fps,
-          config: { damping: 200, mass: 0.5 },
+          config: { damping: theme.motion.springDamping, mass: theme.motion.springMass },
           durationInFrames: 18,
         });
         return (
@@ -208,7 +240,10 @@ export const MarchingList: React.FC<{
               alignItems: "baseline",
               gap: 26,
               opacity: enter,
-              transform: `translateX(${(1 - enter) * -34}px)`,
+              // Rows always arrive horizontally — a list that dropped in
+              // vertically would collide with the stack's own upward march —
+              // so the signature only chooses which side they come from.
+              transform: `translateX(${(1 - enter) * 34 * theme.motion.listFrom}px)`,
             }}
           >
             {numbered ? (
@@ -263,7 +298,7 @@ export const PayoffBlock: React.FC<{
   const enter = spring({
     frame: frame - from,
     fps,
-    config: { damping: 200, mass: 0.7 },
+    config: { damping: theme.motion.springDamping, mass: theme.motion.springMass + 0.2 },
     durationInFrames: 22,
   });
 

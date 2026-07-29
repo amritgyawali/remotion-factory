@@ -94,8 +94,19 @@ export function weeklyPlanErrors(plan) {
     errors.push('weekly plans must use mode "queue"');
   }
 
-  if (!Array.isArray(plan?.items) || plan.items.length !== WEEK_SIZE) {
+  // A full week is 28. The short last week of a campaign — 30 days is four
+  // weeks and a two-day remainder — declares itself with week.partial and is
+  // held to whole days instead. validate-plan.mjs carries the same rule and the
+  // reasoning behind it.
+  const count = Array.isArray(plan?.items) ? plan.items.length : -1;
+  const partial = plan?.week?.partial === true;
+
+  if (!partial && count !== WEEK_SIZE) {
     errors.push(`weekly plans must contain exactly ${WEEK_SIZE} items`);
+  } else if (partial && (count % POSTS_PER_DAY !== 0 || count < POSTS_PER_DAY || count >= WEEK_SIZE)) {
+    errors.push(
+      `a partial week must hold whole days of ${POSTS_PER_DAY}, fewer than ${WEEK_SIZE} — got ${count}`,
+    );
   }
 
   for (const [index, item] of (plan?.items ?? []).entries()) {

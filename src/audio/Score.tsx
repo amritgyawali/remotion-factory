@@ -81,6 +81,23 @@ export type Score = {
 
 const audioSrc = (stem: string) => staticFile(`audio/${stem}.wav`);
 
+/**
+ * Where this video's bed layers live.
+ *
+ * Beds are namespaced by video id, not by template, and that is what lets one
+ * webpack bundle serve a whole shard of renders. The bed is regenerated per
+ * video — a different key, mode, phrase and tempo each time — so when every
+ * video's bed shared the name `bed-DevJoke-pluck.wav` the public folder had to
+ * be rewritten and the project re-bundled between every single render. Under a
+ * per-id path a shard builds all of its audio once, bundles once, and renders
+ * twelve videos off the same server.
+ *
+ * Falls back to the template name so the Studio, which has no plan item and
+ * therefore no id, still finds the unseeded beds `npm run audio` writes.
+ */
+const bedSrc = (videoId: string | undefined, template: string, layer: string) =>
+  staticFile(`audio/beds/${videoId ?? template}/${layer}.wav`);
+
 /** Which step is in force at `frame`. Steps are applied in order, not sorted. */
 function stepAt(bed: BedStep[], frame: number): BedStep | null {
   let current: BedStep | null = null;
@@ -121,7 +138,7 @@ function duckGainAt(cues: Cue[], frame: number): number {
   return dbToGain(DUCK_DB * depth);
 }
 
-export const Soundtrack: React.FC<{ score: Score }> = ({ score }) => {
+export const Soundtrack: React.FC<{ score: Score; videoId?: string }> = ({ score, videoId }) => {
   const { durationInFrames } = useVideoConfig();
   const layers = allLayers(score.bed);
 
@@ -130,7 +147,7 @@ export const Soundtrack: React.FC<{ score: Score }> = ({ score }) => {
       {layers.map((layer) => (
         <Audio
           key={layer}
-          src={audioSrc(`bed-${score.template}-${layer}`)}
+          src={bedSrc(videoId, score.template, layer)}
           volume={(frame) => {
             const step = stepAt(score.bed, frame);
             if (!step || !step.layers.includes(layer)) return 0;

@@ -53,7 +53,7 @@ export const SiteRoast: React.FC<SiteRoastProps> = ({
   );
 
   return (
-    <Frame theme={theme} template="SiteRoast" score={score}>
+    <Frame theme={theme} template="SiteRoast" score={score} videoId={videoId}>
       <AbsoluteFill
         style={{
           boxSizing: "border-box",

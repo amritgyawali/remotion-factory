@@ -65,18 +65,24 @@ export const Backdrop: React.FC<{ theme: Theme; seed?: string }> = ({ theme, see
    * are painted a single time and each frame only composites. Same picture,
    * back to roughly the original cost.
    */
+  // How far the glows travel is per-video: the field is the largest continuous
+  // area of the frame, so a lively drift and a nearly-still one are two
+  // genuinely different backgrounds even on identical colours.
+  const travel = theme.motion.glowTravel;
   const glowA = {
-    x: Math.sin(t * Math.PI * 1.1 + noise(seed, 1) * 6) * 170,
-    y: Math.cos(t * Math.PI * 0.8 + noise(seed, 2) * 6) * 230,
+    x: Math.sin(t * Math.PI * 1.1 + noise(seed, 1) * 6) * 170 * travel,
+    y: Math.cos(t * Math.PI * 0.8 + noise(seed, 2) * 6) * 230 * travel,
   };
   const glowB = {
-    x: Math.cos(t * Math.PI * 0.9 + noise(seed, 3) * 6) * 150,
-    y: Math.sin(t * Math.PI * 1.3 + noise(seed, 4) * 6) * 270,
+    x: Math.cos(t * Math.PI * 0.9 + noise(seed, 3) * 6) * 150 * travel,
+    y: Math.sin(t * Math.PI * 1.3 + noise(seed, 4) * 6) * 270 * travel,
   };
 
-  // The grid scrolls one cell over the clip. Tying it to duration rather than a
-  // fixed rate means a 15s and a 30s video read at the same tempo.
-  const gridShift = interpolate(frame, [0, durationInFrames], [0, 90]);
+  // The grid scrolls exactly one cell over the clip, whatever the cell size, so
+  // the scroll stays seamless on every signature. Tying it to duration rather
+  // than to a fixed rate means a 15s and a 30s video read at the same tempo.
+  const cell = theme.motion.gridCell;
+  const gridShift = interpolate(frame, [0, durationInFrames], [0, cell]);
 
   const glow = (colour: string, size: number): React.CSSProperties => ({
     position: "absolute",
@@ -115,15 +121,21 @@ export const Backdrop: React.FC<{ theme: Theme; seed?: string }> = ({ theme, see
       <div
         style={{
           position: "absolute",
-          left: 0,
-          top: -120,
-          width: 1080,
-          height: 1920 + 240,
+          // Oversized on every side, because a skewed layer no longer covers
+          // the frame at its own size and would show a bare wedge in two
+          // corners. 240px of overhang clears the widest skew this axis allows.
+          left: -240,
+          top: -240,
+          width: 1080 + 480,
+          height: 1920 + 480,
           opacity: 0.22,
           backgroundImage:
-            `repeating-linear-gradient(0deg, ${theme.rule} 0 1px, transparent 1px 90px),` +
-            `repeating-linear-gradient(90deg, ${theme.rule} 0 1px, transparent 1px 90px)`,
-          transform: `translateY(${gridShift}px)`,
+            `repeating-linear-gradient(0deg, ${theme.rule} 0 1px, transparent 1px ${cell}px),` +
+            `repeating-linear-gradient(90deg, ${theme.rule} 0 1px, transparent 1px ${cell}px)`,
+          // Skew rather than rotate: rotation turns both axes and reads as a
+          // tilted photograph of a grid, while a skew keeps the horizontals
+          // level so the field still implies a floor rather than a wonky wall.
+          transform: `translateY(${gridShift}px) skewY(${theme.motion.gridSkew}deg)`,
         }}
       />
 

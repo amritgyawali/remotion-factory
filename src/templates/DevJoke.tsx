@@ -66,7 +66,7 @@ export const DevJoke: React.FC<DevJokeProps> = ({
   const command = SHELL[variant];
 
   return (
-    <Frame theme={theme} template="DevJoke" score={score}>
+    <Frame theme={theme} template="DevJoke" score={score} videoId={videoId}>
       <AbsoluteFill
         style={{
           boxSizing: "border-box",

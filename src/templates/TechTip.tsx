@@ -46,7 +46,7 @@ export const TechTip: React.FC<TechTipProps> = ({
   );
 
   return (
-    <Frame theme={theme} template="TechTip" score={score}>
+    <Frame theme={theme} template="TechTip" score={score} videoId={videoId}>
       <AbsoluteFill
         style={{
           boxSizing: "border-box",

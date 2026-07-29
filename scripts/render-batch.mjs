@@ -5,11 +5,12 @@ import { pathToFileURL } from "node:url";
 import { archiveToCloudinary } from "./archive-cloudinary.mjs";
 import { archiveToR2 } from "./archive-r2.mjs";
 import { archiveVideo } from "./archive-video.mjs";
-import { BED_TEMPLATES } from "./audio/beds.mjs";
+import { writePack } from "./build-audio.mjs";
 import { loadEnvFile } from "./env.mjs";
 import { masterVideoAudio } from "./master-audio.mjs";
 import { jobSummary, notify } from "./postiz.mjs";
-import { getArchivedQueue, loadQueueState, markRendered, pendingRender } from "./queue.mjs";
+import { dailyRenderCount, getArchivedQueue, loadQueueState, markRendered, pendingRender } from "./queue.mjs";
+import { assertRenderAllowed } from "./render-guard.mjs";
 import { assertPlayableVideo } from "./verify-video.mjs";
 
 /**
@@ -46,9 +47,38 @@ function argValue(flag, fallback) {
   return Number.isFinite(value) && value > 0 ? value : fallback;
 }
 
-// One per run by default. The schedule fires four times a day rather than
-// asking one job to produce four videos — see .github/workflows/render-batch.yml.
-const COUNT = argValue("--count", Number(process.env.RENDER_COUNT ?? 1));
+/**
+ * Videos a day. Four runs, four videos, one each — when nothing goes wrong.
+ *
+ * Overridable so the rate can be changed without editing the cron, which is the
+ * setting people actually reach for when a campaign needs to land sooner.
+ */
+const DAILY_TARGET = Math.max(1, Number(process.env.DAILY_TARGET ?? 4));
+
+/**
+ * How many videos this run should render.
+ *
+ * An explicit count — `--count`, or RENDER_COUNT from a manual dispatch — always
+ * wins. Otherwise the run tops the day up to `DAILY_TARGET`.
+ *
+ * The difference matters over a long campaign. GitHub delays scheduled
+ * workflows under load and drops them outright when it is busy enough, which is
+ * documented behaviour and not rare. A run that renders exactly one video turns
+ * every dropped run into a video that is never made up: the daily rate silently
+ * becomes three, and a 37-day campaign quietly becomes a 50-day one with
+ * nothing in any log saying so.
+ *
+ * Topping up instead means the next run absorbs the miss — two videos, or four
+ * if a whole day was lost. Videos are recorded one at a time, so even if a
+ * catch-up run is killed part way through, everything it finished is kept.
+ *
+ * The arithmetic lives in queue.mjs so it can be tested without a render.
+ */
+const countFor = (state) =>
+  dailyRenderCount(state, {
+    target: DAILY_TARGET,
+    explicit: argValue("--count", Number(process.env.RENDER_COUNT ?? Number.NaN)),
+  });
 
 function run(cmd, args) {
   return new Promise((resolve, reject) => {
@@ -67,13 +97,17 @@ function run(cmd, args) {
  * whole public folder on every render.
  */
 async function buildAudioFor(item) {
-  const filter = BED_TEMPLATES.includes(item.template) ? item.template : null;
-  await run("node", [
-    "scripts/build-audio.mjs",
-    ...(filter ? ["--template", filter] : []),
-    "--seed",
-    item.id,
+  // In process rather than through a child process. The CLI path takes a single
+  // template and seed, which cannot express "this video's bed, sized to this
+  // video" now that beds are written per id — see writePack in build-audio.mjs.
+  const { files, bytes } = await writePack([
+    {
+      id: item.id,
+      template: item.template,
+      durationInSeconds: item.props?.durationInSeconds,
+    },
   ]);
+  console.log(`  audio: ${files.length} file(s), ${(bytes / 1e6).toFixed(0)} MB`);
 }
 
 async function renderOne(item, weekId) {
@@ -146,24 +180,35 @@ async function renderOne(item, weekId) {
 }
 
 async function main() {
+  // Rendering is a GitHub job, not a laptop job — see scripts/render-guard.mjs
+  // for why, and for the deliberately awkward escape hatch.
+  const note = assertRenderAllowed({ what: "the scheduled render" });
+  if (note) console.warn(`\n${note}\n`);
+
   await mkdir(OUT, { recursive: true });
 
   const [queue, state] = await Promise.all([getArchivedQueue(), loadQueueState()]);
-  const batch = pendingRender(queue, state, COUNT);
+  const { count, reason } = countFor(state);
+  const batch = pendingRender(queue, state, count);
 
   if (batch.length === 0) {
     const message =
-      queue.remaining === 0
-        ? "Queue is empty. Submit a new 28-item weekly plan."
-        : `Nothing to render — ${(state.rendered ?? []).length} video(s) already waiting to post.`;
+      count === 0
+        ? `Today's ${DAILY_TARGET} are already rendered (${reason}). Nothing to do.`
+        : queue.remaining === 0
+          ? "Queue is empty. Submit a new 28-item weekly plan."
+          : `Nothing to render — ${(state.rendered ?? []).length} video(s) already waiting to post.`;
     console.log(message);
     await jobSummary(`## Render\n\n${message}`);
-    await notify(`Weekly video factory\n${message}`);
+    // Deliberately silent on the happy path. Four "nothing to do" messages a
+    // day is how a notification channel becomes one nobody reads.
+    if (count !== 0) await notify(`Weekly video factory\n${message}`);
     return;
   }
 
   console.log(
-    `Rendering ${batch.length} video(s) sequentially${DRY_RUN ? " (DRY RUN — nothing archived)" : ""}\n`,
+    `Rendering ${batch.length} video(s) sequentially — ${reason}` +
+      `${DRY_RUN ? " (DRY RUN — nothing archived)" : ""}\n`,
   );
 
   const done = [];

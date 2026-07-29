@@ -39,8 +39,14 @@ export const Frame: React.FC<{
   template: string;
   /** Beat-exact cue list off the plan. Falls back to the template's bed behaviour. */
   score?: unknown;
+  /**
+   * The plan item's id. Selects this video's bed — beds are written per id, not
+   * per template, so that a shard of renders can share one bundle — and seeds
+   * the backdrop, so two videos on one template do not get the same drift.
+   */
+  videoId?: string;
   children: React.ReactNode;
-}> = ({ theme, template, score, children }) => {
+}> = ({ theme, template, score, videoId, children }) => {
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
 
@@ -66,7 +72,7 @@ export const Frame: React.FC<{
         silent. The PDF is explicit that with no voiceover the audio track is
         "not decoration, it is the performance".
       */}
-      <Soundtrack score={resolveScore(score, template, durationInFrames, fps)} />
+      <Soundtrack score={resolveScore(score, template, durationInFrames, fps)} videoId={videoId} />
 
       {/*
         Depth, not just a lit corner. The single drifting radial this replaces
@@ -76,7 +82,7 @@ export const Frame: React.FC<{
         from useCurrentFrame, so the ambient drift this file used to compute
         lives there now.
       */}
-      <Backdrop theme={theme} seed={template} />
+      <Backdrop theme={theme} seed={videoId ?? template} />
 
       {/* Grain. Keeps flat colour fields from banding after platform re-encode. */}
       <AbsoluteFill

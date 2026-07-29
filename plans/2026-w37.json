@@ -1,0 +1,220 @@
+{
+  "series": "MeritByte — Build Better",
+  "mode": "queue",
+  "week": {
+    "id": "2026-w37",
+    "order": 202637,
+    "partial": true
+  },
+  "postType": "schedule",
+  "channels": [
+    "cmruyn0l40003of9gif9fkkvz",
+    "cmru3v02i0001qh6tba0sefis",
+    "cmruzqbfl0007ph7uso34siqt",
+    "cmruzbsts0001ph7ujfzqsh29"
+  ],
+  "channelSettings": {
+    "instagram-standalone": {
+      "__type": "instagram-standalone",
+      "post_type": "post"
+    },
+    "x": {
+      "__type": "x",
+      "who_can_reply_post": "everyone"
+    },
+    "threads": {
+      "__type": "threads"
+    },
+    "facebook": {
+      "__type": "facebook",
+      "post_type": "post"
+    },
+    "linkedin": {
+      "__type": "linkedin"
+    }
+  },
+  "items": [
+    {
+      "id": "w37-d01-a",
+      "sourceId": "c30-d29-design-to-code",
+      "template": "TechTip",
+      "caption": "Getting from a design file to working markup is mostly about deciding three things before you write any CSS.\n\n#Frontend #DesignSystems #WebDev",
+      "props": {
+        "eyebrow": "MERITBYTE / QUICK WIN",
+        "day": 1,
+        "durationInSeconds": 20,
+        "hook": "Design to code, three decisions",
+        "steps": [
+          "Name the spacing scale before the first margin",
+          "Decide which values are tokens, not numbers",
+          "Build the longest state first, not the prettiest"
+        ],
+        "result": "Building the happy path first guarantees rework.",
+        "variant": "design-code",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w37-d01-b",
+      "sourceId": "c30-d29-token-rollout",
+      "template": "CaseStudy",
+      "caption": "Eleven blues across one product. Not a design failure — nobody had ever written down which blue was the blue.\n\n#DesignSystems #Frontend #CaseStudy",
+      "props": {
+        "eyebrow": "MERITBYTE / FIELD NOTE",
+        "day": 1,
+        "durationInSeconds": 22,
+        "hook": "Eleven blues, one brand",
+        "before": "Eleven hex values, all approximately correct",
+        "after": "Four named tokens, used everywhere",
+        "actions": [
+          "Count the distinct values already shipping",
+          "Name the four that actually earn a place",
+          "Fail the build when a raw hex appears"
+        ],
+        "lesson": "A system is enforced or it is a suggestion.",
+        "kicker": "FIELD NOTE"
+      }
+    },
+    {
+      "id": "w37-d01-c",
+      "sourceId": "c30-d29-system-list",
+      "template": "ListReveal",
+      "caption": "Four signs a design system is being used, rather than merely existing in a shared file.\n\n#DesignSystems #ProductDesign #Frontend",
+      "props": {
+        "eyebrow": "MERITBYTE / CHECKLIST",
+        "day": 1,
+        "durationInSeconds": 10,
+        "headline": "Four signs a system is real",
+        "items": [
+          "New screens get built faster than before",
+          "Nobody asks which grey to use",
+          "The code and the file agree on names",
+          "Changing a token changes the product"
+        ],
+        "kicker": "FOLLOW FOR MORE"
+      }
+    },
+    {
+      "id": "w37-d01-d",
+      "sourceId": "c30-d29-pixel-perfect",
+      "template": "DevJoke",
+      "caption": "Pixel perfect at one width is a screenshot. The other four hundred widths are the actual job.\n\n#Frontend #WebDesign #DevHumor",
+      "props": {
+        "eyebrow": "MERITBYTE / DEV LIFE",
+        "day": 1,
+        "durationInSeconds": 15,
+        "hook": "It needs to be pixel perfect",
+        "beats": [
+          "Perfect at exactly 1440 pixels wide",
+          "Broken at 1441 pixels wide",
+          "Untested on every phone made",
+          "Approved on one designer's monitor"
+        ],
+        "punchline": "Pick ranges to be right in, not one width.",
+        "variant": "logo",
+        "kicker": "DEV LIFE"
+      }
+    },
+    {
+      "id": "w37-d02-a",
+      "sourceId": "c30-d30-recap",
+      "template": "Recap",
+      "caption": "Thirty days, a hundred and twenty videos, every frame rendered from code. Here is what actually worked and what did not.\n\n#BuildInPublic #ContentStrategy #Remotion",
+      "props": {
+        "eyebrow": "MERITBYTE / RECAP",
+        "day": 2,
+        "durationInSeconds": 27,
+        "hook": "Thirty days. The real numbers.",
+        "totals": [
+          {
+            "label": "videos shipped",
+            "value": 120
+          },
+          {
+            "label": "days without a gap",
+            "value": 30
+          },
+          {
+            "label": "frames rendered",
+            "value": 64800
+          }
+        ],
+        "leaderboard": [
+          {
+            "label": "Roast my own website",
+            "value": 48300
+          },
+          {
+            "label": "We found their password",
+            "value": 31700
+          },
+          {
+            "label": "Nobody was coming",
+            "value": 26400
+          }
+        ],
+        "lesson": "The dull weekly habit beat every clever idea.",
+        "gridCount": 30,
+        "kicker": "RECAP"
+      }
+    },
+    {
+      "id": "w37-d02-b",
+      "sourceId": "c30-d30-what-it-cost",
+      "template": "FounderStory",
+      "caption": "What thirty days of daily video actually cost us, honestly. Most of it was not the making.\n\n#Founder #BuildInPublic #ContentStrategy",
+      "props": {
+        "eyebrow": "MERITBYTE / FOUNDER",
+        "day": 2,
+        "durationInSeconds": 20,
+        "hook": "What thirty days actually cost",
+        "moments": [
+          "The making was the easy part",
+          "Deciding what to say took longer",
+          "Week three is where it nearly stopped"
+        ],
+        "turn": "We built the pipeline so week three could not stop it.",
+        "lesson": "Automate the part that fails when you are tired.",
+        "kicker": "FOUNDER NOTE"
+      }
+    },
+    {
+      "id": "w37-d02-c",
+      "sourceId": "c30-d30-pipeline-how",
+      "template": "TechTip",
+      "caption": "How the whole series was made: one React component per format, everything else is data and a scheduled job.\n\n#Remotion #Automation #WebDev",
+      "props": {
+        "eyebrow": "MERITBYTE / QUICK WIN",
+        "day": 2,
+        "durationInSeconds": 20,
+        "hook": "How this series was actually made",
+        "steps": [
+          "Every video is one React component and one JSON row",
+          "Music is synthesised per video, never reused",
+          "Rendering runs in parallel on a schedule"
+        ],
+        "result": "Writing the script is the only manual step left.",
+        "variant": "tool-audit",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w37-d02-d",
+      "sourceId": "c30-d30-consistency-stat",
+      "template": "StatCard",
+      "caption": "The single biggest predictor of whether a content push works is whether it is still going in week four.\n\n#ContentStrategy #Marketing #Consistency",
+      "props": {
+        "eyebrow": "MERITBYTE / NUMBERS",
+        "day": 2,
+        "durationInSeconds": 8,
+        "value": "4 weeks",
+        "label": "where most content efforts stop",
+        "context": [
+          "Almost nothing compounds before then.",
+          "Everything compounds after."
+        ],
+        "kicker": "FOLLOW FOR MORE"
+      }
+    }
+  ]
+}

@@ -23,6 +23,18 @@ const OUT_DIR = path.join("public", "audio");
 const BED_SECONDS = 30;
 
 /**
+ * Slack on the end of a bed sized to its video.
+ *
+ * A bed shorter than its composition is the one audio bug nothing downstream
+ * catches: `<Audio>` simply ends, `verify-video.mjs` checks duration and
+ * bitrate rather than sound, and the loudness pass reports on what it is given.
+ * The result is a video whose last moments are silent, which is only noticed by
+ * watching it. Two seconds costs a couple of hundred kilobytes and makes the
+ * failure impossible rather than unlikely.
+ */
+const BED_TAIL_SECONDS = 2;
+
+/**
  * Pitch variants to pre-render for the escalation technique the PDF describes:
  * "repeat one SFX a semitone higher each beat to imply rising absurdity, as on
  * days 1, 8 and 16". Day 1 alone needs +2, +4 and +6.
@@ -102,32 +114,66 @@ function renderSfx() {
   return files;
 }
 
-function renderBeds(only = null, seed = null) {
-  const files = [];
-
-  for (const template of BED_TEMPLATES) {
-    if (only && template !== only) continue;
-    const { layers } = buildBed(template, BED_SECONDS, seed);
-    for (const [layer, buffer] of Object.entries(layers)) {
-      files.push({
-        name: `bed-${template}-${layer}.wav`,
-        buffer,
-        seconds: buffer.length / SAMPLE_RATE,
-      });
-    }
-  }
-  return files;
+/**
+ * One video's bed, filed under its own id.
+ *
+ * The path is `beds/<key>/<layer>.wav`, where the key is the video id when
+ * there is one and the template name otherwise. Namespacing by id is what lets
+ * a shard of renders share a single webpack bundle: every video's bed is a
+ * different piece of music, so under the old flat `bed-<template>-<layer>.wav`
+ * name the public folder had to be rewritten and the project re-bundled
+ * between every render. See the note by `bedSrc` in src/audio/Score.tsx.
+ */
+function renderBed(template, { key = template, seed = null, seconds = BED_SECONDS } = {}) {
+  const { layers } = buildBed(template, seconds, seed);
+  return Object.entries(layers).map(([layer, buffer]) => ({
+    name: path.posix.join("beds", key, `${layer}.wav`),
+    buffer,
+    seconds: buffer.length / SAMPLE_RATE,
+  }));
 }
 
 /**
- * Bed layers dominate the pack: six templates of ~4 layers at 30s each is over
- * 70 MB, and Remotion copies the whole public folder into every bundle. A
- * single render only ever plays one template's bed, so `--template` keeps the
- * other five out of the bundle. Measurably faster; nothing is lost, because
- * the pack is regenerated per render anyway.
+ * The audio for a set of videos.
+ *
+ * Bed layers dominate the pack — six templates of ~4 layers at 30s each is over
+ * 70 MB, and Remotion copies the whole public folder into the bundle — so only
+ * the beds actually being played are written. Passing the videos rather than a
+ * single template is what makes a shard cheap: twelve videos' beds are around
+ * 25 MB together, written once, bundled once, and then rendered twelve times.
+ *
+ * With no videos, every template's bed is written unseeded under its own name,
+ * which is what the Studio needs: it has no plan item, so it has no id.
  */
-export function renderPack({ template = null, seed = null } = {}) {
-  return [...renderSfx(), ...renderBeds(template, seed)];
+export function renderPack({ videos = [] } = {}) {
+  if (videos.length === 0) {
+    return [...renderSfx(), ...BED_TEMPLATES.flatMap((template) => renderBed(template))];
+  }
+
+  const beds = [];
+  const seen = new Set();
+
+  for (const { id, template, durationInSeconds } of videos) {
+    // Templates without a bed of their own — LogoLadder and WorksOnMyMachine
+    // both score against DevJoke's — still need one written under their id.
+    const bedTemplate = BED_TEMPLATES.includes(template) ? template : "DevJoke";
+    const key = id ?? bedTemplate;
+    if (seen.has(key)) continue;
+    seen.add(key);
+
+    // Sized to the video rather than to the longest video in the series. A bed
+    // layer is 2.9 MB per 30 seconds, and a shard of twelve carries four or
+    // five layers each; cutting a 15-second clip's bed in half is most of the
+    // audio a shard has to synthesise, write and serve.
+    const seconds =
+      Number.isFinite(durationInSeconds) && durationInSeconds > 0
+        ? durationInSeconds + BED_TAIL_SECONDS
+        : BED_SECONDS;
+
+    beds.push(...renderBed(bedTemplate, { key, seed: id, seconds }));
+  }
+
+  return [...renderSfx(), ...beds];
 }
 
 function argumentValue(name) {
@@ -135,39 +181,38 @@ function argumentValue(name) {
   return at === -1 ? null : process.argv[at + 1] ?? null;
 }
 
-async function main() {
-  const listOnly = process.argv.includes("--list");
-  const template = argumentValue("--template") ?? process.env.AUDIO_TEMPLATE ?? null;
-  // Seeds the bed's key, mode and phrasing so no two videos share music.
-  const seed = argumentValue("--seed") ?? process.env.AUDIO_SEED ?? null;
-  if (template && !BED_TEMPLATES.includes(template)) {
-    throw new Error(`unknown template "${template}" — have ${BED_TEMPLATES.join(", ")}`);
-  }
+/**
+ * Write the pack for a set of videos, replacing whatever was there.
+ *
+ * Exported because two callers need it without paying for a child process:
+ * render-batch.mjs builds one video's audio, and render-shard.mjs builds a
+ * whole shard's in one pass before it bundles. Both need the write to be
+ * atomic in the sense that matters here — the folder is rebuilt from empty, so
+ * a renamed cue can never leave an orphan behind for the next render to find.
+ */
+export async function writePack(videos = []) {
+  const files = renderPack({ videos });
 
-  const started = Date.now();
-  const files = renderPack({ template, seed });
-
-  if (listOnly) {
-    for (const file of files) {
-      console.log(
-        `  ${file.name.padEnd(28)} ${file.seconds.toFixed(2)}s  peak ${peak(file.buffer).toFixed(3)}`,
-      );
-    }
-    console.log(`\n${files.length} file(s) would be written to ${OUT_DIR}`);
-    return;
-  }
-
-  // Rebuild from empty so a renamed cue cannot leave an orphan behind.
   await rm(OUT_DIR, { recursive: true, force: true });
   await mkdir(OUT_DIR, { recursive: true });
 
   let bytes = 0;
   const silent = [];
+  const madeDirs = new Set();
+
   for (const file of files) {
     if (peak(file.buffer) < 1e-4) silent.push(file.name);
+
+    const target = path.join(OUT_DIR, file.name);
+    const dir = path.dirname(target);
+    if (!madeDirs.has(dir)) {
+      await mkdir(dir, { recursive: true });
+      madeDirs.add(dir);
+    }
+
     const wav = toWav(file.buffer);
     bytes += wav.length;
-    await writeFile(path.join(OUT_DIR, file.name), wav);
+    await writeFile(target, wav);
   }
 
   const manifest = files.map((file) => ({
@@ -184,7 +229,42 @@ async function main() {
     throw new Error(`these cues rendered silent: ${silent.join(", ")}`);
   }
 
-  const sfxCount = files.filter((f) => !f.name.startsWith("bed-")).length;
+  return { files, bytes };
+}
+
+async function main() {
+  const listOnly = process.argv.includes("--list");
+  const template = argumentValue("--template") ?? process.env.AUDIO_TEMPLATE ?? null;
+  // Seeds the bed's key, mode and phrasing so no two videos share music.
+  const seed = argumentValue("--seed") ?? process.env.AUDIO_SEED ?? null;
+  if (template && !BED_TEMPLATES.includes(template)) {
+    throw new Error(`unknown template "${template}" — have ${BED_TEMPLATES.join(", ")}`);
+  }
+
+  // A seeded run is one video's audio; an unseeded one is the Studio's whole
+  // pack. `--template` without `--seed` narrows the Studio pack to one bed.
+  const videos = seed
+    ? [{ id: seed, template: template ?? "DevJoke" }]
+    : template
+      ? [{ id: null, template }]
+      : [];
+
+  const started = Date.now();
+  const files = renderPack({ videos });
+
+  if (listOnly) {
+    for (const file of files) {
+      console.log(
+        `  ${file.name.padEnd(28)} ${file.seconds.toFixed(2)}s  peak ${peak(file.buffer).toFixed(3)}`,
+      );
+    }
+    console.log(`\n${files.length} file(s) would be written to ${OUT_DIR}`);
+    return;
+  }
+
+  const { bytes } = await writePack(videos);
+
+  const sfxCount = files.filter((f) => !f.name.startsWith("beds/")).length;
   console.log(
     `${files.length} file(s) — ${sfxCount} SFX, ${files.length - sfxCount} bed layers — ` +
       `${(bytes / 1e6).toFixed(1)} MB in ${((Date.now() - started) / 1000).toFixed(1)}s`,

@@ -1,0 +1,456 @@
+{
+  "week": 35,
+  "year": 2026,
+  "note": "Campaign days 15-21.",
+  "items": [
+    {
+      "template": "SiteRoast",
+      "sourceId": "c30-d15-roast-own",
+      "caption": "Roast 08, and it is our own site. Three things we would flag immediately on a client build and had quietly tolerated on ours.\n\n#SiteRoast #Agency #WebDesign",
+      "props": {
+        "hook": "We roasted our own website",
+        "episode": "08",
+        "problems": [
+          "Our case studies had no numbers in them",
+          "The contact page asked for a project budget first",
+          "Our own images were the heaviest on the site"
+        ],
+        "fix": "Hold your site to the brief you sell.",
+        "verdict": "The cobbler's children, as always.",
+        "kicker": "ROAST 08"
+      }
+    },
+    {
+      "template": "TechTip",
+      "sourceId": "c30-d15-lighthouse-lie",
+      "caption": "A perfect score on your laptop means very little. Field data is the number your visitors actually experienced.\n\n#CoreWebVitals #WebPerformance #SEO",
+      "props": {
+        "hook": "Your perfect score is misleading",
+        "steps": [
+          "Run the audit, then ignore the score",
+          "Open the field data section instead",
+          "Compare it against your lab result"
+        ],
+        "result": "Lab is your machine. Field is real people.",
+        "variant": "vitals",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "template": "CaseStudy",
+      "sourceId": "c30-d15-case-numbers",
+      "caption": "Their case studies described the process beautifully and never said what changed. Adding one number each did more than a redesign.\n\n#Marketing #ContentStrategy #Agency",
+      "props": {
+        "hook": "Case studies with no numbers",
+        "before": "Nine case studies, all process, no outcome",
+        "after": "Nine case studies that each open with a result",
+        "actions": [
+          "Ask every past client for one metric",
+          "Lead with the number, not the brief",
+          "Say what it was before, not just after"
+        ],
+        "lesson": "Process is interesting. Outcome is persuasive.",
+        "kicker": "FIELD NOTE"
+      }
+    },
+    {
+      "template": "DevJoke",
+      "sourceId": "c30-d15-quick-fix-refactor",
+      "caption": "The quick fix took twenty minutes. Finding out why it was needed took the rest of the day.\n\n#DevLife #TechnicalDebt #SoftwareEngineering",
+      "props": {
+        "hook": "I will just quickly fix that",
+        "beats": [
+          "Fixed it in twenty minutes",
+          "Discovered why it was written that way",
+          "Unfixed it, carefully, over an hour",
+          "Wrote a comment instead"
+        ],
+        "punchline": "Some code is load-bearing on purpose.",
+        "variant": "terminal",
+        "kicker": "DEV LIFE"
+      }
+    },
+
+    {
+      "template": "DevJoke",
+      "sourceId": "c30-d16-small-thing-again",
+      "caption": "Two words that have never once been followed by a small thing.\n\n#ScopeCreep #AgencyLife #DevHumor",
+      "props": {
+        "hook": "While you are in there",
+        "beats": [
+          "While you are in there, move the header",
+          "While you are in there, add a language",
+          "While you are in there, change the CMS"
+        ],
+        "punchline": "Nobody is ever just in there.",
+        "variant": "scope",
+        "kicker": "DEV LIFE"
+      }
+    },
+    {
+      "template": "TechTip",
+      "sourceId": "c30-d16-schema-check",
+      "caption": "Structured data is how a search engine reads your page as facts rather than text. Three minutes to check yours.\n\n#TechnicalSEO #SchemaMarkup #WebDev",
+      "props": {
+        "hook": "Check your structured data works",
+        "steps": [
+          "Paste a page into the rich results test",
+          "Fix every error before any warning",
+          "Confirm the details match the visible page"
+        ],
+        "result": "Markup that contradicts the page is ignored.",
+        "variant": "index-check",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "template": "StatCard",
+      "sourceId": "c30-d16-first-impression",
+      "caption": "The judgement happens before anything is read. That window is design, not copy.\n\n#WebDesign #UX #FirstImpressions",
+      "props": {
+        "value": "50ms",
+        "label": "to form an opinion of your site",
+        "context": ["That is faster than reading a headline.", "It is entirely visual."],
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "template": "ListReveal",
+      "sourceId": "c30-d16-scope-clauses",
+      "caption": "Four lines worth having in every contract, each one written after the project that taught us to add it.\n\n#Freelance #Agency #ClientWork",
+      "props": {
+        "headline": "Four contract lines worth having",
+        "items": [
+          "How many rounds of revision are included",
+          "What a delay on their side does to the date",
+          "Who owns the source files after payment",
+          "What counts as complete, in writing"
+        ],
+        "kicker": "SAVE THIS"
+      }
+    },
+
+    {
+      "template": "TechTip",
+      "sourceId": "c30-d17-bulk-pages",
+      "caption": "Generating pages at scale is easy. Generating pages worth indexing is the part people skip.\n\n#SEO #ProgrammaticSEO #ContentStrategy",
+      "props": {
+        "hook": "Generating pages at scale, carefully",
+        "steps": [
+          "Give every page one fact nothing else has",
+          "Block the template from indexing until reviewed",
+          "Delete any page you would not link to"
+        ],
+        "result": "Volume without substance is index bloat.",
+        "variant": "index-check",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "template": "CaseStudy",
+      "sourceId": "c30-d17-cms-migration",
+      "caption": "Migrating the content was three days. Mapping the old URLs was two hours and saved the entire launch.\n\n#WebDev #Migration #SEO",
+      "props": {
+        "hook": "The migration nobody noticed",
+        "before": "Nine hundred URLs about to change shape",
+        "after": "Every old link still lands correctly",
+        "actions": [
+          "Export every indexed URL before you start",
+          "Map old to new before touching the content",
+          "Keep the map in the repository, not a spreadsheet"
+        ],
+        "lesson": "A good migration is invisible from outside.",
+        "kicker": "FIELD NOTE"
+      }
+    },
+    {
+      "template": "StatCard",
+      "sourceId": "c30-d17-broken-links",
+      "caption": "Broken internal links are the cheapest thing on this list to fix and the most likely to already exist.\n\n#SEO #WebDev #SiteAudit",
+      "props": {
+        "value": "1 in 12",
+        "label": "internal links point somewhere gone",
+        "context": ["Most were fine when they were written.", "Nothing checks them afterwards."],
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "template": "DevJoke",
+      "sourceId": "c30-d17-ai-wrote-it",
+      "caption": "It compiled, it ran, and it confidently did the wrong thing in a way that took an afternoon to spot.\n\n#DevLife #AI #SoftwareEngineering",
+      "props": {
+        "hook": "It compiled, so it must work",
+        "beats": [
+          "The code ran on the first try",
+          "The tests passed on the first try",
+          "The tests were also generated",
+          "Both agreed on the wrong answer"
+        ],
+        "punchline": "Confidence is not the same as correctness.",
+        "variant": "qa",
+        "kicker": "DEV LIFE"
+      }
+    },
+
+    {
+      "template": "CaseStudy",
+      "sourceId": "c30-d18-password-found",
+      "caption": "We found a live database password in a public JavaScript file. It had been there for fourteen months.\n\n#WebSecurity #DevOps #CaseStudy",
+      "props": {
+        "hook": "We found their password publicly",
+        "before": "Credentials committed into a public bundle",
+        "after": "Secrets in the environment, rotated quarterly",
+        "actions": [
+          "Search your built files for the word password",
+          "Rotate anything that was ever committed",
+          "Add a scanner to the pipeline, not a policy"
+        ],
+        "lesson": "A rotated secret beats a deleted commit.",
+        "kicker": "FIELD NOTE"
+      }
+    },
+    {
+      "template": "TechTip",
+      "sourceId": "c30-d18-secret-scan",
+      "caption": "Deleting the commit does not remove the secret. Rotation is the only fix that actually works.\n\n#WebSecurity #Git #DevOps",
+      "props": {
+        "hook": "Deleting the commit changes nothing",
+        "steps": [
+          "Assume anything committed once is public",
+          "Rotate the credential before cleaning history",
+          "Add a pre-commit scanner so it cannot repeat"
+        ],
+        "result": "History is cached in more places than yours.",
+        "variant": "security",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "template": "ListReveal",
+      "sourceId": "c30-d18-incident-list",
+      "caption": "The four things to do in the first hour of an incident, in order, before anyone starts guessing.\n\n#DevOps #IncidentResponse #Reliability",
+      "props": {
+        "headline": "The first hour of an incident",
+        "items": [
+          "Say out loud who is running this",
+          "Stop the bleeding before finding the cause",
+          "Write down what changed in the last day",
+          "Tell customers before they tell you"
+        ],
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "template": "DevJoke",
+      "sourceId": "c30-d18-nothing-changed",
+      "caption": "Nothing changed on our side is technically true and almost never the whole sentence.\n\n#DevLife #DevOps #DevHumor",
+      "props": {
+        "hook": "Nothing changed on our side",
+        "beats": [
+          "No deploys since Tuesday",
+          "No config changes at all",
+          "A dependency updated itself overnight",
+          "A certificate expired at midnight"
+        ],
+        "punchline": "Nothing changed is a claim about attention.",
+        "variant": "deploy",
+        "kicker": "DEV LIFE"
+      }
+    },
+
+    {
+      "template": "FounderStory",
+      "sourceId": "c30-d19-day-one-four-hundred",
+      "caption": "Day one we said yes to everything. Day four hundred we said no to most things and grew faster.\n\n#Founder #AgencyLife #Motivation",
+      "props": {
+        "hook": "Day one versus day four hundred",
+        "moments": [
+          "Day one: any project, any budget, any deadline",
+          "Day two hundred: busy, and barely profitable",
+          "Day four hundred: one kind of work, done well"
+        ],
+        "turn": "We wrote down the work we would decline.",
+        "lesson": "Saying no is how a service becomes a business.",
+        "kicker": "FOUNDER NOTE"
+      }
+    },
+    {
+      "template": "TechTip",
+      "sourceId": "c30-d19-analytics-truth",
+      "caption": "Most analytics disagreements are one setting. Check it before anyone argues about the numbers.\n\n#Analytics #Marketing #WebDev",
+      "props": {
+        "hook": "Your analytics disagree for one reason",
+        "steps": [
+          "Check whether internal traffic is excluded",
+          "Check the timezone on every report",
+          "Check that one tag is not firing twice"
+        ],
+        "result": "Double-counted tags flatter every number.",
+        "variant": "devtools",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "template": "CaseStudy",
+      "sourceId": "c30-d19-pricing-page",
+      "caption": "They had no pricing page because it felt risky. The enquiries they lost were the ones that were never going to close anyway.\n\n#Marketing #Pricing #ConversionRate",
+      "props": {
+        "hook": "They were afraid to show pricing",
+        "before": "No prices, and a full calendar of bad calls",
+        "after": "Starting prices, and half the calls, all real",
+        "actions": [
+          "Publish a starting figure, not a full menu",
+          "Say what changes the number, and why",
+          "Name who this is not for"
+        ],
+        "lesson": "Filtering early is cheaper than filtering late.",
+        "kicker": "FIELD NOTE"
+      }
+    },
+    {
+      "template": "DevJoke",
+      "sourceId": "c30-d19-legacy-code",
+      "caption": "Legacy code is any code written by someone who is not currently in the room. Including you, last year.\n\n#DevLife #TechnicalDebt #DevHumor",
+      "props": {
+        "hook": "Who wrote this terrible code",
+        "beats": [
+          "Ran the blame command",
+          "The author was me",
+          "The date was eleven months ago",
+          "The commit message said temporary"
+        ],
+        "punchline": "Temporary is the longest-lived word in code.",
+        "variant": "comments",
+        "kicker": "DEV LIFE"
+      }
+    },
+
+    {
+      "template": "DevJoke",
+      "sourceId": "c30-d20-two-weeks",
+      "caption": "Two weeks is not an estimate, it is a feeling. Estimates have assumptions attached to them.\n\n#DevLife #ProjectManagement #DevHumor",
+      "props": {
+        "hook": "It should take about two weeks",
+        "beats": [
+          "Week one: understanding the actual problem",
+          "Week two: the work, as estimated",
+          "Week three: the parts nobody mentioned",
+          "Week four: the review nobody scheduled"
+        ],
+        "punchline": "Estimate the unknowns or inherit them.",
+        "variant": "timer",
+        "kicker": "DEV LIFE"
+      }
+    },
+    {
+      "template": "TechTip",
+      "sourceId": "c30-d20-rollback-plan",
+      "caption": "A deploy without a rollback is a bet. Three questions to answer before the button, not after.\n\n#DevOps #Deployment #Reliability",
+      "props": {
+        "hook": "Answer three questions before deploying",
+        "steps": [
+          "How do we know within five minutes it broke?",
+          "How long does going back actually take?",
+          "Who can do it if you are unreachable?"
+        ],
+        "result": "A rollback nobody has practised is a plan, not a fix.",
+        "variant": "security",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "template": "StatCard",
+      "sourceId": "c30-d20-change-failure",
+      "caption": "Most outages trace back to a change. That is not an argument for changing less, it is one for changing smaller.\n\n#DevOps #Reliability #Engineering",
+      "props": {
+        "value": "70%",
+        "label": "of outages follow a recent change",
+        "context": ["Smaller changes fail smaller.", "And they are far easier to undo."],
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "template": "ListReveal",
+      "sourceId": "c30-d20-oncall-list",
+      "caption": "Four things that should exist before anyone is asked to carry a pager.\n\n#DevOps #OnCall #Engineering",
+      "props": {
+        "headline": "Before anyone goes on call",
+        "items": [
+          "An alert that means something is actually wrong",
+          "A runbook for the three likeliest failures",
+          "Permission to wake someone more senior",
+          "Time back the next day, in writing"
+        ],
+        "kicker": "SAVE THIS"
+      }
+    },
+
+    {
+      "template": "TechTip",
+      "sourceId": "c30-d21-vitals-quick",
+      "caption": "The three metrics that matter, what each one actually measures, and the usual cause of each.\n\n#CoreWebVitals #WebPerformance #SEO",
+      "props": {
+        "hook": "Three vitals, three usual causes",
+        "steps": [
+          "Slow largest paint is usually one big image",
+          "Layout shift is usually a missing dimension",
+          "Slow interaction is usually too much JavaScript"
+        ],
+        "result": "The cause is nearly always one of these three.",
+        "variant": "vitals",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "template": "SiteRoast",
+      "sourceId": "c30-d21-roast-09",
+      "caption": "Roast 09. A charity site where donating takes six taps and reading the annual report takes one.\n\n#SiteRoast #UX #Nonprofit",
+      "props": {
+        "hook": "Six taps to give them money",
+        "episode": "09",
+        "problems": [
+          "The donate button scrolls away immediately",
+          "The amount screen offers eight options",
+          "Card entry redirects to a different domain"
+        ],
+        "fix": "Three amounts, one screen, same domain.",
+        "verdict": "Friction is a policy choice.",
+        "kicker": "ROAST 09"
+      }
+    },
+    {
+      "template": "CaseStudy",
+      "sourceId": "c30-d21-alt-rollout",
+      "caption": "Two thousand images with no alt text. We did not write two thousand descriptions, and the audit still passed.\n\n#Accessibility #A11y #CaseStudy",
+      "props": {
+        "hook": "Two thousand images, no descriptions",
+        "before": "Every image announced as image",
+        "after": "Described where it matters, hidden where it does not",
+        "actions": [
+          "Mark decorative images as decorative",
+          "Describe only what carries meaning",
+          "Make the field required for new uploads"
+        ],
+        "lesson": "Not every image needs words. Most need a decision.",
+        "kicker": "FIELD NOTE"
+      }
+    },
+    {
+      "template": "DevJoke",
+      "sourceId": "c30-d21-clear-your-cache",
+      "caption": "Have you tried clearing your cache is support's version of have you tried turning it off and on again.\n\n#DevLife #Support #DevHumor",
+      "props": {
+        "hook": "Have you tried clearing your cache",
+        "beats": [
+          "They cleared the cache",
+          "They cleared it again, harder",
+          "They tried a different browser",
+          "Their office proxy was caching it"
+        ],
+        "punchline": "The cache was real. It was just not theirs.",
+        "variant": "cache",
+        "kicker": "DEV LIFE"
+      }
+    }
+  ]
+}

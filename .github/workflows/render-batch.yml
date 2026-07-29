@@ -15,6 +15,13 @@ on:
     # the rest of the day's work — which is how a whole morning was lost to one
     # bad release tag. Four runs mean four independent failures, four retries,
     # and six hours to notice each one.
+    #
+    # Each run tops the day up to four rather than rendering exactly one.
+    # GitHub delays scheduled workflows under load and drops them outright when
+    # it is busy enough, and a run that renders exactly one turns every dropped
+    # run into a video that is never made up — the daily rate silently becomes
+    # three and a 37-day campaign quietly becomes a 50-day one. Topping up means
+    # the next run absorbs the miss. See countFor() in scripts/render-batch.mjs.
     - cron: "45 3,9,15,21 * * *"
   workflow_dispatch:
     inputs:
@@ -38,19 +45,25 @@ concurrency:
 jobs:
   render:
     runs-on: ubuntu-latest
-    # A scheduled run renders one video: ~4.5 minutes on a developer machine,
-    # rather longer on a two-core runner doing software GL with x264 preset
-    # "slow". Sixty minutes is a bad day for one video, not the expected one.
+    # A scheduled run normally renders one video: ~4.5 minutes on a developer
+    # machine, rather longer on a two-core runner doing software GL with x264
+    # preset "slow". But it renders up to four when earlier runs of the day were
+    # dropped, and four renders at twelve minutes plus install and the browser
+    # needs well past an hour.
     #
-    # A manual run is the catch-up path and may ask for four. Four renders that
-    # each take twelve minutes plus install and the browser lands within a
-    # whisker of the same ceiling, and a timeout kills the job *after* the
-    # earlier videos have already been archived — paying for the render and
-    # discarding the run. The manual ceiling is sized for the input it accepts.
-    timeout-minutes: ${{ github.event_name == 'workflow_dispatch' && 180 || 60 }}
+    # A timeout is not catastrophic here — videos are archived and recorded one
+    # at a time, so everything finished before the kill is kept and the next run
+    # picks up the remainder. The ceiling exists to stop a wedged render holding
+    # the concurrency group, not to bound the work.
+    timeout-minutes: 180
     env:
       DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && '1' || '0' }}
-      RENDER_COUNT: ${{ github.event_name == 'workflow_dispatch' && inputs.count || '1' }}
+      # Empty on a scheduled run, so scripts/render-batch.mjs works out how many
+      # videos today still owes. An explicit count always wins, which is what
+      # makes the manual dispatch a usable override.
+      RENDER_COUNT: ${{ github.event_name == 'workflow_dispatch' && inputs.count || '' }}
+      # The daily rate. Change it here rather than editing the cron.
+      DAILY_TARGET: "4"
 
     steps:
       - uses: actions/checkout@v4

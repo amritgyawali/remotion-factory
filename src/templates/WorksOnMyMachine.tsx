@@ -198,7 +198,7 @@ export const WorksOnMyMachine: React.FC<WorksOnMyMachineProps> = ({
   if (s.scene === "endcard" && s.endcard) {
     return (
       <AbsoluteFill style={{ background: CANVAS }}>
-        <Soundtrack score={resolveScore(score ?? machineScore(), "DevJoke", 15 * 30, 30)} />
+        <Soundtrack score={resolveScore(score ?? machineScore(), "DevJoke", 15 * 30, 30)} videoId={videoId} />
         <EndCard endcard={s.endcard} theme={theme} />
       </AbsoluteFill>
     );
@@ -206,7 +206,7 @@ export const WorksOnMyMachine: React.FC<WorksOnMyMachineProps> = ({
 
   return (
     <AbsoluteFill style={{ background: CANVAS }}>
-      <Soundtrack score={resolveScore(score ?? machineScore(), "DevJoke", 15 * 30, 30)} />
+      <Soundtrack score={resolveScore(score ?? machineScore(), "DevJoke", 15 * 30, 30)} videoId={videoId} />
 
       {/* Hook band. On screen from frame 1, never animates in. */}
       <div

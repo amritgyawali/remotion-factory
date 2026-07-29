@@ -296,7 +296,7 @@ export const LogoLadder: React.FC<LogoLadderProps> = ({
         strip at the freeze and the dead stop at 11-12s are structural to this
         template and must not depend on someone remembering to write them out.
       */}
-      <Soundtrack score={resolveScore(score ?? ladderScore(), "DevJoke", 17 * 30, 30)} />
+      <Soundtrack score={resolveScore(score ?? ladderScore(), "DevJoke", 17 * 30, 30)} videoId={videoId} />
 
       {s.scene === "endcard" && s.endcard ? (
         <EndCard endcard={s.endcard} theme={theme} />

@@ -65,18 +65,56 @@ test("synthesis is deterministic across runs", () => {
 });
 
 test("the pack covers every template's bed and names no duplicates", () => {
+  // No videos: the Studio's pack. Every bed is written under its template name,
+  // because the Studio has no plan item and therefore no id.
   const files = renderPack();
   const names = files.map((file) => file.name);
   assert.equal(new Set(names).size, names.length, "two cues would write to one filename");
 
   for (const template of BED_TEMPLATES) {
     assert.ok(
-      names.some((name) => name.startsWith(`bed-${template}-`)),
+      names.some((name) => name.startsWith(`beds/${template}/`)),
       `no bed layers rendered for ${template}`,
     );
   }
   // Day 1 alone escalates a snap through +2, +4 and +6.
   for (const st of [2, 4, 6]) assert.ok(names.includes(`snap-p${st}.wav`), `missing snap-p${st}`);
+});
+
+test("a shard's beds are namespaced per video, not per template", () => {
+  // This is what lets one webpack bundle serve a whole shard: every video's bed
+  // is a different piece of music, so under a shared filename the public folder
+  // would have to be rewritten and the project re-bundled between renders.
+  const files = renderPack({
+    videos: [
+      { id: "w33-d01-a", template: "DevJoke" },
+      { id: "w33-d01-b", template: "DevJoke" },
+    ],
+  });
+  const names = files.map((file) => file.name);
+
+  assert.equal(new Set(names).size, names.length, "two videos would write to one filename");
+  assert.ok(names.some((name) => name.startsWith("beds/w33-d01-a/")));
+  assert.ok(names.some((name) => name.startsWith("beds/w33-d01-b/")));
+
+  // Same template, same layer, different music — otherwise namespacing the
+  // paths would be filing two copies of one bed under two names.
+  const layerFor = (id) => files.find((file) => file.name === `beds/${id}/pluck.wav`);
+  assert.notDeepEqual(
+    Array.from(layerFor("w33-d01-a").buffer.subarray(0, 4000)),
+    Array.from(layerFor("w33-d01-b").buffer.subarray(0, 4000)),
+  );
+});
+
+test("templates without a bed of their own still get one", () => {
+  // LogoLadder and WorksOnMyMachine both score against DevJoke's bed. Without a
+  // fallback their <Audio> tags point at files that were never written, which
+  // renders as a silent video rather than as an error.
+  const files = renderPack({ videos: [{ id: "w33-d05-a", template: "WorksOnMyMachine" }] });
+  assert.ok(
+    files.some((file) => file.name.startsWith("beds/w33-d05-a/")),
+    "a bedless template must still write a bed under its own id",
+  );
 });
 
 test("wav encoding produces a readable 48kHz mono header", () => {

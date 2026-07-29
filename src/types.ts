@@ -191,6 +191,12 @@ export type Plan = {
   week?: {
     id: string;
     order: number;
+    /**
+     * A deliberately short final week. 30 days is four weeks and a two-day
+     * remainder, and without this the 28-item rule reads that remainder as an
+     * under-filled week — which is the failure it exists to catch.
+     */
+    partial?: boolean;
   };
   /** "draft" | "schedule" | "now" — start on draft. */
   postType: "draft" | "schedule" | "now";

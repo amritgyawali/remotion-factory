@@ -113,7 +113,7 @@ export const Recap: React.FC<RecapProps> = ({
   const boardFrom = totalsFrom + Math.max(30, totals.length * 12);
 
   return (
-    <Frame theme={theme} template="Recap" score={score}>
+    <Frame theme={theme} template="Recap" score={score} videoId={videoId}>
       <AbsoluteFill
         style={{
           boxSizing: "border-box",

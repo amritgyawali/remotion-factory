@@ -1,0 +1,601 @@
+{
+  "series": "MeritByte — Build Better",
+  "mode": "queue",
+  "week": {
+    "id": "2026-w36",
+    "order": 202636
+  },
+  "postType": "schedule",
+  "channels": [
+    "cmruyn0l40003of9gif9fkkvz",
+    "cmru3v02i0001qh6tba0sefis",
+    "cmruzqbfl0007ph7uso34siqt",
+    "cmruzbsts0001ph7ujfzqsh29"
+  ],
+  "channelSettings": {
+    "instagram-standalone": {
+      "__type": "instagram-standalone",
+      "post_type": "post"
+    },
+    "x": {
+      "__type": "x",
+      "who_can_reply_post": "everyone"
+    },
+    "threads": {
+      "__type": "threads"
+    },
+    "facebook": {
+      "__type": "facebook",
+      "post_type": "post"
+    },
+    "linkedin": {
+      "__type": "linkedin"
+    }
+  },
+  "items": [
+    {
+      "id": "w36-d01-a",
+      "sourceId": "c30-d22-roast-10",
+      "template": "SiteRoast",
+      "caption": "Roast 10. A restaurant site where the menu is a photograph of a printed menu. Three fixes, one of them free.\n\n#SiteRoast #UX #Hospitality",
+      "props": {
+        "eyebrow": "MERITBYTE / SITE ROAST",
+        "day": 1,
+        "durationInSeconds": 22,
+        "hook": "The menu is a photograph",
+        "episode": "10",
+        "problems": [
+          "The menu is an image nobody can zoom",
+          "Opening hours live only in the footer",
+          "The phone number is not a link"
+        ],
+        "fix": "Menu as text, hours at the top, tap to call.",
+        "verdict": "People came here for three facts.",
+        "kicker": "ROAST 10"
+      }
+    },
+    {
+      "id": "w36-d01-b",
+      "sourceId": "c30-d22-local-schema",
+      "template": "TechTip",
+      "caption": "Three fields that decide whether a local business shows up correctly in search and maps.\n\n#LocalSEO #SchemaMarkup #SmallBusiness",
+      "props": {
+        "eyebrow": "MERITBYTE / QUICK WIN",
+        "day": 1,
+        "durationInSeconds": 20,
+        "hook": "Three fields local search needs",
+        "steps": [
+          "Name, address and phone, identical everywhere",
+          "Opening hours as data, not as an image",
+          "One canonical location page per address"
+        ],
+        "result": "Inconsistent details are why listings disagree.",
+        "variant": "index-check",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w36-d01-c",
+      "sourceId": "c30-d22-local-intent",
+      "template": "StatCard",
+      "caption": "Local searches are not browsing. They are someone deciding where to go in the next hour.\n\n#LocalSEO #SmallBusiness #Marketing",
+      "props": {
+        "eyebrow": "MERITBYTE / NUMBERS",
+        "day": 1,
+        "durationInSeconds": 8,
+        "value": "76%",
+        "label": "of local searches lead to a visit",
+        "context": [
+          "Usually within twenty-four hours.",
+          "Usually to whoever answered clearly."
+        ],
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w36-d01-d",
+      "sourceId": "c30-d22-make-it-pop-again",
+      "template": "DevJoke",
+      "caption": "Pop is not a design instruction, it is a feeling looking for one. The job is translating it.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MERITBYTE / DEV LIFE",
+        "day": 1,
+        "durationInSeconds": 15,
+        "hook": "Can you make it pop more",
+        "beats": [
+          "Increased the contrast",
+          "Increased the size",
+          "Increased the saturation",
+          "They meant the headline was wrong"
+        ],
+        "punchline": "Pop usually means I do not believe it yet.",
+        "variant": "logo",
+        "kicker": "DEV LIFE"
+      }
+    },
+    {
+      "id": "w36-d02-a",
+      "sourceId": "c30-d23-boring-beats",
+      "template": "FounderStory",
+      "caption": "The clever campaign got attention for a week. The boring weekly habit got clients for two years.\n\n#Founder #Marketing #Consistency",
+      "props": {
+        "eyebrow": "MERITBYTE / FOUNDER",
+        "day": 2,
+        "durationInSeconds": 20,
+        "hook": "Boring beat clever, every time",
+        "moments": [
+          "The clever launch got a good week",
+          "Then it got nothing at all",
+          "The dull weekly post kept compounding"
+        ],
+        "turn": "We stopped launching and started showing up.",
+        "lesson": "Consistency outperforms brilliance you cannot repeat.",
+        "kicker": "FOUNDER NOTE"
+      }
+    },
+    {
+      "id": "w36-d02-b",
+      "sourceId": "c30-d23-content-repeat",
+      "template": "TechTip",
+      "caption": "One useful thing a week beats one brilliant thing a quarter. Here is the format that survives a busy month.\n\n#ContentStrategy #Marketing #Agency",
+      "props": {
+        "eyebrow": "MERITBYTE / QUICK WIN",
+        "day": 2,
+        "durationInSeconds": 20,
+        "hook": "A format that survives busy weeks",
+        "steps": [
+          "Write down the question a client asked you",
+          "Answer it in the words you used out loud",
+          "Publish it before you improve it"
+        ],
+        "result": "Real questions outperform invented topics.",
+        "variant": "tool-audit",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w36-d02-c",
+      "sourceId": "c30-d23-newsletter-revive",
+      "template": "CaseStudy",
+      "caption": "A list of nine thousand people who had not been emailed in a year. We did not buy anything, we just started again carefully.\n\n#EmailMarketing #Marketing #CaseStudy",
+      "props": {
+        "eyebrow": "MERITBYTE / FIELD NOTE",
+        "day": 2,
+        "durationInSeconds": 22,
+        "hook": "Nine thousand forgotten subscribers",
+        "before": "A year of silence, then a sales email",
+        "after": "A slow restart, and a list that opens",
+        "actions": [
+          "Email the recently active first, in batches",
+          "Say plainly why they are hearing from you",
+          "Remove anyone who does not open twice"
+        ],
+        "lesson": "A smaller list that opens is worth more.",
+        "kicker": "FIELD NOTE"
+      }
+    },
+    {
+      "id": "w36-d02-d",
+      "sourceId": "c30-d23-one-more-round",
+      "template": "DevJoke",
+      "caption": "Round seven was identical to round two. We know because we kept both files.\n\n#DesignProcess #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MERITBYTE / DEV LIFE",
+        "day": 2,
+        "durationInSeconds": 15,
+        "hook": "Can we see one more option",
+        "beats": [
+          "Round two was warm and simple",
+          "Rounds three to six explored bravely",
+          "Round seven was round two again",
+          "Nobody remembered round two"
+        ],
+        "punchline": "Show fewer options and keep the receipts.",
+        "variant": "comments",
+        "kicker": "DEV LIFE"
+      }
+    },
+    {
+      "id": "w36-d03-a",
+      "sourceId": "c30-d24-final-approval",
+      "template": "DevJoke",
+      "caption": "Final approval is a state, not an event, and it can be left at any time by a single new stakeholder.\n\n#AgencyLife #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MERITBYTE / DEV LIFE",
+        "day": 3,
+        "durationInSeconds": 15,
+        "hook": "This is signed off and final",
+        "beats": [
+          "Signed off by the marketing lead",
+          "Signed off by the director",
+          "Then the founder saw it on a phone",
+          "Back to round three"
+        ],
+        "punchline": "Sign-off needs a name, not a chorus.",
+        "variant": "scope",
+        "kicker": "DEV LIFE"
+      }
+    },
+    {
+      "id": "w36-d03-b",
+      "sourceId": "c30-d24-staging-block",
+      "template": "TechTip",
+      "caption": "If your staging site is in search results, it is competing with the real one. Two settings stop it.\n\n#TechnicalSEO #WebDev #DevOps",
+      "props": {
+        "eyebrow": "MERITBYTE / QUICK WIN",
+        "day": 3,
+        "durationInSeconds": 20,
+        "hook": "Your staging site is indexed",
+        "steps": [
+          "Search site:staging for your own domain",
+          "Put staging behind a password, not a robots rule",
+          "A robots file is a request, not a lock"
+        ],
+        "result": "A password is the only reliable block.",
+        "variant": "security",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w36-d03-c",
+      "sourceId": "c30-d24-brief-red-flags",
+      "template": "ListReveal",
+      "caption": "Four things in an enquiry that reliably predict a difficult project. None of them are about budget.\n\n#Freelance #Agency #ClientWork",
+      "props": {
+        "eyebrow": "MERITBYTE / CHECKLIST",
+        "day": 3,
+        "durationInSeconds": 10,
+        "headline": "Four early signs of a hard project",
+        "items": [
+          "They will not say who makes the decision",
+          "The last agency was terrible, unexplained",
+          "The deadline came before the requirements",
+          "Every question gets answered with soon"
+        ],
+        "kicker": "FOLLOW FOR MORE"
+      }
+    },
+    {
+      "id": "w36-d03-d",
+      "sourceId": "c30-d24-rework-cost",
+      "template": "StatCard",
+      "caption": "Rework is rarely a skills problem. It is almost always a decision that was never actually made.\n\n#ProjectManagement #Agency #Efficiency",
+      "props": {
+        "eyebrow": "MERITBYTE / NUMBERS",
+        "day": 3,
+        "durationInSeconds": 8,
+        "value": "34%",
+        "label": "of project time is spent on rework",
+        "context": [
+          "Most of it traces to an unclear brief.",
+          "Almost none of it is billable."
+        ],
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w36-d04-a",
+      "sourceId": "c30-d25-ticket-deflection",
+      "template": "CaseStudy",
+      "caption": "Sixty percent fewer tickets, and not one of them was answered by a bot. They were answered before they were asked.\n\n#CustomerSupport #UX #CaseStudy",
+      "props": {
+        "eyebrow": "MERITBYTE / FIELD NOTE",
+        "day": 4,
+        "durationInSeconds": 22,
+        "hook": "Sixty percent fewer support tickets",
+        "before": "Every question arriving as an email",
+        "after": "Most questions answered before they are asked",
+        "actions": [
+          "Tag six months of tickets by real cause",
+          "Fix the top three causes in the product",
+          "Answer the next three on the page itself"
+        ],
+        "lesson": "Deflection is a product fix wearing a support hat.",
+        "kicker": "FIELD NOTE"
+      }
+    },
+    {
+      "id": "w36-d04-b",
+      "sourceId": "c30-d25-error-messages",
+      "template": "TechTip",
+      "caption": "Three rules for an error message that reduces support load instead of generating it.\n\n#UX #ProductDesign #WebDev",
+      "props": {
+        "eyebrow": "MERITBYTE / QUICK WIN",
+        "day": 4,
+        "durationInSeconds": 20,
+        "hook": "Write errors people can act on",
+        "steps": [
+          "Say what happened, in their words",
+          "Say what to do next, specifically",
+          "Never blame the person reading it"
+        ],
+        "result": "Something went wrong is a support ticket.",
+        "variant": "design-code",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w36-d04-c",
+      "sourceId": "c30-d25-support-cost",
+      "template": "StatCard",
+      "caption": "The cheapest support ticket is the one nobody needed to open.\n\n#CustomerSupport #Operations #SaaS",
+      "props": {
+        "eyebrow": "MERITBYTE / NUMBERS",
+        "day": 4,
+        "durationInSeconds": 8,
+        "value": "$18",
+        "label": "average cost of one support ticket",
+        "context": [
+          "Answering it once in the product is free.",
+          "Forever, and for everybody."
+        ],
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w36-d04-d",
+      "sourceId": "c30-d25-urgent-tag",
+      "template": "DevJoke",
+      "caption": "When everything is urgent, urgent stops carrying information and starts carrying volume.\n\n#ProjectManagement #DevLife #DevHumor",
+      "props": {
+        "eyebrow": "MERITBYTE / DEV LIFE",
+        "day": 4,
+        "durationInSeconds": 15,
+        "hook": "Everything is marked urgent",
+        "beats": [
+          "Fourteen urgent tickets this morning",
+          "Three are genuinely urgent",
+          "Nine are urgent to one person",
+          "Two were urgent last March"
+        ],
+        "punchline": "Priority only works if something is not it.",
+        "variant": "timer",
+        "kicker": "DEV LIFE"
+      }
+    },
+    {
+      "id": "w36-d05-a",
+      "sourceId": "c30-d26-hacked-check",
+      "template": "TechTip",
+      "caption": "Four signs worth checking before you panic, and before you pay anyone to tell you the same thing.\n\n#WebSecurity #SiteAudit #WebDev",
+      "props": {
+        "eyebrow": "MERITBYTE / QUICK WIN",
+        "day": 5,
+        "durationInSeconds": 20,
+        "hook": "Four signs your site is compromised",
+        "steps": [
+          "Search your site for pages you never wrote",
+          "Check for admin users nobody recognises",
+          "Compare file timestamps against your last deploy"
+        ],
+        "result": "Unknown pages in search are the usual first sign.",
+        "variant": "security",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w36-d05-b",
+      "sourceId": "c30-d26-spam-injection",
+      "template": "CaseStudy",
+      "caption": "Four hundred pages of pharmacy spam, invisible to logged-in users, indexed for eight months.\n\n#WebSecurity #SEO #CaseStudy",
+      "props": {
+        "eyebrow": "MERITBYTE / FIELD NOTE",
+        "day": 5,
+        "durationInSeconds": 22,
+        "hook": "Four hundred pages nobody wrote",
+        "before": "Spam pages served only to search engines",
+        "after": "Clean index, rotated keys, monitored weekly",
+        "actions": [
+          "Fetch your own site as a search engine",
+          "Rotate every credential before cleaning up",
+          "Request removal of what was indexed"
+        ],
+        "lesson": "Cloaked spam is invisible while you are logged in.",
+        "kicker": "FIELD NOTE"
+      }
+    },
+    {
+      "id": "w36-d05-c",
+      "sourceId": "c30-d26-hardening-list",
+      "template": "ListReveal",
+      "caption": "Five hardening steps that take an afternoon and prevent most of what actually happens.\n\n#WebSecurity #DevOps #BestPractices",
+      "props": {
+        "eyebrow": "MERITBYTE / CHECKLIST",
+        "day": 5,
+        "durationInSeconds": 10,
+        "headline": "Five hardening steps worth an afternoon",
+        "items": [
+          "Two-factor on the registrar, not just the CMS",
+          "Unique admin accounts, no shared logins",
+          "Automatic security updates, verified weekly",
+          "Backups stored somewhere the server cannot reach",
+          "Alerts on new admin user creation"
+        ],
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w36-d05-d",
+      "sourceId": "c30-d26-password-sticky",
+      "template": "DevJoke",
+      "caption": "The password policy was strong. The implementation of it was on a sticky note under the keyboard.\n\n#WebSecurity #DevLife #DevHumor",
+      "props": {
+        "eyebrow": "MERITBYTE / DEV LIFE",
+        "day": 5,
+        "durationInSeconds": 15,
+        "hook": "Our password policy is very strict",
+        "beats": [
+          "Sixteen characters, mixed case, symbols",
+          "Rotated every thirty days, enforced",
+          "Written on a note under the keyboard",
+          "Shared with the whole team anyway"
+        ],
+        "punchline": "Policies people cannot follow become workarounds.",
+        "variant": "terminal",
+        "kicker": "DEV LIFE"
+      }
+    },
+    {
+      "id": "w36-d06-a",
+      "sourceId": "c30-d27-cache-explained",
+      "template": "DevJoke",
+      "caption": "Explaining cache again, this time with the CDN, the browser and the plugin all disagreeing politely.\n\n#DevLife #WebDev #DevHumor",
+      "props": {
+        "eyebrow": "MERITBYTE / DEV LIFE",
+        "day": 6,
+        "durationInSeconds": 15,
+        "hook": "Explaining cache, one more time",
+        "beats": [
+          "The CDN says it is fresh",
+          "The plugin says it is cleared",
+          "The browser says it is yesterday",
+          "All three are telling the truth"
+        ],
+        "punchline": "Cache is four systems agreeing to disagree.",
+        "variant": "cache",
+        "kicker": "DEV LIFE"
+      }
+    },
+    {
+      "id": "w36-d06-b",
+      "sourceId": "c30-d27-cache-headers",
+      "template": "TechTip",
+      "caption": "Cache confusion is usually one missing header. Version your files and the problem stops existing.\n\n#WebPerformance #HTTP #WebDev",
+      "props": {
+        "eyebrow": "MERITBYTE / QUICK WIN",
+        "day": 6,
+        "durationInSeconds": 20,
+        "hook": "Stop fighting your own cache",
+        "steps": [
+          "Put a content hash in every asset filename",
+          "Cache hashed files for a year, immutably",
+          "Never cache the HTML that references them"
+        ],
+        "result": "Versioned filenames make clearing unnecessary.",
+        "variant": "devtools",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w36-d06-c",
+      "sourceId": "c30-d27-cdn-cost",
+      "template": "CaseStudy",
+      "caption": "Their bandwidth bill tripled in a month. Nothing had launched. One header was missing from one folder.\n\n#WebPerformance #DevOps #CaseStudy",
+      "props": {
+        "eyebrow": "MERITBYTE / FIELD NOTE",
+        "day": 6,
+        "durationInSeconds": 22,
+        "hook": "The bill tripled, nothing launched",
+        "before": "Every asset re-downloaded on every visit",
+        "after": "Assets cached for a year at the edge",
+        "actions": [
+          "Check what percentage of requests hit the cache",
+          "Add cache headers to the folder that had none",
+          "Alert on the hit rate, not the bill"
+        ],
+        "lesson": "A missing header is a recurring invoice.",
+        "kicker": "FIELD NOTE"
+      }
+    },
+    {
+      "id": "w36-d06-d",
+      "sourceId": "c30-d27-repeat-visit",
+      "template": "StatCard",
+      "caption": "Repeat visits should be nearly free. If they are not, nothing is being cached.\n\n#WebPerformance #WebDev #SiteSpeed",
+      "props": {
+        "eyebrow": "MERITBYTE / NUMBERS",
+        "day": 6,
+        "durationInSeconds": 8,
+        "value": "90%",
+        "label": "of a repeat visit can be cached",
+        "context": [
+          "Only the HTML really needs fetching.",
+          "Everything else can already be there."
+        ],
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w36-d07-a",
+      "sourceId": "c30-d28-month-three",
+      "template": "FounderStory",
+      "caption": "Month three we had six weeks of runway and one unsigned proposal. What saved it was not a client, it was a decision.\n\n#Founder #Motivation #AgencyLife",
+      "props": {
+        "eyebrow": "MERITBYTE / FOUNDER",
+        "day": 7,
+        "durationInSeconds": 20,
+        "hook": "Month three, six weeks of runway",
+        "moments": [
+          "Two clients paused in the same week",
+          "The pipeline was one unsigned proposal",
+          "We had been waiting for it to turn"
+        ],
+        "turn": "We called every past client in two days.",
+        "lesson": "The pipeline you have is the one you contact.",
+        "kicker": "FOUNDER NOTE"
+      }
+    },
+    {
+      "id": "w36-d07-b",
+      "sourceId": "c30-d28-uptime-alert",
+      "template": "TechTip",
+      "caption": "An uptime check that only emails you is not monitoring. Three things it needs to actually work.\n\n#DevOps #Monitoring #Reliability",
+      "props": {
+        "eyebrow": "MERITBYTE / QUICK WIN",
+        "day": 7,
+        "durationInSeconds": 20,
+        "hook": "Your uptime check is not working",
+        "steps": [
+          "Check a real page, not just the homepage",
+          "Alert somewhere that wakes a person",
+          "Test the alert path once a quarter"
+        ],
+        "result": "An untested alert is an untested backup.",
+        "variant": "tool-audit",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "id": "w36-d07-c",
+      "sourceId": "c30-d28-retainer-shape",
+      "template": "CaseStudy",
+      "caption": "Their retainer was hours. Nobody could tell whether it was working. We changed what was being bought, not the price.\n\n#Agency #ClientWork #Business",
+      "props": {
+        "eyebrow": "MERITBYTE / FIELD NOTE",
+        "day": 7,
+        "durationInSeconds": 22,
+        "hook": "The retainer nobody could measure",
+        "before": "Ten hours a month, spent on whatever arrived",
+        "after": "Three outcomes a month, agreed in advance",
+        "actions": [
+          "Sell outcomes, and keep hours internal",
+          "Report what changed, not what was spent",
+          "Review the outcomes every quarter"
+        ],
+        "lesson": "Hours measure effort. Clients are buying change.",
+        "kicker": "FIELD NOTE"
+      }
+    },
+    {
+      "id": "w36-d07-d",
+      "sourceId": "c30-d28-quick-favour",
+      "template": "DevJoke",
+      "caption": "The quick favour arrives on a Friday, needs a login nobody has, and touches the one system without a backup.\n\n#AgencyLife #Freelance #DevHumor",
+      "props": {
+        "eyebrow": "MERITBYTE / DEV LIFE",
+        "day": 7,
+        "durationInSeconds": 15,
+        "hook": "Tiny favour, will take you seconds",
+        "beats": [
+          "Needs a login that expired last year",
+          "Touches the one server without backups",
+          "Was promised to someone else on Monday",
+          "Arrives at four o'clock on Friday"
+        ],
+        "punchline": "Seconds is a unit of hope, not of time.",
+        "variant": "scope",
+        "kicker": "DEV LIFE"
+      }
+    }
+  ]
+}

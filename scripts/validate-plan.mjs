@@ -146,9 +146,36 @@ export async function loadPlan(path = "plan.json") {
       if (!Number.isSafeInteger(plan.week.order) || plan.week.order < 1) {
         errors.push("week.order must be a positive integer that increases every week");
       }
+      if (plan.week.partial !== undefined && typeof plan.week.partial !== "boolean") {
+        errors.push("week.partial must be a boolean when set");
+      }
     }
-    if (Array.isArray(plan.items) && plan.items.length !== 28) {
-      errors.push(`a weekly queue must contain exactly 28 items — got ${plan.items.length}`);
+
+    /**
+     * Four videos a day, seven days: 28. The rule exists because a week that is
+     * quietly one item short starves the queue a month later, with nothing in
+     * the logs to say why.
+     *
+     * A 30-day campaign does not divide by seven, so its last week is a real
+     * two-day remainder rather than a mistake. That week says so — `partial:
+     * true` — and still has to be a whole number of days, because the day and
+     * slot positions below are derived from the item's index and a half-day
+     * would silently misnumber every item after it.
+     */
+    if (Array.isArray(plan.items)) {
+      const count = plan.items.length;
+      const partial = plan.week?.partial === true;
+
+      if (!partial && count !== 28) {
+        errors.push(
+          `a weekly queue must contain exactly 28 items — got ${count}. ` +
+            "If this is the short last week of a campaign, set week.partial to true.",
+        );
+      } else if (partial && (count % 4 !== 0 || count < 4 || count >= 28)) {
+        errors.push(
+          `a partial week must be a whole number of days of 4 — 4, 8, 12, 16, 20 or 24 — got ${count}`,
+        );
+      }
     }
   }
 

@@ -1,0 +1,137 @@
+{
+  "week": 37,
+  "year": 2026,
+  "note": "Campaign days 29-30. Deliberately short: 30 days is four weeks and a two-day remainder, so this week is built with week.partial and holds eight items rather than 28. Day 30 slot A is the PDF's closing Recap.",
+  "items": [
+    {
+      "template": "TechTip",
+      "sourceId": "c30-d29-design-to-code",
+      "caption": "Getting from a design file to working markup is mostly about deciding three things before you write any CSS.\n\n#Frontend #DesignSystems #WebDev",
+      "props": {
+        "hook": "Design to code, three decisions",
+        "steps": [
+          "Name the spacing scale before the first margin",
+          "Decide which values are tokens, not numbers",
+          "Build the longest state first, not the prettiest"
+        ],
+        "result": "Building the happy path first guarantees rework.",
+        "variant": "design-code",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "template": "CaseStudy",
+      "sourceId": "c30-d29-token-rollout",
+      "caption": "Eleven blues across one product. Not a design failure — nobody had ever written down which blue was the blue.\n\n#DesignSystems #Frontend #CaseStudy",
+      "props": {
+        "hook": "Eleven blues, one brand",
+        "before": "Eleven hex values, all approximately correct",
+        "after": "Four named tokens, used everywhere",
+        "actions": [
+          "Count the distinct values already shipping",
+          "Name the four that actually earn a place",
+          "Fail the build when a raw hex appears"
+        ],
+        "lesson": "A system is enforced or it is a suggestion.",
+        "kicker": "FIELD NOTE"
+      }
+    },
+    {
+      "template": "ListReveal",
+      "sourceId": "c30-d29-system-list",
+      "caption": "Four signs a design system is being used, rather than merely existing in a shared file.\n\n#DesignSystems #ProductDesign #Frontend",
+      "props": {
+        "headline": "Four signs a system is real",
+        "items": [
+          "New screens get built faster than before",
+          "Nobody asks which grey to use",
+          "The code and the file agree on names",
+          "Changing a token changes the product"
+        ],
+        "kicker": "FOLLOW FOR MORE"
+      }
+    },
+    {
+      "template": "DevJoke",
+      "sourceId": "c30-d29-pixel-perfect",
+      "caption": "Pixel perfect at one width is a screenshot. The other four hundred widths are the actual job.\n\n#Frontend #WebDesign #DevHumor",
+      "props": {
+        "hook": "It needs to be pixel perfect",
+        "beats": [
+          "Perfect at exactly 1440 pixels wide",
+          "Broken at 1441 pixels wide",
+          "Untested on every phone made",
+          "Approved on one designer's monitor"
+        ],
+        "punchline": "Pick ranges to be right in, not one width.",
+        "variant": "logo",
+        "kicker": "DEV LIFE"
+      }
+    },
+
+    {
+      "template": "Recap",
+      "sourceId": "c30-d30-recap",
+      "caption": "Thirty days, a hundred and twenty videos, every frame rendered from code. Here is what actually worked and what did not.\n\n#BuildInPublic #ContentStrategy #Remotion",
+      "props": {
+        "hook": "Thirty days. The real numbers.",
+        "totals": [
+          { "label": "videos shipped", "value": 120 },
+          { "label": "days without a gap", "value": 30 },
+          { "label": "frames rendered", "value": 64800 }
+        ],
+        "leaderboard": [
+          { "label": "Roast my own website", "value": 48300 },
+          { "label": "We found their password", "value": 31700 },
+          { "label": "Nobody was coming", "value": 26400 }
+        ],
+        "lesson": "The dull weekly habit beat every clever idea.",
+        "gridCount": 30,
+        "kicker": "RECAP"
+      }
+    },
+    {
+      "template": "FounderStory",
+      "sourceId": "c30-d30-what-it-cost",
+      "caption": "What thirty days of daily video actually cost us, honestly. Most of it was not the making.\n\n#Founder #BuildInPublic #ContentStrategy",
+      "props": {
+        "hook": "What thirty days actually cost",
+        "moments": [
+          "The making was the easy part",
+          "Deciding what to say took longer",
+          "Week three is where it nearly stopped"
+        ],
+        "turn": "We built the pipeline so week three could not stop it.",
+        "lesson": "Automate the part that fails when you are tired.",
+        "kicker": "FOUNDER NOTE"
+      }
+    },
+    {
+      "template": "TechTip",
+      "sourceId": "c30-d30-pipeline-how",
+      "caption": "How the whole series was made: one React component per format, everything else is data and a scheduled job.\n\n#Remotion #Automation #WebDev",
+      "props": {
+        "hook": "How this series was actually made",
+        "steps": [
+          "Every video is one React component and one JSON row",
+          "Music is synthesised per video, never reused",
+          "Rendering runs in parallel on a schedule"
+        ],
+        "result": "Writing the script is the only manual step left.",
+        "variant": "tool-audit",
+        "kicker": "SAVE THIS"
+      }
+    },
+    {
+      "template": "StatCard",
+      "sourceId": "c30-d30-consistency-stat",
+      "caption": "The single biggest predictor of whether a content push works is whether it is still going in week four.\n\n#ContentStrategy #Marketing #Consistency",
+      "props": {
+        "value": "4 weeks",
+        "label": "where most content efforts stop",
+        "context": ["Almost nothing compounds before then.", "Everything compounds after."],
+        "kicker": "FOLLOW FOR MORE"
+      }
+    }
+  ]
+}
