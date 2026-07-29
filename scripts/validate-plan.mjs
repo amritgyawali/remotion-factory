@@ -24,6 +24,11 @@ const TEMPLATES = {
     required: ["eyebrow", "day", "durationInSeconds", "hook", "promise", "message", "payoff"],
     limits: { hook: 30, promise: 22, message: 54, payoff: 26, eyebrow: 26 },
   },
+  /** Fixed at 15s for the same reason as LogoLadder — the beats are absolute. */
+  WorksOnMyMachine: {
+    required: ["eyebrow", "day", "durationInSeconds", "hook"],
+    limits: { hook: 30, eyebrow: 26 },
+  },
   StatCard: {
     required: ["eyebrow", "day", "durationInSeconds", "value", "label", "context"],
     limits: { value: 12, label: 46, eyebrow: 26 },

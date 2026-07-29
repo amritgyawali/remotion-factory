@@ -9,6 +9,7 @@ import { LogoLadder } from "./templates/LogoLadder";
 import { SiteRoast } from "./templates/SiteRoast";
 import { StatCard } from "./templates/StatCard";
 import { TechTip } from "./templates/TechTip";
+import { WorksOnMyMachine } from "./templates/WorksOnMyMachine";
 
 const FPS = 30;
 const VERTICAL = { width: 1080, height: 1920, fps: FPS } as const;
@@ -39,6 +40,19 @@ export const RemotionRoot: React.FC = () => (
         promise: "round 7 of 7",
         message: "perfect, can we see one more option",
         payoff: "PERFECT. Ship it.",
+      }}
+    />
+
+    <Composition
+      id="WorksOnMyMachine"
+      component={WorksOnMyMachine}
+      {...VERTICAL}
+      durationInFrames={15 * FPS}
+      defaultProps={{
+        eyebrow: "MeritByte — Build Better",
+        day: 5,
+        durationInSeconds: 15,
+        hook: "WORKS ON MY MACHINE",
       }}
     />
 

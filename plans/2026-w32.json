@@ -35,60 +35,14 @@
   "items": [
     {
       "id": "w32-d01-a",
-      "sourceId": "ladder-01",
-      "template": "LogoLadder",
-      "caption": "Make the logo bigger. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 1 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "sourceId": "pdf-day-05-works-on-my-machine",
+      "template": "WorksOnMyMachine",
+      "caption": "Containers exist because of this exact sentence.\n\n#DevLife #Docker #SoftwareEngineering",
       "props": {
         "eyebrow": "MeritByte — Build Better",
         "day": 1,
-        "durationInSeconds": 17,
-        "hook": "MAKE THE LOGO BIGGER",
-        "promise": "round 7 of 7",
-        "message": "perfect, can we see one more option",
-        "payoff": "SHIPPED. Finally.",
-        "client": {
-          "name": "VERTEX",
-          "brand": "#6B4EFF",
-          "domain": "vertex.io",
-          "eyebrow": "PLATFORM",
-          "headline": "Ship faster with Vertex",
-          "sub": "The infrastructure layer for modern product teams.",
-          "nav": [
-            "Product",
-            "Solutions",
-            "Pricing",
-            "Docs"
-          ],
-          "cta": "Get started",
-          "stats": [
-            {
-              "v": "99.99%",
-              "l": "uptime"
-            },
-            {
-              "v": "40ms",
-              "l": "p95 latency"
-            },
-            {
-              "v": "12k",
-              "l": "teams"
-            }
-          ],
-          "cards": [
-            {
-              "dot": "#6B4EFF",
-              "title": "Deploy"
-            },
-            {
-              "dot": "#F2A93B",
-              "title": "Observe"
-            },
-            {
-              "dot": "#22C55E",
-              "title": "Scale"
-            }
-          ]
-        }
+        "durationInSeconds": 15,
+        "hook": "WORKS ON MY MACHINE"
       }
     },
     {

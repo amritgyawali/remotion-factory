@@ -145,6 +145,17 @@ export type LogoLadderProps = BaseProps & {
   client?: Partial<import("./components/SiteMock").Client>;
 };
 
+/**
+ * Day 5 — "It Works On My Machine". Fixed at 15s (13s body + the 2s brand
+ * close): the freeze at 6-7s, the silence at 8-9s and the loop cut at 12-13s
+ * are timed in seconds against that body, so a different duration would move
+ * the beats out from under the soundtrack.
+ */
+export type WorksOnMyMachineProps = BaseProps & {
+  /** On screen in the first three seconds, per the brief. Never animates in. */
+  hook: string;
+};
+
 export type TemplateId =
   | "StatCard"
   | "ListReveal"
@@ -154,7 +165,8 @@ export type TemplateId =
   | "CaseStudy"
   | "FounderStory"
   | "Recap"
-  | "LogoLadder";
+  | "LogoLadder"
+  | "WorksOnMyMachine";
 
 /** One entry in plan.json. */
 export type PlanItem = {

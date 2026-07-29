@@ -223,3 +223,112 @@ test("the bed strips at the freeze and stops dead for the silence", async () => 
 test.after(() => {
   if (compiled) rmSync(compiled.dir, { recursive: true, force: true });
 });
+
+/* -------------------------------------------------------------------------- */
+/* Day 5 — "It Works On My Machine"                                            */
+/* -------------------------------------------------------------------------- */
+
+let machine;
+async function loadMachine() {
+  if (machine) return machine;
+  const dir = path.join(REPO, "node_modules", ".cache", "timeline-test");
+  mkdirSync(dir, { recursive: true });
+  const out = path.join(dir, "machine.mjs");
+  execFileSync(
+    process.execPath,
+    [
+      path.join(REPO, "node_modules", "esbuild", "bin", "esbuild"),
+      path.join(REPO, "src", "templates", "machine.timeline.ts"),
+      "--bundle",
+      "--format=esm",
+      "--platform=node",
+      "--external:react",
+      `--outfile=${out}`,
+    ],
+    { stdio: "pipe" },
+  );
+  machine = await import(`file://${out.replaceAll("\\", "/")}`);
+  return machine;
+}
+
+test("day 5: 12-13s is the frame-1 composition, identical", async () => {
+  const { getState, BODY_END, LOOP_CUT_LENGTH } = await loadMachine();
+  const cutStart = BODY_END - LOOP_CUT_LENGTH;
+
+  for (let i = 0; i < LOOP_CUT_LENGTH; i += 1) {
+    const head = getState(i);
+    const tail = getState(cutStart + i);
+    // Compare everything the picture is built from, minus the raw frame counter.
+    const strip = ({ rawFrame, ...rest }) => JSON.stringify(rest);
+    assert.equal(
+      strip(tail),
+      strip(head),
+      `frame ${cutStart + i} must be identical to frame ${i} — the brief says "identical pixels"`,
+    );
+  }
+});
+
+test("day 5: 6-7s is a hard freeze on both panes", async () => {
+  const { getState, S } = await loadMachine();
+
+  // "Everything freezes. Both panels held. No motion."
+  const seen = new Set();
+  for (let f = S(6); f < S(7); f += 1) {
+    const s = getState(f);
+    seen.add(
+      JSON.stringify([s.passing, s.failing, s.alerts, s.errorRate, s.traceScroll, s.alertPop]),
+    );
+  }
+  assert.equal(seen.size, 1, `6-7s must be one static frame — got ${seen.size}`);
+});
+
+test("day 5: 8-9s is one full beat of nothing", async () => {
+  const { getState, machineScore, S } = await loadMachine();
+
+  // The brief calls the silence the retention device, so it is asserted twice:
+  // the picture must be still, and the bed must have no layers at all.
+  for (let f = S(8); f < S(9); f += 1) {
+    assert.equal(getState(f).silent, true, `frame ${f} must be inside the silence`);
+    assert.equal(getState(f).punchline, null, "the punchline must not arrive early");
+  }
+
+  const steps = machineScore().bed;
+  const layersAt = (frame) => {
+    let active = steps[0];
+    for (const step of steps) if (frame >= step.frame) active = step;
+    return active.layers;
+  };
+  assert.deepEqual(layersAt(S(8) + 15), [], "8-9s must be literal silence, not quiet");
+  assert.ok(layersAt(S(9) + 5).length >= 4, "and the music must restart full at 9s");
+});
+
+test("day 5: the escalation never goes backwards", async () => {
+  const { getState, S } = await loadMachine();
+
+  // Alerts pile up and the error rate climbs; neither may dip, or a beat reads
+  // as the situation improving right when it should be getting worse.
+  let alerts = 0;
+  let rate = 0;
+  for (let f = 0; f <= S(6); f += 1) {
+    const s = getState(f);
+    assert.ok(s.alerts >= alerts, `alerts dropped at frame ${f}`);
+    assert.ok(s.errorRate >= rate - 1e-9, `error rate dropped at frame ${f}`);
+    alerts = s.alerts;
+    rate = s.errorRate;
+  }
+  assert.equal(alerts, 6, "all six alerts must have landed by the freeze");
+  assert.ok(rate > 0.9, "and the error rate must be at the top of the frame");
+});
+
+test("day 5: every cue names an SFX that exists", async () => {
+  const { machineScore } = await loadMachine();
+  const { readdirSync, existsSync } = await import("node:fs");
+  const dir = path.join(REPO, "public", "audio");
+  if (!existsSync(dir)) return;
+
+  const have = new Set(
+    readdirSync(dir).filter((f) => f.endsWith(".wav")).map((f) => f.replace(/\.wav$/, "")),
+  );
+  const missing = [...new Set(machineScore().cues.map((c) => c.sfx))].filter((n) => !have.has(n));
+  assert.deepEqual(missing, [], `missing SFX: ${missing.join(", ")}`);
+});
