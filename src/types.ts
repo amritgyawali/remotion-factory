@@ -122,6 +122,23 @@ export type RecapProps = BaseProps & {
   kicker?: string;
 };
 
+/**
+ * An escalation joke told by breaking a real page. Fixed at 17s (15s body plus
+ * the 2s brand close) because the whole structure — six rounds, the freeze, the
+ * silence, the snap-back, the loop — is timed in seconds against that length.
+ * `durationInSeconds` is ignored for this template rather than honoured badly.
+ */
+export type LogoLadderProps = BaseProps & {
+  /** Two lines at most. Readable by frame 6, so it never animates in. */
+  hook: string;
+  /** The retention promise, e.g. "round 7 of 7". A number the viewer stays for. */
+  promise: string;
+  /** What the client sends at 10s. The turn the whole build is waiting on. */
+  message: string;
+  /** The release, on the green tick. */
+  payoff: string;
+};
+
 export type TemplateId =
   | "StatCard"
   | "ListReveal"
@@ -130,7 +147,8 @@ export type TemplateId =
   | "SiteRoast"
   | "CaseStudy"
   | "FounderStory"
-  | "Recap";
+  | "Recap"
+  | "LogoLadder";
 
 /** One entry in plan.json. */
 export type PlanItem = {

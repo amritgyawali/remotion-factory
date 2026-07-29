@@ -6,7 +6,7 @@
   "scripts": {
     "studio": "node scripts/build-audio.mjs && remotion studio",
     "validate": "node scripts/validate-plan.mjs && node scripts/accept-week.mjs --check && node scripts/queue.mjs --check",
-    "test": "node --test scripts/queue.test.mjs scripts/typography.test.mjs scripts/due.test.mjs scripts/buffer.test.mjs scripts/archive.test.mjs scripts/audio.test.mjs scripts/archive-r2.test.mjs scripts/archive-cloudinary.test.mjs scripts/week-id.test.mjs scripts/slots.test.mjs",
+    "test": "node --test scripts/queue.test.mjs scripts/typography.test.mjs scripts/due.test.mjs scripts/buffer.test.mjs scripts/archive.test.mjs scripts/audio.test.mjs scripts/archive-r2.test.mjs scripts/archive-cloudinary.test.mjs scripts/week-id.test.mjs scripts/slots.test.mjs scripts/timeline.test.mjs",
     "verify": "node scripts/verify-video.mjs",
     "queue": "node scripts/queue.mjs",
     "due": "node scripts/due.mjs",

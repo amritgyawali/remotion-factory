@@ -5,6 +5,7 @@ import { DevJoke } from "./templates/DevJoke";
 import { FounderStory } from "./templates/FounderStory";
 import { Recap } from "./templates/Recap";
 import { ListReveal } from "./templates/ListReveal";
+import { LogoLadder } from "./templates/LogoLadder";
 import { SiteRoast } from "./templates/SiteRoast";
 import { StatCard } from "./templates/StatCard";
 import { TechTip } from "./templates/TechTip";
@@ -19,6 +20,28 @@ const durationFrom = ({ props }: { props: { durationInSeconds?: number } }) => (
 
 export const RemotionRoot: React.FC = () => (
   <>
+    {/*
+      Fixed length, and deliberately not wired to `durationFrom`. The escalation
+      ladder, the freeze at 6-7s, the silence at 11-12s and the loop cut are all
+      timed in seconds against a 15s body; stretching it with a prop would move
+      the beats out from under the soundtrack rather than making a longer video.
+    */}
+    <Composition
+      id="LogoLadder"
+      component={LogoLadder}
+      {...VERTICAL}
+      durationInFrames={17 * FPS}
+      defaultProps={{
+        eyebrow: "MeritByte — Build Better",
+        day: 1,
+        durationInSeconds: 17,
+        hook: "MAKE THE LOGO BIGGER",
+        promise: "round 7 of 7",
+        message: "perfect, can we see one more option",
+        payoff: "PERFECT. Ship it.",
+      }}
+    />
+
     <Composition
       id="StatCard"
       component={StatCard}
