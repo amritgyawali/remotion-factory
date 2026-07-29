@@ -2,21 +2,11 @@
   "posted": [
     "d01-a",
     "d01-b",
-    "d01-c"
+    "d01-c",
+    "d01-d"
   ],
-  "lastPostedAt": "2026-07-28T21:36:38.941Z",
+  "lastPostedAt": "2026-07-29T03:48:00.268Z",
   "rendered": [
-    {
-      "id": "d01-d",
-      "week": "2026-w31",
-      "template": "FounderStory",
-      "url": "https://github.com/amritgyawali/remotion-factory/releases/download/videos-2026-w31/d01-d.mp4",
-      "sha256": "d666181564096e589e8475a696b8e31beb99e7c6e59eae323eadb5b9fb6f0bd6",
-      "bytes": 2998294,
-      "durationSeconds": 22.1,
-      "renderedAt": "2026-07-28T20:30:21Z",
-      "approval": "pending"
-    },
     {
       "id": "d02-a",
       "week": "2026-w31",
@@ -55,6 +45,10 @@
     {
       "id": "d01-c",
       "at": "2026-08-25T03:15:00.000Z"
+    },
+    {
+      "id": "d01-d",
+      "at": "2026-08-25T09:15:00.000Z"
     }
   ]
 }
