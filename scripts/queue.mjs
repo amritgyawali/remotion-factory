@@ -138,24 +138,60 @@ export function rendersToday(state, now = Date.now()) {
 }
 
 /**
+ * UTC hours the render workflow is scheduled at. Mirrors the cron in
+ * .github/workflows/render-batch.yml — 03:45, 09:45, 15:45 and 21:45 UTC, which
+ * is 09:30, 15:30, 21:30 and 03:30 in Kathmandu.
+ */
+export const RENDER_HOURS = [3, 9, 15, 21];
+
+/**
+ * How many of the day's scheduled slots have started by now.
+ *
+ * Counted on the hour rather than at :45, so a run that GitHub starts late —
+ * which is normal — still counts as its own slot rather than the previous one.
+ */
+export function slotsElapsed(now = Date.now(), hours = RENDER_HOURS) {
+  const hour = new Date(now).getUTCHours();
+  return hours.filter((scheduled) => hour >= scheduled).length;
+}
+
+/**
  * How many videos a run should render to keep the day on rate.
  *
- * An explicit count always wins — that is what makes a manual dispatch a usable
- * override. Otherwise the run renders whatever today still owes, which is what
- * makes the schedule self-healing when GitHub drops a run.
+ * The day is paced across its slots rather than owed as a lump. By the Nth run
+ * of the day, N videos should exist; a run renders the difference between that
+ * and what has actually been made.
+ *
+ * Pacing is the whole point, and getting it wrong is not academic — an earlier
+ * version of this returned `target - done`, which made the 09:30 run render all
+ * four videos and left the other three runs with nothing. That silently undoes
+ * the reason there are four runs at all: a batch shares one job's lifetime, so
+ * anything that kills the runner at video three throws away the rest of the
+ * day's work, which is how a whole morning was once lost to one bad release
+ * tag. Four runs mean four independent failures and four independent retries.
+ *
+ * Catch-up still works, because the comparison is against elapsed slots and not
+ * against the previous run: if the 09:30 run never fires, the 15:30 run sees
+ * two slots elapsed and nothing rendered, and makes two.
+ *
+ * An explicit count always wins, which is what makes a manual dispatch a usable
+ * override.
  */
 export function dailyRenderCount(state, { target = 4, explicit = null, now = Date.now() } = {}) {
   if (Number.isFinite(explicit) && explicit > 0) {
     return { count: Math.floor(explicit), reason: "requested" };
   }
 
+  const slots = RENDER_HOURS.length;
+  const elapsed = slotsElapsed(now);
+  // Ceiling so a target that does not divide by the slot count front-loads
+  // rather than never reaching the target at all.
+  const expected = Math.ceil((target * elapsed) / slots);
   const done = rendersToday(state, now);
+
   return {
-    count: Math.max(0, target - done),
-    reason:
-      done === 0
-        ? `first run of the day, target ${target}`
-        : `${done}/${target} already rendered today`,
+    count: Math.max(0, expected - done),
+    reason: `slot ${elapsed}/${slots}, ${done} of ${expected} rendered so far today`,
   };
 }
 

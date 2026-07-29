@@ -27,46 +27,61 @@ const stateFile = (state) => {
 
 const read = (file) => JSON.parse(readFileSync(file, "utf8"));
 
-test("a fresh day owes the full target", () => {
-  assert.deepEqual(dailyRenderCount({ posted: [] }), {
-    count: 4,
-    reason: "first run of the day, target 4",
-  });
+/** The four scheduled runs, by what they are in Kathmandu. */
+const RUN = {
+  "09:30": Date.parse("2026-08-01T03:45:00.000Z"),
+  "15:30": Date.parse("2026-08-01T09:45:00.000Z"),
+  "21:30": Date.parse("2026-08-01T15:45:00.000Z"),
+  "03:30": Date.parse("2026-08-01T21:45:00.000Z"),
+};
+
+const quota = (count) => ({ posted: [], renderQuota: { day: "2026-08-01", count } });
+
+test("a normal day renders one video per run, not four in the first", () => {
+  // The regression this guards against is not hypothetical: an earlier version
+  // owed `target - done`, so the 09:30 run made all four and the other three
+  // runs made none. That silently undoes the reason there are four runs — a
+  // batch shares one job's lifetime, so a runner killed at video three throws
+  // away the rest of the day.
+  assert.equal(dailyRenderCount(quota(0), { now: RUN["09:30"] }).count, 1);
+  assert.equal(dailyRenderCount(quota(1), { now: RUN["15:30"] }).count, 1);
+  assert.equal(dailyRenderCount(quota(2), { now: RUN["21:30"] }).count, 1);
+  assert.equal(dailyRenderCount(quota(3), { now: RUN["03:30"] }).count, 1);
 });
 
-test("each run renders only what the day still owes", () => {
-  const now = Date.parse("2026-08-01T15:45:00.000Z");
-  const after = (count) =>
-    dailyRenderCount({ renderQuota: { day: "2026-08-01", count } }, { now }).count;
-
-  assert.equal(after(1), 3, "one done, three to go");
-  assert.equal(after(3), 1, "the last run of a normal day renders one");
-  assert.equal(after(4), 0, "the day is finished");
-  assert.equal(after(9), 0, "never negative, whatever the counter says");
+test("a day that is already on rate renders nothing more", () => {
+  assert.equal(dailyRenderCount(quota(4), { now: RUN["03:30"] }).count, 0, "the day is finished");
+  assert.equal(dailyRenderCount(quota(9), { now: RUN["03:30"] }).count, 0, "never negative");
+  // Ahead of schedule — a manual run already made today's second video.
+  assert.equal(dailyRenderCount(quota(2), { now: RUN["15:30"] }).count, 0);
 });
 
 test("a dropped run is absorbed by the next one", () => {
-  // The whole point. Three scheduled runs were dropped; the 21:45 run renders
-  // all four rather than one, and the day still lands on rate.
-  const now = Date.parse("2026-08-01T21:45:00.000Z");
-  const { count } = dailyRenderCount({ renderQuota: { day: "2026-08-01", count: 0 } }, { now });
-  assert.equal(count, 4);
+  // GitHub drops scheduled runs under load. The 09:30 run never fired, so by
+  // 15:30 two slots have elapsed and nothing exists: render two.
+  assert.equal(dailyRenderCount(quota(0), { now: RUN["15:30"] }).count, 2);
+  // A whole day of drops, caught up by the last run.
+  assert.equal(dailyRenderCount(quota(0), { now: RUN["03:30"] }).count, 4);
+});
+
+test("nothing is owed before the day's first slot", () => {
+  const beforeAnyRun = Date.parse("2026-08-01T01:00:00.000Z");
+  assert.equal(dailyRenderCount(quota(0), { now: beforeAnyRun }).count, 0);
 });
 
 test("yesterday's quota does not suppress today's work", () => {
   // A stale counter that still looked current would render nothing, every run,
   // forever — the failure mode that is worse than the one being fixed.
-  const state = { renderQuota: { day: "2026-07-31", count: 4 } };
-  const now = Date.parse("2026-08-01T03:45:00.000Z");
+  const state = { posted: [], renderQuota: { day: "2026-07-31", count: 4 } };
 
-  assert.equal(rendersToday(state, now), 0);
-  assert.equal(dailyRenderCount(state, { now }).count, 4);
+  assert.equal(rendersToday(state, RUN["09:30"]), 0);
+  assert.equal(dailyRenderCount(state, { now: RUN["09:30"] }).count, 1);
 });
 
 test("an explicit count always overrides the quota", () => {
   // A manual dispatch has to be able to ask for work the day does not owe,
   // otherwise the catch-up path removes the operator's only override.
-  const state = { renderQuota: { day: utcDay(), count: 4 } };
+  const state = { posted: [], renderQuota: { day: utcDay(), count: 4 } };
   assert.deepEqual(dailyRenderCount(state, { explicit: 2 }), { count: 2, reason: "requested" });
   assert.equal(dailyRenderCount(state, { explicit: 0 }).count, 0, "zero is not an override");
   assert.equal(dailyRenderCount(state, { explicit: Number.NaN }).count, 0, "NaN falls through");
@@ -110,9 +125,16 @@ test("the counter survives posting draining the buffer", async () => {
   writeFileSync(file, JSON.stringify(drained, null, 2));
 
   const state = read(file);
+  // markRendered stamps the real current day, so the slot has to be today's.
+  const secondSlot = Date.parse(`${utcDay()}T09:45:00.000Z`);
+
   assert.equal(state.rendered.length, 0, "the buffer is empty");
-  assert.equal(rendersToday(state), 2, "but the day still knows it rendered two");
-  assert.equal(dailyRenderCount(state).count, 2, "so it renders two more, not four");
+  assert.equal(rendersToday(state, secondSlot), 2, "but the day still knows it rendered two");
+  assert.equal(
+    dailyRenderCount(state, { now: secondSlot }).count,
+    0,
+    "so the second slot asks for nothing, rather than repeating the day",
+  );
 });
 
 test("a re-render counts against the day", async () => {
