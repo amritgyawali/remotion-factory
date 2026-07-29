@@ -1,14 +1,8 @@
 import React from "react";
 import { AbsoluteFill, useVideoConfig } from "remotion";
 import { Frame } from "../components/Frame";
-import {
-  BLEED_MARGIN,
-  Eyebrow,
-  KineticHeadline,
-  MarchingList,
-  PayoffBlock,
-} from "../components/Kinetic";
-import { MetricStage } from "../components/Stage";
+import { BLEED_MARGIN, Eyebrow, KineticHeadline, PayoffBlock } from "../components/Kinetic";
+import { Exhibit, resolveExhibit } from "../exhibits";
 import { themeFor } from "../theme";
 import type { CaseStudyProps } from "../types";
 
@@ -20,12 +14,13 @@ import type { CaseStudyProps } from "../types";
  * Stating a change and showing one are different things, and only one of them
  * survives being watched with the sound off.
  *
- * MetricStage draws the distance instead: the after bar grows on a spring so
- * the eye tracks the movement rather than being handed a finished result. The
- * bars are deliberately not scaled to the copy — `before` and `after` here are
- * prose ("slow paint hides the offer"), not figures, so a proportional chart
- * would be inventing precision the script does not have. What is honest to show
- * is direction and magnitude, which is what this does.
+ * An exhibit draws the distance instead. Which one depends on what the script
+ * gave it, and that dependency is the honest part: `before` and `after` are
+ * usually prose ("slow paint hides the offer"), and prose cannot be scaled, so
+ * a script with only words gets a mechanism — the stages the work moves
+ * through, the sequence it moves through them in. A script that supplies two
+ * real figures gets the two arcs and the gap between them, drawn to scale.
+ * Neither path invents a proportion the script did not state.
  */
 export const CaseStudy: React.FC<CaseStudyProps> = ({
   hook,
@@ -33,20 +28,21 @@ export const CaseStudy: React.FC<CaseStudyProps> = ({
   after,
   actions,
   lesson,
+  exhibit,
   score,
   videoId,
   theme: overrides,
 }) => {
   const theme = themeFor(videoId, overrides);
   const { durationInFrames } = useVideoConfig();
+  const spec = resolveExhibit(
+    "CaseStudy",
+    { hook, before, after, actions, lesson, exhibit },
+    videoId,
+  );
 
   const lessonAt = Math.max(66, Math.floor(durationInFrames * 0.68));
   const comparisonAt = 20;
-  const actionsFrom = comparisonAt + 54;
-  const actionEvery = Math.max(
-    9,
-    Math.floor((lessonAt - actionsFrom - 16) / Math.max(1, actions.length)),
-  );
 
   return (
     <Frame theme={theme} template="CaseStudy" score={score} videoId={videoId}>
@@ -73,14 +69,17 @@ export const CaseStudy: React.FC<CaseStudyProps> = ({
             gap: 52,
           }}
         >
-          <MetricStage before={before} after={after} theme={theme} from={comparisonAt} />
-          <MarchingList
-            items={actions}
-            theme={theme}
-            from={actionsFrom}
-            every={actionEvery}
-            numbered={false}
-          />
+          {/*
+            The actions are inside the figure, not beside it.
+            A list of the three actions under a diagram built from the same
+            three actions is the same words twice in one frame — the probe
+            render printed "Resize media" as stage one of the pipeline and
+            again as the first line below it. Whichever figure this script
+            draws, it is carrying the actions, so the template does not.
+          */}
+          <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
+            <Exhibit theme={theme} spec={spec} from={comparisonAt} />
+          </div>
         </div>
 
         <PayoffBlock text={lesson} theme={theme} from={lessonAt} />

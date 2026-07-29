@@ -51,7 +51,10 @@
         ],
         "fix": "Hold your site to the brief you sell.",
         "verdict": "The cobbler's children, as always.",
-        "kicker": "ROAST 08"
+        "kicker": "ROAST 08",
+        "exhibit": {
+          "kind": "browser"
+        }
       }
     },
     {
@@ -71,7 +74,16 @@
         ],
         "result": "Lab is your machine. Field is real people.",
         "variant": "vitals",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "pipeline",
+          "stages": [
+            "Run the audit, then ignore the score",
+            "Open the field data section instead",
+            "Compare it against your lab result"
+          ],
+          "bottleneck": 2
+        }
       }
     },
     {
@@ -92,7 +104,24 @@
           "Say what it was before, not just after"
         ],
         "lesson": "Process is interesting. Outcome is persuasive.",
-        "kicker": "FIELD NOTE"
+        "kicker": "FIELD NOTE",
+        "exhibit": {
+          "kind": "checklist",
+          "steps": [
+            {
+              "label": "Ask every past client for one metric",
+              "verdict": "pass"
+            },
+            {
+              "label": "Lead with the number, not the brief",
+              "verdict": "pass"
+            },
+            {
+              "label": "Say what it was before, not just after",
+              "verdict": "pass"
+            }
+          ]
+        }
       }
     },
     {
@@ -113,7 +142,18 @@
         ],
         "punchline": "Some code is load-bearing on purpose.",
         "variant": "terminal",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "code",
+          "filename": "checks.sh",
+          "lines": [
+            "# Fixed it in twenty minutes",
+            "# Discovered why it was written that way",
+            "# Unfixed it, carefully, over an hour",
+            "# Wrote a comment instead"
+          ],
+          "highlight": 3
+        }
       }
     },
     {
@@ -133,7 +173,16 @@
         ],
         "punchline": "Nobody is ever just in there.",
         "variant": "scope",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "pipeline",
+          "stages": [
+            "While you are in there, move the header",
+            "While you are in there, add a language",
+            "While you are in there, change the CMS"
+          ],
+          "bottleneck": 2
+        }
       }
     },
     {
@@ -153,7 +202,24 @@
         ],
         "result": "Markup that contradicts the page is ignored.",
         "variant": "index-check",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "checklist",
+          "steps": [
+            {
+              "label": "Paste a page into the rich results test",
+              "verdict": "pass"
+            },
+            {
+              "label": "Fix every error before any warning",
+              "verdict": "pass"
+            },
+            {
+              "label": "Confirm the details match the visible page",
+              "verdict": "pass"
+            }
+          ]
+        }
       }
     },
     {
@@ -171,7 +237,14 @@
           "That is faster than reading a headline.",
           "It is entirely visual."
         ],
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "dial",
+          "value": 50,
+          "unit": "ms",
+          "caption": "",
+          "of": 50
+        }
       }
     },
     {
@@ -190,7 +263,17 @@
           "Who owns the source files after payment",
           "What counts as complete, in writing"
         ],
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "radar",
+          "label": "what the scan finds",
+          "targets": [
+            "How many rounds of revision…",
+            "What a delay on their side…",
+            "Who owns the source files…",
+            "What counts as complete, in…"
+          ]
+        }
       }
     },
     {
@@ -210,7 +293,24 @@
         ],
         "result": "Volume without substance is index bloat.",
         "variant": "index-check",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "checklist",
+          "steps": [
+            {
+              "label": "Give every page one fact nothing else has",
+              "verdict": "pass"
+            },
+            {
+              "label": "Block the template from indexing until…",
+              "verdict": "pass"
+            },
+            {
+              "label": "Delete any page you would not link to",
+              "verdict": "pass"
+            }
+          ]
+        }
       }
     },
     {
@@ -231,7 +331,16 @@
           "Keep the map in the repository, not a spreadsheet"
         ],
         "lesson": "A good migration is invisible from outside.",
-        "kicker": "FIELD NOTE"
+        "kicker": "FIELD NOTE",
+        "exhibit": {
+          "kind": "pipeline",
+          "stages": [
+            "Export every indexed URL before you…",
+            "Map old to new before touching the…",
+            "Keep the map in the repository, not a…"
+          ],
+          "bottleneck": 2
+        }
       }
     },
     {
@@ -249,7 +358,14 @@
           "Most were fine when they were written.",
           "Nothing checks them afterwards."
         ],
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "dial",
+          "value": 1,
+          "unit": "in 1",
+          "caption": "",
+          "of": 1
+        }
       }
     },
     {
@@ -270,7 +386,10 @@
         ],
         "punchline": "Confidence is not the same as correctness.",
         "variant": "qa",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "chat"
+        }
       }
     },
     {
@@ -291,7 +410,16 @@
           "Add a scanner to the pipeline, not a policy"
         ],
         "lesson": "A rotated secret beats a deleted commit.",
-        "kicker": "FIELD NOTE"
+        "kicker": "FIELD NOTE",
+        "exhibit": {
+          "kind": "pipeline",
+          "stages": [
+            "Search your built files for the word…",
+            "Rotate anything that was ever committed",
+            "Add a scanner to the pipeline, not a…"
+          ],
+          "bottleneck": 2
+        }
       }
     },
     {
@@ -311,7 +439,17 @@
         ],
         "result": "History is cached in more places than yours.",
         "variant": "security",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "code",
+          "filename": "checks.sh",
+          "lines": [
+            "# Assume anything committed once is public",
+            "# Rotate the credential before cleaning…",
+            "# Add a pre-commit scanner so it cannot repeat"
+          ],
+          "highlight": 2
+        }
       }
     },
     {
@@ -330,7 +468,28 @@
           "Write down what changed in the last day",
           "Tell customers before they tell you"
         ],
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "checklist",
+          "steps": [
+            {
+              "label": "Say out loud who is running this",
+              "verdict": "pass"
+            },
+            {
+              "label": "Stop the bleeding before finding the cause",
+              "verdict": "pass"
+            },
+            {
+              "label": "Write down what changed in the last day",
+              "verdict": "pass"
+            },
+            {
+              "label": "Tell customers before they tell you",
+              "verdict": "pass"
+            }
+          ]
+        }
       }
     },
     {
@@ -351,7 +510,10 @@
         ],
         "punchline": "Nothing changed is a claim about attention.",
         "variant": "deploy",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "terminal"
+        }
       }
     },
     {
@@ -371,7 +533,16 @@
         ],
         "turn": "We wrote down the work we would decline.",
         "lesson": "Saying no is how a service becomes a business.",
-        "kicker": "FOUNDER NOTE"
+        "kicker": "FOUNDER NOTE",
+        "exhibit": {
+          "kind": "pipeline",
+          "stages": [
+            "Day one: any project, any budget, any…",
+            "Day two hundred: busy, and barely…",
+            "Day four hundred: one kind of work,…"
+          ],
+          "bottleneck": 2
+        }
       }
     },
     {
@@ -391,7 +562,16 @@
         ],
         "result": "Double-counted tags flatter every number.",
         "variant": "devtools",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "trace",
+          "rows": [
+            "Check whether internal traffic is…",
+            "Check the timezone on every report",
+            "Check that one tag is not firing…"
+          ],
+          "counterLabel": "steps taken"
+        }
       }
     },
     {
@@ -412,7 +592,24 @@
           "Name who this is not for"
         ],
         "lesson": "Filtering early is cheaper than filtering late.",
-        "kicker": "FIELD NOTE"
+        "kicker": "FIELD NOTE",
+        "exhibit": {
+          "kind": "checklist",
+          "steps": [
+            {
+              "label": "Publish a starting figure, not a full menu",
+              "verdict": "pass"
+            },
+            {
+              "label": "Say what changes the number, and why",
+              "verdict": "pass"
+            },
+            {
+              "label": "Name who this is not for",
+              "verdict": "pass"
+            }
+          ]
+        }
       }
     },
     {
@@ -433,7 +630,10 @@
         ],
         "punchline": "Temporary is the longest-lived word in code.",
         "variant": "comments",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "terminal"
+        }
       }
     },
     {
@@ -454,7 +654,10 @@
         ],
         "punchline": "Estimate the unknowns or inherit them.",
         "variant": "timer",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "terminal"
+        }
       }
     },
     {
@@ -474,7 +677,16 @@
         ],
         "result": "A rollback nobody has practised is a plan, not a fix.",
         "variant": "security",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "pipeline",
+          "stages": [
+            "How do we know within five minutes it…",
+            "How long does going back actually take?",
+            "Who can do it if you are unreachable?"
+          ],
+          "bottleneck": 2
+        }
       }
     },
     {
@@ -492,7 +704,13 @@
           "Smaller changes fail smaller.",
           "And they are far easier to undo."
         ],
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "dial",
+          "value": 70,
+          "unit": "%",
+          "caption": ""
+        }
       }
     },
     {
@@ -511,7 +729,17 @@
           "Permission to wake someone more senior",
           "Time back the next day, in writing"
         ],
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "radar",
+          "label": "what the scan finds",
+          "targets": [
+            "An alert that means something…",
+            "A runbook for the three…",
+            "Permission to wake someone…",
+            "Time back the next day, in…"
+          ]
+        }
       }
     },
     {
@@ -531,7 +759,24 @@
         ],
         "result": "The cause is nearly always one of these three.",
         "variant": "vitals",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "checklist",
+          "steps": [
+            {
+              "label": "Slow largest paint is usually one big…",
+              "verdict": "pass"
+            },
+            {
+              "label": "Layout shift is usually a missing…",
+              "verdict": "pass"
+            },
+            {
+              "label": "Slow interaction is usually too much…",
+              "verdict": "pass"
+            }
+          ]
+        }
       }
     },
     {
@@ -552,7 +797,16 @@
         ],
         "fix": "Three amounts, one screen, same domain.",
         "verdict": "Friction is a policy choice.",
-        "kicker": "ROAST 09"
+        "kicker": "ROAST 09",
+        "exhibit": {
+          "kind": "radar",
+          "label": "what the audit finds",
+          "targets": [
+            "The donate button scrolls…",
+            "The amount screen offers…",
+            "Card entry redirects to a…"
+          ]
+        }
       }
     },
     {
@@ -573,7 +827,17 @@
           "Make the field required for new uploads"
         ],
         "lesson": "Not every image needs words. Most need a decision.",
-        "kicker": "FIELD NOTE"
+        "kicker": "FIELD NOTE",
+        "exhibit": {
+          "kind": "code",
+          "filename": "checks.sh",
+          "lines": [
+            "# Mark decorative images as decorative",
+            "# Describe only what carries meaning",
+            "# Make the field required for new uploads"
+          ],
+          "highlight": 2
+        }
       }
     },
     {
@@ -594,7 +858,17 @@
         ],
         "punchline": "The cache was real. It was just not theirs.",
         "variant": "cache",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "trace",
+          "rows": [
+            "They cleared the cache",
+            "They cleared it again, harder",
+            "They tried a different browser",
+            "Their office proxy was caching it"
+          ],
+          "counterLabel": "rounds so far"
+        }
       }
     }
   ]

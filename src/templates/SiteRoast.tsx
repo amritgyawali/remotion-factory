@@ -3,6 +3,7 @@ import { AbsoluteFill, useVideoConfig } from "remotion";
 import { Frame } from "../components/Frame";
 import { BLEED_MARGIN, Eyebrow, KineticHeadline, PayoffBlock } from "../components/Kinetic";
 import { BrowserStage } from "../components/Stage";
+import { Exhibit, drawsOwnStage, resolveExhibit } from "../exhibits";
 import { themeFor } from "../theme";
 import type { SiteRoastProps } from "../types";
 
@@ -29,12 +30,18 @@ export const SiteRoast: React.FC<SiteRoastProps> = ({
   problems,
   fix,
   verdict,
+  exhibit,
   score,
   videoId,
   theme: overrides,
 }) => {
   const theme = themeFor(videoId, overrides);
   const { durationInFrames } = useVideoConfig();
+  // The page under review is this template's native stage. A script that wants
+  // to show something else — the checks running, the scan finding them — says
+  // so and gets that instead.
+  const spec = resolveExhibit("SiteRoast", { hook, problems, fix, verdict, exhibit }, videoId);
+  const nativeStage = drawsOwnStage(spec);
 
   const verdictAt = Math.max(70, Math.floor(durationInFrames * 0.72));
   const fixAt = Math.max(52, verdictAt - 46);
@@ -73,14 +80,18 @@ export const SiteRoast: React.FC<SiteRoastProps> = ({
         </div>
 
         <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-          <BrowserStage
-            theme={theme}
-            faults={problems}
-            from={problemsFrom}
-            every={problemEvery}
-            fixAt={fixAt}
-            height={880}
-          />
+          {nativeStage ? (
+            <BrowserStage
+              theme={theme}
+              faults={problems}
+              from={problemsFrom}
+              every={problemEvery}
+              fixAt={fixAt}
+              height={880}
+            />
+          ) : (
+            <Exhibit theme={theme} spec={spec} from={problemsFrom} height={880} />
+          )}
         </div>
 
         {/*

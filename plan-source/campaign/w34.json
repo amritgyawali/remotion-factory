@@ -17,7 +17,10 @@
         ],
         "punchline": "The bar burns down. Nobody tried the door.",
         "variant": "qa",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "terminal"
+        }
       }
     },
     {
@@ -33,7 +36,16 @@
         ],
         "result": "Chains grow quietly with every site migration.",
         "variant": "index-check",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "pipeline",
+          "stages": [
+            "Run curl -IL on your most-shared link",
+            "Count how many 301s appear before the…",
+            "Point the first hop straight at the last"
+          ],
+          "bottleneck": 2
+        }
       }
     },
     {
@@ -50,7 +62,24 @@
           "Show the total before the payment screen"
         ],
         "lesson": "Every extra step is a chance to reconsider.",
-        "kicker": "FIELD NOTE"
+        "kicker": "FIELD NOTE",
+        "exhibit": {
+          "kind": "checklist",
+          "steps": [
+            {
+              "label": "Let people buy before they register",
+              "verdict": "pass"
+            },
+            {
+              "label": "Ask for the address once, not twice",
+              "verdict": "pass"
+            },
+            {
+              "label": "Show the total before the payment screen",
+              "verdict": "pass"
+            }
+          ]
+        }
       }
     },
     {
@@ -60,11 +89,19 @@
       "props": {
         "value": "70%",
         "label": "of carts are abandoned before payment",
-        "context": ["Surprise costs are the top reason.", "Forced accounts are the second."],
-        "kicker": "SAVE THIS"
+        "context": [
+          "Surprise costs are the top reason.",
+          "Forced accounts are the second."
+        ],
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "dial",
+          "value": 70,
+          "unit": "%",
+          "caption": ""
+        }
       }
     },
-
     {
       "template": "SiteRoast",
       "sourceId": "c30-d09-roast-06",
@@ -79,7 +116,17 @@
         ],
         "fix": "Lead with three. Let the rest be a list.",
         "verdict": "Choice without guidance is work.",
-        "kicker": "ROAST 06"
+        "kicker": "ROAST 06",
+        "exhibit": {
+          "kind": "code",
+          "filename": "checks.sh",
+          "lines": [
+            "# Nineteen equal cards in one grid",
+            "# No pricing signal anywhere on the page",
+            "# Every card links to the same contact form"
+          ],
+          "highlight": 2
+        }
       }
     },
     {
@@ -95,7 +142,16 @@
         ],
         "result": "Fallback text beats no text, every time.",
         "variant": "vitals",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "pipeline",
+          "stages": [
+            "Look for a flash of nothing before text…",
+            "Add font-display: swap to every…",
+            "Preload only the weights above the fold"
+          ],
+          "bottleneck": 2
+        }
       }
     },
     {
@@ -110,7 +166,28 @@
           "How to deploy, written for a stranger",
           "What breaks if the renewal is missed"
         ],
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "checklist",
+          "steps": [
+            {
+              "label": "Where the domain is registered, and who…",
+              "verdict": "pass"
+            },
+            {
+              "label": "Every login, in a shared vault, not an…",
+              "verdict": "pass"
+            },
+            {
+              "label": "How to deploy, written for a stranger",
+              "verdict": "pass"
+            },
+            {
+              "label": "What breaks if the renewal is missed",
+              "verdict": "pass"
+            }
+          ]
+        }
       }
     },
     {
@@ -127,10 +204,19 @@
         ],
         "punchline": "The newest file is never the one named final.",
         "variant": "comments",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "trace",
+          "rows": [
+            "homepage-final.psd",
+            "homepage-final-v2.psd",
+            "homepage-final-USE-THIS.psd",
+            "homepage-final-USE-THIS-old.psd"
+          ],
+          "counterLabel": "rounds so far"
+        }
       }
     },
-
     {
       "template": "FounderStory",
       "sourceId": "c30-d10-one-client",
@@ -144,7 +230,16 @@
         ],
         "turn": "We capped any one client at a quarter of revenue.",
         "lesson": "Concentration feels like security until it moves.",
-        "kicker": "FOUNDER NOTE"
+        "kicker": "FOUNDER NOTE",
+        "exhibit": {
+          "kind": "pipeline",
+          "stages": [
+            "The biggest account never had to be…",
+            "Their new director wanted their own…",
+            "Thirty days notice, contractually…"
+          ],
+          "bottleneck": 2
+        }
       }
     },
     {
@@ -160,7 +255,16 @@
         ],
         "result": "Sending as the visitor is why you are filtered.",
         "variant": "security",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "trace",
+          "rows": [
+            "Check you have SPF, DKIM and…",
+            "Send from your domain, not the…",
+            "Put the visitor in reply-to…"
+          ],
+          "counterLabel": "steps taken"
+        }
       }
     },
     {
@@ -177,7 +281,24 @@
           "Delete every article nobody ever opened"
         ],
         "lesson": "Support volume is a content problem first.",
-        "kicker": "FIELD NOTE"
+        "kicker": "FIELD NOTE",
+        "exhibit": {
+          "kind": "checklist",
+          "steps": [
+            {
+              "label": "Rank tickets by how often they repeat",
+              "verdict": "pass"
+            },
+            {
+              "label": "Answer the top six where they are asked",
+              "verdict": "pass"
+            },
+            {
+              "label": "Delete every article nobody ever opened",
+              "verdict": "pass"
+            }
+          ]
+        }
       }
     },
     {
@@ -194,10 +315,12 @@
         ],
         "punchline": "Offline was where it belonged at minute nine.",
         "variant": "timer",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "chat"
+        }
       }
     },
-
     {
       "template": "TechTip",
       "sourceId": "c30-d11-tool-cancel",
@@ -211,7 +334,16 @@
         ],
         "result": "Half a stack is habit, not requirement.",
         "variant": "tool-audit",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "trace",
+          "rows": [
+            "Write down what it does in one…",
+            "Ask what breaks the day you turn…",
+            "If nothing does, that is the…"
+          ],
+          "counterLabel": "steps taken"
+        }
       }
     },
     {
@@ -221,8 +353,18 @@
       "props": {
         "value": "$4.2k",
         "label": "average yearly spend on unused seats",
-        "context": ["Nobody cancels the seat of someone who left.", "Nobody audits what nobody owns."],
-        "kicker": "SAVE THIS"
+        "context": [
+          "Nobody cancels the seat of someone who left.",
+          "Nobody audits what nobody owns."
+        ],
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "dial",
+          "value": 4.2,
+          "unit": "k",
+          "caption": "",
+          "of": 4.2
+        }
       }
     },
     {
@@ -239,7 +381,16 @@
         ],
         "fix": "Pick five posts. Link them from everywhere.",
         "verdict": "An archive is not a library.",
-        "kicker": "ROAST 07"
+        "kicker": "ROAST 07",
+        "exhibit": {
+          "kind": "radar",
+          "label": "what the audit finds",
+          "targets": [
+            "Reverse chronological, and…",
+            "No indication which posts…",
+            "Every post ends without a…"
+          ]
+        }
       }
     },
     {
@@ -256,10 +407,12 @@
         ],
         "punchline": "Size of change, size of confidence. Unrelated.",
         "variant": "deploy",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "terminal"
+        }
       }
     },
-
     {
       "template": "DevJoke",
       "sourceId": "c30-d12-tabs-open",
@@ -273,7 +426,10 @@
         ],
         "punchline": "Closing them is the only real refactor.",
         "variant": "terminal",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "chat"
+        }
       }
     },
     {
@@ -289,7 +445,16 @@
         ],
         "result": "All three ship with the browser already.",
         "variant": "devtools",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "trace",
+          "rows": [
+            "Use $0 to reference the selected…",
+            "Use console.table on any array of…",
+            "Use monitorEvents to see what…"
+          ],
+          "counterLabel": "steps taken"
+        }
       }
     },
     {
@@ -306,7 +471,24 @@
           "Redirect every removed page somewhere useful"
         ],
         "lesson": "Thin pages compete with your good ones.",
-        "kicker": "FIELD NOTE"
+        "kicker": "FIELD NOTE",
+        "exhibit": {
+          "kind": "checklist",
+          "steps": [
+            {
+              "label": "Find pages with no clicks in a year",
+              "verdict": "pass"
+            },
+            {
+              "label": "Merge the ones covering the same thing",
+              "verdict": "pass"
+            },
+            {
+              "label": "Redirect every removed page somewhere…",
+              "verdict": "pass"
+            }
+          ]
+        }
       }
     },
     {
@@ -321,10 +503,19 @@
           "Does this run once, or on every render?",
           "Can a reader tell why, not just what?"
         ],
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "radar",
+          "label": "what the scan finds",
+          "targets": [
+            "What happens when this input…",
+            "What happens when this call…",
+            "Does this run once, or on…",
+            "Can a reader tell why, not…"
+          ]
+        }
       }
     },
-
     {
       "template": "CaseStudy",
       "sourceId": "c30-d13-mobile-nav",
@@ -339,7 +530,16 @@
           "Keep the rest, one level down"
         ],
         "lesson": "Navigation should match traffic, not the org chart.",
-        "kicker": "FIELD NOTE"
+        "kicker": "FIELD NOTE",
+        "exhibit": {
+          "kind": "pipeline",
+          "stages": [
+            "Rank pages by what people actually open",
+            "Promote the top three out of the menu",
+            "Keep the rest, one level down"
+          ],
+          "bottleneck": 2
+        }
       }
     },
     {
@@ -355,7 +555,16 @@
         ],
         "result": "Small targets read as a broken page.",
         "variant": "design-code",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "trace",
+          "rows": [
+            "Open device mode and pick a real…",
+            "Measure every control you expect…",
+            "Anything under forty-four pixels…"
+          ],
+          "counterLabel": "steps taken"
+        }
       }
     },
     {
@@ -365,8 +574,18 @@
       "props": {
         "value": "1 in 4",
         "label": "adults live with a disability",
-        "context": ["Most accessibility fixes help everyone.", "Almost none of them are expensive."],
-        "kicker": "SAVE THIS"
+        "context": [
+          "Most accessibility fixes help everyone.",
+          "Almost none of them are expensive."
+        ],
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "dial",
+          "value": 1,
+          "unit": "in 4",
+          "caption": "",
+          "of": 1
+        }
       }
     },
     {
@@ -383,10 +602,20 @@
         ],
         "punchline": "Feedback needs an owner, not a quorum.",
         "variant": "comments",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "code",
+          "filename": "checks.sh",
+          "lines": [
+            "# Twelve comments agree with each other",
+            "# Nine disagree, politely, in threads",
+            "# Four say what does everyone else think",
+            "# One says ignore my last comment"
+          ],
+          "highlight": 3
+        }
       }
     },
-
     {
       "template": "FounderStory",
       "sourceId": "c30-d14-nobody-coming",
@@ -400,7 +629,16 @@
         ],
         "turn": "We wrote one useful thing every single week.",
         "lesson": "Being good is invisible until you are findable.",
-        "kicker": "FOUNDER NOTE"
+        "kicker": "FOUNDER NOTE",
+        "exhibit": {
+          "kind": "pipeline",
+          "stages": [
+            "Great work, and a silent inbox",
+            "We assumed the work would speak",
+            "It had nowhere to speak from"
+          ],
+          "bottleneck": 2
+        }
       }
     },
     {
@@ -416,7 +654,16 @@
         ],
         "result": "Recovery time is the number that matters.",
         "variant": "security",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "trace",
+          "rows": [
+            "Restore last night's backup…",
+            "Time how long the whole restore…",
+            "Write that number where the team…"
+          ],
+          "counterLabel": "steps taken"
+        }
       }
     },
     {
@@ -431,7 +678,28 @@
           "Uptime checks that alert a human",
           "A monthly note on what changed"
         ],
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "checklist",
+          "steps": [
+            {
+              "label": "Security updates, applied and verified",
+              "verdict": "pass"
+            },
+            {
+              "label": "A restore test, not just a backup",
+              "verdict": "pass"
+            },
+            {
+              "label": "Uptime checks that alert a human",
+              "verdict": "pass"
+            },
+            {
+              "label": "A monthly note on what changed",
+              "verdict": "pass"
+            }
+          ]
+        }
       }
     },
     {
@@ -448,7 +716,18 @@
         ],
         "punchline": "The deploy was fine. The timing was the bug.",
         "variant": "deploy",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "code",
+          "filename": "checks.sh",
+          "lines": [
+            "# Deployed at five past five",
+            "# First error report at twenty past",
+            "# Team channel wakes up at six",
+            "# Rolled back, in the dark, alone"
+          ],
+          "highlight": 3
+        }
       }
     }
   ]

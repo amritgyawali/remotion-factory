@@ -17,7 +17,10 @@
         ],
         "fix": "Menu as text, hours at the top, tap to call.",
         "verdict": "People came here for three facts.",
-        "kicker": "ROAST 10"
+        "kicker": "ROAST 10",
+        "exhibit": {
+          "kind": "browser"
+        }
       }
     },
     {
@@ -33,7 +36,16 @@
         ],
         "result": "Inconsistent details are why listings disagree.",
         "variant": "index-check",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "pipeline",
+          "stages": [
+            "Name, address and phone, identical…",
+            "Opening hours as data, not as an image",
+            "One canonical location page per address"
+          ],
+          "bottleneck": 2
+        }
       }
     },
     {
@@ -43,8 +55,17 @@
       "props": {
         "value": "76%",
         "label": "of local searches lead to a visit",
-        "context": ["Usually within twenty-four hours.", "Usually to whoever answered clearly."],
-        "kicker": "SAVE THIS"
+        "context": [
+          "Usually within twenty-four hours.",
+          "Usually to whoever answered clearly."
+        ],
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "dial",
+          "value": 76,
+          "unit": "%",
+          "caption": ""
+        }
       }
     },
     {
@@ -61,10 +82,20 @@
         ],
         "punchline": "Pop usually means I do not believe it yet.",
         "variant": "logo",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "code",
+          "filename": "checks.sh",
+          "lines": [
+            "# Increased the contrast",
+            "# Increased the size",
+            "# Increased the saturation",
+            "# They meant the headline was wrong"
+          ],
+          "highlight": 3
+        }
       }
     },
-
     {
       "template": "FounderStory",
       "sourceId": "c30-d23-boring-beats",
@@ -78,7 +109,16 @@
         ],
         "turn": "We stopped launching and started showing up.",
         "lesson": "Consistency outperforms brilliance you cannot repeat.",
-        "kicker": "FOUNDER NOTE"
+        "kicker": "FOUNDER NOTE",
+        "exhibit": {
+          "kind": "pipeline",
+          "stages": [
+            "The clever launch got a good week",
+            "Then it got nothing at all",
+            "The dull weekly post kept compounding"
+          ],
+          "bottleneck": 2
+        }
       }
     },
     {
@@ -94,7 +134,16 @@
         ],
         "result": "Real questions outperform invented topics.",
         "variant": "tool-audit",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "trace",
+          "rows": [
+            "Write down the question a client…",
+            "Answer it in the words you used…",
+            "Publish it before you improve it"
+          ],
+          "counterLabel": "steps taken"
+        }
       }
     },
     {
@@ -111,7 +160,24 @@
           "Remove anyone who does not open twice"
         ],
         "lesson": "A smaller list that opens is worth more.",
-        "kicker": "FIELD NOTE"
+        "kicker": "FIELD NOTE",
+        "exhibit": {
+          "kind": "checklist",
+          "steps": [
+            {
+              "label": "Email the recently active first, in…",
+              "verdict": "pass"
+            },
+            {
+              "label": "Say plainly why they are hearing from you",
+              "verdict": "pass"
+            },
+            {
+              "label": "Remove anyone who does not open twice",
+              "verdict": "pass"
+            }
+          ]
+        }
       }
     },
     {
@@ -128,10 +194,20 @@
         ],
         "punchline": "Show fewer options and keep the receipts.",
         "variant": "comments",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "code",
+          "filename": "checks.sh",
+          "lines": [
+            "# Round two was warm and simple",
+            "# Rounds three to six explored bravely",
+            "# Round seven was round two again",
+            "# Nobody remembered round two"
+          ],
+          "highlight": 3
+        }
       }
     },
-
     {
       "template": "DevJoke",
       "sourceId": "c30-d24-final-approval",
@@ -146,7 +222,18 @@
         ],
         "punchline": "Sign-off needs a name, not a chorus.",
         "variant": "scope",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "code",
+          "filename": "checks.sh",
+          "lines": [
+            "# Signed off by the marketing lead",
+            "# Signed off by the director",
+            "# Then the founder saw it on a phone",
+            "# Back to round three"
+          ],
+          "highlight": 3
+        }
       }
     },
     {
@@ -162,7 +249,16 @@
         ],
         "result": "A password is the only reliable block.",
         "variant": "security",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "pipeline",
+          "stages": [
+            "Search site:staging for your own domain",
+            "Put staging behind a password, not a…",
+            "A robots file is a request, not a lock"
+          ],
+          "bottleneck": 2
+        }
       }
     },
     {
@@ -177,7 +273,28 @@
           "The deadline came before the requirements",
           "Every question gets answered with soon"
         ],
-        "kicker": "FOLLOW FOR MORE"
+        "kicker": "FOLLOW FOR MORE",
+        "exhibit": {
+          "kind": "checklist",
+          "steps": [
+            {
+              "label": "They will not say who makes the decision",
+              "verdict": "pass"
+            },
+            {
+              "label": "The last agency was terrible, unexplained",
+              "verdict": "pass"
+            },
+            {
+              "label": "The deadline came before the requirements",
+              "verdict": "pass"
+            },
+            {
+              "label": "Every question gets answered with soon",
+              "verdict": "pass"
+            }
+          ]
+        }
       }
     },
     {
@@ -187,11 +304,19 @@
       "props": {
         "value": "34%",
         "label": "of project time is spent on rework",
-        "context": ["Most of it traces to an unclear brief.", "Almost none of it is billable."],
-        "kicker": "SAVE THIS"
+        "context": [
+          "Most of it traces to an unclear brief.",
+          "Almost none of it is billable."
+        ],
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "dial",
+          "value": 34,
+          "unit": "%",
+          "caption": ""
+        }
       }
     },
-
     {
       "template": "CaseStudy",
       "sourceId": "c30-d25-ticket-deflection",
@@ -206,7 +331,16 @@
           "Answer the next three on the page itself"
         ],
         "lesson": "Deflection is a product fix wearing a support hat.",
-        "kicker": "FIELD NOTE"
+        "kicker": "FIELD NOTE",
+        "exhibit": {
+          "kind": "pipeline",
+          "stages": [
+            "Tag six months of tickets by real cause",
+            "Fix the top three causes in the product",
+            "Answer the next three on the page itself"
+          ],
+          "bottleneck": 2
+        }
       }
     },
     {
@@ -222,7 +356,17 @@
         ],
         "result": "Something went wrong is a support ticket.",
         "variant": "design-code",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "code",
+          "filename": "checks.sh",
+          "lines": [
+            "# Say what happened, in their words",
+            "# Say what to do next, specifically",
+            "# Never blame the person reading it"
+          ],
+          "highlight": 2
+        }
       }
     },
     {
@@ -232,8 +376,17 @@
       "props": {
         "value": "$18",
         "label": "average cost of one support ticket",
-        "context": ["Answering it once in the product is free.", "Forever, and for everybody."],
-        "kicker": "SAVE THIS"
+        "context": [
+          "Answering it once in the product is free.",
+          "Forever, and for everybody."
+        ],
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "dial",
+          "value": 18,
+          "unit": "%",
+          "caption": ""
+        }
       }
     },
     {
@@ -250,10 +403,12 @@
         ],
         "punchline": "Priority only works if something is not it.",
         "variant": "timer",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "terminal"
+        }
       }
     },
-
     {
       "template": "TechTip",
       "sourceId": "c30-d26-hacked-check",
@@ -267,7 +422,16 @@
         ],
         "result": "Unknown pages in search are the usual first sign.",
         "variant": "security",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "pipeline",
+          "stages": [
+            "Search your site for pages you never…",
+            "Check for admin users nobody recognises",
+            "Compare file timestamps against your…"
+          ],
+          "bottleneck": 2
+        }
       }
     },
     {
@@ -284,7 +448,16 @@
           "Request removal of what was indexed"
         ],
         "lesson": "Cloaked spam is invisible while you are logged in.",
-        "kicker": "FIELD NOTE"
+        "kicker": "FIELD NOTE",
+        "exhibit": {
+          "kind": "trace",
+          "rows": [
+            "Fetch your own site as a search…",
+            "Rotate every credential before…",
+            "Request removal of what was…"
+          ],
+          "counterLabel": "steps taken"
+        }
       }
     },
     {
@@ -300,7 +473,32 @@
           "Backups stored somewhere the server cannot reach",
           "Alerts on new admin user creation"
         ],
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "checklist",
+          "steps": [
+            {
+              "label": "Two-factor on the registrar, not just the…",
+              "verdict": "pass"
+            },
+            {
+              "label": "Unique admin accounts, no shared logins",
+              "verdict": "pass"
+            },
+            {
+              "label": "Automatic security updates, verified…",
+              "verdict": "pass"
+            },
+            {
+              "label": "Backups stored somewhere the server…",
+              "verdict": "pass"
+            },
+            {
+              "label": "Alerts on new admin user creation",
+              "verdict": "pass"
+            }
+          ]
+        }
       }
     },
     {
@@ -317,10 +515,12 @@
         ],
         "punchline": "Policies people cannot follow become workarounds.",
         "variant": "terminal",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "terminal"
+        }
       }
     },
-
     {
       "template": "DevJoke",
       "sourceId": "c30-d27-cache-explained",
@@ -335,7 +535,10 @@
         ],
         "punchline": "Cache is four systems agreeing to disagree.",
         "variant": "cache",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "terminal"
+        }
       }
     },
     {
@@ -351,7 +554,16 @@
         ],
         "result": "Versioned filenames make clearing unnecessary.",
         "variant": "devtools",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "pipeline",
+          "stages": [
+            "Put a content hash in every asset…",
+            "Cache hashed files for a year, immutably",
+            "Never cache the HTML that references…"
+          ],
+          "bottleneck": 2
+        }
       }
     },
     {
@@ -368,7 +580,16 @@
           "Alert on the hit rate, not the bill"
         ],
         "lesson": "A missing header is a recurring invoice.",
-        "kicker": "FIELD NOTE"
+        "kicker": "FIELD NOTE",
+        "exhibit": {
+          "kind": "trace",
+          "rows": [
+            "Check what percentage of requests…",
+            "Add cache headers to the folder…",
+            "Alert on the hit rate, not the…"
+          ],
+          "counterLabel": "steps taken"
+        }
       }
     },
     {
@@ -378,11 +599,19 @@
       "props": {
         "value": "90%",
         "label": "of a repeat visit can be cached",
-        "context": ["Only the HTML really needs fetching.", "Everything else can already be there."],
-        "kicker": "SAVE THIS"
+        "context": [
+          "Only the HTML really needs fetching.",
+          "Everything else can already be there."
+        ],
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "dial",
+          "value": 90,
+          "unit": "%",
+          "caption": ""
+        }
       }
     },
-
     {
       "template": "FounderStory",
       "sourceId": "c30-d28-month-three",
@@ -396,7 +625,16 @@
         ],
         "turn": "We called every past client in two days.",
         "lesson": "The pipeline you have is the one you contact.",
-        "kicker": "FOUNDER NOTE"
+        "kicker": "FOUNDER NOTE",
+        "exhibit": {
+          "kind": "pipeline",
+          "stages": [
+            "Two clients paused in the same week",
+            "The pipeline was one unsigned proposal",
+            "We had been waiting for it to turn"
+          ],
+          "bottleneck": 2
+        }
       }
     },
     {
@@ -412,7 +650,16 @@
         ],
         "result": "An untested alert is an untested backup.",
         "variant": "tool-audit",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "trace",
+          "rows": [
+            "Check a real page, not just the…",
+            "Alert somewhere that wakes a…",
+            "Test the alert path once a quarter"
+          ],
+          "counterLabel": "steps taken"
+        }
       }
     },
     {
@@ -429,7 +676,24 @@
           "Review the outcomes every quarter"
         ],
         "lesson": "Hours measure effort. Clients are buying change.",
-        "kicker": "FIELD NOTE"
+        "kicker": "FIELD NOTE",
+        "exhibit": {
+          "kind": "checklist",
+          "steps": [
+            {
+              "label": "Sell outcomes, and keep hours internal",
+              "verdict": "pass"
+            },
+            {
+              "label": "Report what changed, not what was spent",
+              "verdict": "pass"
+            },
+            {
+              "label": "Review the outcomes every quarter",
+              "verdict": "pass"
+            }
+          ]
+        }
       }
     },
     {
@@ -446,7 +710,18 @@
         ],
         "punchline": "Seconds is a unit of hope, not of time.",
         "variant": "scope",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "code",
+          "filename": "checks.sh",
+          "lines": [
+            "# Needs a login that expired last year",
+            "# Touches the one server without backups",
+            "# Was promised to someone else on Monday",
+            "# Arrives at four o'clock on Friday"
+          ],
+          "highlight": 3
+        }
       }
     }
   ]

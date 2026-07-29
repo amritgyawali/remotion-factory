@@ -1,0 +1,203 @@
+{
+  "$comment": [
+    "The exhibit catalogue, and the only copy of it.",
+    "",
+    "Three programs need to agree about what an exhibit is: the renderer draws it,",
+    "the plan validator refuses a script that does not specify one, and the",
+    "post-render verifier looks at the pixels to check the drawn thing arrived. Two",
+    "of those are Node scripts and one is a Remotion bundle, so the catalogue lives",
+    "in JSON that all three import rather than in a TypeScript module one of them",
+    "would have to keep a hand-written copy of. A mirrored list is a list that drifts.",
+    "",
+    "`family` decides how honest a kind is allowed to be about numbers:",
+    "  chart   — its marks encode a measured quantity, so `numeric` fields are",
+    "            required and the validator refuses prose in them. A bar whose",
+    "            length came from the frame counter is worse than no bar at all:",
+    "            it invites the viewer to read a value that does not exist.",
+    "  diagram — it depicts a mechanism the script already states, and takes its",
+    "            labels from the script's own lines. Nothing is being measured, so",
+    "            nothing is being claimed."
+  ],
+
+  "band": {
+    "$comment": [
+      "Where an exhibit lives in the frame, as a fraction of height.",
+      "",
+      "Every template stacks the same way — hook at the top, exhibit in the middle,",
+      "payoff at the bottom — and this is the middle. It is a shared constant",
+      "rather than a per-template guess because the verifier samples exactly this",
+      "band to decide whether a video showed anything, and a band the layout does",
+      "not actually honour would be a check that passes on the wrong pixels.",
+      "",
+      "Top edge clears the tallest three-line hook; bottom edge clears the payoff",
+      "block and the safe area platforms overlay their own UI onto."
+    ],
+    "top": 0.3,
+    "bottom": 0.74
+  },
+
+  "preference": {
+    "$comment": [
+      "The order each template reaches for its figures in, most characteristic",
+      "first. Both the render-time derivation and the authoring backfill walk",
+      "this list, which is why it is here and not in either of them: when it",
+      "lived in the TypeScript, the JSON-side tool fell back to plain registry",
+      "order and stopped choosing the browser stage for SiteRoast entirely — a",
+      "template lost the one figure it was built around, and nothing failed.",
+      "",
+      "First entry is not a default. It is what this template is *for*: a roast",
+      "shows the page, a machine joke shows the shell, a recap shows the board."
+    ],
+    "SiteRoast": ["browser", "checklist", "radar", "trace", "code", "pipeline", "compare", "bars"],
+    "DevJoke": ["terminal", "chat", "trace", "code", "timeline", "pipeline", "nodegraph"],
+    "StatCard": ["dial", "compare", "bars", "board", "cartogram"],
+    "ListReveal": ["checklist", "nodegraph", "meters", "timeline", "radar", "dial", "bars", "cartogram"],
+    "TechTip": ["checklist", "pipeline", "trace", "code", "radar", "dial", "meters", "board", "nodegraph"],
+    "CaseStudy": ["compare", "pipeline", "timeline", "trace", "checklist", "nodegraph", "bars", "board", "dial", "code", "cartogram"],
+    "FounderStory": ["timeline", "pipeline", "nodegraph", "checklist", "compare", "meters"],
+    "Recap": ["board", "bars", "meters", "dial", "nodegraph", "radar", "cartogram"],
+    "LogoLadder": ["sitemock"],
+    "WorksOnMyMachine": ["sitemock"]
+  },
+
+  "kinds": {
+    "dial": {
+      "family": "chart",
+      "form": "Ring gauge — one ratio against its whole.",
+      "why": "A single ratio against a limit is a meter, not a chart. The ring is the only figure here that reads at a glance while the number is still counting.",
+      "requires": ["value", "unit", "caption"],
+      "numeric": ["value"],
+      "templates": ["StatCard", "TechTip", "CaseStudy", "Recap", "ListReveal"]
+    },
+    "bars": {
+      "family": "chart",
+      "form": "Two to four labelled columns, compared against one baseline.",
+      "why": "Magnitude, low to high. One baseline, one scale — never a second axis.",
+      "requires": ["series", "unit"],
+      "numeric": ["series[].value"],
+      "templates": ["StatCard", "CaseStudy", "Recap", "SiteRoast", "ListReveal"]
+    },
+    "meters": {
+      "family": "chart",
+      "form": "Stacked horizontal meters, one row per item.",
+      "why": "Long category names, part-to-whole per row. Horizontal because a vertical column cannot carry a label a phone can read.",
+      "requires": ["rows", "unit"],
+      "numeric": ["rows[].value"],
+      "templates": ["ListReveal", "TechTip", "Recap", "FounderStory"]
+    },
+    "compare": {
+      "family": "chart",
+      "form": "Before against after, as two concentric arcs and the distance between them.",
+      "why": "The claim of a case study is that something moved. A dumbbell or a nested arc draws the move; two numbers side by side only assert it.",
+      "requires": ["from", "to", "unit"],
+      "numeric": ["from.value", "to.value"],
+      "templates": ["CaseStudy", "StatCard", "SiteRoast", "FounderStory"]
+    },
+    "board": {
+      "family": "chart",
+      "form": "A four-tile figure board with exactly one tile emphasised.",
+      "why": "A handful of headline numbers is a KPI row, not a grouped bar chart. Emphasis carries the story; the other three tiles are context.",
+      "requires": ["tiles", "emphasis"],
+      "numeric": ["tiles[].value"],
+      "templates": ["Recap", "CaseStudy", "StatCard", "TechTip"]
+    },
+
+    "pipeline": {
+      "family": "diagram",
+      "form": "Stages in sequence with a packet travelling through them.",
+      "why": "Shows where the work goes and where it waits. The packet is the reason it is a video and not a slide.",
+      "requires": ["stages"],
+      "numeric": [],
+      "templates": ["TechTip", "CaseStudy", "DevJoke", "SiteRoast", "FounderStory"]
+    },
+    "trace": {
+      "family": "diagram",
+      "form": "Rows filling in one at a time under a running counter.",
+      "why": "The cost of a repeated operation is legible only when you watch it repeat. The counter climbing is the whole point.",
+      "requires": ["rows", "counterLabel"],
+      "numeric": [],
+      "templates": ["TechTip", "DevJoke", "SiteRoast", "CaseStudy"]
+    },
+    "checklist": {
+      "family": "diagram",
+      "form": "Steps that run and settle into pass or fail.",
+      "why": "A checklist that resolves is a demonstration; a checklist that is merely printed is a caption.",
+      "requires": ["steps"],
+      "numeric": [],
+      "templates": ["TechTip", "ListReveal", "SiteRoast", "FounderStory", "CaseStudy"]
+    },
+    "nodegraph": {
+      "family": "diagram",
+      "form": "A lit core with labelled satellites arriving onto an orbit.",
+      "why": "For a subject whose shape is one thing feeding many. Arrival order carries the argument.",
+      "requires": ["core", "nodes"],
+      "numeric": [],
+      "templates": ["ListReveal", "FounderStory", "DevJoke", "TechTip", "Recap", "CaseStudy"]
+    },
+    "timeline": {
+      "family": "diagram",
+      "form": "Editor tracks with clips and a playhead crossing them.",
+      "why": "For anything whose subject is sequence or duration. The playhead is a clock the viewer can read without a number.",
+      "requires": ["tracks"],
+      "numeric": [],
+      "templates": ["DevJoke", "CaseStudy", "FounderStory", "ListReveal"]
+    },
+    "radar": {
+      "family": "diagram",
+      "form": "A polar lattice with a sweeping arm and side readouts.",
+      "why": "For coverage and blind spots — the sweep finds things, which is what a scan is.",
+      "requires": ["label", "targets"],
+      "numeric": [],
+      "templates": ["TechTip", "SiteRoast", "ListReveal", "Recap"]
+    },
+    "cartogram": {
+      "family": "chart",
+      "form": "A tile grid map, each region one cell, shaded on one sequential hue.",
+      "why": "A tile grid, not a projection: every region gets equal area and stays legible at phone size, and it never pretends to a geographic precision the script does not have.",
+      "requires": ["label", "unit", "regions"],
+      "numeric": ["regions[].value"],
+      "templates": ["StatCard", "ListReveal", "Recap", "CaseStudy"]
+    },
+    "code": {
+      "family": "diagram",
+      "form": "An editor panel typing a snippet, with one line marked.",
+      "why": "For a subject that is literally code. The marked line is the argument; the rest is the context that makes it readable.",
+      "requires": ["filename", "lines", "highlight"],
+      "numeric": [],
+      "templates": ["TechTip", "DevJoke", "CaseStudy", "SiteRoast"]
+    },
+
+    "browser": {
+      "family": "diagram",
+      "form": "The page under review, with each fault pinned to the part at fault.",
+      "why": "The template's original stage. A roast about structure has to show the structure.",
+      "requires": [],
+      "numeric": [],
+      "templates": ["SiteRoast"]
+    },
+    "terminal": {
+      "family": "diagram",
+      "form": "A shell that types its command and answers it.",
+      "why": "The template's original stage, for the jokes whose setting is a machine.",
+      "requires": [],
+      "numeric": [],
+      "templates": ["DevJoke"]
+    },
+    "chat": {
+      "family": "diagram",
+      "form": "A message thread, arriving one message at a time.",
+      "why": "The template's original stage, for the jokes whose setting is a person.",
+      "requires": [],
+      "numeric": [],
+      "templates": ["DevJoke"]
+    },
+    "sitemock": {
+      "family": "diagram",
+      "form": "A real page being wrecked round by round.",
+      "why": "LogoLadder and WorksOnMyMachine are built entirely around their own stage and take no other exhibit.",
+      "requires": [],
+      "numeric": [],
+      "templates": ["LogoLadder", "WorksOnMyMachine"]
+    }
+  }
+}

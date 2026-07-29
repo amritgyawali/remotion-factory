@@ -1,7 +1,8 @@
 import React from "react";
 import { AbsoluteFill, useVideoConfig } from "remotion";
 import { Frame } from "../components/Frame";
-import { BLEED_MARGIN, Eyebrow, KineticHeadline, MarchingList, PayoffBlock } from "../components/Kinetic";
+import { BLEED_MARGIN, Eyebrow, KineticHeadline, PayoffBlock } from "../components/Kinetic";
+import { Exhibit, resolveExhibit } from "../exhibits";
 import { themeFor } from "../theme";
 import type { TechTipProps } from "../types";
 
@@ -15,35 +16,38 @@ const variantLabel: Record<TechTipProps["variant"], string> = {
 };
 
 /**
- * Hook, three steps, payoff — as type filling the frame.
+ * Hook, the steps happening, payoff.
  *
- * The console mock this template used to draw is gone. It rendered three bars
- * whose heights were `progress * (0.76 + index * 0.12)`: a number derived from
- * the frame counter and nothing else. It looked like a chart and measured
- * nothing, which is worse than no chart at all — it invites the viewer to read
- * a value that does not exist. The steps it framed are the actual content and
- * they now get the space.
+ * A console mock used to sit here and was deleted for cause: it rendered three
+ * bars whose heights were `progress * (0.76 + index * 0.12)` — a number derived
+ * from the frame counter and nothing else. It looked like a chart and measured
+ * nothing, which is worse than no chart at all, because it invites the viewer
+ * to read a value that does not exist.
+ *
+ * What replaces it is the opposite of that mistake rather than a return to it.
+ * The steps are not decorated with a chart; they are *drawn as themselves* — a
+ * checklist that resolves each one, a pipeline a packet crosses, a scan that
+ * finds them one at a time. Every label on screen is a line the script already
+ * wrote, and no mark claims a quantity. A script that does want a measurement
+ * supplies the numbers and gets a real chart.
  */
 export const TechTip: React.FC<TechTipProps> = ({
   hook,
   steps,
   result,
   variant,
+  exhibit,
   score,
   videoId,
   theme: overrides,
 }) => {
   const theme = themeFor(videoId, overrides);
   const { durationInFrames } = useVideoConfig();
+  const spec = resolveExhibit("TechTip", { hook, steps, result, variant, exhibit }, videoId);
 
   // The payoff lands with roughly a third of the runtime left, so it is on
   // screen long enough to be read twice before the end card takes over.
   const payoffAt = Math.max(60, Math.floor(durationInFrames * 0.6));
-  const stepsFrom = 26;
-  const stepEvery = Math.max(
-    10,
-    Math.floor((payoffAt - stepsFrom - 20) / Math.max(1, steps.length)),
-  );
 
   return (
     <Frame theme={theme} template="TechTip" score={score} videoId={videoId}>
@@ -63,11 +67,11 @@ export const TechTip: React.FC<TechTipProps> = ({
           <KineticHeadline text={hook} theme={theme} from={6} maxLines={3} max={168} />
         </div>
 
-        {/* Takes all remaining height and centres itself in it, so the slack
-            above and below the steps is always equal however long the hook
-            wrapped. `space-between` split it unevenly. */}
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-          <MarchingList items={steps} theme={theme} from={stepsFrom} every={stepEvery} />
+        {/* Takes all remaining height, so the slack above and below the figure
+            is always equal however long the hook wrapped. `space-between` split
+            it unevenly. */}
+        <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
+          <Exhibit theme={theme} spec={spec} from={22} />
         </div>
 
         <PayoffBlock text={result} theme={theme} from={payoffAt} />

@@ -3,6 +3,12 @@ import { pathToFileURL } from "node:url";
 // Both are leaves: neither imports this module, so the summary below can state
 // the two facts that actually govern publishing without creating a cycle.
 import { requiresApproval } from "./approval.mjs";
+import {
+  exhibitProblems,
+  exhibitRequired,
+  repeatedWithinDay,
+  voiceProblems,
+} from "./exhibits.mjs";
 import { expandSchedule, scheduleErrors } from "./schedule.mjs";
 import { describeSlot, FIRST_SLOT_ISO } from "./slots.mjs";
 
@@ -348,6 +354,34 @@ export async function loadPlan(path = "plan.json") {
         if (line.length > 48) warnings.push(`${at}: context line ${n + 1} is long (${line.length} chars)`);
       });
     }
+
+    /**
+     * The exhibit gate.
+     *
+     * "Every video shows something" only means anything if a script that shows
+     * nothing cannot be accepted. The renderer already derives a figure from
+     * the script's own words when none is written, so a missing exhibit does
+     * not produce a blank frame — but it does produce a figure nobody chose,
+     * and the point of the rule is that somebody chose.
+     *
+     * Errors, not warnings. A warning here is a line in a log nobody reads at
+     * the moment a week is accepted, and the week then renders four videos a
+     * day for seven days.
+     */
+    if (exhibitRequired(item, plan.week?.id)) {
+      for (const problem of exhibitProblems(props.exhibit, item.template)) {
+        errors.push(`${at}: ${problem}`);
+      }
+    }
+
+    for (const problem of voiceProblems(props)) {
+      errors.push(`${at}: ${problem}`);
+    }
+  }
+
+  // Cross-item, so it runs once the loop above has seen every script.
+  if (queueMode && plan.items.some((item) => exhibitRequired(item, plan.week?.id))) {
+    errors.push(...repeatedWithinDay(plan.items));
   }
 
   return { plan, errors, warnings, publishBlockers };

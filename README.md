@@ -307,7 +307,89 @@ attached to a null output fails with "Encoder not found" before any analysis
 runs. `volumedetect` is unavailable in that build for the same reason, which is
 why loudness is measured by decoding to PCM rather than by parsing filter output.
 
+## Every video shows something
+
+No video is words on a colour field. Every one draws its subject in the middle
+third of the frame — a figure, a mechanism, a page being broken — and which
+figure is a decision written into the script.
+
+The rule needed enforcement rather than a style note, because a caption card is
+invisible to every other check: the type animates, the variance is high, the end
+card is there, the file is the right length with sound on it. Nothing fails.
+
+**The band.** `src/exhibits/registry.json` fixes it at 30%–74% of frame height.
+Every template places its figure there and the verifier samples exactly those
+pixels — a band the layout did not honour would be a check passing on the wrong
+part of the frame.
+
+**Seventeen figures, in two families.** *Charts* (`dial`, `bars`, `meters`,
+`compare`, `board`, `cartogram`) encode a measured quantity, so the validator
+requires real numbers and refuses prose in a numeric field. *Diagrams*
+(`pipeline`, `trace`, `checklist`, `nodegraph`, `timeline`, `radar`, `code`, plus
+the four native stages) depict a mechanism the script already states and take
+their labels from its own lines.
+
+That split exists because of a component this repository deleted: TechTip once
+drew three bars whose heights were `progress * (0.76 + index * 0.12)`, a number
+off the frame counter. It looked like a chart and measured nothing, which is
+worse than no chart — it invites the viewer to read a value that does not exist.
+So a script with no measurement gets a diagram, and that is the right answer
+rather than a consolation.
+
+**Where a figure comes from**, in precedence order:
+
+1. `props.exhibit` in the script. The intended path.
+2. `scripts/backfill-exhibits.mjs`, which writes one into the campaign *sources*
+   and chooses per day, so a day's four posts never draw the same picture.
+3. `src/exhibits/derive.ts`, which builds one at render time from the script's
+   own props. A floor, not a path — the validator requires an exhibit from week
+   33 on, so this is unreachable in production.
+
+All three walk one preference list in `registry.json`. A test asserts that list
+agrees with the per-kind permissions: the first version kept the order in
+TypeScript, the JSON-side tool fell back to plain registry order, and SiteRoast
+silently stopped drawing the browser stage it was built around.
+
+The rule starts at campaign **week 33** — the same boundary as
+`CAMPAIGN_FIRST_WEEK`. Week 31 is published and frozen; week 32 is LogoLadder and
+WorksOnMyMachine, both of which spend their whole runtime wrecking a real page
+and were never the problem.
+
+Charts also have their own colour pair, separate from the type colours. Measured
+with the OKLab CVD model, three of the eight palettes' `amber`/`seaglass` pairs
+were not distinguishable to a red–green colourblind viewer — plum at ΔE 4.8 is
+effectively one colour. Re-tinting the type was not available (weeks 31–32 are
+fingerprinted), so `theme.chart` carries a separately validated pair per palette,
+every one clearing ΔE 8 across deutan, protan and tritan. A plan may retint the
+type through `props.theme`; it may not touch `theme.chart`.
+
+Full doctrine, catalogue, mark specs and measurements:
+[`MeritByte-Advanced-Production-Bible.pdf`](MeritByte-Advanced-Production-Bible.pdf)
+(source: `docs/production-bible.html`).
+
 ## Render verification
+
+Two gates run on every finished file, and they answer different questions.
+`verify-video.mjs` asks whether this is a healthy MP4; `verify-script.mjs` asks
+whether it is *the video its script asked for*. A render can pass the first
+comfortably and still be the wrong video — right length, right resolution, sound
+on the track, and a figure nobody asked for in the middle of it.
+
+The second gate deliberately does **not** try to recognise the figure in the
+pixels. That was tried and measured: the same script rendered before and after
+the exhibit layer scored 86% and 81% on "how much ink is continuous mark" — the
+text-only version scored *higher*, because large display type produces runs as
+long as a bar's. Erosion and panel-contrast variants separated no better. A gate
+that cannot tell the two cases apart is a number that passes, which is worse
+than no number.
+
+What it does instead is a chain of provable steps: the script names a figure that
+exists and is permitted and complete; the props file the render actually used is
+canonically equal to that script; renders are a pure function of their props
+(the archive fingerprints already depend on this); therefore the file contains
+that figure. The pixels are still inspected, for what they can prove — that the
+band is occupied, animating and held — which catches a font that never loaded, a
+component that threw, or a figure that vanished after six frames.
 
 Nobody watches these renders. A run that fails halfway — a font that never
 loaded, a blank page, a truncated encode — still writes a playable MP4, and
@@ -608,7 +690,10 @@ npm run preflight    # prove Postiz is reachable and the next item's channels re
 npm run campaign     # rebuild plans/ from the campaign scripts
 npm run campaign:check   # prove no two planned videos share a look or music
 npm run shards       # preview how a parallel render would be split
+npm run exhibits -- --check          # propose a figure for any script missing one
 npm run verify -- out/d01-a.mp4 17   # probe one rendered file
+npm run band -- out/d01-a.mp4        # ink, motion and presence in the exhibit band
+npm run verify:script -- out/w33-d01-c.mp4 plans/2026-w33.json w33-d01-c
 ```
 
 None of these render. Rendering is a GitHub job — see *Rendering happens on

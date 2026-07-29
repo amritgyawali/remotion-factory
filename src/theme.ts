@@ -112,16 +112,58 @@ export const mono = TYPEFACES[0].mono;
  * compress flat blacks into banding, and every other account already uses it.
  * Each of these keeps a colour identity through re-encoding, and each pairs a
  * warm paper type with a single saturated signal colour.
+ *
+ * `chart` is a second, separately chosen pair, and it exists because the type
+ * colours are not fit to encode data.
+ *
+ * `amber` and `seaglass` were picked to look good against each other as *type*,
+ * where the shapes carry the meaning and colour is emphasis. The moment two
+ * marks in one figure are told apart by colour alone, the requirement changes:
+ * they have to stay distinguishable to a red-green colourblind viewer, which is
+ * roughly one man in twelve scrolling past this. Measured with the OKLab CVD
+ * model, three of the eight pairs do not:
+ *
+ *   plum      #FF9EC4 vs #9BE3C9   ΔE 4.8 deutan   — indistinguishable
+ *   moss      #B7E36B vs #FF9F68   ΔE 6.5 deutan   — below the safe floor
+ *   oxblood   #FF7A9C vs #8ED8B5   ΔE 7.2 deutan   — below the safe floor
+ *
+ * Re-tinting `amber`/`seaglass` to fix that is not available: weeks 31 and 32
+ * are rendered and fingerprinted, and a palette edit would change what a
+ * re-render of those ids produces. So charts get their own pair instead. Every
+ * one of the eight below clears ΔE 8 across deutan, protan and tritan and 3:1
+ * contrast against its own ground; five reuse the type colours unchanged and
+ * the three above are re-stepped onto a hue that survives the collapse.
+ *
+ * Nothing reads `chart` except the exhibit layer, which is new, so adding it
+ * leaves every already-rendered frame byte-identical.
  */
 export const PALETTES = [
-  { name: "aubergine", ground: "#221033", groundLift: "#3A1C55", paper: "#F4EFE4", amber: "#FFB25C", seaglass: "#6FD3BE" },
-  { name: "ink", ground: "#0F1A2B", groundLift: "#1E3352", paper: "#EFF2F7", amber: "#7FB2FF", seaglass: "#FFD166" },
-  { name: "moss", ground: "#12241B", groundLift: "#1F4032", paper: "#EFF3E9", amber: "#B7E36B", seaglass: "#FF9F68" },
-  { name: "rust", ground: "#2A1512", groundLift: "#4A2620", paper: "#F6EDE6", amber: "#FF8A5B", seaglass: "#7FD1C4" },
-  { name: "slate", ground: "#171A21", groundLift: "#2B313D", paper: "#EDEFF2", amber: "#F2C14E", seaglass: "#8FD3F4" },
-  { name: "plum", ground: "#2B0F26", groundLift: "#4A1D42", paper: "#F7EAF2", amber: "#FF9EC4", seaglass: "#9BE3C9" },
-  { name: "deepSea", ground: "#0C2129", groundLift: "#173F4C", paper: "#E9F4F5", amber: "#5BD1C4", seaglass: "#FFC46B" },
-  { name: "oxblood", ground: "#26101A", groundLift: "#451D2E", paper: "#F6EBEE", amber: "#FF7A9C", seaglass: "#8ED8B5" },
+  // ΔE 12.0 (protan). The original pair, already safe.
+  { name: "aubergine", ground: "#221033", groundLift: "#3A1C55", paper: "#F4EFE4", amber: "#FFB25C", seaglass: "#6FD3BE",
+    chart: { primary: "#FFB25C", secondary: "#6FD3BE" } },
+  // ΔE 21.5 (tritan). Blue against yellow is the widest pair in the set.
+  { name: "ink", ground: "#0F1A2B", groundLift: "#1E3352", paper: "#EFF2F7", amber: "#7FB2FF", seaglass: "#FFD166",
+    chart: { primary: "#7FB2FF", secondary: "#FFD166" } },
+  // Lime against orange collapses to one colour under deutan. Orchid does not:
+  // ΔE 14.2, and it keeps the palette's high-key, slightly acid character.
+  { name: "moss", ground: "#12241B", groundLift: "#1F4032", paper: "#EFF3E9", amber: "#B7E36B", seaglass: "#FF9F68",
+    chart: { primary: "#B7E36B", secondary: "#FFA8E8" } },
+  // ΔE 12.9 (deutan).
+  { name: "rust", ground: "#2A1512", groundLift: "#4A2620", paper: "#F6EDE6", amber: "#FF8A5B", seaglass: "#7FD1C4",
+    chart: { primary: "#FF8A5B", secondary: "#7FD1C4" } },
+  // ΔE 19.9 (tritan).
+  { name: "slate", ground: "#171A21", groundLift: "#2B313D", paper: "#EDEFF2", amber: "#F2C14E", seaglass: "#8FD3F4",
+    chart: { primary: "#F2C14E", secondary: "#8FD3F4" } },
+  // Pink against mint is the worst pair in the set — ΔE 4.8, effectively one
+  // colour to a deuteranope. Citron reads as a different mark at ΔE 15.3.
+  { name: "plum", ground: "#2B0F26", groundLift: "#4A1D42", paper: "#F7EAF2", amber: "#FF9EC4", seaglass: "#9BE3C9",
+    chart: { primary: "#FF9EC4", secondary: "#CFE86B" } },
+  // ΔE 11.8 (protan).
+  { name: "deepSea", ground: "#0C2129", groundLift: "#173F4C", paper: "#E9F4F5", amber: "#5BD1C4", seaglass: "#FFC46B",
+    chart: { primary: "#5BD1C4", secondary: "#FFC46B" } },
+  // Rose against mint, ΔE 7.2. Swapping mint for sky lifts it to ΔE 12.4.
+  { name: "oxblood", ground: "#26101A", groundLift: "#451D2E", paper: "#F6EBEE", amber: "#FF7A9C", seaglass: "#8ED8B5",
+    chart: { primary: "#FF7A9C", secondary: "#8FD3F4" } },
 ] as const;
 
 /**
@@ -159,6 +201,30 @@ const withDerived = (
   amber: base.amber,
   seaglass: base.seaglass,
   rule: `${base.paper}38`,
+  /**
+   * The tokens a figure is drawn from, named by the job each one does rather
+   * than by its colour — an exhibit asks for `chart.primary`, never for amber,
+   * so a palette can re-step its data pair without every chart following the
+   * type colours into a pair a colourblind viewer cannot read.
+   *
+   * `track` is the empty half of a meter and is deliberately a lighter step of
+   * `primary` rather than a neutral grey: state then reads across the whole bar
+   * instead of only where it happens to be filled. `surface` is what the two
+   * spacers are painted in — the gap between touching marks and the ring round
+   * an overlapping one are both this colour, never a stroke.
+   */
+  chart: {
+    primary: base.chart.primary,
+    secondary: base.chart.secondary,
+    /** Meter track: same hue as primary, stepped down until it recedes. */
+    track: `${base.chart.primary}26`,
+    /** Hairline grid and axis. One step off the surface, never dashed. */
+    grid: `${base.paper}24`,
+    /** What a mark is separated from its neighbour by. Never a border. */
+    surface: base.ground,
+    /** Panel fill an exhibit sits on, so it lifts off the drifting backdrop. */
+    panel: "rgba(0,0,0,0.34)",
+  },
   display: type.display as string,
   mono: type.mono as string,
   displayTracking: type.displayTracking as string,
@@ -180,11 +246,18 @@ export type Theme = typeof palette;
  * that sets `props.theme` is choosing colours, and letting that same field
  * smuggle in a motion signature would put timing values a template springs
  * against under the control of a JSON file nobody type-checks.
+ *
+ * `chart` is reinstated for a sharper reason. Its eight pairs are the output of
+ * a colourblind-separation check, and a plan that could set them would be able
+ * to hand a figure two colours that measure ΔE 4.8 apart without anything
+ * noticing. Retinting the *type* is a taste decision and stays available;
+ * retinting the marks that encode the data is not.
  */
 export const resolveTheme = (overrides?: Partial<Theme>): Theme => ({
   ...palette,
   ...(overrides ?? {}),
   motion: palette.motion,
+  chart: palette.chart,
 });
 
 export type Look = {
@@ -245,8 +318,12 @@ export function lookFor(id: string | undefined, overrides?: Partial<Theme>): Loo
   const chosenType = TYPEFACES[campaign ? campaign.typefaceIndex : legacy!.typeIndex];
   const motion = MOTION_SIGNATURES[campaign ? campaign.motionIndex : 0];
 
+  const derived = withDerived(chosenPalette, chosenType, motion);
+
   return {
-    theme: { ...withDerived(chosenPalette, chosenType, motion), ...(overrides ?? {}), motion },
+    // Same two exemptions as resolveTheme: an override may retint the type but
+    // may not restyle the motion or unpick the validated chart pair.
+    theme: { ...derived, ...(overrides ?? {}), motion, chart: derived.chart },
     paletteName: chosenPalette.name,
     typefaceName: chosenType.name,
     motion,

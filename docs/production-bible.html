@@ -1,0 +1,805 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MeritByte Motion System — Advanced Production Bible</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm 20mm; }
+  @page { @bottom-center { content: counter(page); } }
+
+  :root{
+    --ink:#16121b; --dim:#5b5266; --faint:#8b8394; --rule:#ddd6e2;
+    --amber:#b25c00; --sea:#0d7a68; --bad:#a3123c; --panel:#faf7fb;
+    --mono: "SFMono-Regular", "JetBrains Mono", Consolas, "Liberation Mono", monospace;
+    --sans: "Inter", -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    font-family:var(--sans); color:var(--ink); font-size:9.6pt; line-height:1.55;
+    margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+
+  h1{font-size:26pt;line-height:1.05;letter-spacing:-.025em;margin:0 0 6pt}
+  h2{
+    font-size:15pt;line-height:1.15;letter-spacing:-.02em;margin:0 0 10pt;
+    padding-bottom:5pt;border-bottom:2px solid var(--ink);
+    break-after:avoid; page-break-after:avoid;
+  }
+  h3{font-size:11pt;letter-spacing:-.01em;margin:16pt 0 5pt;break-after:avoid;page-break-after:avoid}
+  h4{font-size:9.6pt;margin:11pt 0 3pt;break-after:avoid;page-break-after:avoid}
+  p{margin:0 0 7pt}
+  ul,ol{margin:0 0 8pt;padding-left:15pt}
+  li{margin-bottom:3pt}
+  code,kbd{font-family:var(--mono);font-size:.88em;background:var(--panel);padding:.5pt 2.5pt;border-radius:2pt}
+  pre{
+    font-family:var(--mono);font-size:7.6pt;line-height:1.45;background:var(--panel);
+    border:1px solid var(--rule);border-left:3px solid var(--amber);
+    border-radius:3pt;padding:7pt 9pt;margin:0 0 9pt;white-space:pre-wrap;
+    break-inside:avoid; page-break-inside:avoid;
+  }
+  pre code{background:none;padding:0}
+
+  .section{break-before:page; page-break-before:always}
+  .cover{break-after:page; page-break-after:always}
+  .keep{break-inside:avoid; page-break-inside:avoid}
+
+  table{width:100%;border-collapse:collapse;margin:0 0 10pt;font-size:8.4pt;break-inside:avoid;page-break-inside:avoid}
+  th{text-align:left;font-weight:600;border-bottom:1.5px solid var(--ink);padding:4pt 6pt 4pt 0;vertical-align:bottom}
+  td{border-bottom:1px solid var(--rule);padding:4pt 6pt 4pt 0;vertical-align:top}
+  td.mono,th.mono,.mono{font-family:var(--mono);font-size:7.8pt}
+  .num{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--mono)}
+
+  .lede{font-size:11pt;line-height:1.45;color:var(--dim);margin:0 0 14pt}
+  .eyebrow{font-family:var(--mono);font-size:7.6pt;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);margin:0 0 8pt}
+  .rule-box{
+    border:1px solid var(--ink);border-left:4px solid var(--amber);
+    padding:9pt 11pt;margin:0 0 11pt;background:var(--panel);
+    break-inside:avoid;page-break-inside:avoid;
+  }
+  .rule-box p:last-child{margin-bottom:0}
+  .rule-box .eyebrow{color:var(--ink)}
+  .note{color:var(--dim);font-size:8.6pt}
+  .bad{color:var(--bad);font-weight:600}
+  .good{color:var(--sea);font-weight:600}
+  .swatch{display:inline-block;width:9pt;height:9pt;border-radius:2pt;vertical-align:-1pt;margin-right:3pt;border:.5px solid rgba(0,0,0,.25)}
+  .cols{column-count:2;column-gap:14pt}
+  .cols > *{break-inside:avoid}
+  .toc{font-size:9pt}
+  .toc td{border:none;padding:2.5pt 0}
+  .toc td:first-child{font-family:var(--mono);color:var(--amber);width:34pt}
+  footer.cover-foot{margin-top:26pt;padding-top:9pt;border-top:1px solid var(--rule);color:var(--faint);font-size:8pt}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════ COVER ══════════════════════════════ -->
+<section class="cover">
+  <p class="eyebrow">MeritByte Technologies · remotion-factory</p>
+  <h1>The Advanced Production Bible</h1>
+  <p class="lede">
+    How to build a vertical video that <em>demonstrates</em> its subject rather than
+    captioning it — the figure catalogue, the measured colour system, the mark
+    specs, the sound contract, the script schema, and the verification chain that
+    refuses anything which does not comply.
+  </p>
+
+  <div class="rule-box">
+    <p class="eyebrow">The one rule this document exists to enforce</p>
+    <p style="font-size:12.5pt;line-height:1.3;letter-spacing:-.01em">
+      <strong>No video is words on a colour field.</strong> Every video draws its
+      subject in the middle third of the frame — a figure, a mechanism, a page
+      being broken — and that figure is a decision written into the script, not a
+      by-product of a template.
+    </p>
+  </div>
+
+  <p>
+    This is not a style guide. Every rule below is either enforced by a program
+    that fails the build, or is a measurement with the measurement printed beside
+    it. Where an approach was tried and rejected, the numbers that rejected it are
+    given, so the rule can be argued with rather than merely obeyed.
+  </p>
+
+  <table class="toc">
+    <tr><td>I</td><td><strong>The exhibit doctrine</strong> — the failure it replaces, the band, the two families</td></tr>
+    <tr><td>II</td><td><strong>The figure catalogue</strong> — 17 kinds, what each is for, and its data contract</td></tr>
+    <tr><td>III</td><td><strong>Colour, measured</strong> — the colourblind audit, the eight validated pairs, the ramp</td></tr>
+    <tr><td>IV</td><td><strong>Marks, scale and layout</strong> — why a 24px bar is wrong here, and what replaces it</td></tr>
+    <tr><td>V</td><td><strong>Motion</strong> — arrival, the per-video signature, and the performance budget</td></tr>
+    <tr><td>VI</td><td><strong>Sound</strong> — no voice, low level, and how both are made unfalsifiable</td></tr>
+    <tr><td>VII</td><td><strong>The script schema</strong> — the full contract, with a worked example</td></tr>
+    <tr><td>VIII</td><td><strong>Verification</strong> — the chain, what each gate proves, what it does not</td></tr>
+    <tr><td>IX</td><td><strong>Working practice</strong> — commands, authoring loop, failure playbook</td></tr>
+    <tr><td>X</td><td><strong>Appendix</strong> — rejected approaches and the measurements that rejected them</td></tr>
+  </table>
+
+  <footer class="cover-foot">
+    Applies from campaign week 33. Weeks 31–32 predate the rule and are exempt by
+    design — 31 is published and frozen, 32 is two templates that already spend
+    their whole runtime wrecking a real page.
+  </footer>
+</section>
+
+<!-- ═══════════════════════════════ I · DOCTRINE ══════════════════════════ -->
+<section class="section">
+  <h2>I · The exhibit doctrine</h2>
+
+  <h3>The failure this replaces</h3>
+  <p>
+    The templates were type on a colour field. A <code>SiteRoast</code> said “slow
+    first view” in large letters and never showed a page. A <code>TechTip</code>
+    listed three steps and never performed one. That reads as a caption card, and a
+    caption card is what a viewer scrolls past: the frame carries no evidence that
+    anything is happening, so there is nothing to stop on.
+  </p>
+  <p>
+    Worse, it is invisible to every check. A caption card is a perfectly healthy
+    render — the type animates, the variance is high, the end card is there, the
+    file is the right length with sound on it. Nothing failed. That is why the rule
+    needed a gate of its own rather than a note in a style guide.
+  </p>
+
+  <h3>The band</h3>
+  <p>
+    Every template stacks the same way: hook at the top, <strong>exhibit in the
+    middle</strong>, payoff at the bottom. The middle is a shared constant, not a
+    per-template guess:
+  </p>
+  <pre><code>src/exhibits/registry.json → band: { top: 0.30, bottom: 0.74 }</code></pre>
+  <p>
+    It is one number because the verifier samples exactly those pixels. A band the
+    layout did not actually honour would be a check passing on the wrong part of
+    the frame — the most expensive kind of green tick. The top edge clears a
+    three-line hook; the bottom edge clears the payoff block and the safe area the
+    platforms overlay their own UI onto.
+  </p>
+
+  <h3>Two families, and why the distinction is load-bearing</h3>
+  <div class="rule-box">
+    <p class="eyebrow">Charts</p>
+    <p>
+      Marks encode a measured quantity. Every length, angle and shade is
+      <code>value / scale</code>. A chart-family figure <strong>requires real
+      numbers in the script</strong> and the validator refuses prose in a numeric
+      field.
+    </p>
+    <p class="eyebrow" style="margin-top:9pt">Diagrams</p>
+    <p>
+      Marks depict a mechanism the script already states, and take their labels
+      from the script’s own lines. Nothing is measured, so nothing is claimed.
+    </p>
+  </div>
+  <p>
+    This split exists because of a component that was deleted from this codebase.
+    <code>TechTip</code> once drew three bars whose heights were
+    <code>progress * (0.76 + index * 0.12)</code> — a number derived from the frame
+    counter and nothing else. It looked like a chart and measured nothing, which is
+    <em>worse than no chart</em>: it invites the viewer to read a value that does
+    not exist. The lesson is encoded as a type, not a convention.
+  </p>
+
+  <div class="rule-box">
+    <p class="eyebrow">Corollary — the honesty rule</p>
+    <p>
+      If the script has no measurement, it does not get a chart. It gets a diagram,
+      which is an equally strong picture and an honest one. Reaching for a bar
+      chart to “look data-driven” is the failure mode, not the goal.
+    </p>
+  </div>
+
+  <h3>Where the figure comes from</h3>
+  <ol>
+    <li><strong>Authored.</strong> <code>props.exhibit</code> in the script. Always wins. This is the intended path.</li>
+    <li><strong>Assigned.</strong> <code>scripts/backfill-exhibits.mjs</code> writes one into the source scripts, choosing per day so the four posts six hours apart never draw the same picture. Its output is a file a human reads and edits.</li>
+    <li><strong>Derived.</strong> <code>src/exhibits/derive.ts</code> builds one at render time from the script’s own props. A floor, not a path — the validator requires an exhibit from week 33 on, so this is never reached in production.</li>
+  </ol>
+  <p class="note">
+    The three cannot disagree: once the backfill has written a figure, the
+    validator requires it and the derivation is unreachable. All three walk the
+    same preference order in <code>registry.json</code>, and a unit test asserts
+    the preference list and the per-kind permissions agree — the first version of
+    this system silently stopped choosing the browser stage for
+    <code>SiteRoast</code> because those two lists had drifted apart.
+  </p>
+</section>
+
+<!-- ═══════════════════════════════ II · CATALOGUE ════════════════════════ -->
+<section class="section">
+  <h2>II · The figure catalogue</h2>
+  <p>
+    Seventeen kinds. The catalogue is <code>src/exhibits/registry.json</code>, and
+    it is the only copy — the renderer, the plan validator and the pixel verifier
+    all import it rather than keeping mirrors.
+  </p>
+
+  <h3>Charts — require measurements</h3>
+  <table>
+    <tr><th style="width:58pt">Kind</th><th style="width:150pt">Form</th><th>Use it when · required data</th></tr>
+    <tr>
+      <td class="mono">dial</td>
+      <td>Ring gauge, one ratio against its whole; the number counts inside.</td>
+      <td>One share against a limit. A two-slice pie is the wrong answer — the eye compares angles badly.<br><span class="mono">value · unit · caption</span></td>
+    </tr>
+    <tr>
+      <td class="mono">bars</td>
+      <td>2–4 columns from one baseline, rounded data-end.</td>
+      <td>Magnitude, low to high. One scale, one baseline, never a second axis.<br><span class="mono">series[{label,value}] · unit</span></td>
+    </tr>
+    <tr>
+      <td class="mono">meters</td>
+      <td>Horizontal meters, one row per item.</td>
+      <td>The categories are sentences. A column cannot carry “Headaches by mid-afternoon” at any readable size.<br><span class="mono">rows[{label,value}] · unit</span></td>
+    </tr>
+    <tr>
+      <td class="mono">compare</td>
+      <td>Two concentric arcs and the gap between them.</td>
+      <td>Before against after. One hue in two steps — lightness survives every form of colour blindness.<br><span class="mono">from{label,value} · to{…} · unit</span></td>
+    </tr>
+    <tr>
+      <td class="mono">board</td>
+      <td>Four tiles, exactly one emphasised.</td>
+      <td>Headline figures with no shared scale. Bars would invent a comparison the numbers do not have.<br><span class="mono">tiles[4] · emphasis</span></td>
+    </tr>
+    <tr>
+      <td class="mono">cartogram</td>
+      <td>Tile grid map, one cell per region, one sequential hue.</td>
+      <td>Magnitude across places. A tile grid, never a projection — equal area per region, and no false geographic precision.<br><span class="mono">label · unit · regions[{label,value}]</span></td>
+    </tr>
+  </table>
+
+  <h3>Diagrams — take the script’s own lines</h3>
+  <table>
+    <tr><th style="width:58pt">Kind</th><th style="width:150pt">Form</th><th>Use it when · required data</th></tr>
+    <tr><td class="mono">pipeline</td><td>Stages with a packet travelling through, stalling at the bottleneck.</td><td>The subject is a sequence and where it waits. The packet is why it is a video and not a slide.<br><span class="mono">stages[3–5] · bottleneck?</span></td></tr>
+    <tr><td class="mono">trace</td><td>Rows filling in under a climbing counter.</td><td>The subject is repetition. Repetition is legible only when you watch it repeat.<br><span class="mono">rows[3–7] · counterLabel</span></td></tr>
+    <tr><td class="mono">checklist</td><td>Steps that run, hesitate, then resolve pass / warn / fail.</td><td>A printed checklist is a caption; one that resolves is a demonstration. The pause before each verdict is the device.<br><span class="mono">steps[{label,verdict}]</span></td></tr>
+    <tr><td class="mono">nodegraph</td><td>Lit core, labelled satellites landing on an orbit.</td><td>One thing feeding many. <strong>Short labels only</strong> — ≤ 26 chars, or the layout picks a different figure.<br><span class="mono">core · nodes[3–6]</span></td></tr>
+    <tr><td class="mono">timeline</td><td>Editor tracks, clips, a playhead crossing them.</td><td>Sequence or elapsed time. The playhead is a clock read without a number.<br><span class="mono">tracks[{label,clips}] · restAt?</span></td></tr>
+    <tr><td class="mono">radar</td><td>Polar lattice, sweeping arm, targets appearing as it passes.</td><td>Coverage and blind spots. Targets are <em>found</em>, not listed.<br><span class="mono">label · targets[2–4]</span></td></tr>
+    <tr><td class="mono">code</td><td>Editor panel; one marked line types, the rest appear.</td><td>The subject is literally code. Typing only the marked line puts the pace where the attention should be.<br><span class="mono">filename · lines[2–8] · highlight</span></td></tr>
+    <tr><td class="mono">browser</td><td>The page under review, faults pinned to the part at fault, then fixed.</td><td><code>SiteRoast</code>’s native stage. A roast about structure must show the structure.</td></tr>
+    <tr><td class="mono">terminal</td><td>A shell that types its command and answers it.</td><td><code>DevJoke</code>, when the joke’s setting is a machine.</td></tr>
+    <tr><td class="mono">chat</td><td>A message thread arriving one message at a time.</td><td><code>DevJoke</code>, when the setting is a person. “Make the logo bigger” in a terminal is a frame arguing with its own script.</td></tr>
+    <tr><td class="mono">sitemock</td><td>A real page wrecked round by round.</td><td><code>LogoLadder</code> and <code>WorksOnMyMachine</code>, which are built entirely around it.</td></tr>
+  </table>
+
+  <div class="rule-box">
+    <p class="eyebrow">Choosing — in order</p>
+    <ol style="margin-bottom:0">
+      <li>Does the script state a <strong>measurement</strong>? → chart. Which one is decided by the job: one ratio → <code>dial</code>; magnitudes → <code>bars</code>; sentence-length categories → <code>meters</code>; a change → <code>compare</code>; unrelated headline figures → <code>board</code>; places → <code>cartogram</code>.</li>
+      <li>Otherwise, what <strong>shape</strong> is the subject? Sequence → <code>pipeline</code> / <code>timeline</code>. Repetition → <code>trace</code>. Verification → <code>checklist</code> / <code>radar</code>. One-to-many → <code>nodegraph</code>. Code → <code>code</code>.</li>
+      <li>Does the template have a <strong>native stage</strong> that already is the subject? Use it.</li>
+      <li>Check the labels <strong>fit</strong>. A figure full of ellipses is worse than a different figure.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ III · COLOUR ══════════════════════════ -->
+<section class="section">
+  <h2>III · Colour, measured</h2>
+
+  <p>
+    Colour is assigned by the <em>job</em> it does, and the assignment is
+    <strong>computed, never eyeballed</strong>. Four jobs, one rule each:
+  </p>
+  <table>
+    <tr><th style="width:70pt">Job</th><th>Rule</th></tr>
+    <tr><td><strong>Identity</strong></td><td>Categorical. The validated pair below, in fixed order. Never cycled, never generated.</td></tr>
+    <tr><td><strong>Magnitude</strong></td><td>Sequential. One hue, dark → light. Never a rainbow.</td></tr>
+    <tr><td><strong>Polarity</strong></td><td>Diverging. Two poles, neutral midpoint. Not used in this series yet.</td></tr>
+    <tr><td><strong>State</strong></td><td>Status. Reserved for pass / warn / fail, and always shipped with a glyph <em>and</em> a word.</td></tr>
+  </table>
+
+  <h3>The audit that changed the palette</h3>
+  <p>
+    The eight palettes pair a warm paper ink with one saturated signal colour.
+    Those two were chosen to look good together <em>as type</em>, where shape
+    carries the meaning. The moment two marks in one figure are told apart by
+    colour alone the requirement changes: they must stay distinguishable to a
+    red–green colourblind viewer — roughly one man in twelve scrolling past.
+    Measured with the OKLab CVD model, three of eight did not:
+  </p>
+  <table>
+    <tr><th>Palette</th><th class="mono">amber</th><th class="mono">seaglass</th><th class="num">worst ΔE</th><th>Verdict</th></tr>
+    <tr><td>plum</td><td class="mono"><span class="swatch" style="background:#FF9EC4"></span>#FF9EC4</td><td class="mono"><span class="swatch" style="background:#9BE3C9"></span>#9BE3C9</td><td class="num">4.8</td><td class="bad">FAIL — one colour to a deuteranope</td></tr>
+    <tr><td>moss</td><td class="mono"><span class="swatch" style="background:#B7E36B"></span>#B7E36B</td><td class="mono"><span class="swatch" style="background:#FF9F68"></span>#FF9F68</td><td class="num">6.5</td><td class="bad">below the safe floor</td></tr>
+    <tr><td>oxblood</td><td class="mono"><span class="swatch" style="background:#FF7A9C"></span>#FF7A9C</td><td class="mono"><span class="swatch" style="background:#8ED8B5"></span>#8ED8B5</td><td class="num">7.2</td><td class="bad">below the safe floor</td></tr>
+  </table>
+
+  <p>
+    Re-tinting the type was not available: weeks 31–32 are rendered and
+    fingerprinted, and a palette edit would change what a re-render of those ids
+    produces — which is exactly the alarm the duplicate detector exists to raise.
+    <strong>So charts got their own pair.</strong> Every one clears ΔE 8 across
+    deutan, protan and tritan, and 3:1 contrast against its own ground.
+  </p>
+
+  <table>
+    <tr><th>Palette</th><th class="mono">chart.primary</th><th class="mono">chart.secondary</th><th class="num">worst ΔE</th><th>Note</th></tr>
+    <tr><td>aubergine</td><td class="mono"><span class="swatch" style="background:#FFB25C"></span>#FFB25C</td><td class="mono"><span class="swatch" style="background:#6FD3BE"></span>#6FD3BE</td><td class="num">12.0</td><td>unchanged</td></tr>
+    <tr><td>ink</td><td class="mono"><span class="swatch" style="background:#7FB2FF"></span>#7FB2FF</td><td class="mono"><span class="swatch" style="background:#FFD166"></span>#FFD166</td><td class="num">21.5</td><td>unchanged</td></tr>
+    <tr><td>moss</td><td class="mono"><span class="swatch" style="background:#B7E36B"></span>#B7E36B</td><td class="mono"><span class="swatch" style="background:#FFA8E8"></span>#FFA8E8</td><td class="num">14.2</td><td class="good">re-stepped to orchid</td></tr>
+    <tr><td>rust</td><td class="mono"><span class="swatch" style="background:#FF8A5B"></span>#FF8A5B</td><td class="mono"><span class="swatch" style="background:#7FD1C4"></span>#7FD1C4</td><td class="num">12.9</td><td>unchanged</td></tr>
+    <tr><td>slate</td><td class="mono"><span class="swatch" style="background:#F2C14E"></span>#F2C14E</td><td class="mono"><span class="swatch" style="background:#8FD3F4"></span>#8FD3F4</td><td class="num">19.9</td><td>unchanged</td></tr>
+    <tr><td>plum</td><td class="mono"><span class="swatch" style="background:#FF9EC4"></span>#FF9EC4</td><td class="mono"><span class="swatch" style="background:#CFE86B"></span>#CFE86B</td><td class="num">15.3</td><td class="good">re-stepped to citron</td></tr>
+    <tr><td>deepSea</td><td class="mono"><span class="swatch" style="background:#5BD1C4"></span>#5BD1C4</td><td class="mono"><span class="swatch" style="background:#FFC46B"></span>#FFC46B</td><td class="num">11.8</td><td>unchanged</td></tr>
+    <tr><td>oxblood</td><td class="mono"><span class="swatch" style="background:#FF7A9C"></span>#FF7A9C</td><td class="mono"><span class="swatch" style="background:#8FD3F4"></span>#8FD3F4</td><td class="num">12.4</td><td class="good">re-stepped to sky</td></tr>
+  </table>
+
+  <div class="rule-box">
+    <p class="eyebrow">Enforced</p>
+    <p>
+      A plan may retint the <em>type</em> through <code>props.theme</code>. It may
+      <strong>not</strong> touch <code>theme.chart</code> — the field is reinstated
+      after the override spread in both <code>resolveTheme</code> and
+      <code>lookFor</code>. Retinting type is a taste decision; retinting the marks
+      that encode data would let a script hand a figure two colours measuring
+      ΔE 4.8 apart with nothing noticing.
+    </p>
+  </div>
+
+  <h3>The sequential ramp</h3>
+  <p>
+    The obvious implementation is to fade the signal colour toward the ground. It
+    is wrong twice, and both corrections were measured.
+  </p>
+  <p>
+    <strong>It is not one hue.</strong> These grounds are chromatic on purpose, so a
+    step halfway between an orange signal and a purple ground is a muddy brown —
+    the ramp measured <strong>45° of hue spread</strong> on aubergine. A ramp whose
+    hue moves is one the reader must decode instead of read. Scaling every channel
+    by the same factor is exactly a lightness change and leaves hue alone:
+    measured spread is now <strong>1°</strong>.
+  </p>
+  <p>
+    <strong>Its floor was invisible.</strong> At a 0.18 floor the lowest cell
+    measured <strong>1.45:1</strong> against its ground — a region carrying real
+    data, rendered invisible. <code>RAMP_FLOOR = 0.5</code> is the smallest floor
+    clearing 2:1 on all eight grounds; the tightest, oxblood, lands at 2.30:1.
+  </p>
+  <pre><code>rampStep(signal, t) = signal × (0.5 + t × 0.5)      // hue-preserving, visible at t=0</code></pre>
+
+  <h3>Text never wears the data colour</h3>
+  <p>
+    Marks carry the series colour. Labels, values and axis text wear ink tokens
+    (<code>paper</code> / <code>paperDim</code>) — a light categorical hue is
+    illegible as type, and identity is meant to come from the coloured mark
+    <em>beside</em> the words. The single exception is a label sitting
+    <em>inside</em> a filled mark, where the choice is made by measuring the fill’s
+    relative luminance with WCAG’s own formula, not by thresholding the value that
+    produced it.
+  </p>
+</section>
+
+<!-- ═══════════════════════════════ IV · MARKS ════════════════════════════ -->
+<section class="section">
+  <h2>IV · Marks, scale and layout</h2>
+
+  <h3>The scale factor — why the published mark specs are wrong here</h3>
+  <p>
+    Standard chart specs — a 24px bar cap, a 2px line, an 8px marker, a 2px gap —
+    are written for a chart on a desktop screen where a CSS pixel is a pixel. This
+    frame is 1080 wide and is watched on a phone roughly 390pt across, so a mark
+    drawn at its literal spec arrives on the viewer’s eye at about a third of its
+    intended size: a 24px bar becomes 9 points of ink, which is a hairline.
+  </p>
+  <pre><code>MARK_SCALE = 1080 / 390 = 2.77          // src/exhibits/Figure.tsx</code></pre>
+  <table>
+    <tr><th>Mark</th><th class="num">Reference</th><th class="num">This frame</th><th>Rule</th></tr>
+    <tr><td>Bar / column thickness</td><td class="num">24</td><td class="num">66</td><td>Cap it. The leftover in the band is air, not more bar.</td></tr>
+    <tr><td>Line weight</td><td class="num">2</td><td class="num">6</td><td>Round join and cap.</td></tr>
+    <tr><td>Marker / end-dot</td><td class="num">8</td><td class="num">22</td><td>Plus a surface ring where it overlaps.</td></tr>
+    <tr><td>Surface gap</td><td class="num">2</td><td class="num">6</td><td>One consistent width across a whole figure.</td></tr>
+    <tr><td>Hairline grid / axis</td><td class="num">1</td><td class="num">3</td><td>Solid, never dashed. Always recessive.</td></tr>
+    <tr><td>Rounded data-end</td><td class="num">4</td><td class="num">11</td><td>Rounded at the tip, square at the baseline.</td></tr>
+  </table>
+
+  <div class="rule-box">
+    <p class="eyebrow">One documented deviation</p>
+    <p>
+      <code>bars</code> replaces the absolute 66px cap with a proportional one —
+      a bar takes at most <strong>62% of its band</strong>. The absolute cap
+      assumes a chart sharing a dashboard with five others. Here the figure
+      <em>is</em> the frame, so the proportional rule preserves the relationship
+      the spec is actually protecting (“the leftover is air”) while letting the
+      marks read on a phone.
+    </p>
+  </div>
+
+  <h3>The two spacers</h3>
+  <p>
+    <strong>Never draw a border around a mark to separate it.</strong> A stroke adds
+    ink that is not data. Two mechanisms do the separating: a
+    <strong>surface gap</strong> between touching marks, and a
+    <strong>surface ring</strong> on dots and end-markers that cross something.
+  </p>
+
+  <h3>Labels — and why the usual advice is inverted here</h3>
+  <p>
+    The standard rule is <em>label selectively</em>: label the endpoint, the
+    extreme, the one series the story is about, and let the tooltip and table view
+    carry the rest. That rule assumes a reader who can hover.
+  </p>
+  <div class="rule-box">
+    <p class="eyebrow">Video amendment</p>
+    <p>
+      There is no tooltip, no legend box, no table view and no hover. The direct
+      label beside a mark is the <em>only</em> channel left when colour fails, so
+      <strong>every mark is labelled</strong>, and the figure’s panel header names
+      what is being measured. A legend box would restate the header and cost the
+      space the marks need.
+    </p>
+  </div>
+
+  <h3>Hard prohibitions</h3>
+  <ul>
+    <li><strong>Never a second y-axis.</strong> Two measures of different scale are two figures, not one figure with two rulers. This is the single most common way a chart lies.</li>
+    <li><strong>Never generate a hue</strong> for an extra series. Fold the tail into “other”, facet, or cut series.</li>
+    <li><strong>Never colour by rank.</strong> Colour follows the entity. A filter that changes the series count must not repaint the survivors.</li>
+    <li><strong>Never clip a label</strong> with <code>overflow:hidden</code>. If it does not fit, move it outside the mark or choose a different figure.</li>
+    <li><strong>Never mark state by colour alone.</strong> Verdicts ship with a glyph and a word.</li>
+  </ul>
+</section>
+
+<!-- ═══════════════════════════════ V · MOTION ════════════════════════════ -->
+<section class="section">
+  <h2>V · Motion</h2>
+
+  <h3>Arrival, not appearance</h3>
+  <p>
+    A figure’s panel rises and settles on a spring rather than fading. A fade reads
+    as a slide transition; a physical arrival reads as an object entering the
+    frame, and that is the difference between a deck and a video. The marks follow
+    the panel, and a counting number rides the <em>same</em> spring as the mark it
+    labels — a value that finishes before its bar does reads as two unrelated
+    animations.
+  </p>
+
+  <h3>Motion is a variation axis</h3>
+  <p>
+    Every campaign video walks an 8 × 7 × 6 = <strong>336-combination</strong> space
+    of palette × typeface × motion signature with a stride coprime to the space, so
+    120 videos are distinct <em>by construction</em> rather than by luck. A
+    signature changes entrance direction, stagger, spring damping and mass, and the
+    backdrop’s grid scale and skew — so two videos sharing a palette and a typeface
+    still do not produce matching frames. The figure kind rotates on the same
+    ordinal, so consecutive videos on one template never draw the same picture.
+  </p>
+
+  <h3>The performance budget is real</h3>
+  <p>
+    These render on a two-core runner through a software GL path. The rules are not
+    stylistic:
+  </p>
+  <ul>
+    <li><strong>No full-frame blur.</strong> Glows are radial gradients. A full-frame <code>filter: blur()</code> costs more than every other layer combined.</li>
+    <li><strong>Rasterise once, translate thereafter.</strong> Animating a gradient’s <em>position</em> repaints 1080×1920 twice a frame: measured 0.43 s/frame → 1.21 s/frame. Animate <code>transform</code> so each frame only composites.</li>
+    <li><strong>Grain is a 256px tile, not a full-frame filter.</strong> An <code>feTurbulence</code> over two million pixels was roughly three quarters of total render time.</li>
+    <li><strong>Line work is SVG.</strong> The rasteriser is good at it.</li>
+    <li><strong>No <code>Math.random</code> in a render.</strong> Every variation is a pure function of the video id, because renders are retried and a retry that produced a different video would invalidate the stored fingerprint.</li>
+  </ul>
+
+  <div class="rule-box">
+    <p class="eyebrow">React rule that bites here</p>
+    <p>
+      Every figure draws a <em>list</em> of marks, so timing is computed inside a
+      <code>map</code>. Read the frame <strong>once</strong> at the top of the
+      component and pass it down to pure helpers
+      (<code>arrival(theme, from, frame, fps)</code>). A hook called in a loop is a
+      hook whose call order changes with the data.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ VI · SOUND ════════════════════════════ -->
+<section class="section">
+  <h2>VI · Sound</h2>
+
+  <p>
+    With no voiceover, the audio track is not decoration — it is the performance.
+    Two requirements, and both are made unfalsifiable rather than merely stated.
+  </p>
+
+  <h3>No voice</h3>
+  <p>
+    Every sound in the series is <strong>synthesised by this repository</strong>:
+    bed layers and one-shot cues built by <code>scripts/audio/</code>. A cue names a
+    generated one-shot, never a file.
+  </p>
+  <pre><code>// scripts/exhibits.mjs → voiceProblems()
+props.voiceover | narration | vo | speech | tts   → rejected
+score.cues[].sfx containing "." "/" or "\"        → rejected  (that is a file, and a
+                                                    file is audio this repo did not make)</code></pre>
+  <p class="note">
+    The check is on the script, not the render, because by render time the decision
+    has already been made. It is the only way a voice could reach the mix, so it is
+    closed at the only place it can be closed.
+  </p>
+
+  <h3>Low volume — a band, not a floor</h3>
+  <p>
+    The master pass targets <strong>−23 LUFS</strong> at −2 dBTP. Verification
+    checks a <em>band</em>, measured as mean RMS in dBFS:
+  </p>
+  <pre><code>QUIET_FLOOR_DB   = -45     // below this: a track with effectively nothing on it
+QUIET_CEILING_DB = -14     // above this: an unmastered mix at full level
+observed on real mastered renders: -29.4 dB</code></pre>
+  <p>
+    The ceiling is the important half and the one a floor-only check misses
+    entirely: it catches an unmastered mix going out at full level under a viewer’s
+    thumb at two in the morning. Measured as RMS rather than LUFS because that
+    needs no filter build — Remotion ships ffmpeg with <code>--disable-filters</code>
+    and <code>volumedetect</code> is not among the few re-enabled.
+  </p>
+
+  <h3>The score model</h3>
+  <ul>
+    <li><strong>Bed</strong> — layers that enter and leave on named frames. One layer per beat is the house pattern.</li>
+    <li><strong>Cues</strong> — one-shots on exact frames, with optional pitch escalation. Pitch rising across a build is this series’ substitute for narration.</li>
+    <li><strong>Hard silence</strong> — cut every layer for a full beat before a payoff. Used on nearly every script. This is why the frame verifier reports stillness rather than judging it: deliberate stillness is a device here, and a check that failed it would fail the videos following the brief most closely.</li>
+    <li>A script that transcribes no score gets the template’s documented bed behaviour, so no video is ever silent by accident.</li>
+  </ul>
+</section>
+
+<!-- ═══════════════════════════════ VII · SCHEMA ══════════════════════════ -->
+<section class="section">
+  <h2>VII · The script schema</h2>
+
+  <p>
+    Scripts are authored in <code>plan-source/campaign/w&lt;n&gt;.json</code>. Ids,
+    day numbers, eyebrows, runtimes and the week block are all
+    <em>derived</em> by <code>scripts/build-campaign.mjs</code> — never written by
+    hand, because that is what validators check hardest and humans are worst at.
+  </p>
+
+  <div class="rule-box">
+    <p class="eyebrow">Author here, not in <code>plans/</code></p>
+    <p>
+      <code>plans/&lt;week&gt;.json</code> is generated. A figure written there is
+      dropped the next time the campaign is built. The validator catches this, but
+      the habit is worth having.
+    </p>
+  </div>
+
+  <h3>A complete item</h3>
+<pre><code>{
+  "template": "TechTip",
+  "sourceId": "c30-d01-hero-weight",
+  "caption": "Your largest paint is almost always the hero image. Three checks that
+tell you in under a minute.\n\n#WebPerformance #CoreWebVitals #FrontEnd",
+  "props": {
+    "hook": "Your hero image is the wait",
+    "steps": [
+      "Open DevTools, throttle to Fast 3G",
+      "Find the Largest Contentful Paint element",
+      "If it is the hero, resize and preload it"
+    ],
+    "result": "Most sites lose two seconds to one image.",
+    "variant": "vitals",
+    "kicker": "SAVE THIS",
+
+    "exhibit": {
+      "kind": "checklist",
+      "title": "three checks, in order",
+      "steps": [
+        { "label": "Throttle to Fast 3G",          "verdict": "pass" },
+        { "label": "Find the LCP element",         "verdict": "pass" },
+        { "label": "Hero is 1.9 MB, unpreloaded",  "verdict": "fail" }
+      ]
+    }
+  }
+}</code></pre>
+
+  <h3>Rules the validator enforces on every item</h3>
+  <table>
+    <tr><th style="width:120pt">Rule</th><th>Why</th></tr>
+    <tr><td><code>props.exhibit</code> present<br>(week ≥ 33)</td><td>The renderer would derive one anyway — but then nobody chose it. The point of the rule is that somebody chose.</td></tr>
+    <tr><td>Kind is known and <strong>permitted for that template</strong></td><td>A kind no component can draw would render an empty band on a video nobody watched before it posted.</td></tr>
+    <tr><td>Every <code>requires</code> field present</td><td>A dial with no number is not a dial.</td></tr>
+    <tr><td>Chart-family <code>numeric</code> fields are finite numbers</td><td>The deleted-component rule. Prose in a numeric field means the figure should be a diagram.</td></tr>
+    <tr><td>List lengths inside bounds</td><td>Past them the figure stops being readable at phone size.</td></tr>
+    <tr><td><strong>No two of a day’s four posts</strong> draw the same figure</td><td>Four dials in one day is one video posted four times to anyone scrolling that feed. Stage kinds are exempt — their uniqueness is in the page, checked on the pixels.</td></tr>
+    <tr><td>No voiceover field; cues name generated one-shots</td><td>See VI.</td></tr>
+    <tr><td>Hook ≤ 7 words; exactly 3 hashtags; ids match weekly position</td><td>Pre-existing series rules, unchanged.</td></tr>
+  </table>
+</section>
+
+<!-- ═══════════════════════════════ VIII · VERIFY ═════════════════════════ -->
+<section class="section">
+  <h2>VIII · Verification</h2>
+
+  <p>
+    Nothing reads these videos before they reach an audience. A render that fails
+    halfway still produces a playable MP4, and unattended that mistake repeats four
+    times a day for a week. Five gates, in order, each refusing to let a video
+    past.
+  </p>
+
+  <table>
+    <tr><th style="width:96pt">Gate</th><th>Proves</th><th style="width:96pt">Runs</th></tr>
+    <tr><td><strong>1 · Plan</strong><br><span class="mono">validate-plan.mjs</span></td><td>The script is one we would accept: figure named, permitted, complete, numeric where it claims to measure, distinct within its day, no voice.</td><td>On every push, before anything renders.</td></tr>
+    <tr><td><strong>2 · Uniqueness matrix</strong><br><span class="mono">uniqueness-matrix.mjs</span></td><td>No two of the 120 planned videos share a look, a piece of music, or their words. Proved from the plan in about a second.</td><td>Before dispatching a render.</td></tr>
+    <tr><td><strong>3 · File</strong><br><span class="mono">verify-video.mjs</span></td><td>Well-formed 1080×1920 h264, right length, real bitrate, an audio stream with programme in it, non-blank frames, motion that resumes, the end card present.</td><td>After the master pass.</td></tr>
+    <tr><td><strong>4 · Script contract</strong><br><span class="mono">verify-script.mjs</span></td><td><strong>That this file is the video its script asked for.</strong> See below.</td><td>Immediately after gate 3.</td></tr>
+    <tr><td><strong>5 · Archive</strong><br><span class="mono">uniqueness.mjs</span></td><td>The finished file’s visual and audio fingerprints match nothing already published.</td><td>Before upload.</td></tr>
+  </table>
+
+  <h3>Gate 4, in detail — and the honest limit of it</h3>
+  <div class="rule-box">
+    <p class="eyebrow">The tempting wrong answer</p>
+    <p>
+      Look at the pixels and recognise the figure. <strong>It does not work</strong>,
+      and this was measured rather than assumed. The same script rendered before
+      and after the exhibit layer scored <strong>86%</strong> and <strong>81%</strong>
+      on the “how much ink is continuous mark” statistic — the text-only version
+      scored <em>higher</em>. Large display type produces runs just as long as a bar
+      does. Erosion and panel-contrast variants separated no better: 4.8% vs 6.3%,
+      and 39% vs 84% with a text-only <code>FounderStory</code> scoring 100%.
+    </p>
+    <p>
+      A gate that does not separate the two cases is not protecting anything. It is
+      a number that passes, which is worse than no number.
+    </p>
+  </div>
+
+  <p>What works is a chain of individually provable steps:</p>
+  <ol>
+    <li>The script names a figure that exists, is allowed on that template, and has every field it needs. <span class="note">Proved by reading the plan against the catalogue.</span></li>
+    <li>The renderer was handed exactly that script. <span class="note">Proved by comparing the props file the render used against the plan item, canonically — key order cannot cause a false failure, and the injected <code>videoId</code> is checked against the item id separately because it seeds palette, typeface, motion and musical key.</span></li>
+    <li>Renders are a pure function of their props. <span class="note">The project already depends on this: a retry producing a different video would invalidate the stored fingerprint.</span></li>
+    <li><strong>Therefore the video contains that figure.</strong></li>
+  </ol>
+
+  <p>
+    The pixels are still inspected, and still gate — for what they can actually
+    prove. <code>inspect-band.mjs</code> decodes only the band and asks whether it
+    is <em>occupied, alive and held</em>. That catches what a props comparison
+    cannot: a font that never loaded, a component that threw, a figure that
+    vanished after six frames.
+  </p>
+
+  <table>
+    <tr><th>Band check</th><th class="num">Floor</th><th class="num">Worst real</th><th>Catches</th></tr>
+    <tr><td>Settled ink coverage</td><td class="num">3%</td><td class="num">6.6%</td><td>An empty middle third.</td></tr>
+    <tr><td>Frames the band changes on</td><td class="num">4</td><td class="num">26</td><td>A figure that is a still image.</td></tr>
+    <tr><td>Body frames the band is occupied</td><td class="num">35%</td><td class="num">74%</td><td>A figure that flashes rather than holds.</td></tr>
+  </table>
+  <p class="note">
+    Calibrated against seven real renders across every template. The low end of
+    each is a genuine video, not a bad one — 6.6% is a sparse radar, 74% is a
+    <code>LogoLadder</code> clearing its own stage during a scripted freeze. Every
+    floor sits well under the worst real measurement, deliberately: a false
+    positive blocks a publish and needs a human at 3am, while what these catch are
+    gross failures measuring near zero, not near the floor.
+  </p>
+
+  <div class="rule-box">
+    <p class="eyebrow">State it plainly</p>
+    <p>
+      The pixel gate proves the band is <em>occupied and alive</em>. It does
+      <strong>not</strong> prove which figure is in it. That guarantee comes from
+      the plan contract plus deterministic rendering — a proof, where a classifier
+      would be a guess.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ IX · PRACTICE ═════════════════════════ -->
+<section class="section">
+  <h2>IX · Working practice</h2>
+
+  <h3>Authoring loop</h3>
+  <ol>
+    <li>Write the script in <code>plan-source/campaign/w&lt;n&gt;.json</code>, including <code>props.exhibit</code>.</li>
+    <li><code>npm run exhibits -- --check</code> — proposes figures for anything missing one, without writing.</li>
+    <li><code>npm run campaign</code> — rebuilds <code>plans/</code> from source.</li>
+    <li><code>npm run validate</code> — all five plan-side gates.</li>
+    <li><code>npm run studio</code> — look at it. Or <code>npx remotion still src/index.ts &lt;Template&gt; out/probe/x.png --props=&lt;file&gt; --frame=150 --scale=0.4</code> for a fast single frame.</li>
+    <li><code>npm test</code> — 162 tests, including the catalogue-consistency checks.</li>
+  </ol>
+
+  <h3>Commands</h3>
+  <table>
+    <tr><th style="width:170pt">Command</th><th>Does</th></tr>
+    <tr><td class="mono">npm run validate</td><td>Plan structure, exhibit gate, queue, campaign build freshness, uniqueness matrix.</td></tr>
+    <tr><td class="mono">npm run exhibits [-- --check]</td><td>Assign figures to campaign sources, day-aware. <code>--check</code> reports only.</td></tr>
+    <tr><td class="mono">npm run band &lt;file.mp4&gt;</td><td>Ink, structure, motion and presence in the exhibit band.</td></tr>
+    <tr><td class="mono">npm run verify &lt;file.mp4&gt; [secs]</td><td>Container, frames, loudness, end card.</td></tr>
+    <tr><td class="mono">npm run verify:script &lt;mp4&gt; &lt;plan&gt; &lt;id&gt;</td><td>The full script contract for one finished file.</td></tr>
+    <tr><td class="mono">npm run campaign:check</td><td>The 120-video look, music and copy uniqueness matrix.</td></tr>
+  </table>
+
+  <h3>Failure playbook</h3>
+  <table>
+    <tr><th style="width:190pt">Message</th><th>Do</th></tr>
+    <tr><td class="mono">props.exhibit is missing</td><td>Write one, or run <code>npm run exhibits</code> and review what it proposed.</td></tr>
+    <tr><td class="mono">kind “X” is not available to &lt;Template&gt;</td><td>Either the wrong figure for that template, or the catalogue should permit it — decide, then edit <code>registry.json</code>. The consistency test will hold you to it.</td></tr>
+    <tr><td class="mono">must be a finite number on a chart-family figure</td><td>The script has no measurement. Use a diagram kind — do not invent a number.</td></tr>
+    <tr><td class="mono">draws the same figure as … on the same day</td><td>Author a different figure for one of them. The assigner already tried most-constrained-first and could not find a clash-free set.</td></tr>
+    <tr><td class="mono">NO FIGURE FITS — write one by hand</td><td>Usually labels too long for every candidate. Shorten the lines, or write a figure whose data is not the lines.</td></tr>
+    <tr><td class="mono">the render used different props from the script</td><td>The props file is stale. Re-render; do not re-point the check.</td></tr>
+    <tr><td class="mono">the exhibit band is … % covered</td><td>A real render failure — a throw, a font that never loaded, a figure with empty data. Look at a still before anything else.</td></tr>
+    <tr><td class="mono">DIFFERS from its source scripts</td><td>Something edited <code>plans/</code> directly. Move the change into <code>plan-source/</code> and rebuild.</td></tr>
+  </table>
+</section>
+
+<!-- ═══════════════════════════════ X · APPENDIX ══════════════════════════ -->
+<section class="section">
+  <h2>X · Appendix — rejected approaches</h2>
+  <p>
+    Recorded so they are not re-attempted, with the measurement that rejected each.
+  </p>
+
+  <table>
+    <tr><th style="width:130pt">Tried</th><th>Measured</th><th>Why it was dropped</th></tr>
+    <tr>
+      <td>Run-length “structure” as a text-vs-figure gate</td>
+      <td>Text-only 86% · exhibit 81%</td>
+      <td>Text-only scored <em>higher</em>. Large display type produces runs as long as a bar’s.</td>
+    </tr>
+    <tr>
+      <td>Erosion (5×5) solidity</td>
+      <td>4.8% vs 6.3%</td>
+      <td>Legitimate thin-but-long marks — meters, rules, playheads — erode away with the type.</td>
+    </tr>
+    <tr>
+      <td>Panel-contrast detection</td>
+      <td>39% vs 84%, control 100%</td>
+      <td>A text-only <code>FounderStory</code> scored 100%. The backdrop vignette dominates the measurement.</td>
+    </tr>
+    <tr>
+      <td>Fading the signal colour toward the ground for the ramp</td>
+      <td>45° hue spread; light end 1.45:1</td>
+      <td>Not one hue, and its low end was invisible. Replaced by channel scaling with a 0.5 floor.</td>
+    </tr>
+    <tr>
+      <td>Re-tinting <code>amber</code>/<code>seaglass</code> to fix CVD</td>
+      <td>—</td>
+      <td>Weeks 31–32 are rendered and fingerprinted; a palette edit changes what a re-render of those ids produces.</td>
+    </tr>
+    <tr>
+      <td>Greedy left-to-right figure assignment</td>
+      <td>Two checklists in w36-d05</td>
+      <td>Cannot back out when a later slot has only one workable figure. Replaced by most-constrained-first.</td>
+    </tr>
+    <tr>
+      <td>Keeping the preference order in TypeScript</td>
+      <td><code>browser</code> chosen 0 times</td>
+      <td>The JSON-side tool could not import it, fell back to registry order, and <code>SiteRoast</code> silently lost the stage it was built around.</td>
+    </tr>
+    <tr>
+      <td>Radial <code>nodegraph</code> at a 34% orbit</td>
+      <td>Labels 150px past the panel</td>
+      <td>A satellite’s label grows outward from its node; the orbit is solved against the panel width, not chosen.</td>
+    </tr>
+    <tr>
+      <td>Backfilling <code>plans/</code> directly</td>
+      <td>5 plans “DIFFER from source”</td>
+      <td>Generated files. The next campaign build drops every figure written there.</td>
+    </tr>
+  </table>
+
+  <h3>Standing measurements</h3>
+  <table>
+    <tr><th>Quantity</th><th class="num">Value</th></tr>
+    <tr><td>Look space (palette × typeface × motion)</td><td class="num">8 × 7 × 6 = 336</td></tr>
+    <tr><td>Walk stride (coprime to 336)</td><td class="num">149</td></tr>
+    <tr><td>Campaign videos, all distinct in look and music</td><td class="num">120 / 120</td></tr>
+    <tr><td>Chart pair worst-case CVD separation, all eight palettes</td><td class="num">ΔE ≥ 11.8</td></tr>
+    <tr><td>Sequential ramp hue spread, after correction</td><td class="num">1°</td></tr>
+    <tr><td>Ramp light-end contrast, tightest ground (oxblood)</td><td class="num">2.30 : 1</td></tr>
+    <tr><td>Master target / delivered true peak</td><td class="num">−23 LUFS / −2 dBTP</td></tr>
+    <tr><td>Observed mean programme level, mastered</td><td class="num">−29.4 dB</td></tr>
+    <tr><td>Test suite</td><td class="num">162 passing</td></tr>
+  </table>
+
+  <footer class="cover-foot">
+    Every rule in this document is enforced by <code>npm run validate</code>,
+    <code>npm test</code>, or a gate in the render pipeline. If a rule here is not
+    enforced somewhere, it is a bug in the system, not a matter of discipline.
+  </footer>
+</section>
+
+</body>
+</html>

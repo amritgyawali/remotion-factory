@@ -30,6 +30,20 @@ export type BaseProps = {
     bed: { frame: number; layers: string[]; detune?: number }[];
     cues: { frame: number; sfx: string; db?: number; major?: boolean }[];
   };
+  /**
+   * What this video *shows*, as opposed to what it says.
+   *
+   * Every template renders one into the same band of the frame, so the middle
+   * third is never a colour field with type on it. Omitted, one is derived from
+   * the rest of these props — see src/exhibits/derive.ts — which means the
+   * guarantee holds without every plan item having to carry a figure by hand.
+   *
+   * Typed loosely here on purpose. This arrives from JSON that nothing has
+   * checked yet, and `asExhibit` is the one place it becomes an Exhibit; a
+   * template that declared it already narrowed would be lying about a prop the
+   * renderer receives straight off disk.
+   */
+  exhibit?: unknown;
 };
 
 export type StatCardProps = BaseProps & {

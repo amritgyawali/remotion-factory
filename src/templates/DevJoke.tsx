@@ -3,6 +3,7 @@ import { AbsoluteFill, useVideoConfig } from "remotion";
 import { Frame } from "../components/Frame";
 import { BLEED_MARGIN, Eyebrow, KineticHeadline, PayoffBlock } from "../components/Kinetic";
 import { ChatStage, TerminalStage } from "../components/Stage";
+import { Exhibit, drawsOwnStage, resolveExhibit } from "../exhibits";
 import { themeFor } from "../theme";
 import type { DevJokeProps } from "../types";
 
@@ -47,12 +48,21 @@ export const DevJoke: React.FC<DevJokeProps> = ({
   beats,
   punchline,
   variant,
+  exhibit,
   score,
   videoId,
   theme: overrides,
 }) => {
   const theme = themeFor(videoId, overrides);
   const { durationInFrames } = useVideoConfig();
+  /**
+   * The shell and the thread are this template's native stages and stay the
+   * default. A script may still name a different figure — a trace of the same
+   * beats, an editor panel, a timeline — and when it does, that is what draws.
+   * The band is filled either way, which is the only invariant that matters.
+   */
+  const spec = resolveExhibit("DevJoke", { hook, beats, punchline, variant, exhibit }, videoId);
+  const nativeStage = drawsOwnStage(spec);
 
   const punchAt = Math.max(54, Math.floor(durationInFrames * 0.62));
   const beatsFrom = 34;
@@ -82,7 +92,9 @@ export const DevJoke: React.FC<DevJokeProps> = ({
         </div>
 
         <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-          {command ? (
+          {!nativeStage ? (
+            <Exhibit theme={theme} spec={spec} from={beatsFrom} />
+          ) : command ? (
             <TerminalStage
               theme={theme}
               command={command}

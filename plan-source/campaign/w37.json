@@ -16,7 +16,16 @@
         ],
         "result": "Building the happy path first guarantees rework.",
         "variant": "design-code",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "pipeline",
+          "stages": [
+            "Name the spacing scale before the first…",
+            "Decide which values are tokens, not…",
+            "Build the longest state first, not the…"
+          ],
+          "bottleneck": 2
+        }
       }
     },
     {
@@ -33,7 +42,16 @@
           "Fail the build when a raw hex appears"
         ],
         "lesson": "A system is enforced or it is a suggestion.",
-        "kicker": "FIELD NOTE"
+        "kicker": "FIELD NOTE",
+        "exhibit": {
+          "kind": "trace",
+          "rows": [
+            "Count the distinct values already…",
+            "Name the four that actually earn…",
+            "Fail the build when a raw hex…"
+          ],
+          "counterLabel": "steps taken"
+        }
       }
     },
     {
@@ -48,7 +66,28 @@
           "The code and the file agree on names",
           "Changing a token changes the product"
         ],
-        "kicker": "FOLLOW FOR MORE"
+        "kicker": "FOLLOW FOR MORE",
+        "exhibit": {
+          "kind": "checklist",
+          "steps": [
+            {
+              "label": "New screens get built faster than before",
+              "verdict": "pass"
+            },
+            {
+              "label": "Nobody asks which grey to use",
+              "verdict": "pass"
+            },
+            {
+              "label": "The code and the file agree on names",
+              "verdict": "pass"
+            },
+            {
+              "label": "Changing a token changes the product",
+              "verdict": "pass"
+            }
+          ]
+        }
       }
     },
     {
@@ -65,10 +104,20 @@
         ],
         "punchline": "Pick ranges to be right in, not one width.",
         "variant": "logo",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "code",
+          "filename": "checks.sh",
+          "lines": [
+            "# Perfect at exactly 1440 pixels wide",
+            "# Broken at 1441 pixels wide",
+            "# Untested on every phone made",
+            "# Approved on one designer's monitor"
+          ],
+          "highlight": 3
+        }
       }
     },
-
     {
       "template": "Recap",
       "sourceId": "c30-d30-recap",
@@ -76,18 +125,55 @@
       "props": {
         "hook": "Thirty days. The real numbers.",
         "totals": [
-          { "label": "videos shipped", "value": 120 },
-          { "label": "days without a gap", "value": 30 },
-          { "label": "frames rendered", "value": 64800 }
+          {
+            "label": "videos shipped",
+            "value": 120
+          },
+          {
+            "label": "days without a gap",
+            "value": 30
+          },
+          {
+            "label": "frames rendered",
+            "value": 64800
+          }
         ],
         "leaderboard": [
-          { "label": "Roast my own website", "value": 48300 },
-          { "label": "We found their password", "value": 31700 },
-          { "label": "Nobody was coming", "value": 26400 }
+          {
+            "label": "Roast my own website",
+            "value": 48300
+          },
+          {
+            "label": "We found their password",
+            "value": 31700
+          },
+          {
+            "label": "Nobody was coming",
+            "value": 26400
+          }
         ],
         "lesson": "The dull weekly habit beat every clever idea.",
         "gridCount": 30,
-        "kicker": "RECAP"
+        "kicker": "RECAP",
+        "exhibit": {
+          "kind": "bars",
+          "series": [
+            {
+              "label": "Roast my own…",
+              "value": 48300
+            },
+            {
+              "label": "We found their…",
+              "value": 31700
+            },
+            {
+              "label": "Nobody was coming",
+              "value": 26400
+            }
+          ],
+          "unit": "",
+          "emphasis": 0
+        }
       }
     },
     {
@@ -103,7 +189,24 @@
         ],
         "turn": "We built the pipeline so week three could not stop it.",
         "lesson": "Automate the part that fails when you are tired.",
-        "kicker": "FOUNDER NOTE"
+        "kicker": "FOUNDER NOTE",
+        "exhibit": {
+          "kind": "checklist",
+          "steps": [
+            {
+              "label": "The making was the easy part",
+              "verdict": "pass"
+            },
+            {
+              "label": "Deciding what to say took longer",
+              "verdict": "pass"
+            },
+            {
+              "label": "Week three is where it nearly stopped",
+              "verdict": "pass"
+            }
+          ]
+        }
       }
     },
     {
@@ -119,7 +222,16 @@
         ],
         "result": "Writing the script is the only manual step left.",
         "variant": "tool-audit",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "trace",
+          "rows": [
+            "Every video is one React…",
+            "Music is synthesised per video,…",
+            "Rendering runs in parallel on a…"
+          ],
+          "counterLabel": "steps taken"
+        }
       }
     },
     {
@@ -129,8 +241,18 @@
       "props": {
         "value": "4 weeks",
         "label": "where most content efforts stop",
-        "context": ["Almost nothing compounds before then.", "Everything compounds after."],
-        "kicker": "FOLLOW FOR MORE"
+        "context": [
+          "Almost nothing compounds before then.",
+          "Everything compounds after."
+        ],
+        "kicker": "FOLLOW FOR MORE",
+        "exhibit": {
+          "kind": "dial",
+          "value": 4,
+          "unit": "week",
+          "caption": "",
+          "of": 4
+        }
       }
     }
   ]

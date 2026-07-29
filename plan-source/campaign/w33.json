@@ -17,7 +17,10 @@
         ],
         "punchline": "Premium is fewer things, done properly.",
         "variant": "logo",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "terminal"
+        }
       }
     },
     {
@@ -33,7 +36,16 @@
         ],
         "result": "Most sites lose two seconds to one image.",
         "variant": "vitals",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "pipeline",
+          "stages": [
+            "Open DevTools, throttle to Fast 3G",
+            "Find the Largest Contentful Paint…",
+            "If it is the hero, resize and preload it"
+          ],
+          "bottleneck": 2
+        }
       }
     },
     {
@@ -43,8 +55,17 @@
       "props": {
         "value": "32%",
         "label": "more visitors leave at three seconds",
-        "context": ["The first second buys attention.", "The third one spends it."],
-        "kicker": "SAVE THIS"
+        "context": [
+          "The first second buys attention.",
+          "The third one spends it."
+        ],
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "dial",
+          "value": 32,
+          "unit": "%",
+          "caption": ""
+        }
       }
     },
     {
@@ -59,10 +80,19 @@
           "Which date is real and which is hoped for?",
           "What happens to this site after launch?"
         ],
-        "kicker": "FOLLOW FOR MORE"
+        "kicker": "FOLLOW FOR MORE",
+        "exhibit": {
+          "kind": "radar",
+          "label": "what the scan finds",
+          "targets": [
+            "Who signs off, and who else…",
+            "What is already written, and…",
+            "Which date is real and which…",
+            "What happens to this site…"
+          ]
+        }
       }
     },
-
     {
       "template": "TechTip",
       "sourceId": "c30-d02-exposed-paths",
@@ -76,7 +106,16 @@
         ],
         "result": "A public .env is a live credential leak.",
         "variant": "security",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "radar",
+          "label": "what the scan finds",
+          "targets": [
+            "Try /.env and /.git/config in…",
+            "Try /backup.zip and /db.sql",
+            "Anything that loads needs…"
+          ]
+        }
       }
     },
     {
@@ -93,7 +132,16 @@
           "Confirm on the page, not by redirect"
         ],
         "lesson": "Ask for what you need to reply, not to file.",
-        "kicker": "FIELD NOTE"
+        "kicker": "FIELD NOTE",
+        "exhibit": {
+          "kind": "trace",
+          "rows": [
+            "Cut every field sales could ask…",
+            "Move the phone number to optional",
+            "Confirm on the page, not by…"
+          ],
+          "counterLabel": "steps taken"
+        }
       }
     },
     {
@@ -109,7 +157,10 @@
         ],
         "punchline": "Staging was a rehearsal, not a promise.",
         "variant": "terminal",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "chat"
+        }
       }
     },
     {
@@ -119,11 +170,19 @@
       "props": {
         "value": "63%",
         "label": "of visits arrive on a phone",
-        "context": ["Almost every sign-off happens on a laptop.", "That gap is where the bugs live."],
-        "kicker": "SAVE THIS"
+        "context": [
+          "Almost every sign-off happens on a laptop.",
+          "That gap is where the bugs live."
+        ],
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "dial",
+          "value": 63,
+          "unit": "%",
+          "caption": ""
+        }
       }
     },
-
     {
       "template": "SiteRoast",
       "sourceId": "c30-d03-roast-04",
@@ -138,7 +197,16 @@
         ],
         "fix": "Say the job in the headline. Keep one button.",
         "verdict": "Clear is a design decision.",
-        "kicker": "ROAST 04"
+        "kicker": "ROAST 04",
+        "exhibit": {
+          "kind": "trace",
+          "rows": [
+            "The headline describes a feeling,…",
+            "The first real fact is below…",
+            "Two buttons compete on the same…"
+          ],
+          "counterLabel": "steps taken"
+        }
       }
     },
     {
@@ -154,7 +222,16 @@
         ],
         "result": "Images and ad slots cause most of it.",
         "variant": "devtools",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "radar",
+          "label": "what the scan finds",
+          "targets": [
+            "Open the Performance panel…",
+            "Turn on Layout Shift Regions",
+            "Give every shifted element…"
+          ]
+        }
       }
     },
     {
@@ -170,7 +247,32 @@
           "Do the social preview images exist?",
           "Does the favicon load on mobile?"
         ],
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "checklist",
+          "steps": [
+            {
+              "label": "Does the 404 page have navigation?",
+              "verdict": "pass"
+            },
+            {
+              "label": "Does the contact form actually send?",
+              "verdict": "pass"
+            },
+            {
+              "label": "Is the staging site blocked from search?",
+              "verdict": "pass"
+            },
+            {
+              "label": "Do the social preview images exist?",
+              "verdict": "pass"
+            },
+            {
+              "label": "Does the favicon load on mobile?",
+              "verdict": "pass"
+            }
+          ]
+        }
       }
     },
     {
@@ -187,10 +289,12 @@
         ],
         "punchline": "Every unreproducible bug has a condition.",
         "variant": "qa",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "chat"
+        }
       }
     },
-
     {
       "template": "FounderStory",
       "sourceId": "c30-d04-first-refund",
@@ -204,7 +308,16 @@
         ],
         "turn": "We started every project with the outcome instead.",
         "lesson": "A spec describes the work, not the point of it.",
-        "kicker": "FOUNDER NOTE"
+        "kicker": "FOUNDER NOTE",
+        "exhibit": {
+          "kind": "pipeline",
+          "stages": [
+            "We delivered exactly what was written",
+            "They asked what it was supposed to do",
+            "Nobody had ever written that down"
+          ],
+          "bottleneck": 2
+        }
       }
     },
     {
@@ -220,7 +333,17 @@
         ],
         "result": "Most sites index three things they should not.",
         "variant": "index-check",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "code",
+          "filename": "checks.sh",
+          "lines": [
+            "# Search site:yourdomain.com and read page two",
+            "# Look for staging, tags and old campaigns",
+            "# Noindex what should never have been public"
+          ],
+          "highlight": 2
+        }
       }
     },
     {
@@ -237,7 +360,24 @@
           "Lazy-load everything below the fold"
         ],
         "lesson": "Nobody uploads a huge image on purpose.",
-        "kicker": "FIELD NOTE"
+        "kicker": "FIELD NOTE",
+        "exhibit": {
+          "kind": "checklist",
+          "steps": [
+            {
+              "label": "Resize to the largest size actually…",
+              "verdict": "pass"
+            },
+            {
+              "label": "Serve modern formats with a fallback",
+              "verdict": "pass"
+            },
+            {
+              "label": "Lazy-load everything below the fold",
+              "verdict": "pass"
+            }
+          ]
+        }
       }
     },
     {
@@ -254,16 +394,21 @@
         ],
         "punchline": "The email would have taken four minutes.",
         "variant": "timer",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "terminal"
+        }
       }
     },
-
     {
       "template": "WorksOnMyMachine",
       "sourceId": "c30-d05-ran-fine-locally",
       "caption": "It ran fine locally because locally had your node version, your env file and your cached dependencies. Production had none of them.\n\n#DevLife #Docker #SoftwareEngineering",
       "props": {
-        "hook": "IT RAN FINE LOCALLY"
+        "hook": "IT RAN FINE LOCALLY",
+        "exhibit": {
+          "kind": "sitemock"
+        }
       }
     },
     {
@@ -279,7 +424,16 @@
         ],
         "result": "Duplicate descriptions mean duplicate spend.",
         "variant": "tool-audit",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "trace",
+          "rows": [
+            "Export twelve months of card…",
+            "Write what each tool does in five…",
+            "Cancel every duplicate description"
+          ],
+          "counterLabel": "steps taken"
+        }
       }
     },
     {
@@ -296,7 +450,24 @@
           "Map the words customers actually use"
         ],
         "lesson": "Empty search results are a list of missed sales.",
-        "kicker": "FIELD NOTE"
+        "kicker": "FIELD NOTE",
+        "exhibit": {
+          "kind": "checklist",
+          "steps": [
+            {
+              "label": "Log every query that returns nothing",
+              "verdict": "pass"
+            },
+            {
+              "label": "Rebuild the index on every catalogue…",
+              "verdict": "pass"
+            },
+            {
+              "label": "Map the words customers actually use",
+              "verdict": "pass"
+            }
+          ]
+        }
       }
     },
     {
@@ -306,11 +477,20 @@
       "props": {
         "value": "2.4x",
         "label": "more likely to buy after a search",
-        "context": ["Searchers already know what they want.", "A bad result sends them somewhere else."],
-        "kicker": "SAVE THIS"
+        "context": [
+          "Searchers already know what they want.",
+          "A bad result sends them somewhere else."
+        ],
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "dial",
+          "value": 2.4,
+          "unit": "x",
+          "caption": "",
+          "of": 2.4
+        }
       }
     },
-
     {
       "template": "CaseStudy",
       "sourceId": "c30-d06-eleven-to-one",
@@ -325,7 +505,16 @@
           "Cache the parts that never change"
         ],
         "lesson": "Measure first, then fix the longest wait.",
-        "kicker": "FIELD NOTE"
+        "kicker": "FIELD NOTE",
+        "exhibit": {
+          "kind": "pipeline",
+          "stages": [
+            "Defer every script that is not the page",
+            "Inline the styles the first screen needs",
+            "Cache the parts that never change"
+          ],
+          "bottleneck": 2
+        }
       }
     },
     {
@@ -341,7 +530,16 @@
         ],
         "result": "Guessing these is where rework comes from.",
         "variant": "design-code",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "trace",
+          "rows": [
+            "The empty state for every list",
+            "The longest realistic string, not…",
+            "What each thing does on a narrow…"
+          ],
+          "counterLabel": "steps taken"
+        }
       }
     },
     {
@@ -356,7 +554,28 @@
           "Industry-leading, best-in-class results",
           "Welcome to our website"
         ],
-        "kicker": "FOLLOW FOR MORE"
+        "kicker": "FOLLOW FOR MORE",
+        "exhibit": {
+          "kind": "checklist",
+          "steps": [
+            {
+              "label": "Solutions tailored to your needs",
+              "verdict": "pass"
+            },
+            {
+              "label": "We are passionate about quality",
+              "verdict": "pass"
+            },
+            {
+              "label": "Industry-leading, best-in-class results",
+              "verdict": "pass"
+            },
+            {
+              "label": "Welcome to our website",
+              "verdict": "pass"
+            }
+          ]
+        }
       }
     },
     {
@@ -373,10 +592,20 @@
         ],
         "punchline": "There is always one more layer.",
         "variant": "cache",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "code",
+          "filename": "checks.sh",
+          "lines": [
+            "# Cleared the server cache",
+            "# Cleared the CDN cache",
+            "# Cleared the browser cache",
+            "# They were looking at the old tab"
+          ],
+          "highlight": 3
+        }
       }
     },
-
     {
       "template": "TechTip",
       "sourceId": "c30-d07-headers-check",
@@ -390,7 +619,16 @@
         ],
         "result": "Headers are configuration, not development.",
         "variant": "security",
-        "kicker": "SAVE THIS"
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "radar",
+          "label": "what the scan finds",
+          "targets": [
+            "Run curl -I against your own…",
+            "Look for Strict-Transport-Secu…",
+            "Add the ones that are missing…"
+          ]
+        }
       }
     },
     {
@@ -407,7 +645,24 @@
         ],
         "fix": "Answer cost, risk and proof before the form.",
         "verdict": "Trust comes first, always.",
-        "kicker": "ROAST 05"
+        "kicker": "ROAST 05",
+        "exhibit": {
+          "kind": "checklist",
+          "steps": [
+            {
+              "label": "The price appears after the calendar",
+              "verdict": "fail"
+            },
+            {
+              "label": "Cancellation terms are in a linked PDF",
+              "verdict": "fail"
+            },
+            {
+              "label": "The only proof is a stock photograph",
+              "verdict": "fail"
+            }
+          ]
+        }
       }
     },
     {
@@ -417,8 +672,17 @@
       "props": {
         "value": "55%",
         "label": "of homepage images have no alt text",
-        "context": ["It takes about a minute per image.", "It is also read by every search engine."],
-        "kicker": "SAVE THIS"
+        "context": [
+          "It takes about a minute per image.",
+          "It is also read by every search engine."
+        ],
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "dial",
+          "value": 55,
+          "unit": "%",
+          "caption": ""
+        }
       }
     },
     {
@@ -435,7 +699,17 @@
         ],
         "punchline": "Small is a description of the sentence.",
         "variant": "scope",
-        "kicker": "DEV LIFE"
+        "kicker": "DEV LIFE",
+        "exhibit": {
+          "kind": "trace",
+          "rows": [
+            "The small thing needs a new field",
+            "The new field needs a new screen",
+            "The new screen needs a decision",
+            "The decision needs a meeting"
+          ],
+          "counterLabel": "rounds so far"
+        }
       }
     }
   ]

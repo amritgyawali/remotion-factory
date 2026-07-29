@@ -9,7 +9,8 @@ import {
   markArchivedPosted,
   QUEUE_LOW_WATER,
 } from "./queue.mjs";
-import { assertPlayableVideo } from "./verify-video.mjs";
+import { assertPlayableVideo, probeLoudness } from "./verify-video.mjs";
+import { assertMatchesScript } from "./verify-script.mjs";
 import { archiveVideo } from "./archive-video.mjs";
 import { BED_TEMPLATES } from "./audio/beds.mjs";
 import { masterVideoAudio } from "./master-audio.mjs";
@@ -70,7 +71,7 @@ async function buildAudioFor(items) {
   ]);
 }
 
-async function renderOne(item) {
+async function renderOne(item, weekId) {
   const outFile = path.join(OUT, `${item.id}.mp4`);
   const propsFile = path.join(OUT, `${item.id}.props.json`);
   // videoId is injected rather than authored: it seeds this video's palette,
@@ -108,6 +109,33 @@ async function renderOne(item) {
     `  audio mastered ${mastered.inputLufs} -> ${mastered.targetLufs} LUFS, ` +
       `true peak ${mastered.targetTruePeak} dBTP`,
   );
+
+  /**
+   * The second gate, and the one that asks whether this is the *right* video.
+   *
+   * assertPlayableVideo above proves the file is a well-formed, non-blank,
+   * non-silent MP4 of the right length. All of that is true of a render that
+   * shows a figure nobody asked for, or none at all. This compares the props
+   * the render was actually given against the script, and looks at the band of
+   * the frame the figure lives in — see scripts/verify-script.mjs for why that
+   * pair is a proof and a pixel classifier would not be.
+   *
+   * After mastering, so the loudness it judges is the loudness that ships.
+   */
+  const loudness = await probeLoudness(outFile).catch(() => null);
+  const matched = await assertMatchesScript(outFile, item, {
+    weekId,
+    propsFile,
+    loudness,
+    fps: 30,
+  });
+  console.log(
+    `  matches script — figure "${matched.exhibit ?? "none"}", ` +
+      `band ${(matched.band.settledInk * 100).toFixed(1)}% ink, ` +
+      `${matched.band.motionFrames} moving frames, ` +
+      `held ${(matched.band.presenceFraction * 100).toFixed(0)}% of the body`,
+  );
+
   return { file: outFile, verified };
 }
 
@@ -203,7 +231,7 @@ async function main() {
     console.log(`[${index + 1}/${items.length}] ${item.id} — ${item.template}`);
     let scheduledFor = null;
     try {
-      const { file, verified } = await renderOne(item);
+      const { file, verified } = await renderOne(item, weekId);
 
       if (!DRY_RUN) {
         // Store the master in GitHub before publishing. If Postiz is down the

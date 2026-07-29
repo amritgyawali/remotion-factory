@@ -2,6 +2,7 @@ import React from "react";
 import { AbsoluteFill, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { Frame } from "../components/Frame";
 import { BLEED_MARGIN, Eyebrow, KineticHeadline, PayoffBlock, fittedSize } from "../components/Kinetic";
+import { Exhibit, resolveExhibit } from "../exhibits";
 import { themeFor, type Theme } from "../theme";
 import type { RecapProps } from "../types";
 
@@ -101,12 +102,23 @@ export const Recap: React.FC<RecapProps> = ({
   totals,
   leaderboard,
   lesson,
+  exhibit,
   score,
   videoId,
   theme: overrides,
 }) => {
   const theme = themeFor(videoId, overrides);
   const { durationInFrames } = useVideoConfig();
+  /**
+   * The headline totals become the exhibit; the leaderboard stays as rows.
+   *
+   * They are two different jobs and drawing both the same way was the bug. A
+   * handful of unrelated headline figures — videos shipped, motion beats — have
+   * no shared scale, so bars invented a comparison between them; that is a KPI
+   * board. The leaderboard *is* one measure across several entries, which is
+   * exactly what proportional bars are for, so those keep them.
+   */
+  const spec = resolveExhibit("Recap", { hook, totals, leaderboard, lesson, exhibit }, videoId);
 
   const lessonAt = Math.max(80, Math.floor(durationInFrames * 0.76));
   const totalsFrom = 22;
@@ -137,7 +149,9 @@ export const Recap: React.FC<RecapProps> = ({
             gap: 46,
           }}
         >
-          <Rows rows={totals} theme={theme} from={totalsFrom} every={11} />
+          <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
+            <Exhibit theme={theme} spec={spec} from={totalsFrom} />
+          </div>
           <Rows rows={leaderboard} theme={theme} from={boardFrom} every={9} highlightFirst />
         </div>
 
