@@ -39,8 +39,9 @@
       "sha256": "efed1469c6a39ba1740b7213c8f4dfc05619f77f8f0ccd895cda21aae16f6ff7",
       "bytes": 1582010,
       "durationSeconds": 17.045,
-      "approval": "pending",
-      "renderedAt": "2026-07-29T06:20:03.187Z"
+      "approval": "approved",
+      "renderedAt": "2026-07-29T06:20:03.187Z",
+      "reviewedAt": "2026-07-29T07:19:41.435Z"
     }
   ],
   "scheduled": [
