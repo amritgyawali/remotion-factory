@@ -2,7 +2,7 @@ import React from "react";
 import { AbsoluteFill, useCurrentFrame } from "remotion";
 import { Soundtrack } from "../audio/Score";
 import { resolveScore } from "../audio/defaultScore";
-import { CLIENT_BRAND, SiteMock } from "../components/SiteMock";
+import { DEFAULT_CLIENT, SiteMock, type Client } from "../components/SiteMock";
 import { themeFor } from "../theme";
 import type { LogoLadderProps } from "../types";
 import { getState, ladderScore, type LadderState } from "./logoLadder.timeline";
@@ -107,7 +107,8 @@ const Tick: React.FC<{ progress: number }> = ({ progress }) => {
 const ChatPanel: React.FC<{
   chat: NonNullable<LadderState["chat"]>;
   theme: ReturnType<typeof themeFor>;
-}> = ({ chat, theme }) => (
+  client: Client;
+}> = ({ chat, theme, client }) => (
   <AbsoluteFill style={{ paddingTop: 700, paddingLeft: 60, paddingRight: 60 }}>
     <div
       style={{
@@ -127,7 +128,7 @@ const ChatPanel: React.FC<{
           color: "#FFFFFF",
         }}
       >
-        vertex-website
+        {`${client.name.toLowerCase()}-website`}
       </span>
       <span style={{ fontFamily: theme.display, fontSize: 24, color: "rgba(255,255,255,0.4)" }}>
         redesign · feedback
@@ -140,7 +141,7 @@ const ChatPanel: React.FC<{
           width: 62,
           height: 62,
           borderRadius: 14,
-          background: CLIENT_BRAND,
+          background: client.brand,
           display: "grid",
           placeItems: "center",
           fontFamily: theme.display,
@@ -150,7 +151,7 @@ const ChatPanel: React.FC<{
           flexShrink: 0,
         }}
       >
-        VC
+        {client.name.slice(0, 2).toUpperCase()}
       </div>
 
       <div style={{ flex: 1 }}>
@@ -163,7 +164,7 @@ const ChatPanel: React.FC<{
               color: "#FFFFFF",
             }}
           >
-            Vertex Co.
+            {`${client.name.charAt(0)}${client.name.slice(1).toLowerCase()} Co.`}
           </span>
           <span style={{ fontFamily: theme.mono, fontSize: 20, color: "rgba(255,255,255,0.4)" }}>
             16:41
@@ -277,10 +278,12 @@ export const LogoLadder: React.FC<LogoLadderProps> = ({
   promise,
   message,
   payoff,
+  client,
   score,
   videoId,
   theme: overrides,
 }) => {
+  const site = { ...DEFAULT_CLIENT, ...(client ?? {}) };
   const theme = themeFor(videoId, overrides);
   const frame = useCurrentFrame();
   const s = getState(frame, { hook, promise, message, payoff });
@@ -345,7 +348,7 @@ export const LogoLadder: React.FC<LogoLadderProps> = ({
           </div>
 
           {s.scene === "chat" && s.chat ? (
-            <ChatPanel chat={s.chat} theme={theme} />
+            <ChatPanel chat={s.chat} theme={theme} client={site} />
           ) : (
             <div
               style={{
@@ -356,7 +359,7 @@ export const LogoLadder: React.FC<LogoLadderProps> = ({
                 height: 1230,
               }}
             >
-              <SiteMock state={s.site} theme={theme} />
+              <SiteMock state={s.site} theme={theme} client={site} />
             </div>
           )}
 

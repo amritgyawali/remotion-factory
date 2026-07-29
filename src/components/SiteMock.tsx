@@ -27,7 +27,52 @@ import type { Theme } from "../theme";
  * thinks MeritByte's own site is the one falling apart.
  */
 
+/** Fallback only. Every video should pass its own client through. */
 export const CLIENT_BRAND = "#6B4EFF";
+
+/**
+ * The site being wrecked, as data.
+ *
+ * Hardcoding one fictional company would have made twenty-eight videos that
+ * are the same picture with new captions — and this project already refuses
+ * those: archive uniqueness compares frame fingerprints, so a week of
+ * identical mocks would be rejected at the archive step after paying for
+ * every render. Varying the client is what makes one template carry a week.
+ */
+export type Client = {
+  name: string;
+  /** Deliberately never MeritByte blue, so nobody thinks it is our site breaking. */
+  brand: string;
+  domain: string;
+  eyebrow: string;
+  headline: string;
+  sub: string;
+  nav: string[];
+  cta: string;
+  stats: { v: string; l: string }[];
+  cards: { dot: string; title: string }[];
+};
+
+export const DEFAULT_CLIENT: Client = {
+  name: "VERTEX",
+  brand: CLIENT_BRAND,
+  domain: "vertex.io",
+  eyebrow: "PLATFORM",
+  headline: "Ship faster with Vertex",
+  sub: "The infrastructure layer for modern product teams.",
+  nav: ["Product", "Solutions", "Pricing", "Docs"],
+  cta: "Get started",
+  stats: [
+    { v: "99.99%", l: "uptime" },
+    { v: "40ms", l: "p95 latency" },
+    { v: "12k", l: "teams" },
+  ],
+  cards: [
+    { dot: "#6B4EFF", title: "Deploy" },
+    { dot: "#F2A93B", title: "Observe" },
+    { dot: "#22C55E", title: "Scale" },
+  ],
+};
 
 const INK = "#0D1116";
 const MID = "#5A6472";
@@ -48,14 +93,29 @@ export type SiteState = {
   scrollY: number;
 };
 
-const NAV_ITEMS = ["Product", "Solutions", "Pricing", "Docs"];
-
 /** The client's mark: a rounded square and a stroked V. Hand-drawn SVG, no icon set. */
-const ClientMark: React.FC<{ size: number }> = ({ size }) => (
+const ClientMark: React.FC<{ size: number; brand: string; letter: string }> = ({
+  size,
+  brand,
+  letter,
+}) => (
   <svg width={size} height={size} viewBox="0 0 100 100" style={{ display: "block", flexShrink: 0 }}>
-    <rect width="100" height="100" rx="24" fill={CLIENT_BRAND} />
+    <rect width="100" height="100" rx="24" fill={brand} />
+    <text
+      x="50"
+      y="50"
+      textAnchor="middle"
+      dominantBaseline="central"
+      fill="#FFFFFF"
+      fontSize="58"
+      fontWeight="700"
+      fontFamily="system-ui, sans-serif"
+    >
+      {letter}
+    </text>
     <path
       d="M26 30 L50 72 L74 30"
+      display="none"
       fill="none"
       stroke="#FFFFFF"
       strokeWidth="13"
@@ -65,7 +125,11 @@ const ClientMark: React.FC<{ size: number }> = ({ size }) => (
   </svg>
 );
 
-export const SiteMock: React.FC<{ state: SiteState; theme: Theme }> = ({ state, theme }) => {
+export const SiteMock: React.FC<{ state: SiteState; theme: Theme; client?: Client }> = ({
+  state,
+  theme,
+  client = DEFAULT_CLIENT,
+}) => {
   const {
     logoH,
     logoX,
@@ -123,7 +187,7 @@ export const SiteMock: React.FC<{ state: SiteState; theme: Theme }> = ({ state, 
             color: DIM,
           }}
         >
-          vertex.io
+          {client.domain}
         </div>
       </div>
 
@@ -151,7 +215,7 @@ export const SiteMock: React.FC<{ state: SiteState; theme: Theme }> = ({ state, 
                 flexShrink: 0,
               }}
             >
-              <ClientMark size={logoH} />
+              <ClientMark size={logoH} brand={client.brand} letter={client.name.slice(0, 1)} />
               <span
                 style={{
                   fontFamily: theme.display,
@@ -162,7 +226,7 @@ export const SiteMock: React.FC<{ state: SiteState; theme: Theme }> = ({ state, 
                   whiteSpace: "nowrap",
                 }}
               >
-                VERTEX
+                {client.name}
               </span>
             </div>
 
@@ -180,7 +244,7 @@ export const SiteMock: React.FC<{ state: SiteState; theme: Theme }> = ({ state, 
                 opacity: navClipped ? 0.9 : 1,
               }}
             >
-              {NAV_ITEMS.map((item) => (
+              {client.nav.map((item) => (
                 <span
                   key={item}
                   style={{
@@ -198,7 +262,7 @@ export const SiteMock: React.FC<{ state: SiteState; theme: Theme }> = ({ state, 
                 style={{
                   padding: "10px 18px",
                   borderRadius: 9,
-                  background: CLIENT_BRAND,
+                  background: client.brand,
                   color: "#FFFFFF",
                   fontFamily: theme.display,
                   fontWeight: theme.weightMid,
@@ -206,7 +270,7 @@ export const SiteMock: React.FC<{ state: SiteState; theme: Theme }> = ({ state, 
                   whiteSpace: "nowrap",
                 }}
               >
-                Get started
+                {client.cta}
               </span>
             </div>
           </div>
@@ -218,11 +282,11 @@ export const SiteMock: React.FC<{ state: SiteState; theme: Theme }> = ({ state, 
                 fontFamily: theme.mono,
                 fontSize: 17,
                 letterSpacing: "0.18em",
-                color: CLIENT_BRAND,
+                color: client.brand,
                 marginBottom: 14,
               }}
             >
-              PLATFORM
+              {client.eyebrow}
             </div>
             <div
               style={{
@@ -234,7 +298,7 @@ export const SiteMock: React.FC<{ state: SiteState; theme: Theme }> = ({ state, 
                 color: INK,
               }}
             >
-              Ship faster with Vertex
+              {client.headline}
             </div>
             <div
               style={{
@@ -245,7 +309,7 @@ export const SiteMock: React.FC<{ state: SiteState; theme: Theme }> = ({ state, 
                 color: MID,
               }}
             >
-              The infrastructure layer for modern product teams.
+              {client.sub}
             </div>
 
             <div
@@ -303,7 +367,7 @@ export const SiteMock: React.FC<{ state: SiteState; theme: Theme }> = ({ state, 
                   width: 240,
                   height: 150,
                   borderRadius: 14,
-                  background: `${CLIENT_BRAND}66`,
+                  background: `${client.brand}66`,
                 }}
               />
               <div
@@ -320,11 +384,7 @@ export const SiteMock: React.FC<{ state: SiteState; theme: Theme }> = ({ state, 
             </div>
 
             <div style={{ display: "flex", gap: 18, marginTop: 30 }}>
-              {[
-                { dot: CLIENT_BRAND, title: "Deploy" },
-                { dot: "#F2A93B", title: "Observe" },
-                { dot: "#22C55E", title: "Scale" },
-              ].map((card) => (
+              {client.cards.map((card) => (
                 <div
                   key={card.title}
                   style={{
@@ -374,11 +434,7 @@ export const SiteMock: React.FC<{ state: SiteState; theme: Theme }> = ({ state, 
                 overflow: "hidden",
               }}
             >
-              {[
-                { v: "99.99%", l: "uptime" },
-                { v: "40ms", l: "p95 latency" },
-                { v: "12k", l: "teams" },
-              ].map((stat, i) => (
+              {client.stats.map((stat, i) => (
                 <div
                   key={stat.l}
                   style={{

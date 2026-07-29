@@ -14,6 +14,16 @@ export function isPortableItemId(value) {
 }
 
 const TEMPLATES = {
+  /**
+   * Fixed at 17s: the escalation, the freeze, the silence and the loop cut are
+   * all timed in seconds against a 15s body plus the 2s brand close, so a
+   * different duration would move the beats out from under the soundtrack
+   * rather than making a longer video.
+   */
+  LogoLadder: {
+    required: ["eyebrow", "day", "durationInSeconds", "hook", "promise", "message", "payoff"],
+    limits: { hook: 30, promise: 22, message: 54, payoff: 26, eyebrow: 26 },
+  },
   StatCard: {
     required: ["eyebrow", "day", "durationInSeconds", "value", "label", "context"],
     limits: { value: 12, label: 46, eyebrow: 26 },

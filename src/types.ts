@@ -137,6 +137,12 @@ export type LogoLadderProps = BaseProps & {
   message: string;
   /** The release, on the green tick. */
   payoff: string;
+  /**
+   * The site being wrecked. Varying it is what lets one template carry a week:
+   * archive uniqueness compares frame fingerprints, so twenty-eight identical
+   * mocks would be rejected after paying for every render.
+   */
+  client?: Partial<import("./components/SiteMock").Client>;
 };
 
 export type TemplateId =

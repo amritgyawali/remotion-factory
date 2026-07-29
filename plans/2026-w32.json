@@ -1,0 +1,1661 @@
+{
+  "series": "MeritByte — Build Better",
+  "mode": "queue",
+  "week": {
+    "id": "2026-w32",
+    "order": 202632
+  },
+  "postType": "schedule",
+  "channels": [
+    "cmruyn0l40003of9gif9fkkvz",
+    "cmru3v02i0001qh6tba0sefis",
+    "cmruzqbfl0007ph7uso34siqt",
+    "cmruzbsts0001ph7ujfzqsh29"
+  ],
+  "channelSettings": {
+    "instagram-standalone": {
+      "__type": "instagram-standalone",
+      "post_type": "post"
+    },
+    "x": {
+      "__type": "x",
+      "who_can_reply_post": "everyone"
+    },
+    "threads": {
+      "__type": "threads"
+    },
+    "facebook": {
+      "__type": "facebook",
+      "post_type": "post"
+    },
+    "linkedin": {
+      "__type": "linkedin"
+    }
+  },
+  "items": [
+    {
+      "id": "w32-d01-a",
+      "sourceId": "ladder-01",
+      "template": "LogoLadder",
+      "caption": "Make the logo bigger. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 1 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 1,
+        "durationInSeconds": 17,
+        "hook": "MAKE THE LOGO BIGGER",
+        "promise": "round 7 of 7",
+        "message": "perfect, can we see one more option",
+        "payoff": "SHIPPED. Finally.",
+        "client": {
+          "name": "VERTEX",
+          "brand": "#6B4EFF",
+          "domain": "vertex.io",
+          "eyebrow": "PLATFORM",
+          "headline": "Ship faster with Vertex",
+          "sub": "The infrastructure layer for modern product teams.",
+          "nav": [
+            "Product",
+            "Solutions",
+            "Pricing",
+            "Docs"
+          ],
+          "cta": "Get started",
+          "stats": [
+            {
+              "v": "99.99%",
+              "l": "uptime"
+            },
+            {
+              "v": "40ms",
+              "l": "p95 latency"
+            },
+            {
+              "v": "12k",
+              "l": "teams"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#6B4EFF",
+              "title": "Deploy"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Observe"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Scale"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d01-b",
+      "sourceId": "ladder-02",
+      "template": "LogoLadder",
+      "caption": "Just make it pop. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 2 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 1,
+        "durationInSeconds": 17,
+        "hook": "JUST MAKE IT POP",
+        "promise": "revision 9 of 9",
+        "message": "love it! can it pop a bit more though",
+        "payoff": "APPROVED. At last.",
+        "client": {
+          "name": "NORTHWIND",
+          "brand": "#0EA5E9",
+          "domain": "northwind.co",
+          "eyebrow": "LOGISTICS",
+          "headline": "Freight that tracks itself",
+          "sub": "Live shipment visibility for growing importers.",
+          "nav": [
+            "Network",
+            "Tracking",
+            "Rates",
+            "About"
+          ],
+          "cta": "Book a lane",
+          "stats": [
+            {
+              "v": "4.9/5",
+              "l": "rated"
+            },
+            {
+              "v": "2 days",
+              "l": "turnaround"
+            },
+            {
+              "v": "1.2k",
+              "l": "clients"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#0EA5E9",
+              "title": "Plan"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Track"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Report"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d01-c",
+      "sourceId": "ladder-03",
+      "template": "LogoLadder",
+      "caption": "Can it be more premium. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 3 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 1,
+        "durationInSeconds": 17,
+        "hook": "CAN IT BE MORE PREMIUM",
+        "promise": "attempt 6 of 6",
+        "message": "getting there, maybe more premium?",
+        "payoff": "SIGNED OFF.",
+        "client": {
+          "name": "HEARTH",
+          "brand": "#E1477E",
+          "domain": "hearth.house",
+          "eyebrow": "INTERIORS",
+          "headline": "Rooms that finally work",
+          "sub": "Design and fit-out for homes with opinions.",
+          "nav": [
+            "Studio",
+            "Projects",
+            "Process",
+            "Journal"
+          ],
+          "cta": "Start a project",
+          "stats": [
+            {
+              "v": "36%",
+              "l": "faster"
+            },
+            {
+              "v": "18 mins",
+              "l": "saved daily"
+            },
+            {
+              "v": "8k",
+              "l": "seats"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#E1477E",
+              "title": "Design"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Build"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Launch"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d01-d",
+      "sourceId": "ladder-04",
+      "template": "LogoLadder",
+      "caption": "One small change. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 4 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 1,
+        "durationInSeconds": 17,
+        "hook": "ONE SMALL CHANGE",
+        "promise": "change 12 of 12",
+        "message": "tiny thing, can the logo breathe more",
+        "payoff": "DONE. For real.",
+        "client": {
+          "name": "QUARRY",
+          "brand": "#F59E0B",
+          "domain": "quarry.build",
+          "eyebrow": "CONSTRUCTION",
+          "headline": "Build without the guesswork",
+          "sub": "Estimating and scheduling for small builders.",
+          "nav": [
+            "Estimating",
+            "Schedule",
+            "Crew",
+            "Docs"
+          ],
+          "cta": "Get a quote",
+          "stats": [
+            {
+              "v": "24/7",
+              "l": "coverage"
+            },
+            {
+              "v": "99.4%",
+              "l": "on time"
+            },
+            {
+              "v": "310",
+              "l": "sites"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#F59E0B",
+              "title": "Intake"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Review"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Deliver"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d02-a",
+      "sourceId": "ladder-05",
+      "template": "LogoLadder",
+      "caption": "My nephew has notes. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 5 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 2,
+        "durationInSeconds": 17,
+        "hook": "MY NEPHEW HAS NOTES",
+        "promise": "note 8 of 8",
+        "message": "he says the logo should be bigger",
+        "payoff": "LOCKED. Thank you.",
+        "client": {
+          "name": "PELICAN",
+          "brand": "#14B8A6",
+          "domain": "pelican.health",
+          "eyebrow": "CLINIC",
+          "headline": "Care that runs on time",
+          "sub": "Practice software for independent clinics.",
+          "nav": [
+            "Booking",
+            "Records",
+            "Billing",
+            "Support"
+          ],
+          "cta": "See a demo",
+          "stats": [
+            {
+              "v": "99.99%",
+              "l": "uptime"
+            },
+            {
+              "v": "40ms",
+              "l": "p95 latency"
+            },
+            {
+              "v": "12k",
+              "l": "teams"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#14B8A6",
+              "title": "Deploy"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Observe"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Scale"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d02-b",
+      "sourceId": "ladder-06",
+      "template": "LogoLadder",
+      "caption": "Make it feel bigger. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 6 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 2,
+        "durationInSeconds": 17,
+        "hook": "MAKE IT FEEL BIGGER",
+        "promise": "take 7 of 7",
+        "message": "bigger, but like, tastefully bigger",
+        "payoff": "FINAL. Promise.",
+        "client": {
+          "name": "FORGE",
+          "brand": "#8B5CF6",
+          "domain": "forge.dev",
+          "eyebrow": "TOOLING",
+          "headline": "Ship your CI in an hour",
+          "sub": "Pipelines that configure themselves.",
+          "nav": [
+            "Pipelines",
+            "Runners",
+            "Pricing",
+            "Docs"
+          ],
+          "cta": "Try free",
+          "stats": [
+            {
+              "v": "4.9/5",
+              "l": "rated"
+            },
+            {
+              "v": "2 days",
+              "l": "turnaround"
+            },
+            {
+              "v": "1.2k",
+              "l": "clients"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#8B5CF6",
+              "title": "Plan"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Track"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Report"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d02-c",
+      "sourceId": "ladder-07",
+      "template": "LogoLadder",
+      "caption": "The logo is too subtle. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 7 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 2,
+        "durationInSeconds": 17,
+        "hook": "THE LOGO IS TOO SUBTLE",
+        "promise": "pass 9 of 9",
+        "message": "can people see it from the car park?",
+        "payoff": "APPROVED. Ship it.",
+        "client": {
+          "name": "MERIDIAN",
+          "brand": "#EF4444",
+          "domain": "meridian.law",
+          "eyebrow": "PRACTICE",
+          "headline": "Matters, finally organised",
+          "sub": "Case management for small firms.",
+          "nav": [
+            "Matters",
+            "Clients",
+            "Billing",
+            "Team"
+          ],
+          "cta": "Request access",
+          "stats": [
+            {
+              "v": "36%",
+              "l": "faster"
+            },
+            {
+              "v": "18 mins",
+              "l": "saved daily"
+            },
+            {
+              "v": "8k",
+              "l": "seats"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#EF4444",
+              "title": "Design"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Build"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Launch"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d02-d",
+      "sourceId": "ladder-08",
+      "template": "LogoLadder",
+      "caption": "Can we try it louder. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 8 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 2,
+        "durationInSeconds": 17,
+        "hook": "CAN WE TRY IT LOUDER",
+        "promise": "version 6 of 6",
+        "message": "louder. i cannot explain it better",
+        "payoff": "SHIPPED. Goodnight.",
+        "client": {
+          "name": "ORCHARD",
+          "brand": "#22C55E",
+          "domain": "orchard.farm",
+          "eyebrow": "SUPPLY",
+          "headline": "From grower to shelf",
+          "sub": "Traceability for regional produce.",
+          "nav": [
+            "Growers",
+            "Traceability",
+            "Buyers",
+            "About"
+          ],
+          "cta": "Join the network",
+          "stats": [
+            {
+              "v": "24/7",
+              "l": "coverage"
+            },
+            {
+              "v": "99.4%",
+              "l": "on time"
+            },
+            {
+              "v": "310",
+              "l": "sites"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#22C55E",
+              "title": "Intake"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Review"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Deliver"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d03-a",
+      "sourceId": "ladder-09",
+      "template": "LogoLadder",
+      "caption": "More impact please. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 9 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 3,
+        "durationInSeconds": 17,
+        "hook": "MORE IMPACT PLEASE",
+        "promise": "round 8 of 8",
+        "message": "needs impact. the logo isn't landing",
+        "payoff": "SIGNED. Finally.",
+        "client": {
+          "name": "ATLAS",
+          "brand": "#3B82F6",
+          "domain": "atlasgear.co",
+          "eyebrow": "OUTDOOR",
+          "headline": "Gear that earns its weight",
+          "sub": "Field-tested packs and shelters.",
+          "nav": [
+            "Packs",
+            "Shelters",
+            "Guides",
+            "Stories"
+          ],
+          "cta": "Shop packs",
+          "stats": [
+            {
+              "v": "99.99%",
+              "l": "uptime"
+            },
+            {
+              "v": "40ms",
+              "l": "p95 latency"
+            },
+            {
+              "v": "12k",
+              "l": "teams"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#3B82F6",
+              "title": "Deploy"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Observe"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Scale"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d03-b",
+      "sourceId": "ladder-10",
+      "template": "LogoLadder",
+      "caption": "It needs to breathe. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 10 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 3,
+        "durationInSeconds": 17,
+        "hook": "IT NEEDS TO BREATHE",
+        "promise": "draft 7 of 7",
+        "message": "so it needs to breathe, but bigger",
+        "payoff": "DONE. Well done.",
+        "client": {
+          "name": "CINDER",
+          "brand": "#F97316",
+          "domain": "cinder.coffee",
+          "eyebrow": "ROASTERY",
+          "headline": "Coffee with a paper trail",
+          "sub": "Single-origin roasted to order.",
+          "nav": [
+            "Beans",
+            "Subscribe",
+            "Wholesale",
+            "Story"
+          ],
+          "cta": "Subscribe",
+          "stats": [
+            {
+              "v": "4.9/5",
+              "l": "rated"
+            },
+            {
+              "v": "2 days",
+              "l": "turnaround"
+            },
+            {
+              "v": "1.2k",
+              "l": "clients"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#F97316",
+              "title": "Plan"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Track"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Report"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d03-c",
+      "sourceId": "ladder-11",
+      "template": "LogoLadder",
+      "caption": "Just for the homepage. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 11 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 3,
+        "durationInSeconds": 17,
+        "hook": "JUST FOR THE HOMEPAGE",
+        "promise": "round 9 of 9",
+        "message": "only on the homepage. and maybe all pages",
+        "payoff": "SHIPPED. At last.",
+        "client": {
+          "name": "LUMEN",
+          "brand": "#06B6D4",
+          "domain": "lumen.studio",
+          "eyebrow": "PHOTO",
+          "headline": "Light, handled properly",
+          "sub": "Product photography for catalogues.",
+          "nav": [
+            "Work",
+            "Rates",
+            "Studio",
+            "Contact"
+          ],
+          "cta": "Book a shoot",
+          "stats": [
+            {
+              "v": "36%",
+              "l": "faster"
+            },
+            {
+              "v": "18 mins",
+              "l": "saved daily"
+            },
+            {
+              "v": "8k",
+              "l": "seats"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#06B6D4",
+              "title": "Design"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Build"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Launch"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d03-d",
+      "sourceId": "ladder-12",
+      "template": "LogoLadder",
+      "caption": "My wife prefers bigger. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 12 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 3,
+        "durationInSeconds": 17,
+        "hook": "MY WIFE PREFERS BIGGER",
+        "promise": "revision 7 of 7",
+        "message": "she has a great eye for these things",
+        "payoff": "APPROVED. Thank you.",
+        "client": {
+          "name": "BASALT",
+          "brand": "#64748B",
+          "domain": "basalt.works",
+          "eyebrow": "MANUFACTURING",
+          "headline": "Parts, on time, every time",
+          "sub": "Precision machining for short runs.",
+          "nav": [
+            "Capabilities",
+            "Materials",
+            "Quality",
+            "Quote"
+          ],
+          "cta": "Upload a part",
+          "stats": [
+            {
+              "v": "24/7",
+              "l": "coverage"
+            },
+            {
+              "v": "99.4%",
+              "l": "on time"
+            },
+            {
+              "v": "310",
+              "l": "sites"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#64748B",
+              "title": "Intake"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Review"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Deliver"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d04-a",
+      "sourceId": "ladder-13",
+      "template": "LogoLadder",
+      "caption": "Slightly more presence. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 13 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 4,
+        "durationInSeconds": 17,
+        "hook": "SLIGHTLY MORE PRESENCE",
+        "promise": "take 8 of 8",
+        "message": "presence. you know the one i mean",
+        "payoff": "LOCKED. Finally.",
+        "client": {
+          "name": "WILLOW",
+          "brand": "#A855F7",
+          "domain": "willow.care",
+          "eyebrow": "SUPPORT",
+          "headline": "Care plans that adapt",
+          "sub": "Coordination for in-home support teams.",
+          "nav": [
+            "Plans",
+            "Rosters",
+            "Reporting",
+            "Help"
+          ],
+          "cta": "Talk to us",
+          "stats": [
+            {
+              "v": "99.99%",
+              "l": "uptime"
+            },
+            {
+              "v": "40ms",
+              "l": "p95 latency"
+            },
+            {
+              "v": "12k",
+              "l": "teams"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#A855F7",
+              "title": "Deploy"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Observe"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Scale"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d04-b",
+      "sourceId": "ladder-14",
+      "template": "LogoLadder",
+      "caption": "Can it be hero sized. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 14 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 4,
+        "durationInSeconds": 17,
+        "hook": "CAN IT BE HERO SIZED",
+        "promise": "pass 7 of 7",
+        "message": "hero sized. like the hero of the page",
+        "payoff": "SHIPPED. Goodbye.",
+        "client": {
+          "name": "KESTREL",
+          "brand": "#0891B2",
+          "domain": "kestrel.aero",
+          "eyebrow": "SURVEY",
+          "headline": "Survey a site by lunchtime",
+          "sub": "Drone capture and mapping.",
+          "nav": [
+            "Capture",
+            "Mapping",
+            "Sectors",
+            "Pricing"
+          ],
+          "cta": "Plan a flight",
+          "stats": [
+            {
+              "v": "4.9/5",
+              "l": "rated"
+            },
+            {
+              "v": "2 days",
+              "l": "turnaround"
+            },
+            {
+              "v": "1.2k",
+              "l": "clients"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#0891B2",
+              "title": "Plan"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Track"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Report"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d04-c",
+      "sourceId": "ladder-15",
+      "template": "LogoLadder",
+      "caption": "But on mobile too. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 15 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 4,
+        "durationInSeconds": 17,
+        "hook": "BUT ON MOBILE TOO",
+        "promise": "round 6 of 6",
+        "message": "and on mobile. especially on mobile",
+        "payoff": "DONE. Truly.",
+        "client": {
+          "name": "VERTEX",
+          "brand": "#6B4EFF",
+          "domain": "vertex.io",
+          "eyebrow": "PLATFORM",
+          "headline": "Ship faster with Vertex",
+          "sub": "The infrastructure layer for modern product teams.",
+          "nav": [
+            "Product",
+            "Solutions",
+            "Pricing",
+            "Docs"
+          ],
+          "cta": "Get started",
+          "stats": [
+            {
+              "v": "36%",
+              "l": "faster"
+            },
+            {
+              "v": "18 mins",
+              "l": "saved daily"
+            },
+            {
+              "v": "8k",
+              "l": "seats"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#6B4EFF",
+              "title": "Design"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Build"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Launch"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d04-d",
+      "sourceId": "ladder-16",
+      "template": "LogoLadder",
+      "caption": "The board wants bigger. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 16 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 4,
+        "durationInSeconds": 17,
+        "hook": "THE BOARD WANTS BIGGER",
+        "promise": "review 9 of 9",
+        "message": "the board reviewed it. bigger please",
+        "payoff": "SIGNED OFF. Phew.",
+        "client": {
+          "name": "NORTHWIND",
+          "brand": "#0EA5E9",
+          "domain": "northwind.co",
+          "eyebrow": "LOGISTICS",
+          "headline": "Freight that tracks itself",
+          "sub": "Live shipment visibility for growing importers.",
+          "nav": [
+            "Network",
+            "Tracking",
+            "Rates",
+            "About"
+          ],
+          "cta": "Book a lane",
+          "stats": [
+            {
+              "v": "24/7",
+              "l": "coverage"
+            },
+            {
+              "v": "99.4%",
+              "l": "on time"
+            },
+            {
+              "v": "310",
+              "l": "sites"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#0EA5E9",
+              "title": "Intake"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Review"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Deliver"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d05-a",
+      "sourceId": "ladder-17",
+      "template": "LogoLadder",
+      "caption": "A touch more confident. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 17 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 5,
+        "durationInSeconds": 17,
+        "hook": "A TOUCH MORE CONFIDENT",
+        "promise": "attempt 7 of 7",
+        "message": "confident. bold. you understand",
+        "payoff": "APPROVED. Finally.",
+        "client": {
+          "name": "HEARTH",
+          "brand": "#E1477E",
+          "domain": "hearth.house",
+          "eyebrow": "INTERIORS",
+          "headline": "Rooms that finally work",
+          "sub": "Design and fit-out for homes with opinions.",
+          "nav": [
+            "Studio",
+            "Projects",
+            "Process",
+            "Journal"
+          ],
+          "cta": "Start a project",
+          "stats": [
+            {
+              "v": "99.99%",
+              "l": "uptime"
+            },
+            {
+              "v": "40ms",
+              "l": "p95 latency"
+            },
+            {
+              "v": "12k",
+              "l": "teams"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#E1477E",
+              "title": "Deploy"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Observe"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Scale"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d05-b",
+      "sourceId": "ladder-18",
+      "template": "LogoLadder",
+      "caption": "Make it unmissable. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 18 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 5,
+        "durationInSeconds": 17,
+        "hook": "MAKE IT UNMISSABLE",
+        "promise": "round 8 of 8",
+        "message": "unmissable. that is the brief",
+        "payoff": "SHIPPED. Done.",
+        "client": {
+          "name": "QUARRY",
+          "brand": "#F59E0B",
+          "domain": "quarry.build",
+          "eyebrow": "CONSTRUCTION",
+          "headline": "Build without the guesswork",
+          "sub": "Estimating and scheduling for small builders.",
+          "nav": [
+            "Estimating",
+            "Schedule",
+            "Crew",
+            "Docs"
+          ],
+          "cta": "Get a quote",
+          "stats": [
+            {
+              "v": "4.9/5",
+              "l": "rated"
+            },
+            {
+              "v": "2 days",
+              "l": "turnaround"
+            },
+            {
+              "v": "1.2k",
+              "l": "clients"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#F59E0B",
+              "title": "Plan"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Track"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Report"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d05-c",
+      "sourceId": "ladder-19",
+      "template": "LogoLadder",
+      "caption": "Can we test it bigger. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 19 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 5,
+        "durationInSeconds": 17,
+        "hook": "CAN WE TEST IT BIGGER",
+        "promise": "test 6 of 6",
+        "message": "just to see. purely to compare",
+        "payoff": "LOCKED. Thank you.",
+        "client": {
+          "name": "PELICAN",
+          "brand": "#14B8A6",
+          "domain": "pelican.health",
+          "eyebrow": "CLINIC",
+          "headline": "Care that runs on time",
+          "sub": "Practice software for independent clinics.",
+          "nav": [
+            "Booking",
+            "Records",
+            "Billing",
+            "Support"
+          ],
+          "cta": "See a demo",
+          "stats": [
+            {
+              "v": "36%",
+              "l": "faster"
+            },
+            {
+              "v": "18 mins",
+              "l": "saved daily"
+            },
+            {
+              "v": "8k",
+              "l": "seats"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#14B8A6",
+              "title": "Design"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Build"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Launch"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d05-d",
+      "sourceId": "ladder-20",
+      "template": "LogoLadder",
+      "caption": "It looks small on tv. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 20 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 5,
+        "durationInSeconds": 17,
+        "hook": "IT LOOKS SMALL ON TV",
+        "promise": "round 7 of 7",
+        "message": "i showed my dad on the tv",
+        "payoff": "DONE. Finally.",
+        "client": {
+          "name": "FORGE",
+          "brand": "#8B5CF6",
+          "domain": "forge.dev",
+          "eyebrow": "TOOLING",
+          "headline": "Ship your CI in an hour",
+          "sub": "Pipelines that configure themselves.",
+          "nav": [
+            "Pipelines",
+            "Runners",
+            "Pricing",
+            "Docs"
+          ],
+          "cta": "Try free",
+          "stats": [
+            {
+              "v": "24/7",
+              "l": "coverage"
+            },
+            {
+              "v": "99.4%",
+              "l": "on time"
+            },
+            {
+              "v": "310",
+              "l": "sites"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#8B5CF6",
+              "title": "Intake"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Review"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Deliver"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d06-a",
+      "sourceId": "ladder-21",
+      "template": "LogoLadder",
+      "caption": "Scale it up a bit. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 21 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 6,
+        "durationInSeconds": 17,
+        "hook": "SCALE IT UP A BIT",
+        "promise": "version 9 of 9",
+        "message": "a bit. then maybe a bit more",
+        "payoff": "APPROVED. Ship.",
+        "client": {
+          "name": "MERIDIAN",
+          "brand": "#EF4444",
+          "domain": "meridian.law",
+          "eyebrow": "PRACTICE",
+          "headline": "Matters, finally organised",
+          "sub": "Case management for small firms.",
+          "nav": [
+            "Matters",
+            "Clients",
+            "Billing",
+            "Team"
+          ],
+          "cta": "Request access",
+          "stats": [
+            {
+              "v": "99.99%",
+              "l": "uptime"
+            },
+            {
+              "v": "40ms",
+              "l": "p95 latency"
+            },
+            {
+              "v": "12k",
+              "l": "teams"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#EF4444",
+              "title": "Deploy"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Observe"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Scale"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d06-b",
+      "sourceId": "ladder-22",
+      "template": "LogoLadder",
+      "caption": "Needs more authority. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 22 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 6,
+        "durationInSeconds": 17,
+        "hook": "NEEDS MORE AUTHORITY",
+        "promise": "draft 8 of 8",
+        "message": "authority. gravitas. bigger",
+        "payoff": "SIGNED. At last.",
+        "client": {
+          "name": "ORCHARD",
+          "brand": "#22C55E",
+          "domain": "orchard.farm",
+          "eyebrow": "SUPPLY",
+          "headline": "From grower to shelf",
+          "sub": "Traceability for regional produce.",
+          "nav": [
+            "Growers",
+            "Traceability",
+            "Buyers",
+            "About"
+          ],
+          "cta": "Join the network",
+          "stats": [
+            {
+              "v": "4.9/5",
+              "l": "rated"
+            },
+            {
+              "v": "2 days",
+              "l": "turnaround"
+            },
+            {
+              "v": "1.2k",
+              "l": "clients"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#22C55E",
+              "title": "Plan"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Track"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Report"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d06-c",
+      "sourceId": "ladder-23",
+      "template": "LogoLadder",
+      "caption": "Just this once bigger. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 23 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 6,
+        "durationInSeconds": 17,
+        "hook": "JUST THIS ONCE BIGGER",
+        "promise": "round 6 of 6",
+        "message": "last time i promise. bigger",
+        "payoff": "SHIPPED. Promise kept.",
+        "client": {
+          "name": "ATLAS",
+          "brand": "#3B82F6",
+          "domain": "atlasgear.co",
+          "eyebrow": "OUTDOOR",
+          "headline": "Gear that earns its weight",
+          "sub": "Field-tested packs and shelters.",
+          "nav": [
+            "Packs",
+            "Shelters",
+            "Guides",
+            "Stories"
+          ],
+          "cta": "Shop packs",
+          "stats": [
+            {
+              "v": "36%",
+              "l": "faster"
+            },
+            {
+              "v": "18 mins",
+              "l": "saved daily"
+            },
+            {
+              "v": "8k",
+              "l": "seats"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#3B82F6",
+              "title": "Design"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Build"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Launch"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d06-d",
+      "sourceId": "ladder-24",
+      "template": "LogoLadder",
+      "caption": "More brand moment. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 24 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 6,
+        "durationInSeconds": 17,
+        "hook": "MORE BRAND MOMENT",
+        "promise": "pass 9 of 9",
+        "message": "we need a brand moment up top",
+        "payoff": "LOCKED. Lovely.",
+        "client": {
+          "name": "CINDER",
+          "brand": "#F97316",
+          "domain": "cinder.coffee",
+          "eyebrow": "ROASTERY",
+          "headline": "Coffee with a paper trail",
+          "sub": "Single-origin roasted to order.",
+          "nav": [
+            "Beans",
+            "Subscribe",
+            "Wholesale",
+            "Story"
+          ],
+          "cta": "Subscribe",
+          "stats": [
+            {
+              "v": "24/7",
+              "l": "coverage"
+            },
+            {
+              "v": "99.4%",
+              "l": "on time"
+            },
+            {
+              "v": "310",
+              "l": "sites"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#F97316",
+              "title": "Intake"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Review"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Deliver"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d07-a",
+      "sourceId": "ladder-25",
+      "template": "LogoLadder",
+      "caption": "Can it fill the space. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 25 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 7,
+        "durationInSeconds": 17,
+        "hook": "CAN IT FILL THE SPACE",
+        "promise": "take 7 of 7",
+        "message": "there is space. fill the space",
+        "payoff": "DONE. Thank you.",
+        "client": {
+          "name": "LUMEN",
+          "brand": "#06B6D4",
+          "domain": "lumen.studio",
+          "eyebrow": "PHOTO",
+          "headline": "Light, handled properly",
+          "sub": "Product photography for catalogues.",
+          "nav": [
+            "Work",
+            "Rates",
+            "Studio",
+            "Contact"
+          ],
+          "cta": "Book a shoot",
+          "stats": [
+            {
+              "v": "99.99%",
+              "l": "uptime"
+            },
+            {
+              "v": "40ms",
+              "l": "p95 latency"
+            },
+            {
+              "v": "12k",
+              "l": "teams"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#06B6D4",
+              "title": "Deploy"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Observe"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Scale"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d07-b",
+      "sourceId": "ladder-26",
+      "template": "LogoLadder",
+      "caption": "The ceo said bigger. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 26 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 7,
+        "durationInSeconds": 17,
+        "hook": "THE CEO SAID BIGGER",
+        "promise": "review 8 of 8",
+        "message": "not my call. he said bigger",
+        "payoff": "APPROVED. Finally.",
+        "client": {
+          "name": "BASALT",
+          "brand": "#64748B",
+          "domain": "basalt.works",
+          "eyebrow": "MANUFACTURING",
+          "headline": "Parts, on time, every time",
+          "sub": "Precision machining for short runs.",
+          "nav": [
+            "Capabilities",
+            "Materials",
+            "Quality",
+            "Quote"
+          ],
+          "cta": "Upload a part",
+          "stats": [
+            {
+              "v": "4.9/5",
+              "l": "rated"
+            },
+            {
+              "v": "2 days",
+              "l": "turnaround"
+            },
+            {
+              "v": "1.2k",
+              "l": "clients"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#64748B",
+              "title": "Plan"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Track"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Report"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d07-c",
+      "sourceId": "ladder-27",
+      "template": "LogoLadder",
+      "caption": "One last tweak. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 27 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 7,
+        "durationInSeconds": 17,
+        "hook": "ONE LAST TWEAK",
+        "promise": "tweak 12 of 12",
+        "message": "genuinely the last one this time",
+        "payoff": "SHIPPED. Really.",
+        "client": {
+          "name": "WILLOW",
+          "brand": "#A855F7",
+          "domain": "willow.care",
+          "eyebrow": "SUPPORT",
+          "headline": "Care plans that adapt",
+          "sub": "Coordination for in-home support teams.",
+          "nav": [
+            "Plans",
+            "Rosters",
+            "Reporting",
+            "Help"
+          ],
+          "cta": "Talk to us",
+          "stats": [
+            {
+              "v": "36%",
+              "l": "faster"
+            },
+            {
+              "v": "18 mins",
+              "l": "saved daily"
+            },
+            {
+              "v": "8k",
+              "l": "seats"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#A855F7",
+              "title": "Design"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Build"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Launch"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "w32-d07-d",
+      "sourceId": "ladder-28",
+      "template": "LogoLadder",
+      "caption": "Perfect but bigger. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 28 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "eyebrow": "MeritByte — Build Better",
+        "day": 7,
+        "durationInSeconds": 17,
+        "hook": "PERFECT BUT BIGGER",
+        "promise": "round 9 of 9",
+        "message": "it is perfect. now make it bigger",
+        "payoff": "SIGNED OFF. Done.",
+        "client": {
+          "name": "KESTREL",
+          "brand": "#0891B2",
+          "domain": "kestrel.aero",
+          "eyebrow": "SURVEY",
+          "headline": "Survey a site by lunchtime",
+          "sub": "Drone capture and mapping.",
+          "nav": [
+            "Capture",
+            "Mapping",
+            "Sectors",
+            "Pricing"
+          ],
+          "cta": "Plan a flight",
+          "stats": [
+            {
+              "v": "24/7",
+              "l": "coverage"
+            },
+            {
+              "v": "99.4%",
+              "l": "on time"
+            },
+            {
+              "v": "310",
+              "l": "sites"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#0891B2",
+              "title": "Intake"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Review"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Deliver"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
