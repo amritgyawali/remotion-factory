@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  html,body { width:1080px; height:1920px; margin:0; padding:0; overflow:hidden; background:#0F1012; }
+</style>
+</head>
+<body>
+<div id="stage" class="mb-stage"></div>
+<script type="module">
+  import { getState, DURATION } from '../src/lib/timeline.js';
+  import { CSS } from '../src/brand/styles.js';
+  import { buildHTML } from './scene.js';
+
+  const s = document.createElement('style');
+  s.textContent = CSS;
+  document.head.appendChild(s);
+
+  const stage = document.getElementById('stage');
+  window.DURATION = DURATION;
+  window.setFrame = (f) => { stage.innerHTML = buildHTML(getState(f)); return true; };
+  window.setFrame(0);
+  window.__ready = true;
+</script>
+</body>
+</html>

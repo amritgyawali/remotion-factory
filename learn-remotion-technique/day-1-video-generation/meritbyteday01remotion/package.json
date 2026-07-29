@@ -1,0 +1,25 @@
+{
+  "name": "meritbyte-silent-motion",
+  "version": "1.0.0",
+  "description": "MeritByte Technologies — Silent Motion System. Thirty videos, no humans, no voices.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "remotion studio",
+    "audio:day01": "python3 audio/build_audio.py",
+    "render:day01": "remotion render Day01 out/Day01_MakeTheLogoBigger.mp4 --codec=h264 --crf=17",
+    "still:day01": "remotion still Day01 out/day01-thumb.png --frame=12",
+    "preview:render": "node renderer/render.mjs frames 0 510",
+    "lambda:day01": "remotion lambda render <serve-url> Day01 --codec=h264"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.360",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "remotion": "4.0.360"
+  },
+  "devDependencies": {
+    "@types/react": "19.0.0",
+    "typescript": "5.8.3"
+  }
+}

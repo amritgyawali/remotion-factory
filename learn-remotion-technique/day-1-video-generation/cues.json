@@ -1,0 +1,132 @@
+{
+  "bpm": 90,
+  "fps": 30,
+  "cues": [
+    {
+      "frame": 12,
+      "second": 0.4,
+      "sfx": "shutter snap",
+      "dbfs": -9,
+      "ducks_bed": true
+    },
+    {
+      "frame": 30,
+      "second": 1.0,
+      "sfx": "shutter snap +2st",
+      "dbfs": -9,
+      "ducks_bed": true
+    },
+    {
+      "frame": 60,
+      "second": 2.0,
+      "sfx": "shutter snap +4st",
+      "dbfs": -9,
+      "ducks_bed": true
+    },
+    {
+      "frame": 90,
+      "second": 3.0,
+      "sfx": "shutter snap +6st",
+      "dbfs": -9,
+      "ducks_bed": true
+    },
+    {
+      "frame": 120,
+      "second": 4.0,
+      "sfx": "comedic boing",
+      "dbfs": -11,
+      "ducks_bed": false
+    },
+    {
+      "frame": 150,
+      "second": 5.0,
+      "sfx": "shutter snap +8st",
+      "dbfs": -9,
+      "ducks_bed": true
+    },
+    {
+      "frame": 154,
+      "second": 5.133,
+      "sfx": "record scratch",
+      "dbfs": -12,
+      "ducks_bed": false
+    },
+    {
+      "frame": 210,
+      "second": 7.0,
+      "sfx": "shutter snap +10st (biggest)",
+      "dbfs": -8,
+      "ducks_bed": true
+    },
+    {
+      "frame": 210,
+      "second": 7.0,
+      "sfx": "sub-bass thump",
+      "dbfs": -8,
+      "ducks_bed": true
+    },
+    {
+      "frame": 240,
+      "second": 8.0,
+      "sfx": "rising whoosh",
+      "dbfs": -12,
+      "ducks_bed": false
+    },
+    {
+      "frame": 270,
+      "second": 9.0,
+      "sfx": "typing blip 1",
+      "dbfs": -12,
+      "ducks_bed": false
+    },
+    {
+      "frame": 280,
+      "second": 9.333,
+      "sfx": "typing blip 2",
+      "dbfs": -12,
+      "ducks_bed": false
+    },
+    {
+      "frame": 290,
+      "second": 9.667,
+      "sfx": "typing blip 3",
+      "dbfs": -12,
+      "ducks_bed": false
+    },
+    {
+      "frame": 312,
+      "second": 10.4,
+      "sfx": "message ping",
+      "dbfs": -9,
+      "ducks_bed": true
+    },
+    {
+      "frame": 360,
+      "second": 12.0,
+      "sfx": "comedic pop",
+      "dbfs": -12,
+      "ducks_bed": false
+    },
+    {
+      "frame": 390,
+      "second": 13.0,
+      "sfx": "confirmation chime",
+      "dbfs": -10,
+      "ducks_bed": true
+    },
+    {
+      "frame": 420,
+      "second": 14.0,
+      "sfx": "tape-rewind zip",
+      "dbfs": -11,
+      "ducks_bed": false
+    },
+    {
+      "frame": 450,
+      "second": 15.0,
+      "sfx": "logo sting + warm chime",
+      "dbfs": -10,
+      "ducks_bed": true
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "project": "MeritByte Silent Motion System \u2014 Day 1",
+  "output": "out/Day01_MakeTheLogoBigger.mp4",
+  "pipeline": [
+    {
+      "step": 1,
+      "name": "synthesise audio",
+      "cmd": "python3 audio/build_audio.py",
+      "writes": [
+        "out/day01_audio.wav",
+        "out/stems/bed.wav",
+        "out/stems/sfx.wav",
+        "audio/cues.json"
+      ]
+    },
+    {
+      "step": 2,
+      "name": "emit beat sheet",
+      "cmd": "node scripts/emit-script-json.mjs",
+      "writes": [
+        "day01.script.json"
+      ]
+    },
+    {
+      "step": 3,
+      "name": "render frames",
+      "cmd": "node renderer/render.mjs frames 0 510",
+      "writes": [
+        "frames/f0000.png \u2026 f0509.png"
+      ],
+      "remotionEquivalent": "npx remotion render Day01 out/Day01_MakeTheLogoBigger.mp4 --codec=h264 --crf=17"
+    },
+    {
+      "step": 4,
+      "name": "mux",
+      "cmd": "ffmpeg -y -framerate 30 -i frames/f%04d.png -i out/day01_audio.wav -c:v libx264 -profile:v high -pix_fmt yuv420p -crf 17 -preset slow -g 60 -movflags +faststart -c:a aac -b:a 256k -ar 48000 -shortest out/Day01_MakeTheLogoBigger.mp4"
+    },
+    {
+      "step": 5,
+      "name": "verify",
+      "cmd": "python3 verify.py"
+    }
+  ],
+  "toolchain": {
+    "node": "22.22.2",
+    "python": "3.11.15",
+    "ffmpeg": "6.1.1",
+    "chromium": "headless_shell (CDP)",
+    "pythonLibs": [
+      "numpy",
+      "scipy"
+    ]
+  },
+  "externalAssets": {
+    "fonts": "system Liberation Sans \u2014 no download",
+    "icons": "hand-authored inline SVG",
+    "music": "synthesised (numpy)",
+    "sfx": "synthesised (numpy)",
+    "stockFootage": null,
+    "count": 0
+  },
+  "determinism": {
+    "audioRngSeed": 20260729,
+    "chromiumFlags": [
+      "--force-device-scale-factor=1",
+      "--font-render-hinting=none",
+      "--force-color-profile=srgb",
+      "--hide-scrollbars"
+    ]
+  },
+  "verification": [
+    "loop frames 420-449 == 0-29 (md5)",
+    "6-7s freeze is one static frame",
+    "11-12s is one static frame",
+    "11-12s audio is digital zero",
+    "each bed layer enters in its own band",
+    "18/18 SFX onsets on their cue frame",
+    "1080x1920 @ 30fps, 510 frames"
+  ]
+}

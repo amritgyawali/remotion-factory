@@ -1,0 +1,516 @@
+{
+  "$schema": "./script.schema.json",
+  "day": 1,
+  "title": "Make The Logo Bigger",
+  "emotion": "COMEDY",
+  "template": "DevJoke",
+  "bodyLengthSeconds": 15,
+  "endCardSeconds": 2,
+  "composition": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "durationInFrames": 510
+  },
+  "rules": {
+    "noHumans": true,
+    "noVoice": true,
+    "soundOnly": true,
+    "remotionOnly": true,
+    "bannedOnScreen": [
+      "faces",
+      "hands",
+      "bodies",
+      "silhouettes",
+      "avatars",
+      "photographs",
+      "illustrated characters",
+      "cursors driven by a hand",
+      "stock footage",
+      "screen recordings"
+    ],
+    "bannedInAudio": [
+      "voiceover",
+      "dialogue",
+      "narration",
+      "whispers",
+      "crowd voices",
+      "AI speech",
+      "vocal pads",
+      "breaths",
+      "chanting",
+      "lyrics"
+    ]
+  },
+  "hooks": {
+    "A": "MAKE THE LOGO BIGGER (round 7)",
+    "B": "Client feedback, round 7 of 7.",
+    "C": "We made the logo bigger 7 times.",
+    "mechanic": "the number / escalation promise",
+    "whyItHolds": "The round counter is a promise of escalation. Nobody leaves before they see round 7.",
+    "readableByFrame": 6,
+    "minPointSize": 90,
+    "maxWords": 7
+  },
+  "musicBed": {
+    "instrument": "playful plucked synth",
+    "bpm": 90,
+    "bpmNote": "brief says 100; 90 keeps beat=20 frames / eighth=10 / sixteenth=5 so every cue is frame-exact and on-grid. Still inside the 88-108 DevJoke band.",
+    "behaviour": "One instrument layer added on every round so the track escalates with the logo. Full stop at the ping.",
+    "key": "A minor",
+    "progression": [
+      "Am",
+      "Am",
+      "F",
+      "G"
+    ],
+    "layerEntry": {
+      "pluck": 0,
+      "bass": 0,
+      "kick": 30,
+      "shaker": 60,
+      "hihat": 90
+    },
+    "stripToBassOnly": [
+      180,
+      210
+    ],
+    "hardStopFrame": 312,
+    "silence": [
+      330,
+      360
+    ],
+    "quietReentryFrame": 360,
+    "fullReturnFrame": 390,
+    "resetToBarOneFrame": 420
+  },
+  "mix": {
+    "bedLufs": -16,
+    "sfxPeakDbfs": [
+      -12,
+      -8
+    ],
+    "duck": {
+      "depthDb": -4,
+      "holdFrames": 6,
+      "appliesTo": "every major SFX hit"
+    },
+    "masterLufs": -14,
+    "truePeakDbtp": -1
+  },
+  "retention": {
+    "device": "Escalation plus a perfect loop.",
+    "seamlessLoop": {
+      "cutFrame": 420,
+      "identicalTo": [
+        0,
+        30
+      ],
+      "note": "frames 420-449 are byte-identical to frames 0-29"
+    },
+    "persistentLockup": "lower-left MeritByte.com from second zero, so the brand survives the loop"
+  },
+  "caption": "Round 7. We shipped round 1. Tag a designer who has lived this.",
+  "cta": null,
+  "ctaNote": "No CTA. Pure reach video.",
+  "rows": [
+    {
+      "fromFrame": 0,
+      "toFrame": 30,
+      "fromSecond": 0,
+      "toSecond": 1,
+      "onScreenText": "MAKE THE LOGO BIGGER",
+      "motion": "logo 40->64, damping 12",
+      "logoHeightPx": 40,
+      "scene": "site",
+      "sound": []
+    },
+    {
+      "fromFrame": 30,
+      "toFrame": 60,
+      "fromSecond": 1,
+      "toSecond": 2,
+      "onScreenText": "ROUND 2",
+      "motion": "logo 64->96, nav pushes right, counter chip in",
+      "logoHeightPx": 64,
+      "scene": "site",
+      "sound": [
+        {
+          "sfx": "shutter snap +2st",
+          "dbfs": -9,
+          "ducksBed": true
+        }
+      ]
+    },
+    {
+      "fromFrame": 60,
+      "toFrame": 90,
+      "fromSecond": 2,
+      "toSecond": 3,
+      "onScreenText": "ROUND 3",
+      "motion": "logo ->140, nav wraps to 2nd line",
+      "logoHeightPx": 96,
+      "scene": "site",
+      "sound": [
+        {
+          "sfx": "shutter snap +4st",
+          "dbfs": -9,
+          "ducksBed": true
+        }
+      ]
+    },
+    {
+      "fromFrame": 90,
+      "toFrame": 120,
+      "fromSecond": 3,
+      "toSecond": 4,
+      "onScreenText": "ROUND 4",
+      "motion": "logo ->200, nav clipped off right edge",
+      "logoHeightPx": 140,
+      "scene": "site",
+      "sound": [
+        {
+          "sfx": "shutter snap +6st",
+          "dbfs": -9,
+          "ducksBed": true
+        }
+      ]
+    },
+    {
+      "fromFrame": 120,
+      "toFrame": 150,
+      "fromSecond": 4,
+      "toSecond": 5,
+      "onScreenText": "still not big enough",
+      "motion": "logo ->280, hero squashed to 30px strip",
+      "logoHeightPx": 200,
+      "scene": "site",
+      "sound": [
+        {
+          "sfx": "comedic boing",
+          "dbfs": -11,
+          "ducksBed": false
+        }
+      ]
+    },
+    {
+      "fromFrame": 150,
+      "toFrame": 180,
+      "fromSecond": 5,
+      "toSecond": 6,
+      "onScreenText": "ROUND 5",
+      "motion": "logo ->380, overlaps headline, z-index fight",
+      "logoHeightPx": 280,
+      "scene": "site",
+      "sound": [
+        {
+          "sfx": "shutter snap +8st",
+          "dbfs": -9,
+          "ducksBed": true
+        }
+      ]
+    },
+    {
+      "fromFrame": 180,
+      "toFrame": 210,
+      "fromSecond": 6,
+      "toSecond": 7,
+      "onScreenText": null,
+      "motion": "FREEZE — nothing animates for a full second",
+      "logoHeightPx": 380,
+      "scene": "site",
+      "sound": []
+    },
+    {
+      "fromFrame": 210,
+      "toFrame": 240,
+      "fromSecond": 7,
+      "toSecond": 8,
+      "onScreenText": "ROUND 6",
+      "motion": "logo ->520, bleeds past both edges",
+      "logoHeightPx": 380,
+      "scene": "site",
+      "sound": [
+        {
+          "sfx": "shutter snap +10st (biggest)",
+          "dbfs": -8,
+          "ducksBed": true
+        },
+        {
+          "sfx": "sub-bass thump",
+          "dbfs": -8,
+          "ducksBed": true
+        }
+      ]
+    },
+    {
+      "fromFrame": 240,
+      "toFrame": 270,
+      "fromSecond": 8,
+      "toSecond": 9,
+      "onScreenText": "this is the live site now",
+      "motion": "camera pans down the dead page",
+      "logoHeightPx": 520,
+      "scene": "site",
+      "sound": [
+        {
+          "sfx": "rising whoosh",
+          "dbfs": -12,
+          "ducksBed": false
+        }
+      ]
+    },
+    {
+      "fromFrame": 270,
+      "toFrame": 300,
+      "fromSecond": 9,
+      "toSecond": 10,
+      "onScreenText": "client is typing...",
+      "motion": "cut to chat panel, char-count interpolate",
+      "logoHeightPx": 520,
+      "scene": "chat",
+      "sound": [
+        {
+          "sfx": "typing blip 1",
+          "dbfs": -12,
+          "ducksBed": false
+        }
+      ]
+    },
+    {
+      "fromFrame": 300,
+      "toFrame": 330,
+      "fromSecond": 10,
+      "toSecond": 11,
+      "onScreenText": "can we see one more option",
+      "motion": "message lands, music stops dead on the ping",
+      "logoHeightPx": 520,
+      "scene": "chat",
+      "sound": []
+    },
+    {
+      "fromFrame": 330,
+      "toFrame": 360,
+      "fromSecond": 11,
+      "toSecond": 12,
+      "onScreenText": null,
+      "motion": "absolute stillness, total silence",
+      "logoHeightPx": 520,
+      "scene": "chat",
+      "sound": []
+    },
+    {
+      "fromFrame": 360,
+      "toFrame": 390,
+      "fromSecond": 12,
+      "toSecond": 13,
+      "onScreenText": "ROUND 7",
+      "motion": "logo springs back to 40, layout correct",
+      "logoHeightPx": 520,
+      "scene": "site",
+      "sound": [
+        {
+          "sfx": "comedic pop",
+          "dbfs": -12,
+          "ducksBed": false
+        }
+      ]
+    },
+    {
+      "fromFrame": 390,
+      "toFrame": 420,
+      "fromSecond": 13,
+      "toSecond": 14,
+      "onScreenText": "PERFECT. Ship it.",
+      "motion": "green tick draws on (stroke-dashoffset)",
+      "logoHeightPx": 40,
+      "scene": "site",
+      "sound": [
+        {
+          "sfx": "confirmation chime",
+          "dbfs": -10,
+          "ducksBed": true
+        }
+      ]
+    },
+    {
+      "fromFrame": 420,
+      "toFrame": 450,
+      "fromSecond": 14,
+      "toSecond": 15,
+      "onScreenText": "MAKE THE LOGO BIGGER",
+      "motion": "hard cut to the exact frame-1 composition",
+      "logoHeightPx": 40,
+      "scene": "site",
+      "sound": [
+        {
+          "sfx": "tape-rewind zip",
+          "dbfs": -11,
+          "ducksBed": false
+        }
+      ]
+    },
+    {
+      "fromFrame": 450,
+      "toFrame": 510,
+      "fromSecond": 15,
+      "toSecond": 17,
+      "onScreenText": "MeritByte Technologies / MeritByte.com",
+      "motion": "brand card on #191919",
+      "logoHeightPx": null,
+      "scene": "endcard",
+      "sound": [
+        {
+          "sfx": "logo sting + warm chime",
+          "dbfs": -10,
+          "ducksBed": true
+        }
+      ]
+    }
+  ],
+  "sfxCues": [
+    {
+      "frame": 12,
+      "second": 0.4,
+      "sfx": "shutter snap",
+      "peakDbfs": -9,
+      "ducksBed": true
+    },
+    {
+      "frame": 30,
+      "second": 1,
+      "sfx": "shutter snap +2st",
+      "peakDbfs": -9,
+      "ducksBed": true
+    },
+    {
+      "frame": 60,
+      "second": 2,
+      "sfx": "shutter snap +4st",
+      "peakDbfs": -9,
+      "ducksBed": true
+    },
+    {
+      "frame": 90,
+      "second": 3,
+      "sfx": "shutter snap +6st",
+      "peakDbfs": -9,
+      "ducksBed": true
+    },
+    {
+      "frame": 120,
+      "second": 4,
+      "sfx": "comedic boing",
+      "peakDbfs": -11,
+      "ducksBed": false
+    },
+    {
+      "frame": 150,
+      "second": 5,
+      "sfx": "shutter snap +8st",
+      "peakDbfs": -9,
+      "ducksBed": true
+    },
+    {
+      "frame": 154,
+      "second": 5.133,
+      "sfx": "record scratch",
+      "peakDbfs": -12,
+      "ducksBed": false
+    },
+    {
+      "frame": 210,
+      "second": 7,
+      "sfx": "shutter snap +10st (biggest)",
+      "peakDbfs": -8,
+      "ducksBed": true
+    },
+    {
+      "frame": 210,
+      "second": 7,
+      "sfx": "sub-bass thump",
+      "peakDbfs": -8,
+      "ducksBed": true
+    },
+    {
+      "frame": 240,
+      "second": 8,
+      "sfx": "rising whoosh",
+      "peakDbfs": -12,
+      "ducksBed": false
+    },
+    {
+      "frame": 270,
+      "second": 9,
+      "sfx": "typing blip 1",
+      "peakDbfs": -12,
+      "ducksBed": false
+    },
+    {
+      "frame": 280,
+      "second": 9.333,
+      "sfx": "typing blip 2",
+      "peakDbfs": -12,
+      "ducksBed": false
+    },
+    {
+      "frame": 290,
+      "second": 9.667,
+      "sfx": "typing blip 3",
+      "peakDbfs": -12,
+      "ducksBed": false
+    },
+    {
+      "frame": 312,
+      "second": 10.4,
+      "sfx": "message ping",
+      "peakDbfs": -9,
+      "ducksBed": true
+    },
+    {
+      "frame": 360,
+      "second": 12,
+      "sfx": "comedic pop",
+      "peakDbfs": -12,
+      "ducksBed": false
+    },
+    {
+      "frame": 390,
+      "second": 13,
+      "sfx": "confirmation chime",
+      "peakDbfs": -10,
+      "ducksBed": true
+    },
+    {
+      "frame": 420,
+      "second": 14,
+      "sfx": "tape-rewind zip",
+      "peakDbfs": -11,
+      "ducksBed": false
+    },
+    {
+      "frame": 450,
+      "second": 15,
+      "sfx": "logo sting + warm chime",
+      "peakDbfs": -10,
+      "ducksBed": true
+    }
+  ],
+  "copy": {
+    "chatMessage": "perfect, can we see one more option",
+    "chatChannel": "#vertex-website",
+    "chatSender": "Vertex Co.",
+    "senderInitials": "VC",
+    "mockSite": "Vertex",
+    "mockDomain": "vertex.io"
+  },
+  "endCard": {
+    "durationFrames": 60,
+    "background": "#191919",
+    "line1": "MeritByte Technologies",
+    "line2": "MeritByte.com",
+    "motion": "logo mark springs in over 6 frames, text fades up, then completely still",
+    "audio": "logo sting + one warm chime; bed resolves to its final chord and fades across the full 2s",
+    "note": "identical on all thirty videos — one component, EndCard.tsx"
+  }
+}
