@@ -1,7 +1,8 @@
 import React from "react";
 import { AbsoluteFill, useVideoConfig } from "remotion";
 import { Frame } from "../components/Frame";
-import { BLEED_MARGIN, Eyebrow, KineticHeadline, MarchingList, PayoffBlock } from "../components/Kinetic";
+import { BLEED_MARGIN, Eyebrow, KineticHeadline, PayoffBlock } from "../components/Kinetic";
+import { ChatStage, TerminalStage } from "../components/Stage";
 import { themeFor } from "../theme";
 import type { DevJokeProps } from "../types";
 
@@ -14,6 +15,23 @@ const variantLabel: Record<DevJokeProps["variant"], string> = {
   deploy: "FRIDAY DEPLOY",
   comments: "FEEDBACK",
   cache: "CACHE",
+};
+
+/**
+ * Where each joke is set.
+ *
+ * Half these variants are about a machine and half are about a person, and one
+ * stage cannot serve both: "make the logo bigger, again" in a terminal is a
+ * frame arguing with its own script. The dev variants get a shell and a command
+ * that would plausibly produce the beats; the client variants get a message
+ * thread, because that is literally where the joke happens.
+ */
+const SHELL: Partial<Record<DevJokeProps["variant"], string>> = {
+  terminal: "npm test && npm run deploy",
+  deploy: "git push origin main --force",
+  cache: "rm -rf .next && npm run build",
+  qa: "npm run test:e2e -- --grep 'order'",
+  timer: "standup --duration 15m",
 };
 
 /**
@@ -37,33 +55,44 @@ export const DevJoke: React.FC<DevJokeProps> = ({
   const { durationInFrames } = useVideoConfig();
 
   const punchAt = Math.max(54, Math.floor(durationInFrames * 0.62));
-  const beatsFrom = 22;
-  const beatEvery = Math.max(9, Math.floor((punchAt - beatsFrom - 18) / Math.max(1, beats.length)));
+  const beatsFrom = 34;
+  // Capped for the same reason as SiteRoast's faults: spreading the beats over
+  // the whole setup left seconds of a motionless stage between them, and a joke
+  // that pauses that long between beats is not landing.
+  const beatEvery = Math.min(
+    40,
+    Math.max(13, Math.floor((punchAt - beatsFrom - 18) / Math.max(1, beats.length))),
+  );
+  const command = SHELL[variant];
 
   return (
     <Frame theme={theme} template="DevJoke" score={score}>
       <AbsoluteFill
         style={{
           boxSizing: "border-box",
-          padding: `104px ${BLEED_MARGIN}px 0`,
+          padding: `78px ${BLEED_MARGIN}px 0`,
           display: "flex",
           flexDirection: "column",
-          gap: 40,
+          gap: 30,
         }}
       >
-        <div style={{ display: "flex", flexDirection: "column", gap: 30 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
           <Eyebrow text={variantLabel[variant]} theme={theme} color={theme.amber} />
-          <KineticHeadline text={hook} theme={theme} from={4} maxLines={3} max={168} />
+          <KineticHeadline text={hook} theme={theme} from={4} maxLines={2} max={132} />
         </div>
 
         <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-          <MarchingList
-            items={beats}
-            theme={theme}
-            from={beatsFrom}
-            every={beatEvery}
-            accent={theme.amber}
-          />
+          {command ? (
+            <TerminalStage
+              theme={theme}
+              command={command}
+              lines={beats}
+              from={beatsFrom}
+              every={beatEvery}
+            />
+          ) : (
+            <ChatStage theme={theme} messages={beats} from={beatsFrom} every={beatEvery} />
+          )}
         </div>
 
         <PayoffBlock

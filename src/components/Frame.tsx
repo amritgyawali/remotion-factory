@@ -3,6 +3,7 @@ import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } fr
 import { type Theme } from "../theme";
 import { Soundtrack } from "../audio/Score";
 import { resolveScore } from "../audio/defaultScore";
+import { Backdrop } from "./Stage";
 
 const MARGIN = 72;
 
@@ -51,9 +52,6 @@ export const Frame: React.FC<{
     durationInFrames: 10,
   });
 
-  // Slow ambient drift so a static composition never looks frozen.
-  const drift = interpolate(frame, [0, durationInFrames], [0, 1]);
-
   const exit = interpolate(
     frame,
     [durationInFrames - 10, durationInFrames - 1],
@@ -70,13 +68,15 @@ export const Frame: React.FC<{
       */}
       <Soundtrack score={resolveScore(score, template, durationInFrames, fps)} />
 
-      <AbsoluteFill
-        style={{
-          background: `radial-gradient(120% 70% at ${18 + drift * 24}% ${
-            12 + drift * 10
-          }%, ${theme.groundLift} 0%, transparent 62%)`,
-        }}
-      />
+      {/*
+        Depth, not just a lit corner. The single drifting radial this replaces
+        left the field reading as a still image with text moving on it; Backdrop
+        adds a receding grid and two counter-drifting glows so the frame has
+        somewhere to be behind the type. It derives its own clip-relative time
+        from useCurrentFrame, so the ambient drift this file used to compute
+        lives there now.
+      */}
+      <Backdrop theme={theme} seed={template} />
 
       {/* Grain. Keeps flat colour fields from banding after platform re-encode. */}
       <AbsoluteFill

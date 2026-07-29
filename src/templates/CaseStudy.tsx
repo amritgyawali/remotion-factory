@@ -2,22 +2,30 @@ import React from "react";
 import { AbsoluteFill, useVideoConfig } from "remotion";
 import { Frame } from "../components/Frame";
 import {
-  BeforeAfter,
   BLEED_MARGIN,
   Eyebrow,
   KineticHeadline,
   MarchingList,
   PayoffBlock,
 } from "../components/Kinetic";
+import { MetricStage } from "../components/Stage";
 import { themeFor } from "../theme";
 import type { CaseStudyProps } from "../types";
 
 /**
  * A change, the work behind it, and what it cost.
  *
- * The before figure is struck through as the after arrives, which states the
- * relationship without a chart. The bars this template used to draw were
- * proportional to the frame counter, not to the numbers.
+ * The claim of a case study is "this moved", and the template used to make that
+ * claim in words — a before string struck through as an after string arrived.
+ * Stating a change and showing one are different things, and only one of them
+ * survives being watched with the sound off.
+ *
+ * MetricStage draws the distance instead: the after bar grows on a spring so
+ * the eye tracks the movement rather than being handed a finished result. The
+ * bars are deliberately not scaled to the copy — `before` and `after` here are
+ * prose ("slow paint hides the offer"), not figures, so a proportional chart
+ * would be inventing precision the script does not have. What is honest to show
+ * is direction and magnitude, which is what this does.
  */
 export const CaseStudy: React.FC<CaseStudyProps> = ({
   hook,
@@ -65,7 +73,7 @@ export const CaseStudy: React.FC<CaseStudyProps> = ({
             gap: 52,
           }}
         >
-          <BeforeAfter before={before} after={after} theme={theme} from={comparisonAt} />
+          <MetricStage before={before} after={after} theme={theme} from={comparisonAt} />
           <MarchingList
             items={actions}
             theme={theme}
