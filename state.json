@@ -28,7 +28,8 @@
       "bytes": 3369112,
       "durationSeconds": 22.1,
       "renderedAt": "2026-07-28T20:38:56Z",
-      "approval": "pending"
+      "approval": "rejected",
+      "reviewedAt": "2026-07-29T05:50:01.921Z"
     },
     {
       "id": "d02-c",
