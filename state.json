@@ -27,33 +27,12 @@
     "d07-a",
     "d07-b",
     "d07-c",
-    "d07-d"
+    "d07-d",
+    "w32-d01-a",
+    "w32-d01-b"
   ],
-  "lastPostedAt": "2026-07-29T03:48:00.268Z",
+  "lastPostedAt": "2026-07-29T17:45:56.772Z",
   "rendered": [
-    {
-      "id": "w32-d01-a",
-      "week": "2026-w32",
-      "template": "LogoLadder",
-      "url": "https://github.com/amritgyawali/remotion-factory/releases/download/videos-2026-w32/w32-d01-a.mp4",
-      "sha256": "efed1469c6a39ba1740b7213c8f4dfc05619f77f8f0ccd895cda21aae16f6ff7",
-      "bytes": 1582010,
-      "durationSeconds": 17.045,
-      "approval": "approved",
-      "renderedAt": "2026-07-29T06:20:03.187Z",
-      "reviewedAt": "2026-07-29T07:19:41.435Z"
-    },
-    {
-      "id": "w32-d01-b",
-      "week": "2026-w32",
-      "template": "LogoLadder",
-      "url": "https://github.com/amritgyawali/remotion-factory/releases/download/videos-2026-w32/w32-d01-b.mp4",
-      "sha256": "7c7891260b349e303f320355a5b2d1ea04c05bc8e122736654921a3902b28df3",
-      "bytes": 1704671,
-      "durationSeconds": 17.045,
-      "approval": "pending",
-      "renderedAt": "2026-07-29T07:59:59.496Z"
-    },
     {
       "id": "w32-d01-c",
       "week": "2026-w32",
@@ -96,6 +75,14 @@
     {
       "id": "d01-d",
       "at": "2026-08-25T09:15:00.000Z"
+    },
+    {
+      "id": "w32-d01-a",
+      "at": "2026-08-25T15:15:00.000Z"
+    },
+    {
+      "id": "w32-d01-b",
+      "at": "2026-08-25T21:15:00.000Z"
     }
   ],
   "renderQuota": {
