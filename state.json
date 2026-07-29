@@ -42,6 +42,50 @@
       "approval": "approved",
       "renderedAt": "2026-07-29T06:20:03.187Z",
       "reviewedAt": "2026-07-29T07:19:41.435Z"
+    },
+    {
+      "id": "w32-d01-b",
+      "week": "2026-w32",
+      "template": "LogoLadder",
+      "url": "https://github.com/amritgyawali/remotion-factory/releases/download/videos-2026-w32/w32-d01-b.mp4",
+      "sha256": "7c7891260b349e303f320355a5b2d1ea04c05bc8e122736654921a3902b28df3",
+      "bytes": 1704671,
+      "durationSeconds": 17.045,
+      "approval": "pending",
+      "renderedAt": "2026-07-29T07:59:59.496Z"
+    },
+    {
+      "id": "w32-d01-c",
+      "week": "2026-w32",
+      "template": "LogoLadder",
+      "url": "https://github.com/amritgyawali/remotion-factory/releases/download/videos-2026-w32/w32-d01-c.mp4",
+      "sha256": "e1ced21c89b5f9c7f8195059690a2cfe33c27c997a3272b99d3035215b5b52ce",
+      "bytes": 1641142,
+      "durationSeconds": 17.045,
+      "approval": "pending",
+      "renderedAt": "2026-07-29T08:01:12.521Z"
+    },
+    {
+      "id": "w32-d01-d",
+      "week": "2026-w32",
+      "template": "LogoLadder",
+      "url": "https://github.com/amritgyawali/remotion-factory/releases/download/videos-2026-w32/w32-d01-d.mp4",
+      "sha256": "961df11ce866dc45466dbfbd01c951c7716dd9eb99a596303dc3089d7ca0cce4",
+      "bytes": 1764957,
+      "durationSeconds": 17.045,
+      "approval": "pending",
+      "renderedAt": "2026-07-29T08:02:24.420Z"
+    },
+    {
+      "id": "w32-d02-a",
+      "week": "2026-w32",
+      "template": "LogoLadder",
+      "url": "https://github.com/amritgyawali/remotion-factory/releases/download/videos-2026-w32/w32-d02-a.mp4",
+      "sha256": "2a490813bd6c28d3bcaf70a86718df4b9074c3a5215d3adb5468e1dde54576db",
+      "bytes": 1703484,
+      "durationSeconds": 17.045,
+      "approval": "pending",
+      "renderedAt": "2026-07-29T08:03:36.746Z"
     }
   ],
   "scheduled": [
@@ -53,5 +97,9 @@
       "id": "d01-d",
       "at": "2026-08-25T09:15:00.000Z"
     }
-  ]
+  ],
+  "renderQuota": {
+    "day": "2026-07-29",
+    "count": 4
+  }
 }
