@@ -75,6 +75,80 @@ const ASIDES = [
   { from: S(8), to: S(9), text: "this is the live site now" },
 ];
 
+/**
+ * The soundtrack, generated from the same beats as the picture.
+ *
+ * With no voice the audio is not decoration, it is the performance — and the
+ * one thing it must never do is drift from the cut. Deriving both from the same
+ * `S(sec)` calls is what makes a cue frame-exact by construction rather than by
+ * a person counting frames in two files. The reference build's own rule was
+ * that audio three frames late reads as an amateur edit; the way to never be
+ * three frames late is to never hold the number twice.
+ *
+ * Three things carry the comedy, and all three are audible rather than visual:
+ *
+ *   1. A layer per round. pluck+bass, then kick, then shaker, then hat. The
+ *      escalation is heard before it is understood.
+ *   2. Pitch on the snap. The same snap rises a step each round, so absurdity
+ *      escalates without introducing a single new sound.
+ *   3. The strip and the silence. At the freeze everything but the bass drops
+ *      out; at 11-12s the bed stops dead. Silence is the closest thing to
+ *      delivery a video with no voice has.
+ *
+ * The payoff chime is flagged `major` against a minor bed — a Picardy third,
+ * which is why "PERFECT. Ship it." lands as relief rather than as one more beat.
+ */
+export function ladderScore() {
+  return {
+    bed: [
+      { frame: S(0), layers: ["pluck", "bass"] },
+      { frame: S(1), layers: ["pluck", "bass", "kick"] },
+      { frame: S(2), layers: ["pluck", "bass", "kick", "shaker"] },
+      { frame: S(3), layers: ["pluck", "bass", "kick", "shaker", "hat"] },
+      // The freeze: everything but the bass drops away. The picture stops and
+      // so does the arrangement, or the stillness reads as a dropped frame.
+      { frame: S(6), layers: ["bass"] },
+      { frame: S(7), layers: ["pluck", "bass", "kick", "shaker", "hat"] },
+      { frame: S(9), layers: ["pluck", "bass"] },
+      // Dead stop on the client's message, held through the still beat.
+      { frame: S(10) + 12, layers: [] },
+      { frame: S(12), layers: ["pluck", "bass", "kick"] },
+      { frame: S(13), layers: ["pluck", "bass", "kick", "shaker", "hat"] },
+    ],
+    cues: [
+      /**
+       * Rounds 1-6: the same snap, two semitones higher each round.
+       *
+       * The pitched variants already existed in the SFX pack — snap-p2 through
+       * snap-p8 — which is the whole point of a resampled catalogue: rising
+       * absurdity without introducing a single new sound, so the escalation is
+       * heard as one idea getting louder rather than as six unrelated noises.
+       */
+      { frame: S(0) + 12, sfx: "snap", db: -9 },
+      { frame: S(1), sfx: "snap-p2", db: -9 },
+      { frame: S(2), sfx: "snap-p4", db: -8 },
+      { frame: S(3), sfx: "snap-p6", db: -8 },
+      { frame: S(4), sfx: "boing", db: -10 },
+      { frame: S(5), sfx: "snap-p8", db: -7 },
+      { frame: S(5) + 2, sfx: "scratch", db: -13 },
+      // Round 6 is the top of the ladder, so it lands with sub under it.
+      { frame: S(7), sfx: "snap-p8", db: -6 },
+      { frame: S(7) + 2, sfx: "subThump", db: -8 },
+      { frame: S(8), sfx: "whoosh-down", db: -12 },
+      // Typing, then the ping the bed stops on.
+      { frame: S(9) + 10, sfx: "keyTap", db: -16 },
+      { frame: S(9) + 15, sfx: "keyTap", db: -16 },
+      { frame: S(9) + 20, sfx: "keyTap", db: -16 },
+      { frame: S(10) + 12, sfx: "ping", db: -8 },
+      // ... silence ...
+      { frame: S(12), sfx: "pop", db: -9 },
+      { frame: S(13), sfx: "confirm", db: -8, major: true },
+      { frame: S(14), sfx: "tapeZip-rewind", db: -13 },
+      { frame: END_CARD, sfx: "logoSting", db: -10 },
+    ],
+  };
+}
+
 export type LadderScript = {
   hook: string;
   promise: string;

@@ -5,7 +5,7 @@ import { resolveScore } from "../audio/defaultScore";
 import { CLIENT_BRAND, SiteMock } from "../components/SiteMock";
 import { themeFor } from "../theme";
 import type { LogoLadderProps } from "../types";
-import { getState, type LadderState } from "./logoLadder.timeline";
+import { getState, ladderScore, type LadderState } from "./logoLadder.timeline";
 
 /**
  * An escalation joke, told by breaking a real page.
@@ -287,7 +287,13 @@ export const LogoLadder: React.FC<LogoLadderProps> = ({
 
   return (
     <AbsoluteFill style={{ background: CANVAS }}>
-      <Soundtrack score={resolveScore(score, "DevJoke", 17 * 30, 30)} />
+      {/*
+        The generated ladder score is the default, not the fallback. A day whose
+        cues have been transcribed by hand still wins, but the escalation, the
+        strip at the freeze and the dead stop at 11-12s are structural to this
+        template and must not depend on someone remembering to write them out.
+      */}
+      <Soundtrack score={resolveScore(score ?? ladderScore(), "DevJoke", 17 * 30, 30)} />
 
       {s.scene === "endcard" && s.endcard ? (
         <EndCard endcard={s.endcard} theme={theme} />

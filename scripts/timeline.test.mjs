@@ -177,6 +177,49 @@ test("the hook is readable from the first frame", async () => {
   assert.equal(getState(6, SCRIPT).hookOpacity, 1);
 });
 
+test("every cue names an SFX that exists in the pack", async () => {
+  const { ladderScore } = await load();
+  const { readdirSync, existsSync } = await import("node:fs");
+
+  // A cue naming a file that is not there fails a render six minutes in, as a
+  // 404 for an asset nobody thought about — which is how `whoosh` and `tapeZip`
+  // got written here when the pack only ships `whoosh-down` and
+  // `tapeZip-rewind`. Cheaper to catch by listing a directory.
+  const dir = path.join(REPO, "public", "audio");
+  if (!existsSync(dir)) return; // pack is generated; skip when it has not been built
+
+  const have = new Set(
+    readdirSync(dir)
+      .filter((f) => f.endsWith(".wav"))
+      .map((f) => f.replace(/\.wav$/, "")),
+  );
+
+  const missing = ladderScore()
+    .cues.map((cue) => cue.sfx)
+    .filter((name) => !have.has(name));
+
+  assert.deepEqual(missing, [], `cues name SFX that are not in public/audio: ${missing.join(", ")}`);
+});
+
+test("the bed strips at the freeze and stops dead for the silence", async () => {
+  const { ladderScore, S } = await load();
+  const steps = ladderScore().bed;
+
+  const at = (frame) => {
+    let active = steps[0];
+    for (const step of steps) if (frame >= step.frame) active = step;
+    return active.layers;
+  };
+
+  // 6-7s: the tonal strip. Everything but the bass drops out, so the freeze is
+  // heard as well as seen.
+  assert.deepEqual(at(S(6) + 5), ["bass"], "the freeze must strip to bass alone");
+  assert.ok(at(S(5)).length > 1, "and the round before it must be full");
+
+  // 11-12s: not quiet — nothing. A tail ringing into the beat softens it.
+  assert.deepEqual(at(S(11) + 10), [], "the still beat must be digital silence");
+});
+
 test.after(() => {
   if (compiled) rmSync(compiled.dir, { recursive: true, force: true });
 });
