@@ -122,13 +122,13 @@
       "week": "2026-w32",
       "template": "LogoLadder",
       "sourceId": "ladder-04",
-      "bytes": 1764957,
+      "bytes": 1764611,
       "durationSeconds": 17.045,
-      "sha256": "961df11ce866dc45466dbfbd01c951c7716dd9eb99a596303dc3089d7ca0cce4",
+      "sha256": "73633d0a4d079f1dbb6d40573e9924eaba3208906fe1c6fa06aea665299ed4ba",
       "visualSignature": "acf0f6f880dae80100e6fcfee092ca0100e0b6f6aefaca5500e0f4f282eed20100d8a6ec8080eed00000d0900100000000e6dcaef880da01acf0e6f880dae801",
       "audioSignature": "6563444847542f5542571064b7468732",
       "url": "https://github.com/amritgyawali/remotion-factory/releases/download/videos-2026-w32/w32-d01-d.mp4",
-      "archivedAt": "2026-07-29T08:02:24.418Z"
+      "archivedAt": "2026-07-30T06:14:14.511Z"
     },
     {
       "id": "w32-d02-a",
