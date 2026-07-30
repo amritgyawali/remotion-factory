@@ -21,6 +21,24 @@ export function captionKey(item) {
   return normaliseContent(item.caption);
 }
 
+/**
+ * The first thing on screen, whatever the template calls it.
+ *
+ * Visible-copy uniqueness compares a whole script and so passes two videos that
+ * open on the same words and then diverge — which is the wrong end to compare
+ * from. The PDF is explicit that with no voiceover the hook is the entire
+ * proposition: "text must be fully readable by frame 6", and it is the only part
+ * a scrolling viewer sees. Two videos opening on "70%" read as the same video
+ * whatever their fourth second holds.
+ *
+ * StatCard has no `hook` and leads on its figure; ListReveal leads on its
+ * headline. Those are the same slot in the frame, so they are the same key.
+ */
+export function hookKey(item) {
+  const props = item?.props ?? {};
+  return normaliseContent(props.hook ?? props.headline ?? props.value);
+}
+
 export function visibleCopyKey(item) {
   const props = item.props ?? {};
   const ignored = new Set(["day", "durationInSeconds", "eyebrow", "kicker", "theme", "variant"]);
@@ -57,19 +75,48 @@ export function canonicalJson(value) {
 }
 
 /**
- * A week's content: everything except `postType`.
+ * The content of one item, as the thing that decides what the file looks like.
  *
- * An accepted week is immutable once it starts posting, so a delayed video can
- * never be silently rewritten. `postType` is not content though — it is the
- * owner's standing decision about how anything gets delivered, and locking it
- * to whatever was set when the first item happened to post would mean a week
- * can never be paused to drafts or released live once it is under way.
- *
- * Content is compared with this; `postType` is allowed to move on its own.
+ * The id is excluded because it is this item's identity, not its content — it is
+ * the key the two versions are matched on.
  */
-export function weekContentJson(plan) {
-  const { postType, ...content } = plan ?? {};
+export function itemContentJson(item) {
+  const { id, ...content } = item ?? {};
   return canonicalJson(content);
+}
+
+/**
+ * Which already-posted items a replacement week would rewrite.
+ *
+ * The rule used to freeze the *whole* week once any item in it posted, and the
+ * reasoning was sound as far as it went: a video that is already public must not
+ * be silently rewritten underneath its own id. But it also froze the twenty-six
+ * items that had not posted, which made a week that was accepted with a fault in
+ * it permanently unfixable — and week 32 was accepted holding twenty-six re-skins
+ * of one script. The only way to repair it under the old rule was to bypass the
+ * rule, which is the worst outcome a check can produce.
+ *
+ * So the freeze now covers exactly what publication makes irreversible: an item
+ * that has posted may not change, and may not disappear. Everything still in the
+ * queue is a plan, and a plan is allowed to be corrected.
+ */
+export function frozenItemChanges(existingPlan, candidatePlan, postedIds) {
+  const posted = new Set(postedIds ?? []);
+  const candidates = new Map((candidatePlan?.items ?? []).map((item) => [item.id, item]));
+  const changed = [];
+
+  for (const item of existingPlan?.items ?? []) {
+    if (!posted.has(item.id)) continue;
+
+    const replacement = candidates.get(item.id);
+    if (!replacement) {
+      changed.push(`${item.id} has already posted and would be removed`);
+    } else if (itemContentJson(item) !== itemContentJson(replacement)) {
+      changed.push(`${item.id} has already posted and would be rewritten`);
+    }
+  }
+
+  return changed;
 }
 
 export function weeklyPlanErrors(plan) {
@@ -154,6 +201,7 @@ export function weeklyCollectionErrors(entries) {
   const sourceIds = new Map();
   const captions = new Map();
   const visibleCopy = new Map();
+  const hooks = new Map();
   let postType;
 
   for (const entry of entries) {
@@ -178,6 +226,7 @@ export function weeklyCollectionErrors(entries) {
       addUnique(sourceIds, item.sourceId, "sourceId", location, errors);
       addUnique(captions, captionKey(item), "caption", location, errors);
       addUnique(visibleCopy, visibleCopyKey(item), "visible copy", location, errors);
+      addUnique(hooks, hookKey(item), "opening hook", location, errors);
     }
   }
 

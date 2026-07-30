@@ -67,7 +67,7 @@ export type CompareExhibit = {
 
 export type BoardExhibit = {
   kind: "board";
-  /** Exactly four. It is a KPI row, and a KPI row with seven tiles is a table. */
+  /** Three or four. It is a KPI row, and a KPI row with seven tiles is a table. */
   tiles: (Datum & { suffix?: string })[];
   /** Index of the one tile that carries the story. Exactly one. */
   emphasis: number;

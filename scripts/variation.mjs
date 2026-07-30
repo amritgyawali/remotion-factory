@@ -23,7 +23,7 @@
 
 const CAMPAIGN_ID = /^w(\d{1,3})-d(\d{1,2})-([a-d])$/;
 
-export const CAMPAIGN_FIRST_WEEK = 33;
+export const CAMPAIGN_FIRST_WEEK = 32;
 export const SLOTS = ["a", "b", "c", "d"];
 export const SLOTS_PER_DAY = SLOTS.length;
 export const DAYS_PER_WEEK = 7;

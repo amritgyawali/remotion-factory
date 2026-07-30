@@ -82,10 +82,17 @@ export type DevJokeProps = BaseProps & {
   kicker?: string;
 };
 
+/**
+ * One per TechTip page in the source PDF: days 2, 7, 11, 17, 21, 26 and 29.
+ * `prompt` was the missing seventh — day 17 is about writing one prompt, not
+ * about checking an index, and labelling it "INDEX CHECK" would have put a
+ * false strand name on screen for the whole runtime.
+ */
 export type TechTipVariant =
   | "security"
   | "devtools"
   | "tool-audit"
+  | "prompt"
   | "vitals"
   | "index-check"
   | "design-code";

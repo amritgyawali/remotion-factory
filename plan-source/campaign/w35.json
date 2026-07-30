@@ -574,20 +574,20 @@
     {
       "template": "StatCard",
       "sourceId": "c30-d20-change-failure",
-      "caption": "Most outages trace back to a change. That is not an argument for changing less, it is one for changing smaller.\n\n#DevOps #Reliability #Engineering",
+      "caption": "The teams that ship most often also break things least often. Not despite the frequency — because of what shipping often forces you to make small.\n\n#DevOps #Reliability #Engineering",
       "props": {
-        "value": "70%",
-        "label": "of outages follow a recent change",
+        "value": "15%",
+        "label": "change failure rate elite teams hit",
         "context": [
-          "Smaller changes fail smaller.",
-          "And they are far easier to undo."
+          "Shipping more often makes each change smaller.",
+          "Smaller changes fail smaller."
         ],
         "kicker": "SAVE THIS",
         "exhibit": {
           "kind": "dial",
-          "value": 70,
+          "value": 15,
           "unit": "%",
-          "caption": ""
+          "caption": "of deployments cause a failure"
         }
       }
     },

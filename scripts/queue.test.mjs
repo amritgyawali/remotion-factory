@@ -5,7 +5,7 @@ import path from "node:path";
 import test from "node:test";
 import { acceptWeek } from "./accept-week.mjs";
 import { getArchivedQueue, markArchivedPosted } from "./queue.mjs";
-import { weeklyPlanErrors } from "./weekly-plan.mjs";
+import { frozenItemChanges, weeklyPlanErrors } from "./weekly-plan.mjs";
 
 const slots = ["a", "b", "c", "d"];
 
@@ -23,7 +23,16 @@ function makePlan(weekId = "2026-w31", order = 202631) {
         "#meritbyte #learning #careers",
     };
 
-    if (index % 2 === 0) {
+    // Two figures per template, chosen on parity. Templates repeat every three
+    // items, so the only way one can appear twice inside a four-item day is at
+    // i and i+3 — which differ in parity and therefore never draw the same
+    // figure. See repeatedWithinDay.
+    const alternate = index % 2 === 0;
+
+    // Three formats, not two. A 28-item week may give at most a third of itself
+    // to one template — see templateConcentrationErrors — so an alternating
+    // fixture of 14 and 14 is not an acceptable week and cannot stand in for one.
+    if (index % 3 === 0) {
       return {
         ...common,
         template: "StatCard",
@@ -31,32 +40,92 @@ function makePlan(weekId = "2026-w31", order = 202631) {
           eyebrow: "MeritByte",
           day,
           durationInSeconds: 8,
-          value: `${number}x`,
+          // Carries the week, because StatCard has no hook and leads on its
+          // figure — so the figure is what hookKey compares across weeks.
+          value: `${number}.${compactWeek.slice(-2)}x`,
           label: `Result ${compactWeek} number ${number}`,
           context: [
             `Principle ${number} changes ${compactWeek}`,
             `Apply lesson ${number} in ${compactWeek}`,
           ],
           kicker: "SAVE THIS",
+          exhibit: alternate
+            ? { kind: "dial", value: number, unit: "x", caption: `Result ${number}` }
+            : {
+                kind: "bars",
+                unit: "x",
+                series: [
+                  { label: "before", value: 1 },
+                  { label: "after", value: number },
+                ],
+              },
+        },
+      };
+    }
+
+    if (index % 3 === 1) {
+      return {
+        ...common,
+        template: "ListReveal",
+        props: {
+          eyebrow: "MeritByte",
+          day,
+          durationInSeconds: 10,
+          headline: `Four ${compactWeek} moves for principle ${number}`,
+          items: [
+            `Start ${compactWeek} lesson ${number}`,
+            `Measure ${compactWeek} result ${number}`,
+            `Review ${compactWeek} signal ${number}`,
+            `Repeat ${compactWeek} practice ${number}`,
+          ],
+          kicker: "TRY THIS",
+          exhibit: alternate
+            ? {
+                kind: "checklist",
+                steps: [
+                  { label: `Start ${compactWeek} lesson ${number}`, verdict: "pass" },
+                  { label: `Measure ${compactWeek} result ${number}`, verdict: "warn" },
+                ],
+              }
+            : {
+                kind: "meters",
+                unit: "count",
+                rows: [
+                  { label: `Signal ${number}`, value: number },
+                  { label: `Practice ${number}`, value: number + 1 },
+                ],
+              },
         },
       };
     }
 
     return {
       ...common,
-      template: "ListReveal",
+      template: "TechTip",
       props: {
         eyebrow: "MeritByte",
         day,
-        durationInSeconds: 10,
-        headline: `Four ${compactWeek} moves for principle ${number}`,
-        items: [
-          `Start ${compactWeek} lesson ${number}`,
-          `Measure ${compactWeek} result ${number}`,
-          `Review ${compactWeek} signal ${number}`,
-          `Repeat ${compactWeek} practice ${number}`,
+        durationInSeconds: 20,
+        hook: `Check ${compactWeek} step ${number}`,
+        steps: [
+          `Open ${compactWeek} panel ${number}`,
+          `Compare ${compactWeek} reading ${number}`,
+          `Record ${compactWeek} outcome ${number}`,
         ],
-        kicker: "TRY THIS",
+        result: `Step ${number} settles ${compactWeek} in one pass.`,
+        variant: "devtools",
+        kicker: "SAVE THIS",
+        exhibit: alternate
+          ? {
+              kind: "pipeline",
+              stages: [`Open panel ${number}`, `Compare reading ${number}`, `Record ${number}`],
+            }
+          : {
+              kind: "code",
+              filename: `step-${number}.sh`,
+              lines: [`# open panel ${number}`, `# record outcome ${number}`],
+              highlight: 1,
+            },
       },
     };
   });
@@ -114,7 +183,7 @@ test("accepts a new week and treats the identical plan as a no-op", async (t) =>
   assert.deepEqual(JSON.parse(await readFile(created.archivePath, "utf8")), plan);
 });
 
-test("allows replacing an unstarted week but locks it after the first posted id", async (t) => {
+test("locks the items that have posted and leaves the rest of the week editable", async (t) => {
   const paths = await fixture(t);
   const plan = makePlan();
   await writeJson(paths.planPath, plan);
@@ -130,15 +199,49 @@ test("allows replacing an unstarted week but locks it after the first posted id"
   assert.equal(updated.action, "updated");
 
   await writeJson(paths.statePath, { posted: [plan.items[0].id] });
-  edited.items[1].caption =
-    "A second edit must be blocked after publishing.\n\n#meritbyte #learning #careers";
-  edited.items[1].props.headline = "A changed headline after publishing";
-  await writeJson(paths.planPath, edited);
 
-  await assert.rejects(() => acceptWeek(paths), /is immutable because 1 item\(s\) already posted/);
+  // Still queued, so still a plan: a week found to be full of near-identical
+  // scripts has to be repairable without republishing what already went out.
+  const repaired = structuredClone(edited);
+  repaired.items[1].caption =
+    "A queued lesson is rewritten during a repair.\n\n#meritbyte #learning #careers";
+  repaired.items[1].props.headline = "A changed headline before publishing";
+  await writeJson(paths.planPath, repaired);
+  assert.equal((await acceptWeek(paths)).action, "updated");
+
+  // Already public, so frozen under its own id.
+  const rewritesPosted = structuredClone(repaired);
+  rewritesPosted.items[0].props.context[0] = "A second edit after publishing";
+  await writeJson(paths.planPath, rewritesPosted);
+  await assert.rejects(() => acceptWeek(paths), /has already posted and would be rewritten/);
 });
 
-test("postType stays changeable after a week has started, content does not", async (t) => {
+test("a posted item may not be rewritten or dropped, an unposted one may be", () => {
+  const existing = makePlan();
+  const posted = [existing.items[0].id];
+
+  assert.deepEqual(frozenItemChanges(existing, structuredClone(existing), posted), []);
+
+  const editsQueued = structuredClone(existing);
+  editsQueued.items[1].props.headline = "Rewritten while still in the queue";
+  assert.deepEqual(frozenItemChanges(existing, editsQueued, posted), []);
+
+  const editsPosted = structuredClone(existing);
+  editsPosted.items[0].props.value = "99x";
+  assert.deepEqual(frozenItemChanges(existing, editsPosted, posted), [
+    `${existing.items[0].id} has already posted and would be rewritten`,
+  ]);
+
+  // Removal is checked here rather than through acceptWeek, because a week one
+  // item short fails the 28-item rule first and never reaches this.
+  const dropsPosted = structuredClone(existing);
+  dropsPosted.items.shift();
+  assert.deepEqual(frozenItemChanges(existing, dropsPosted, posted), [
+    `${existing.items[0].id} has already posted and would be removed`,
+  ]);
+});
+
+test("postType stays changeable after a week has started, posted content does not", async (t) => {
   const paths = await fixture(t);
   const plan = makePlan();
   plan.postType = "draft";
@@ -155,14 +258,15 @@ test("postType stays changeable after a week has started, content does not", asy
   assert.equal(updated.action, "updated");
   assert.equal(JSON.parse(await readFile(updated.archivePath, "utf8")).postType, "now");
 
-  // Riding along on a postType change must not smuggle a content edit through.
+  // Riding along on a postType change must not smuggle an edit to a video that
+  // is already public.
   const smuggled = structuredClone(released);
   smuggled.postType = "draft";
-  smuggled.items[3].caption =
+  smuggled.items[0].caption =
     "A caption edit hidden behind a postType change.\n\n#meritbyte #learning #careers";
   await writeJson(paths.planPath, smuggled);
 
-  await assert.rejects(() => acceptWeek(paths), /only postType may change once a week has started/);
+  await assert.rejects(() => acceptWeek(paths), /has already posted and would be rewritten/);
 });
 
 test("rejects duplicate ids, source ids, captions, and visible copy across weeks", async (t) => {
@@ -175,8 +279,13 @@ test("rejects duplicate ids, source ids, captions, and visible copy across weeks
   second.items[0].id = first.items[0].id;
   second.items[1].sourceId = first.items[1].sourceId;
   second.items[2].caption = first.items[2].caption;
-  second.items[3].props.headline = first.items[3].props.headline;
-  second.items[3].props.items = [...first.items[3].props.items];
+  // Index 4 rather than 3: the fixture cycles three templates, and this case
+  // needs the one with a headline and a list to copy.
+  second.items[4].props.headline = first.items[4].props.headline;
+  second.items[4].props.items = [...first.items[4].props.items];
+  // The figure's labels are visible copy too, so they have to match as well for
+  // this to be the same video rather than merely a similar one.
+  second.items[4].props.exhibit = structuredClone(first.items[4].props.exhibit);
   await writeJson(paths.planPath, second);
 
   await assert.rejects(

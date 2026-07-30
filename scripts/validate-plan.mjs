@@ -19,6 +19,70 @@ export function isPortableItemId(value) {
   return typeof value === "string" && ITEM_ID.test(value) && !WINDOWS_RESERVED.test(value);
 }
 
+/**
+ * The share of one week a single template may carry.
+ *
+ * A third, so a week has to be built from at least three formats. It is not a
+ * style preference: week 32 was accepted holding twenty-seven copies of one
+ * composition — the same escalation joke re-skinned with a different client
+ * logo each time — and shipped four of them before anybody watching the feed
+ * said what the feed already showed. Nothing caught it, because every other
+ * uniqueness check in this repository asks whether two videos are *identical*
+ * and those twenty-seven were not: different logo, different colours, different
+ * words, one video.
+ *
+ * So this asks the question the others cannot: is this week made of more than
+ * one idea. Deliberately generous — a third of 28 is 9, which still allows a
+ * strand to dominate a week — because the failure it exists to catch is not a
+ * skewed mix, it is a week that is one video wearing twenty-eight hats.
+ */
+export const MAX_TEMPLATE_SHARE = 1 / 3;
+
+/**
+ * Compositions that may not be given any new work, and the one item each is
+ * still allowed to describe.
+ *
+ * Both were built around a single script page and hard-code its beats: the
+ * escalation, the freeze, the silence and the loop cut are timed in absolute
+ * seconds, and everything a plan can vary is a string laid over that fixed
+ * picture. LogoLadder takes a logo; WorksOnMyMachine takes a hook and nothing
+ * else. So a second item on either template is the same video with new words,
+ * which is exactly how week 32 came to hold twenty-seven of one and week 33 a
+ * second copy of the other.
+ *
+ * They are retired rather than deleted because each has a master that is already
+ * published. Removing the composition would make its plan item unrenderable and
+ * its entry in state.json unresolvable, and the only way through that is to
+ * delete the record of a video that is live on four channels — trading a
+ * duplicate for a lie about what was posted. Retirement gets the same result
+ * without that: the two files that exist stay describable, and nothing new can
+ * reach them.
+ */
+export const RETIRED_TEMPLATES = {
+  LogoLadder: "w32-d01-b",
+  WorksOnMyMachine: "w32-d01-a",
+};
+
+export function templateConcentrationErrors(items) {
+  const counts = new Map();
+  for (const item of items ?? []) {
+    if (item?.template) counts.set(item.template, (counts.get(item.template) ?? 0) + 1);
+  }
+
+  const total = items?.length ?? 0;
+  if (total === 0) return [];
+  const limit = Math.max(3, Math.ceil(total * MAX_TEMPLATE_SHARE));
+
+  return [...counts.entries()]
+    .filter(([, count]) => count > limit)
+    .map(
+      ([template, count]) =>
+        `${count} of ${total} items use the "${template}" template — at most ${limit} may. ` +
+        "A week built from one composition is one video posted many times, whatever " +
+        "the props say.",
+    );
+}
+
 const TEMPLATES = {
   /**
    * Fixed at 17s: the escalation, the freeze, the silence and the loop cut are
@@ -53,7 +117,15 @@ const TEMPLATES = {
     required: ["eyebrow", "day", "durationInSeconds", "hook", "steps", "result", "variant"],
     limits: { hook: 52, result: 62, eyebrow: 26, kicker: 20 },
     array: { key: "steps", min: 3, max: 3, line: 52 },
-    variants: ["security", "devtools", "tool-audit", "vitals", "index-check", "design-code"],
+    variants: [
+      "security",
+      "devtools",
+      "tool-audit",
+      "prompt",
+      "vitals",
+      "index-check",
+      "design-code",
+    ],
   },
   SiteRoast: {
     required: [
@@ -237,6 +309,16 @@ export async function loadPlan(path = "plan.json") {
       continue;
     }
 
+    const retiredFor = RETIRED_TEMPLATES[item.template];
+    if (retiredFor !== undefined && item.id !== retiredFor) {
+      errors.push(
+        `${at}: "${item.template}" is retired — it hard-codes one script page and every ` +
+          `prop it takes is a string laid over the same picture, so a second item on it ` +
+          `is that video again with new words. Only "${retiredFor}", which is already ` +
+          `published, may use it.`,
+      );
+    }
+
     if (queueMode) {
       if (item.publishAt) errors.push(`${at}: queue items must not have publishAt`);
       if (!isPortableItemId(item.sourceId)) {
@@ -382,6 +464,9 @@ export async function loadPlan(path = "plan.json") {
   // Cross-item, so it runs once the loop above has seen every script.
   if (queueMode && plan.items.some((item) => exhibitRequired(item, plan.week?.id))) {
     errors.push(...repeatedWithinDay(plan.items));
+  }
+  if (queueMode) {
+    errors.push(...templateConcentrationErrors(plan.items));
   }
 
   return { plan, errors, warnings, publishBlockers };

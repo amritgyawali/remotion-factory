@@ -238,8 +238,8 @@
     </tr>
     <tr>
       <td class="mono">board</td>
-      <td>Four tiles, exactly one emphasised.</td>
-      <td>Headline figures with no shared scale. Bars would invent a comparison the numbers do not have.<br><span class="mono">tiles[4] · emphasis</span></td>
+      <td>Three or four tiles, exactly one emphasised.</td>
+      <td>Headline figures with no shared scale. Bars would invent a comparison the numbers do not have.<br><span class="mono">tiles[3–4] · emphasis</span></td>
     </tr>
     <tr>
       <td class="mono">cartogram</td>
@@ -263,6 +263,25 @@
     <tr><td class="mono">chat</td><td>A message thread arriving one message at a time.</td><td><code>DevJoke</code>, when the setting is a person. “Make the logo bigger” in a terminal is a frame arguing with its own script.</td></tr>
     <tr><td class="mono">sitemock</td><td>A real page wrecked round by round.</td><td><code>LogoLadder</code> and <code>WorksOnMyMachine</code>, which are built entirely around it.</td></tr>
   </table>
+
+  <div class="rule-box">
+    <p class="eyebrow">A worked example of every kind</p>
+    <p>
+      <code>docs/exhibit-examples.json</code> carries one validated
+      <code>exhibit</code> block per kind, with the template it is valid on.
+      Paste one into a script’s props and replace the data.
+    </p>
+    <p>
+      Five kinds — <code>compare</code>, <code>meters</code>,
+      <code>cartogram</code>, <code>nodegraph</code>, <code>timeline</code> — are
+      <strong>used by none of the current 120 scripts</strong>, because that copy
+      carries neither the measurements nor the short labels they need. That is
+      the honesty rule doing its job, not a gap: inventing figures to spread the
+      catalogue evenly is the failure this system exists to prevent. They are
+      built, rendered and tested, and the examples file is how a future script
+      reaches them. A unit test re-validates every example, so none can rot.
+    </p>
+  </div>
 
   <div class="rule-box">
     <p class="eyebrow">Choosing — in order</p>
@@ -708,6 +727,7 @@ tell you in under a minute.\n\n#WebPerformance #CoreWebVitals #FrontEnd",
     <tr><td class="mono">npm run verify &lt;file.mp4&gt; [secs]</td><td>Container, frames, loudness, end card.</td></tr>
     <tr><td class="mono">npm run verify:script &lt;mp4&gt; &lt;plan&gt; &lt;id&gt;</td><td>The full script contract for one finished file.</td></tr>
     <tr><td class="mono">npm run campaign:check</td><td>The 120-video look, music and copy uniqueness matrix.</td></tr>
+    <tr><td class="mono">docs/exhibit-examples.json</td><td>Not a command — a validated <code>exhibit</code> block for every kind, ready to paste.</td></tr>
   </table>
 
   <h3>Failure playbook</h3>
@@ -778,6 +798,16 @@ tell you in under a minute.\n\n#WebPerformance #CoreWebVitals #FrontEnd",
       <td>5 plans “DIFFER from source”</td>
       <td>Generated files. The next campaign build drops every figure written there.</td>
     </tr>
+    <tr>
+      <td>Letting <code>Recap</code> draw <code>bars</code></td>
+      <td>Leaderboard on screen twice</td>
+      <td>The template already draws its leaderboard as real proportional bars. The exhibit’s subject there is the <em>totals</em>, so <code>bars</code> and <code>meters</code> were removed from what Recap may draw.</td>
+    </tr>
+    <tr>
+      <td>Requiring a board to have exactly four tiles</td>
+      <td>Recap fell through to <code>bars</code></td>
+      <td>A KPI row of three is a normal form. Three now stack rather than leaving a hole where a fourth should be.</td>
+    </tr>
   </table>
 
   <h3>Standing measurements</h3>
@@ -791,7 +821,7 @@ tell you in under a minute.\n\n#WebPerformance #CoreWebVitals #FrontEnd",
     <tr><td>Ramp light-end contrast, tightest ground (oxblood)</td><td class="num">2.30 : 1</td></tr>
     <tr><td>Master target / delivered true peak</td><td class="num">−23 LUFS / −2 dBTP</td></tr>
     <tr><td>Observed mean programme level, mastered</td><td class="num">−29.4 dB</td></tr>
-    <tr><td>Test suite</td><td class="num">162 passing</td></tr>
+    <tr><td>Test suite</td><td class="num">168 passing</td></tr>
   </table>
 
   <footer class="cover-foot">

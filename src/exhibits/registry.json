@@ -55,7 +55,7 @@
     "TechTip": ["checklist", "pipeline", "trace", "code", "radar", "dial", "meters", "board", "nodegraph"],
     "CaseStudy": ["compare", "pipeline", "timeline", "trace", "checklist", "nodegraph", "bars", "board", "dial", "code", "cartogram"],
     "FounderStory": ["timeline", "pipeline", "nodegraph", "checklist", "compare", "meters"],
-    "Recap": ["board", "bars", "meters", "dial", "nodegraph", "radar", "cartogram"],
+    "Recap": ["board", "dial", "nodegraph", "radar", "cartogram"],
     "LogoLadder": ["sitemock"],
     "WorksOnMyMachine": ["sitemock"]
   },
@@ -75,7 +75,7 @@
       "why": "Magnitude, low to high. One baseline, one scale — never a second axis.",
       "requires": ["series", "unit"],
       "numeric": ["series[].value"],
-      "templates": ["StatCard", "CaseStudy", "Recap", "SiteRoast", "ListReveal"]
+      "templates": ["StatCard", "CaseStudy", "SiteRoast", "ListReveal"]
     },
     "meters": {
       "family": "chart",
@@ -83,7 +83,7 @@
       "why": "Long category names, part-to-whole per row. Horizontal because a vertical column cannot carry a label a phone can read.",
       "requires": ["rows", "unit"],
       "numeric": ["rows[].value"],
-      "templates": ["ListReveal", "TechTip", "Recap", "FounderStory"]
+      "templates": ["ListReveal", "TechTip", "FounderStory"]
     },
     "compare": {
       "family": "chart",
@@ -95,7 +95,7 @@
     },
     "board": {
       "family": "chart",
-      "form": "A four-tile figure board with exactly one tile emphasised.",
+      "form": "A three- or four-tile figure board with exactly one tile emphasised.",
       "why": "A handful of headline numbers is a KPI row, not a grouped bar chart. Emphasis carries the story; the other three tiles are context.",
       "requires": ["tiles", "emphasis"],
       "numeric": ["tiles[].value"],

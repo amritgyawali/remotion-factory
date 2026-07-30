@@ -338,10 +338,14 @@ export const Meters: React.FC<{ theme: Theme; spec: MetersExhibit; from: number 
     <div
       style={{
         flex: 1,
+        minHeight: 0,
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
-        gap: 30,
+        // Distributed rather than centred: four rows centred in a tall panel
+        // leave the top third bare, and a meter must not be stretched to fill
+        // it — its bar height is a mark spec, not a layout value.
+        justifyContent: "space-evenly",
+        gap: 24,
       }}
     >
       {rows.map((row, index) => {
@@ -433,8 +437,11 @@ export const Compare: React.FC<{ theme: Theme; spec: CompareExhibit; from: numbe
   const outerCount = counted(spec.from.value, from + 6, frame, fps, 26);
   const innerCount = counted(spec.to.value, from + 18, frame, fps, 30);
 
-  const size = 470;
-  const stroke = MARKS.barThickness * 0.78;
+  // Solved against the panel, like the nodegraph's orbit: the rings and the
+  // readout column sit side by side, so size + gap + readout must clear the
+  // panel's inner width of 928.
+  const size = 600;
+  const stroke = MARKS.barThickness * 0.86;
   // Two rings with a surface gap between them, never a stroke.
   const outerRadius = (size - stroke) / 2;
   const innerRadius = outerRadius - stroke - MARKS.gap * 2;
@@ -471,7 +478,16 @@ export const Compare: React.FC<{ theme: Theme; spec: CompareExhibit; from: numbe
   const wasColour = mix(theme.chart.primary, theme.ground, 0.55);
 
   return (
-    <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 30 }}>
+    <div
+      style={{
+        flex: 1,
+        minHeight: 0,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 24,
+      }}
+    >
       <div style={{ position: "relative", width: size, height: size, flexShrink: 0 }}>
         <svg width={size} height={size} style={{ display: "block" }}>
           {arc(outerRadius, outerCount, wasColour)}
@@ -534,8 +550,12 @@ export const Board: React.FC<{ theme: Theme; spec: BoardExhibit; from: number }>
     <div
       style={{
         flex: 1,
+        minHeight: 0,
         display: "grid",
-        gridTemplateColumns: "1fr 1fr",
+        // Four tiles read as a 2x2 block. Three in the same grid leaves a hole
+        // where a fourth should be, which reads as a missing figure rather than
+        // as a choice, so three stack instead.
+        gridTemplateColumns: tiles.length === 3 ? "1fr" : "1fr 1fr",
         gridAutoRows: "1fr",
         gap: MARKS.gap * 5,
       }}

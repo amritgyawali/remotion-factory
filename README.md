@@ -363,6 +363,14 @@ fingerprinted), so `theme.chart` carries a separately validated pair per palette
 every one clearing ΔE 8 across deutan, protan and tritan. A plan may retint the
 type through `props.theme`; it may not touch `theme.chart`.
 
+**A worked example of every figure** lives in
+[`docs/exhibit-examples.json`](docs/exhibit-examples.json) — paste one into a
+script's props and swap the data. Five kinds (`compare`, `meters`, `cartogram`,
+`nodegraph`, `timeline`) are used by none of the current 120 scripts, because
+that copy carries neither the measurements nor the short labels they need. They
+are built, rendered and tested; the examples file is how a future script reaches
+them, and a unit test re-validates every example so none can rot.
+
 Full doctrine, catalogue, mark specs and measurements:
 [`MeritByte-Advanced-Production-Bible.pdf`](MeritByte-Advanced-Production-Bible.pdf)
 (source: `docs/production-bible.html`).

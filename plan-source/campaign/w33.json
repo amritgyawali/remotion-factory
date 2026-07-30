@@ -401,13 +401,30 @@
       }
     },
     {
-      "template": "WorksOnMyMachine",
-      "sourceId": "c30-d05-ran-fine-locally",
-      "caption": "It ran fine locally because locally had your node version, your env file and your cached dependencies. Production had none of them.\n\n#DevLife #Docker #SoftwareEngineering",
+      "template": "DevJoke",
+      "sourceId": "c30-d05-naming-things",
+      "caption": "Nine hundred lines in a file called utils. Nobody can tell you what is in it, including the person who wrote it.\n\n#CleanCode #Refactoring #DevHumor",
       "props": {
-        "hook": "IT RAN FINE LOCALLY",
+        "hook": "Naming things is the hard part.",
+        "beats": [
+          "data. data2. dataFinal.",
+          "dataFinalV2. dataFinalUse.",
+          "utils.js is now 900 lines.",
+          "So we added helpers.js."
+        ],
+        "punchline": "A good name is documentation that compiles.",
+        "variant": "terminal",
+        "kicker": "DEV LIFE",
         "exhibit": {
-          "kind": "sitemock"
+          "kind": "code",
+          "title": "the file nobody can describe",
+          "filename": "utils.js",
+          "lines": [
+            "export const format = (d) => {...}",
+            "export const format2 = (d) => {...}",
+            "export const formatReal = (d) => {...}"
+          ],
+          "highlight": 2
         }
       }
     },

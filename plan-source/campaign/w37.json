@@ -1,7 +1,7 @@
 {
   "week": 37,
   "year": 2026,
-  "note": "Campaign days 29-30. Deliberately short: 30 days is four weeks and a two-day remainder, so this week is built with week.partial and holds eight items rather than 28. Day 30 slot A is the PDF's closing Recap.",
+  "note": "Campaign days 29-30. Deliberately short: 30 days is four weeks and a two-day remainder, so this week is built with week.partial and holds eight items rather than 28. The last slot is the source PDF's own day 30 recap, which is the page the whole series is written to end on. An invented recap sat there and was dropped: two closing recaps in one week is the repetition this campaign was repaired for, and the PDF's is the real one.",
   "items": [
     {
       "template": "TechTip",
@@ -119,60 +119,23 @@
       }
     },
     {
-      "template": "Recap",
-      "sourceId": "c30-d30-recap",
-      "caption": "Thirty days, a hundred and twenty videos, every frame rendered from code. Here is what actually worked and what did not.\n\n#BuildInPublic #ContentStrategy #Remotion",
+      "template": "StatCard",
+      "sourceId": "c30-d30-consistency-stat",
+      "caption": "The single biggest predictor of whether a content push works is whether it is still going in week four.\n\n#ContentStrategy #Marketing #Consistency",
       "props": {
-        "hook": "Thirty days. The real numbers.",
-        "totals": [
-          {
-            "label": "videos shipped",
-            "value": 120
-          },
-          {
-            "label": "days without a gap",
-            "value": 30
-          },
-          {
-            "label": "frames rendered",
-            "value": 64800
-          }
+        "value": "4 weeks",
+        "label": "where most content efforts stop",
+        "context": [
+          "Almost nothing compounds before then.",
+          "Everything compounds after."
         ],
-        "leaderboard": [
-          {
-            "label": "Roast my own website",
-            "value": 48300
-          },
-          {
-            "label": "We found their password",
-            "value": 31700
-          },
-          {
-            "label": "Nobody was coming",
-            "value": 26400
-          }
-        ],
-        "lesson": "The dull weekly habit beat every clever idea.",
-        "gridCount": 30,
-        "kicker": "RECAP",
+        "kicker": "FOLLOW FOR MORE",
         "exhibit": {
-          "kind": "bars",
-          "series": [
-            {
-              "label": "Roast my own…",
-              "value": 48300
-            },
-            {
-              "label": "We found their…",
-              "value": 31700
-            },
-            {
-              "label": "Nobody was coming",
-              "value": 26400
-            }
-          ],
-          "unit": "",
-          "emphasis": 0
+          "kind": "dial",
+          "value": 4,
+          "unit": "week",
+          "caption": "",
+          "of": 4
         }
       }
     },
@@ -235,23 +198,80 @@
       }
     },
     {
-      "template": "StatCard",
-      "sourceId": "c30-d30-consistency-stat",
-      "caption": "The single biggest predictor of whether a content push works is whether it is still going in week four.\n\n#ContentStrategy #Marketing #Consistency",
+      "template": "Recap",
+      "sourceId": "pdf-day-30-thirty-days-the-real-numbers",
+      "caption": "Every number, including the flops. Day 31 starts tomorrow.\n\n#BuildInPublic #ContentStrategy #Remotion",
       "props": {
-        "value": "4 weeks",
-        "label": "where most content efforts stop",
-        "context": [
-          "Almost nothing compounds before then.",
-          "Everything compounds after."
+        "durationInSeconds": 27,
+        "hook": "30 videos in 30 days. Real numbers.",
+        "totals": [
+          { "label": "script pages shipped", "value": 30 },
+          { "label": "days without a gap", "value": 30 },
+          { "label": "motion beats", "value": 370 }
         ],
-        "kicker": "FOLLOW FOR MORE",
+        "leaderboard": [
+          { "label": "Roast my website", "value": 71 },
+          { "label": "It works on my machine", "value": 18 },
+          { "label": "the flop", "value": 2 }
+        ],
+        "lesson": "The hook beat everything. Series beat one-offs.",
+        "gridCount": 30,
+        "kicker": "RECAP",
         "exhibit": {
-          "kind": "dial",
-          "value": 4,
-          "unit": "week",
-          "caption": "",
-          "of": 4
+          "kind": "board",
+          "title": "thirty days, counted honestly",
+          "tiles": [
+            { "label": "script pages shipped", "value": 30 },
+            { "label": "views from the top 3", "value": 71, "suffix": "%" },
+            { "label": "motion beats", "value": 370 }
+          ],
+          "emphasis": 1
+        },
+        "score": {
+          "bed": [
+            { "frame": 0, "layers": ["pad"] },
+            { "frame": 30, "layers": ["pad", "bass"] },
+            { "frame": 90, "layers": ["pad", "bass", "pluck"] },
+            { "frame": 210, "layers": ["pad", "bass", "pluck", "kick"] },
+            { "frame": 330, "layers": ["pad", "bass", "pluck", "kick", "bell"] },
+            { "frame": 690, "layers": ["pad", "bell"] },
+            { "frame": 750, "layers": ["pad"] }
+          ],
+          "cues": [
+            { "frame": 0, "sfx": "tick", "db": -6 },
+            { "frame": 3, "sfx": "tick-p2", "db": -6 },
+            { "frame": 6, "sfx": "tick", "db": -6 },
+            { "frame": 9, "sfx": "tick-p2", "db": -6 },
+            { "frame": 12, "sfx": "tick", "db": -6 },
+            { "frame": 15, "sfx": "tick-p2", "db": -6 },
+            { "frame": 18, "sfx": "tick", "db": -6 },
+            { "frame": 21, "sfx": "tick-p2", "db": -6 },
+            { "frame": 24, "sfx": "tick", "db": -6 },
+            { "frame": 30, "sfx": "hum", "db": -8 },
+            { "frame": 60, "sfx": "whoosh-up", "major": true },
+            { "frame": 72, "sfx": "confirm", "major": true },
+            { "frame": 90, "sfx": "counterRun", "major": true },
+            { "frame": 150, "sfx": "riser-up", "db": -6 },
+            { "frame": 172, "sfx": "riser-up", "db": -9 },
+            { "frame": 194, "sfx": "riser-up", "db": -5 },
+            { "frame": 210, "sfx": "whoosh-up", "db": -4 },
+            { "frame": 220, "sfx": "whoosh-up", "db": -4 },
+            { "frame": 230, "sfx": "whoosh-up", "db": -4 },
+            { "frame": 270, "sfx": "snap", "major": true },
+            { "frame": 330, "sfx": "pop", "db": -6 },
+            { "frame": 390, "sfx": "thud", "major": true },
+            { "frame": 450, "sfx": "tick" },
+            { "frame": 468, "sfx": "tick" },
+            { "frame": 510, "sfx": "subThump", "major": true },
+            { "frame": 570, "sfx": "tick" },
+            { "frame": 588, "sfx": "tick" },
+            { "frame": 606, "sfx": "tick" },
+            { "frame": 630, "sfx": "tick" },
+            { "frame": 648, "sfx": "tick" },
+            { "frame": 690, "sfx": "chime", "major": true },
+            { "frame": 750, "sfx": "logoSting", "major": true },
+            { "frame": 758, "sfx": "chime", "db": -3 }
+          ]
         }
       }
     }

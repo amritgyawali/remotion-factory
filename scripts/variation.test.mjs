@@ -82,11 +82,13 @@ test("ordinals are dense and consecutive across a campaign", () => {
 });
 
 test("ids that predate the campaign keep the legacy scheme", () => {
-  // Weeks 31 and 32 are rendered and fingerprinted. Giving them a new look
-  // would mean a re-render no longer matches the fingerprint already recorded
-  // for that id — the exact alarm the duplicate detector exists to raise.
+  // Week 31 is published and fingerprinted. Giving it a new look would mean a
+  // re-render no longer matches the fingerprint already recorded for that id —
+  // the exact alarm the duplicate detector exists to raise. Week 32 was excluded
+  // for the same reason until its queued items were re-scripted from the source
+  // PDF, which is why the boundary moved down to it.
   assert.equal(campaignOrdinal("d01-a"), null, "week 31's unprefixed ids");
-  assert.equal(campaignOrdinal("w32-d01-a"), null, "week 32 predates the scheme");
+  assert.notEqual(campaignOrdinal("w32-d01-a"), null, "week 32 walks");
   assert.equal(campaignOrdinal(`w${CAMPAIGN_FIRST_WEEK - 1}-d01-a`), null);
   assert.notEqual(campaignOrdinal(`w${CAMPAIGN_FIRST_WEEK}-d01-a`), null);
 

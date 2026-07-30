@@ -94,7 +94,10 @@ function suits(kind, item) {
   if (registry.kinds[kind].family === "chart") {
     // A chart needs measurements, and only two templates carry any.
     if (kind === "dial") return leadingNumber(props.value) !== null;
-    if (kind === "board") return countableRows(props.totals).length === 4;
+    if (kind === "board") {
+      const rows = countableRows(props.totals).length;
+      return rows >= 3 && rows <= 4;
+    }
     if (kind === "bars") {
       const rows = countableRows(props.leaderboard);
       return rows.length >= 2 && rows.length <= 4;

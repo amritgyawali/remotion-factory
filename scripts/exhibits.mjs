@@ -23,17 +23,28 @@ export const EXHIBIT_BAND = registry.band;
 /**
  * The campaign week the exhibit rule starts at.
  *
- * Weeks 31 and 32 predate it. 31 is published and its plan is frozen, so its
- * scripts are not ours to rewrite; 32 is LogoLadder and WorksOnMyMachine, both
- * of which spend their whole runtime wrecking a real page and were never the
- * problem this rule exists to solve. Applying the rule retroactively would fail
- * validation on two weeks that cannot be fixed, which is a check that has to be
- * disabled to get any work done — the worst kind.
+ * Week 31 predates it: it is published, its plan is frozen, and its scripts are
+ * not ours to rewrite. Week 32 was exempt for the same reason until its unposted
+ * half was found to be twenty-six re-skins of one composition and was rebuilt
+ * from the source PDF's own script pages — those are new scripts, written after
+ * the rule existed, so they are held to it.
  *
  * Deliberately the same boundary as CAMPAIGN_FIRST_WEEK in src/variation.ts.
  * One line in the history of this project, not two.
  */
-export const EXHIBIT_FIRST_WEEK = 33;
+export const EXHIBIT_FIRST_WEEK = 32;
+
+/**
+ * The two compositions that are their own exhibit.
+ *
+ * Both spend their entire runtime wrecking a rendered page, which is the figure;
+ * `sitemock` exists in the registry to name it. Requiring them to *declare* it
+ * would mean editing two items that have already been rendered and posted, and
+ * an accepted week's posted items are immutable — correctly, since the file they
+ * describe is already public. Exempting the template rather than the week keeps
+ * the rule applying to every script that can still be changed.
+ */
+const OWN_STAGE = new Set(["LogoLadder", "WorksOnMyMachine"]);
 
 const WEEK_ID = /^(\d{4})-w(\d{1,2})$/;
 const ITEM_WEEK = /^w(\d{1,3})-d\d{1,2}-[a-d]$/;
@@ -46,8 +57,9 @@ export function weekNumberOf(item, weekId) {
   return fromWeek ? Number(fromWeek[2]) : null;
 }
 
-/** Whether this item is old enough to predate the rule. */
+/** Whether this item is old enough, or self-staged enough, to predate the rule. */
 export function exhibitRequired(item, weekId) {
+  if (OWN_STAGE.has(item?.template)) return false;
   const week = weekNumberOf(item, weekId);
   return week !== null && week >= EXHIBIT_FIRST_WEEK;
 }
@@ -67,7 +79,7 @@ function valuesAt(spec, path) {
 const LIST_BOUNDS = {
   bars: { key: "series", min: 2, max: 4 },
   meters: { key: "rows", min: 2, max: 5 },
-  board: { key: "tiles", min: 4, max: 4 },
+  board: { key: "tiles", min: 3, max: 4 },
   cartogram: { key: "regions", min: 2, max: 18 },
   pipeline: { key: "stages", min: 3, max: 5 },
   trace: { key: "rows", min: 3, max: 7 },
@@ -88,7 +100,9 @@ export function exhibitProblems(exhibit, template) {
   const problems = [];
 
   if (exhibit === undefined || exhibit === null) {
-    return ["props.exhibit is missing — every video from week 33 on must show something"];
+    return [
+      `props.exhibit is missing — every video from week ${EXHIBIT_FIRST_WEEK} on must show something`,
+    ];
   }
   if (typeof exhibit !== "object" || Array.isArray(exhibit)) {
     return [`props.exhibit must be an object — got ${Array.isArray(exhibit) ? "an array" : typeof exhibit}`];
@@ -190,9 +204,13 @@ export function exhibitProblems(exhibit, template) {
  * video; this guarantees the *figure* differs too, which is the axis a viewer
  * actually notices.
  *
- * Stage kinds are exempt. A week of LogoLadder is 28 videos of one template
- * wrecking a different page each time, and its uniqueness comes from the page,
- * which the frame fingerprint checks after the render.
+ * Stage kinds are exempt: a browser, a terminal and a chat thread are settings
+ * rather than figures, and two jokes set in a terminal are not the same picture.
+ * That exemption used to carry a second claim — that a whole week of one
+ * template wrecking a different page each time was fine, because the frame
+ * fingerprint would catch it after the render. It did not, and week 32 shipped
+ * four of them. Template concentration is now refused up front, in
+ * validate-plan.mjs::templateConcentrationErrors.
  */
 export function repeatedWithinDay(items) {
   const stages = new Set(["browser", "terminal", "chat", "sitemock"]);

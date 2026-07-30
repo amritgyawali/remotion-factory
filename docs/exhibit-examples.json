@@ -1,0 +1,231 @@
+{
+  "$comment": [
+    "One worked, validated example of every figure in the catalogue.",
+    "",
+    "This exists because five of the seventeen kinds — compare, meters, cartogram,",
+    "nodegraph and timeline — are not used by any of the current 120 scripts. That",
+    "is not a bug in them: they need measurements or short labels that the copy as",
+    "written does not carry, and inventing numbers to make the spread look better",
+    "would be exactly the dishonesty the chart/diagram split exists to prevent.",
+    "",
+    "So instead of leaving five components unreachable, every kind gets a block a",
+    "script can copy. Paste the `exhibit` object into a plan item's props, change",
+    "the data to the real figures, and the validator will hold you to the rest.",
+    "",
+    "scripts/exhibits.test.mjs asserts every example here passes the same gate a",
+    "real script does, on the template named beside it — so these cannot rot into",
+    "examples that no longer validate."
+  ],
+
+  "dial": {
+    "template": "StatCard",
+    "note": "One ratio against its whole. `caption` may be empty when the template's headline already names it.",
+    "exhibit": { "kind": "dial", "title": "share of sessions", "value": 32, "unit": "%", "caption": "" }
+  },
+
+  "bars": {
+    "template": "StatCard",
+    "note": "One baseline, one scale. `emphasis` indexes the column the story is about.",
+    "exhibit": {
+      "kind": "bars",
+      "title": "visitors who leave, by load time",
+      "unit": "%",
+      "emphasis": 2,
+      "series": [
+        { "label": "1 second", "value": 9 },
+        { "label": "2 seconds", "value": 17 },
+        { "label": "3 seconds", "value": 32 }
+      ]
+    }
+  },
+
+  "meters": {
+    "template": "ListReveal",
+    "note": "Horizontal, because these category names are sentences. Two to five rows.",
+    "exhibit": {
+      "kind": "meters",
+      "title": "time to first paint, by cause",
+      "unit": "ms",
+      "rows": [
+        { "label": "Hero image, unpreloaded", "value": 1900 },
+        { "label": "Third-party tag manager", "value": 820 },
+        { "label": "Webfonts, no swap", "value": 410 },
+        { "label": "Everything else", "value": 160 }
+      ]
+    }
+  },
+
+  "compare": {
+    "template": "CaseStudy",
+    "note": "Before against after, one measure at two times. One hue in two steps, so it cannot fail a colourblind check.",
+    "exhibit": {
+      "kind": "compare",
+      "title": "largest contentful paint",
+      "from": { "label": "before", "value": 4.1 },
+      "to": { "label": "after", "value": 1.9 },
+      "unit": "s"
+    }
+  },
+
+  "board": {
+    "template": "Recap",
+    "note": "Three or four headline figures with no shared scale. Exactly one is emphasised.",
+    "exhibit": {
+      "kind": "board",
+      "title": "thirty days, counted",
+      "emphasis": 0,
+      "tiles": [
+        { "label": "videos shipped", "value": 120 },
+        { "label": "days without a gap", "value": 30 },
+        { "label": "frames rendered", "value": 64800 }
+      ]
+    }
+  },
+
+  "cartogram": {
+    "template": "StatCard",
+    "note": "A tile grid, not a projection. Use the fixed region codes; an unnamed cell is drawn absent, never as zero. Codes: CAN UK NEU RUS USA SEU MEA CHN JPN MEX BRA WAF EAF IND SEA ARG ZAF AUS.",
+    "exhibit": {
+      "kind": "cartogram",
+      "title": "median mobile speed",
+      "label": "median mobile speed",
+      "unit": " Mbps",
+      "regions": [
+        { "label": "USA", "value": 90 },
+        { "label": "CAN", "value": 78 },
+        { "label": "UK", "value": 62 },
+        { "label": "NEU", "value": 71 },
+        { "label": "SEU", "value": 44 },
+        { "label": "CHN", "value": 58 },
+        { "label": "JPN", "value": 66 },
+        { "label": "IND", "value": 26 },
+        { "label": "BRA", "value": 31 },
+        { "label": "WAF", "value": 14 },
+        { "label": "ZAF", "value": 35 },
+        { "label": "AUS", "value": 69 }
+      ]
+    }
+  },
+
+  "pipeline": {
+    "template": "TechTip",
+    "note": "Three to five stages. `bottleneck` is where the packet visibly waits.",
+    "exhibit": {
+      "kind": "pipeline",
+      "title": "where the request goes",
+      "stages": ["Browser asks for the page", "CDN misses, hits origin", "Origin waits on the database"],
+      "bottleneck": 2
+    }
+  },
+
+  "trace": {
+    "template": "TechTip",
+    "note": "Three to seven rows. The counter counts the rows on screen and claims nothing beyond them.",
+    "exhibit": {
+      "kind": "trace",
+      "title": "queries per page load",
+      "counterLabel": "queries so far",
+      "rows": [
+        "SELECT * FROM posts",
+        "SELECT author WHERE id = 1",
+        "SELECT author WHERE id = 2",
+        "SELECT author WHERE id = 3",
+        "SELECT author WHERE id = 4"
+      ]
+    }
+  },
+
+  "checklist": {
+    "template": "TechTip",
+    "note": "Two to five steps. Mixed verdicts are the point — a list where every row passes is a list with ticks drawn on it.",
+    "exhibit": {
+      "kind": "checklist",
+      "title": "three checks, in order",
+      "steps": [
+        { "label": "Throttle to Fast 3G", "verdict": "pass" },
+        { "label": "Find the LCP element", "verdict": "pass" },
+        { "label": "Hero is 1.9 MB, unpreloaded", "verdict": "fail" }
+      ]
+    }
+  },
+
+  "nodegraph": {
+    "template": "ListReveal",
+    "note": "Three to six satellites, SHORT labels only — a label grows outward from its node and must clear the panel edge. Past ~26 characters, choose another figure.",
+    "exhibit": {
+      "kind": "nodegraph",
+      "title": "what one brief decides",
+      "core": "The brief",
+      "nodes": ["Sign-off owner", "Existing copy", "The real date", "Post-launch plan"]
+    }
+  },
+
+  "timeline": {
+    "template": "FounderStory",
+    "note": "Two to four tracks, short names — the label sits in a fixed gutter beside its clips. `restAt` is where the playhead stops, 0–1.",
+    "exhibit": {
+      "kind": "timeline",
+      "title": "the month it went quiet",
+      "restAt": 0.82,
+      "tracks": [
+        { "label": "Week one", "clips": 2 },
+        { "label": "Week two", "clips": 3 },
+        { "label": "Week three", "clips": 4 },
+        { "label": "Week four", "clips": 5 }
+      ]
+    }
+  },
+
+  "radar": {
+    "template": "TechTip",
+    "note": "Two to four targets. They appear as the arm passes over them, which is what a scan is.",
+    "exhibit": {
+      "kind": "radar",
+      "title": "what the scan finds",
+      "label": "what the scan finds",
+      "targets": ["Exposed .git directory", "Backup zip in web root", "Admin login, no rate limit"]
+    }
+  },
+
+  "code": {
+    "template": "TechTip",
+    "note": "Two to eight lines; `highlight` indexes the one that carries the argument and is the only one that types.",
+    "exhibit": {
+      "kind": "code",
+      "title": "fonts.css",
+      "filename": "fonts.css",
+      "highlight": 3,
+      "lines": [
+        "@font-face {",
+        "  font-family: \"Inter\";",
+        "  src: url(inter.woff2) format(\"woff2\");",
+        "  font-display: swap;",
+        "}"
+      ]
+    }
+  },
+
+  "browser": {
+    "template": "SiteRoast",
+    "note": "The template's native stage. Takes no data — the faults come from props.problems.",
+    "exhibit": { "kind": "browser" }
+  },
+
+  "terminal": {
+    "template": "DevJoke",
+    "note": "Native stage, for a joke whose setting is a machine. Beats become the shell output.",
+    "exhibit": { "kind": "terminal" }
+  },
+
+  "chat": {
+    "template": "DevJoke",
+    "note": "Native stage, for a joke whose setting is a person.",
+    "exhibit": { "kind": "chat" }
+  },
+
+  "sitemock": {
+    "template": "LogoLadder",
+    "note": "Native stage. LogoLadder and WorksOnMyMachine are built entirely around it and take no panel.",
+    "exhibit": { "kind": "sitemock" }
+  }
+}

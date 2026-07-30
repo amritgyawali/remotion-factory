@@ -1,0 +1,163 @@
+{
+  "week": 32,
+  "year": 2026,
+  "note": "A deliberately short week, and the smallest one the queue geometry allows. It previously held twenty-seven re-skins of the PDF's day 1 — one composition with a different client logo in each — and was rebuilt from the PDF's own script pages, until checking the provenance properly showed that week 31 had already published twenty-seven of the thirty pages under the older `meritbyte-pdf-NN` sourceIds. Re-making them would have swapped one kind of repetition for another, so only the two pages nobody has ever made are here: day 17 and the day 30 recap. Slots d01-a and d01-b have already posted and are frozen byte-for-byte.",
+  "items": [
+    {
+      "template": "WorksOnMyMachine",
+      "sourceId": "pdf-day-05-works-on-my-machine",
+      "caption": "Containers exist because of this exact sentence.\n\n#DevLife #Docker #SoftwareEngineering",
+      "props": {
+        "hook": "WORKS ON MY MACHINE"
+      }
+    },
+    {
+      "template": "LogoLadder",
+      "sourceId": "ladder-02",
+      "caption": "Just make it pop. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 2 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "hook": "JUST MAKE IT POP",
+        "promise": "revision 9 of 9",
+        "message": "love it! can it pop a bit more though",
+        "payoff": "APPROVED. At last.",
+        "client": {
+          "name": "NORTHWIND",
+          "brand": "#0EA5E9",
+          "domain": "northwind.co",
+          "eyebrow": "LOGISTICS",
+          "headline": "Freight that tracks itself",
+          "sub": "Live shipment visibility for growing importers.",
+          "nav": ["Network", "Tracking", "Rates", "About"],
+          "cta": "Book a lane",
+          "stats": [
+            { "v": "4.9/5", "l": "rated" },
+            { "v": "2 days", "l": "turnaround" },
+            { "v": "1.2k", "l": "clients" }
+          ],
+          "cards": [
+            { "dot": "#0EA5E9", "title": "Plan" },
+            { "dot": "#F2A93B", "title": "Track" },
+            { "dot": "#22C55E", "title": "Report" }
+          ]
+        }
+      }
+    },
+
+    {
+      "template": "TechTip",
+      "sourceId": "pdf-day-17-one-prompt-200-pages",
+      "caption": "The full prompt is in frame. Screenshot the last 3 seconds.\n\n#SEO #AI #Prompting",
+      "props": {
+        "durationInSeconds": 20,
+        "hook": "200 pages. 40 seconds. One prompt.",
+        "steps": [
+          "Give it a role, not a request",
+          "Constrain it: under 155 characters, no fluff",
+          "Show it three examples you would ship"
+        ],
+        "result": "200 descriptions in 41 seconds. CTR +18%.",
+        "variant": "prompt",
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "trace",
+          "title": "rows written, live",
+          "rows": [
+            "41 rows written",
+            "88 rows written",
+            "140 rows written",
+            "200 rows, all under 155 chars"
+          ],
+          "counterLabel": "descriptions written"
+        },
+        "score": {
+          "bed": [
+            { "frame": 0, "layers": ["pulse", "hat"] },
+            { "frame": 60, "layers": ["pad", "pulse", "hat"] },
+            { "frame": 210, "layers": ["pad", "pulse", "hat", "sub"] },
+            { "frame": 450, "layers": ["pad"] },
+            { "frame": 510, "layers": [] },
+            { "frame": 540, "layers": ["pad"] }
+          ],
+          "cues": [
+            { "frame": 0, "sfx": "keyTap" },
+            { "frame": 6, "sfx": "keyTap-p1" },
+            { "frame": 12, "sfx": "keyTap" },
+            { "frame": 18, "sfx": "keyTap-p1" },
+            { "frame": 24, "sfx": "keyTap" },
+            { "frame": 30, "sfx": "beep", "major": true },
+            { "frame": 60, "sfx": "thock", "major": true },
+            { "frame": 70, "sfx": "whoosh-up" },
+            { "frame": 90, "sfx": "blip", "db": -5 },
+            { "frame": 105, "sfx": "blip", "db": -5 },
+            { "frame": 120, "sfx": "blip", "db": -5 },
+            { "frame": 135, "sfx": "blip", "db": -5 },
+            { "frame": 150, "sfx": "tick", "db": -5 },
+            { "frame": 168, "sfx": "tick", "db": -5 },
+            { "frame": 186, "sfx": "tick", "db": -5 },
+            { "frame": 210, "sfx": "beep-p7", "major": true },
+            { "frame": 222, "sfx": "confirm", "major": true },
+            { "frame": 270, "sfx": "riser-up", "major": true },
+            { "frame": 330, "sfx": "tick" },
+            { "frame": 348, "sfx": "tick" },
+            { "frame": 366, "sfx": "tick" },
+            { "frame": 390, "sfx": "whoosh-up", "db": -4 },
+            { "frame": 408, "sfx": "whoosh-up", "db": -4 },
+            { "frame": 426, "sfx": "whoosh-up", "db": -4 },
+            { "frame": 540, "sfx": "logoSting", "major": true },
+            { "frame": 548, "sfx": "chime", "db": -3 }
+          ]
+        }
+      }
+    },
+    {
+      "template": "ListReveal",
+      "sourceId": "c31-cookie-banner-cost",
+      "caption": "The banner is the first thing every visitor meets and the only part of the page nobody designs. It is measured like the rest of it.\n\n#WebDesign #UX #ConversionRate",
+      "props": {
+        "durationInSeconds": 14,
+        "headline": "Four things your cookie banner costs",
+        "items": [
+          "It covers the content people arrived to read",
+          "It shifts the layout after the page has painted",
+          "Reject is three taps; accept is one",
+          "Every extra tap is measured as a bounce"
+        ],
+        "kicker": "SAVE THIS",
+        "exhibit": {
+          "kind": "checklist",
+          "title": "the banner, audited",
+          "steps": [
+            { "label": "content visible underneath", "verdict": "fail" },
+            { "label": "no shift after paint", "verdict": "fail" },
+            { "label": "reject as easy as accept", "verdict": "fail" },
+            { "label": "one tap either way", "verdict": "warn" }
+          ]
+        },
+        "score": {
+          "bed": [
+            { "frame": 0, "layers": ["pluck"] },
+            { "frame": 60, "layers": ["pluck", "hat"] },
+            { "frame": 150, "layers": ["pluck", "hat", "kick"] },
+            { "frame": 240, "layers": ["pluck", "hat", "kick", "bass"] },
+            { "frame": 330, "layers": [] },
+            { "frame": 360, "layers": ["pluck"] }
+          ],
+          "cues": [
+            { "frame": 0, "sfx": "thunk", "major": true },
+            { "frame": 60, "sfx": "tick", "major": true },
+            { "frame": 90, "sfx": "whoosh-down", "db": -4 },
+            { "frame": 150, "sfx": "tick", "major": true },
+            { "frame": 180, "sfx": "boing", "db": -5 },
+            { "frame": 240, "sfx": "tick", "major": true },
+            { "frame": 276, "sfx": "tick", "db": -6 },
+            { "frame": 288, "sfx": "tick", "db": -6 },
+            { "frame": 300, "sfx": "tick", "db": -6 },
+            { "frame": 330, "sfx": "thud", "major": true },
+            { "frame": 360, "sfx": "logoSting", "major": true },
+            { "frame": 368, "sfx": "chime", "db": -3 }
+          ]
+        }
+      }
+    }
+  ]
+}

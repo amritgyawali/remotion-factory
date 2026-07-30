@@ -4,9 +4,9 @@ import { pathToFileURL } from "node:url";
 import { loadQueueState } from "./queue.mjs";
 import {
   canonicalJson,
+  frozenItemChanges,
   inspectWeeklyPlan,
   loadAcceptedWeeks,
-  weekContentJson,
   weeklyCollectionErrors,
 } from "./weekly-plan.mjs";
 
@@ -60,14 +60,15 @@ export async function acceptWeek({
   }
 
   if (existing) {
-    const existingIds = new Set(existing.plan.items.map((item) => item.id));
-    const alreadyPosted = state.posted.filter((id) => existingIds.has(id));
-    // Content is frozen once the week starts; postType stays the owner's to
-    // change, so a running week can still be paused to drafts or released live.
-    if (alreadyPosted.length && weekContentJson(existing.plan) !== weekContentJson(candidate.plan)) {
+    // Posted items are frozen; unposted ones are still a plan and may be
+    // corrected. postType stays the owner's to change either way, so a running
+    // week can still be paused to drafts or released live.
+    const rewritten = frozenItemChanges(existing.plan, candidate.plan, state.posted);
+    if (rewritten.length) {
       throw new Error(
-        `week "${weekId}" is immutable because ${alreadyPosted.length} item(s) already posted — ` +
-          "only postType may change once a week has started",
+        `week "${weekId}" cannot be accepted:\n- ${rewritten.join("\n- ")}\n` +
+          "A published video may not be rewritten under its own id. Give the new script " +
+          "a queue position that has not posted.",
       );
     }
   } else if (accepted.length) {

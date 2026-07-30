@@ -10,6 +10,7 @@ const variantLabel: Record<TechTipProps["variant"], string> = {
   security: "SECURITY CHECK",
   devtools: "DEVTOOLS",
   "tool-audit": "STACK AUDIT",
+  prompt: "ONE PROMPT",
   vitals: "WEB VITALS",
   "index-check": "INDEX CHECK",
   "design-code": "DESIGN → CODE",

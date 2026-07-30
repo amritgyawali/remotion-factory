@@ -863,9 +863,7 @@ export const CodePanel: React.FC<{ theme: Theme; spec: CodeExhibit; from: number
   const caretOn = Math.floor(frame / 8) % 2 === 0;
 
   return (
-    <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 18 }}>
-      <MarkLabel theme={theme} text={spec.filename} size={25} />
-
+    <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
       <div
         style={{
           flex: 1,

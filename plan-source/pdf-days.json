@@ -1,0 +1,2794 @@
+{
+  "source": "MeritByte-30-Remotion-Videos.pdf",
+  "note": [
+    "One entry per script page of the PDF, transcribed row by row: the time column, the",
+    "motion column, the burned-in on-screen text and the sound cue for that exact beat.",
+    "",
+    "This file is the provenance layer, not the build. Every renderable video that comes",
+    "from a script page cites it by sourceId, and scripts/pdf-days.mjs walks both and",
+    "fails if a page already made is queued to be made again.",
+    "",
+    "Week 31 made twenty-eight of these pages and has published all of them, under the",
+    "older sourceId scheme 'meritbyte-pdf-NN'. That was not visible until the checker was",
+    "taught to read both schemes, and in the meantime week 32 was rebuilt from the same",
+    "pages — which would have posted twenty-six subjects a second time. Only the two",
+    "pages nobody has ever made are queued now: day 17 and day 30.",
+    "",
+    "'status' is the whole point of the file:",
+    "  shipped  — already rendered and posted. Never make it again.",
+    "  planned  — queued at exactly one position, named in 'item'.",
+    "  excluded — deliberately never made. None currently.",
+    "",
+    "'template' is what the PDF table assigns the day to. 'builtAs' appears only where",
+    "this repository implements the page as its own composition instead, which two pages",
+    "earned: their beats are timed in absolute seconds against a specific body length,",
+    "so they cannot be a props file on a shared template."
+  ],
+  "hardRules": [
+    "No humans: no faces, hands, bodies, silhouettes, or hand-driven cursors.",
+    "No voice: nothing in the audio track may read as a human voice. On-screen text is the narrator.",
+    "Sound only: music beds, SFX and deliberate silence carry the emotional arc. Every motion beat has a cue.",
+    "Remotion only: every pixel is a rendered React component. No footage, screen recording, or photographs."
+  ],
+  "readingRules": [
+    "Text is the script — if the on-screen text does not tell the story with the sound off, the video does not work.",
+    "Readability — seven words maximum per card, minimum 1.2s on screen, all text inside the middle 80 percent.",
+    "Sync — every SFX lands on the first frame of its motion, never after it.",
+    "Silence — where a row says silence, mute everything. It is the loudest instrument here.",
+    "End card — every video ends on the same two-second MeritByte card.",
+    "Numbers — any bracketed value is a placeholder. Put a real figure in or cut the line."
+  ],
+  "endCard": {
+    "seconds": 2,
+    "frames": 60,
+    "background": "#191919",
+    "lines": [
+      "MeritByte Technologies",
+      "MeritByte.com"
+    ],
+    "build": "Logo mark springs in over 6 frames, text fades up, then completely still.",
+    "audio": "Logo sting plus one warm chime. Bed resolves to its final chord and fades across the full two seconds."
+  },
+  "templateBeds": {
+    "DevJoke": {
+      "bed": "Playful synth or deadpan jazz",
+      "bpm": [
+        88,
+        108
+      ],
+      "behaviour": "Adds a layer per beat. Stops dead before the punchline card."
+    },
+    "TechTip": {
+      "bed": "Clean electronic pulse",
+      "bpm": [
+        96,
+        112
+      ],
+      "behaviour": "One synth stab per reveal. Silent on the static save frame."
+    },
+    "SiteRoast": {
+      "bed": "Confident mid-tempo beat",
+      "bpm": [
+        102,
+        104
+      ],
+      "behaviour": "Drops out for the rebuild, returns bigger for the score."
+    },
+    "CaseStudy": {
+      "bed": "Minimal build",
+      "bpm": [
+        88,
+        102
+      ],
+      "behaviour": "Grows with the graph. Open pad on the peak number."
+    },
+    "FounderStory": {
+      "bed": "Piano, strings later",
+      "bpm": null,
+      "behaviour": "No music at all for the first three seconds. Ever."
+    },
+    "Recap": {
+      "bed": "Warm full build",
+      "bpm": [
+        102,
+        102
+      ],
+      "behaviour": "A layer per data reveal, resolving open at the end."
+    }
+  },
+  "days": [
+    {
+      "day": 1,
+      "title": "Make The Logo Bigger",
+      "emotion": "COMEDY",
+      "template": "DevJoke",
+      "builtAs": "LogoLadder",
+      "seconds": 15,
+      "status": "shipped",
+      "reason": "Withdrawn by the owner after week 31 published it as d01-a. It is the escalation joke the LogoLadder composition was built around, and week 32 was then filled with twenty-seven re-skins of it. Nothing may be made from this page again: the composition is retired in validate-plan.mjs, and the page is marked shipped here.",
+      "item": "d01-a",
+      "publishedAs": [
+        "d01-a"
+      ],
+      "retired": true
+    },
+    {
+      "day": 2,
+      "title": "Your Website Is Leaking",
+      "emotion": "INTERESTING",
+      "template": "TechTip",
+      "seconds": 20,
+      "status": "shipped",
+      "item": "d01-b",
+      "sourceId": "pdf-day-02-your-website-is-leaking",
+      "hooks": {
+        "a": "Type this after your domain.",
+        "b": "/wp-admin <- try it on your own site",
+        "c": "3 URLs that should never load. Yours might."
+      },
+      "whyItHolds": "A direct instruction. The viewer wants to test it on their own site, which requires watching to the end.",
+      "musicBed": "Tense minimal pulse, 92 BPM, single repeating note. Warm pad enters at 13s on the fix. Serious, never alarmist.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "Browser chrome component. URL types in character by character, one per 2 frames.",
+          "onScreen": "yoursite.com/",
+          "sound": "Mechanical key tap per character, sample-accurate."
+        },
+        {
+          "at": "1-2s",
+          "motion": "Typing completes the path. Cursor blinks at 2Hz.",
+          "onScreen": "yoursite.com/wp-admin",
+          "sound": "Final keystroke, louder. Pulse enters underneath."
+        },
+        {
+          "at": "2-3s",
+          "motion": "Page flashes to a login panel. Red outline strokes on around it.",
+          "onScreen": "IT LOADED. That is the problem.",
+          "sound": "Enter-key thock, then a low alarm blip on the stroke."
+        },
+        {
+          "at": "3-5s",
+          "motion": "Card slides in listing the 3 paths to test. Each row fades up 8 frames apart.",
+          "onScreen": "/wp-admin /.git /backup.zip",
+          "sound": "Three soft UI ticks, one per row appearing."
+        },
+        {
+          "at": "5-7s",
+          "motion": "Directory listing renders as a styled file table. Filenames animate in.",
+          "onScreen": "anyone can read these",
+          "sound": "Paper-slide whoosh. Pulse continues."
+        },
+        {
+          "at": "7-9s",
+          "motion": "A .git folder expands into a tree diagram. Nodes spring open.",
+          "onScreen": "/.git = your entire source code",
+          "sound": "Deeper alarm blip, one tone lower. More serious."
+        },
+        {
+          "at": "9-11s",
+          "motion": "backup.zip row highlights. A download progress bar fills to 100%.",
+          "onScreen": "and your database password",
+          "sound": "Descending download tone. Pulse drops out under it."
+        },
+        {
+          "at": "11-13s",
+          "motion": "Screen wipes to a dark code panel. Three config lines type in.",
+          "onScreen": "THE FIX",
+          "sound": "Music shifts: warm pad enters. Light click per line typed."
+        },
+        {
+          "at": "13-15s",
+          "motion": "Code panel holds still. Syntax highlighting only, no motion.",
+          "onScreen": "deny all. 3 lines.",
+          "sound": "No SFX at all. Hold the pad. Silence sells the simplicity."
+        },
+        {
+          "at": "15-17s",
+          "motion": "Three browser frames tile in. Each stamps a 403 badge with a spring.",
+          "onScreen": "403 403 403",
+          "sound": "Three ascending confirmation ticks, one per 403."
+        },
+        {
+          "at": "17-19s",
+          "motion": "Text card on near-black. Single line, no movement.",
+          "onScreen": "Test all 3 on your site. Right now.",
+          "sound": "Music resolves and stops. Two beats of clean silence."
+        },
+        {
+          "at": "19-20s",
+          "motion": "Static frame holds for the screenshot pause.",
+          "onScreen": "/wp-admin /.git /backup.zip",
+          "sound": "Silence. Nothing under the save frame."
+        }
+      ],
+      "caption": "Three URLs. Test them on your own site in the next 60 seconds.",
+      "cta": "Save this. Then actually test it.",
+      "retention": "Homework hook. A testable instruction produces saves, and saves outperform likes.",
+      "publishedAs": [
+        "d01-b"
+      ]
+    },
+    {
+      "day": 3,
+      "title": "Roast My Website — Ep. 01",
+      "emotion": "INTERESTING",
+      "template": "SiteRoast",
+      "seconds": 22,
+      "status": "shipped",
+      "item": "d01-c",
+      "sourceId": "pdf-day-03-roast-episode-one",
+      "hooks": {
+        "a": "This site loses money on purpose.",
+        "b": "Score: 12/100. Let me show you why.",
+        "c": "4 mistakes. This site makes all 4."
+      },
+      "whyItHolds": "A hostile verdict on something the viewer can see. They stay to judge whether the roast is fair.",
+      "musicBed": "Confident mid-tempo beat, 104 BPM. Drops out entirely at 13s for the rebuild, returns bigger for the score climb.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "Anonymised site mock renders. A red circle strokes on around the hero via stroke-dashoffset.",
+          "onScreen": "THIS LOSES MONEY",
+          "sound": "Impact slam plus marker squeak synced to the stroke draw."
+        },
+        {
+          "at": "1-2s",
+          "motion": "Camera pushes in 8% on the hero. Score chip drops in top right.",
+          "onScreen": "SCORE: 12/100",
+          "sound": "Quick zoom whoosh. Music enters on the beat."
+        },
+        {
+          "at": "2-3s",
+          "motion": "A spinner rotates. Load timer counts up in real time: 0.0 to 8.4s.",
+          "onScreen": "8.4s to load",
+          "sound": "Dull loading hum. Deliberately empty and unsatisfying."
+        },
+        {
+          "at": "3-5s",
+          "motion": "Bounce-rate line chart draws upward, path animated left to right.",
+          "onScreen": "MISTAKE 1: nobody waits",
+          "sound": "Graph-climb riser tracking the path."
+        },
+        {
+          "at": "5-7s",
+          "motion": "Long scroll driven by interpolate. Hero text never states what is sold.",
+          "onScreen": "MISTAKE 2: what do you even sell?",
+          "sound": "Continuous scroll rumble. Music thins to build unease."
+        },
+        {
+          "at": "7-9s",
+          "motion": "A grey low-contrast CTA fades in at the very bottom.",
+          "onScreen": "the only button. 1900px down.",
+          "sound": "Dull thud on the CTA. Anticlimactic on purpose."
+        },
+        {
+          "at": "9-11s",
+          "motion": "Mobile frame. Tap-target boxes render at 22px with a 44px guide overlay.",
+          "onScreen": "MISTAKE 3: 22px tap targets",
+          "sound": "Three dry taps on glass. No music under the taps."
+        },
+        {
+          "at": "11-13s",
+          "motion": "Analytics panel slides up. Mobile bounce figure highlights in red.",
+          "onScreen": "MISTAKE 4: 71% mobile bounce",
+          "sound": "Light data blip as the panel arrives."
+        },
+        {
+          "at": "13-15s",
+          "motion": "Full white wipe. Rebuilt page paints in one frame, fully composed.",
+          "onScreen": "SAME CONTENT. REBUILT.",
+          "sound": "Music cuts out. Clean wipe whoosh into the rebuild."
+        },
+        {
+          "at": "15-17s",
+          "motion": "Rebuild holds. Load timer reads 1.1s. CTA visible above the fold.",
+          "onScreen": "1.1s. CTA at the top.",
+          "sound": "Single satisfying snap on the paint. Music returns, full."
+        },
+        {
+          "at": "17-19s",
+          "motion": "Score counter animates 12 to 96 with an easing curve, digits blurring.",
+          "onScreen": "12 -> 96",
+          "sound": "Accelerating counter ticks resolving on 96."
+        },
+        {
+          "at": "19-20s",
+          "motion": "Score locks at 96. Soft glow pulse behind the number.",
+          "onScreen": "SCORE: 96/100",
+          "sound": "Warm chime plus a shimmer on the lock."
+        },
+        {
+          "at": "20-22s",
+          "motion": "Text card. Comment prompt, no movement.",
+          "onScreen": "Drop a URL. Ep. 02 roasts one of yours.",
+          "sound": "Music ducks 6 dB for the final card and sustains."
+        }
+      ],
+      "caption": "Episode 1. Drop your URL and your site might be episode 2.",
+      "cta": "Comment a URL for episode 2.",
+      "retention": "Named series plus an open invitation. Comments compound across episodes.",
+      "publishedAs": [
+        "d01-c"
+      ]
+    },
+    {
+      "day": 4,
+      "title": "Fired In Four Days",
+      "emotion": "MOTIVATION",
+      "template": "FounderStory",
+      "seconds": 20,
+      "status": "shipped",
+      "item": "d01-d",
+      "sourceId": "pdf-day-04-fired-in-four-days",
+      "hooks": {
+        "a": "Our first client fired us in 4 days.",
+        "b": "Day 4. Contract terminated.",
+        "c": "We lost our first client in 96 hours."
+      },
+      "whyItHolds": "A contradiction the viewer must resolve: how is being fired a good story? They stay for the turn.",
+      "musicBed": "No music for the first 3s at all. Single low piano note from 3s. Strings build from 13s. Never loud enough to compete with the text.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "Near-black frame. One line of text fades up over 8 frames. Nothing else moves.",
+          "onScreen": "Fired in 4 days.",
+          "sound": "No music. No SFX. Total silence. The silence is the hook."
+        },
+        {
+          "at": "1-2s",
+          "motion": "Text holds. A thin rule draws underneath it.",
+          "onScreen": "Our first client, 2022.",
+          "sound": "Still silent. Only a faint rule-draw tick."
+        },
+        {
+          "at": "2-3s",
+          "motion": "Text swaps with a 4-frame crossfade.",
+          "onScreen": "Best thing that ever happened.",
+          "sound": "Single low piano note lands as the tone turns."
+        },
+        {
+          "at": "3-5s",
+          "motion": "Contract document mock scrolls. Signature block animates in.",
+          "onScreen": "Day 0: signed",
+          "sound": "Paper-scroll rustle under the scroll. Piano continues."
+        },
+        {
+          "at": "5-7s",
+          "motion": "Calendar strip advances day by day. Each day stamps with a spring.",
+          "onScreen": "Day 1. Day 2. Day 3.",
+          "sound": "Soft calendar-stamp per day. Four stamps, evenly timed."
+        },
+        {
+          "at": "7-9s",
+          "motion": "Kanban board renders. 14 cards sit in one column, none moving.",
+          "onScreen": "14 tasks. Zero updates sent.",
+          "sound": "No SFX. Piano only. Do not score the mistake."
+        },
+        {
+          "at": "9-11s",
+          "motion": "Email client mock. A termination email slides in and highlights.",
+          "onScreen": "Day 4: terminated",
+          "sound": "Single quiet notification. Unremarkable on purpose."
+        },
+        {
+          "at": "11-13s",
+          "motion": "Frame holds on the email. Zero motion for a full beat.",
+          "onScreen": "no text on screen",
+          "sound": "Piano drops to one sustained note. One beat of stillness."
+        },
+        {
+          "at": "13-15s",
+          "motion": "Text builds line by line, 10 frames apart. Strings enter.",
+          "onScreen": "They never doubted the code.",
+          "sound": "Strings enter warm and low, building under the text."
+        },
+        {
+          "at": "15-17s",
+          "motion": "Second line joins beneath the first.",
+          "onScreen": "They doubted we were working at all.",
+          "sound": "Strings add a layer. No SFX."
+        },
+        {
+          "at": "17-19s",
+          "motion": "Third line lands. All three visible together.",
+          "onScreen": "Now: Friday update, every client, forever.",
+          "sound": "Strings near full. Single warm tick per line."
+        },
+        {
+          "at": "19-20s",
+          "motion": "Cut to the frame 1 composition. Identical.",
+          "onScreen": "Fired in 4 days.",
+          "sound": "Strings resolve to the tonic and stop cleanly on the loop."
+        }
+      ],
+      "caption": "The Friday update rule came from getting fired. Still the best process we have.",
+      "cta": "Follow for the honest ones.",
+      "retention": "Contradiction opened in second 1, resolved at 17s. The loop restates the hook.",
+      "publishedAs": [
+        "d01-d"
+      ]
+    },
+    {
+      "day": 5,
+      "title": "It Works On My Machine",
+      "emotion": "COMEDY",
+      "template": "DevJoke",
+      "builtAs": "WorksOnMyMachine",
+      "seconds": 13,
+      "status": "shipped",
+      "item": "w32-d01-a",
+      "sourceId": "pdf-day-05-works-on-my-machine",
+      "reason": "Built as its own composition — src/templates/WorksOnMyMachine.tsx times the 6-7s freeze, the 8-9s silence and the 12-13s loop cut in absolute seconds against this page. Rendered and posted. Making it again would be the duplicate this file exists to prevent.",
+      "publishedAs": [
+        "d02-a",
+        "w32-d01-a"
+      ]
+    },
+    {
+      "day": 6,
+      "title": "Eleven Seconds To One",
+      "emotion": "INTERESTING",
+      "template": "CaseStudy",
+      "seconds": 20,
+      "status": "shipped",
+      "item": "d02-b",
+      "sourceId": "pdf-day-06-eleven-seconds-to-one",
+      "hooks": {
+        "a": "11.4s vs 1.2s. Same website.",
+        "b": "Watch both timers. Left is their old site.",
+        "c": "This page took 11 seconds to load."
+      },
+      "whyItHolds": "Two live timers running side by side. An unresolved race is the strongest silent hook there is.",
+      "musicBed": "Clean tech pulse, 96 BPM, no melody. A warm chord lands on each fix reveal. Silence during the slow load.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "Two phone frames render side by side. Two timers start counting from 0.00 in sync.",
+          "onScreen": "BEFORE | AFTER",
+          "sound": "Two soft timer-start beeps. Pulse enters."
+        },
+        {
+          "at": "1-3s",
+          "motion": "Both frames blank. Timers climb. Right frame shows a skeleton loader.",
+          "onScreen": "1.0s ... 1.2s",
+          "sound": "Quiet loading hum. Music holds one note."
+        },
+        {
+          "at": "3-4s",
+          "motion": "Right frame paints fully composed. Its timer freezes at 1.2s.",
+          "onScreen": "AFTER: 1.2s",
+          "sound": "Bright snap on the paint. Warm chord lands."
+        },
+        {
+          "at": "4-6s",
+          "motion": "Left frame still blank. Timer keeps climbing past 6s. Long, uncomfortable hold.",
+          "onScreen": "BEFORE: 6.8s ...",
+          "sound": "Music drops out entirely. Only a dull hum. Awkward by design."
+        },
+        {
+          "at": "6-8s",
+          "motion": "Left frame finally paints, unstyled then restyled. Timer stops at 11.4s.",
+          "onScreen": "BEFORE: 11.4s",
+          "sound": "Late, heavy thud as it lands."
+        },
+        {
+          "at": "8-10s",
+          "motion": "Wipe to a fix list. Row 1 slides in with a file-size counter.",
+          "onScreen": "FIX 1: 4.2MB -> 380KB images",
+          "sound": "UI whoosh. Pulse returns. Warm chord on fix 1."
+        },
+        {
+          "at": "10-12s",
+          "motion": "Counter animates down. Bar shrinks proportionally.",
+          "onScreen": "11x smaller",
+          "sound": "Descending counter tick tracking the number."
+        },
+        {
+          "at": "12-14s",
+          "motion": "Waterfall chart renders. 9 blocking scripts fade to 2.",
+          "onScreen": "FIX 2: 9 scripts -> 2",
+          "sound": "Light data chatter. Chord two."
+        },
+        {
+          "at": "14-16s",
+          "motion": "Cache header code line types in on a dark panel.",
+          "onScreen": "FIX 3: one cache header",
+          "sound": "Single keystroke thock. Chord three."
+        },
+        {
+          "at": "16-18s",
+          "motion": "Two metric cards animate: bounce down, enquiries up.",
+          "onScreen": "bounce -41% enquiries +2.3x",
+          "sound": "Soft ascending sweep across both cards."
+        },
+        {
+          "at": "18-20s",
+          "motion": "Both phone frames return, both loading fast, timers synced.",
+          "onScreen": "same site. 3 fixes.",
+          "sound": "Music resolves. Two clean snaps, one per frame."
+        }
+      ],
+      "caption": "Three fixes. 11.4s to 1.2s. No redesign, no rebuild.",
+      "cta": "Comment SPEED for the checklist.",
+      "retention": "Live race in frame 1. The unfinished timer is the retention engine.",
+      "publishedAs": [
+        "d02-b"
+      ]
+    },
+    {
+      "day": 7,
+      "title": "Three DevTools Tricks",
+      "emotion": "INTERESTING",
+      "template": "TechTip",
+      "seconds": 18,
+      "status": "shipped",
+      "item": "d02-c",
+      "sourceId": "pdf-day-07-three-devtools-tricks",
+      "hooks": {
+        "a": "You have used DevTools for years. Never opened this.",
+        "b": "3 DevTools tricks you have never used.",
+        "c": "Cmd+Shift+P. Then type screenshot."
+      },
+      "whyItHolds": "A gentle accusation of incompetence. Viewers stay to close the knowledge gap or to prove you wrong.",
+      "musicBed": "Fast bright electronic loop, 112 BPM. One click-tick lands on every reveal. Music stops at 14s so the save frame is silent.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "DevTools panel mock renders mid-session. Command palette springs open over it.",
+          "onScreen": "YOU HAVE NEVER OPENED THIS",
+          "sound": "Music already at full on frame 1. Cold open."
+        },
+        {
+          "at": "1-2s",
+          "motion": "Key-combo chips stamp in one at a time.",
+          "onScreen": "Cmd + Shift + P",
+          "sound": "Sharp mechanical clack per chip."
+        },
+        {
+          "at": "2-4s",
+          "motion": "Palette filters as the word types. Result list narrows to one row.",
+          "onScreen": "TRICK 1: full page screenshot",
+          "sound": "Typing taps, then a click-tick on the reveal."
+        },
+        {
+          "at": "4-6s",
+          "motion": "Full-page capture animates: the whole page compresses into an image file.",
+          "onScreen": "entire page. one file.",
+          "sound": "Camera-shutter snap on the capture frame."
+        },
+        {
+          "at": "6-8s",
+          "motion": "Context menu opens on a network row. Copy as fetch highlights.",
+          "onScreen": "TRICK 2: copy as fetch",
+          "sound": "Menu-open blip, then a copy tick. Click-tick on the reveal."
+        },
+        {
+          "at": "8-10s",
+          "motion": "Code pastes into a console panel and executes, returning a JSON tree.",
+          "onScreen": "working API call. zero writing.",
+          "sound": "Paste blip plus a success chime."
+        },
+        {
+          "at": "10-12s",
+          "motion": "Sources panel. A conditional breakpoint dialog springs open on a line.",
+          "onScreen": "TRICK 3: conditional breakpoint",
+          "sound": "Panel-open whoosh. Click-tick on the reveal."
+        },
+        {
+          "at": "12-14s",
+          "motion": "Execution pauses. Only the matching iteration highlights. Everything else dims.",
+          "onScreen": "stops only when id === 42",
+          "sound": "Hard stop-thunk on the pause frame."
+        },
+        {
+          "at": "14-16s",
+          "motion": "All three tricks listed as a static summary card. Zero motion.",
+          "onScreen": "1 screenshot 2 fetch 3 breakpoint",
+          "sound": "Music stops. Total silence on the static frame."
+        },
+        {
+          "at": "16-18s",
+          "motion": "Two poll cards slide in from the bottom.",
+          "onScreen": "Which did you not know?",
+          "sound": "Music returns as a short outro stab under the cards."
+        }
+      ],
+      "caption": "Three DevTools tricks. Which one did you not know?",
+      "cta": "Comment 1, 2 or 3.",
+      "retention": "Numbered list plus a static save frame. Lists get saved, saves get re-served.",
+      "publishedAs": [
+        "d02-c"
+      ]
+    },
+    {
+      "day": 8,
+      "title": "A QA Tester Walks Into A Bar",
+      "emotion": "COMEDY",
+      "template": "DevJoke",
+      "seconds": 15,
+      "status": "shipped",
+      "item": "d02-d",
+      "sourceId": "pdf-day-08-qa-tester-walks-into-a-bar",
+      "hooks": {
+        "a": "A QA tester walks into a bar.",
+        "b": "A QA tester orders a beer. Then -1 beers.",
+        "c": "This joke is 12 orders long. Stay for order 12."
+      },
+      "whyItHolds": "A known joke format with an unknown ending. The order counter promises a finite, reachable payoff.",
+      "musicBed": "Deadpan jazz walking bass, 88 BPM, brushed drums. Never reacts to the chaos. That indifference is the joke.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "Flat vector bar scene renders: counter, three glasses, no people. Text card drops in.",
+          "onScreen": "A QA tester walks into a bar.",
+          "sound": "Music in cold. Low ambient bar hum, no voices."
+        },
+        {
+          "at": "1-2s",
+          "motion": "Order ticket slides in from the right on a spring.",
+          "onScreen": "Orders a beer.",
+          "sound": "Ticket-slide whoosh plus a glass clink."
+        },
+        {
+          "at": "2-3s",
+          "motion": "Second ticket stacks on the first.",
+          "onScreen": "Orders 0 beers.",
+          "sound": "Same clink, one tone lower. Bass keeps walking."
+        },
+        {
+          "at": "3-4s",
+          "motion": "Third ticket stacks. A glass outline draws empty.",
+          "onScreen": "Orders 999999 beers.",
+          "sound": "Single confused record-scratch stab."
+        },
+        {
+          "at": "4-5s",
+          "motion": "Fourth ticket. Glass renders upside down.",
+          "onScreen": "Orders -1 beers.",
+          "sound": "Same scratch, pitched down. Music unchanged."
+        },
+        {
+          "at": "5-6s",
+          "motion": "Fifth ticket. A lizard icon springs into the glass.",
+          "onScreen": "Orders a lizard.",
+          "sound": "One absurd chirp. Music does not react at all."
+        },
+        {
+          "at": "6-7s",
+          "motion": "Sixth ticket. The glass renders as a null symbol.",
+          "onScreen": "Orders NULL.",
+          "sound": "Hollow empty tone."
+        },
+        {
+          "at": "7-8s",
+          "motion": "Tickets accelerate: three stack in one second, overlapping.",
+          "onScreen": "Orders ';DROP TABLE—",
+          "sound": "Rapid till keypresses, then a harsh error buzz."
+        },
+        {
+          "at": "8-9s",
+          "motion": "All motion stops. Ticket stack held mid-air.",
+          "onScreen": "no text on screen",
+          "sound": "Everything stops. Total silence. One full beat."
+        },
+        {
+          "at": "9-10s",
+          "motion": "Bar scene switches to a fire state: flame shapes, alarm strobe overlay.",
+          "onScreen": "The bar catches fire.",
+          "sound": "Fire alarm plus sprinkler hiss. Music restarts, identical."
+        },
+        {
+          "at": "10-11s",
+          "motion": "Ticket panel replaced by a bug-tracker form sliding up over the fire.",
+          "onScreen": "He files a bug report.",
+          "sound": "Form-open chime. Alarm continues behind."
+        },
+        {
+          "at": "11-13s",
+          "motion": "Priority dropdown opens. Options render. Cursor lands on LOW.",
+          "onScreen": "Priority: LOW",
+          "sound": "Dropdown click, then a dry blip on LOW."
+        },
+        {
+          "at": "13-14s",
+          "motion": "Punchline card wipes over everything, full frame.",
+          "onScreen": "Nobody ordered a real drink.",
+          "sound": "Single dry rimshot. Music holds."
+        },
+        {
+          "at": "14-15s",
+          "motion": "Cut to the frame 1 bar scene, identical, fire gone.",
+          "onScreen": "A QA tester walks into a bar.",
+          "sound": "Bar hum returns clean. Music resets to bar 1."
+        }
+      ],
+      "caption": "Order 12 is why QA exists. Tag your tester.",
+      "cta": "No CTA. Tag bait.",
+      "retention": "Counted list joke. Each order is a micro-payoff, which keeps the completion curve flat.",
+      "publishedAs": [
+        "d02-d"
+      ]
+    },
+    {
+      "day": 9,
+      "title": "Roast My Website — Ep. 02",
+      "emotion": "INTERESTING",
+      "template": "SiteRoast",
+      "seconds": 20,
+      "status": "shipped",
+      "item": "d03-a",
+      "sourceId": "pdf-day-09-roast-episode-two",
+      "hooks": {
+        "a": "This menu does not open on any phone.",
+        "b": "Tap 1. Tap 2. Tap 3. Nothing.",
+        "c": "68% of their traffic cannot use this menu."
+      },
+      "whyItHolds": "A repeated failed action. Watching something not work three times is compulsive.",
+      "musicBed": "Sparse tense pulse, 90 BPM. No music at all for the first 3 taps. Enters at 3s. Resolves warm at 13s.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "Mobile frame. A tap ripple animates on the burger icon. Menu does not open.",
+          "onScreen": "TAP 1",
+          "sound": "No music. One dry tap on glass. Nothing else."
+        },
+        {
+          "at": "1-2s",
+          "motion": "Second tap ripple, larger. Still nothing opens.",
+          "onScreen": "TAP 2",
+          "sound": "No music. Second tap, harder, louder."
+        },
+        {
+          "at": "2-3s",
+          "motion": "Third tap ripple. A red X stamps over the icon.",
+          "onScreen": "TAP 3. Still nothing.",
+          "sound": "Third tap plus a dull failure thud. Pulse enters."
+        },
+        {
+          "at": "3-5s",
+          "motion": "Analytics overlay slides up. Mobile share highlights.",
+          "onScreen": "68% of their traffic is mobile",
+          "sound": "Light data blip on arrival."
+        },
+        {
+          "at": "5-7s",
+          "motion": "Cut to a CSS panel. One property line highlights in red.",
+          "onScreen": "the culprit: z-index: 1",
+          "sound": "UI whoosh plus a soft alarm blip."
+        },
+        {
+          "at": "7-9s",
+          "motion": "Layer stack separates into an exploded 3D diagram. The menu sits behind the hero.",
+          "onScreen": "the menu opens BEHIND the page",
+          "sound": "Layered whoosh as the stack separates."
+        },
+        {
+          "at": "9-11s",
+          "motion": "Desktop frame. A hover state works perfectly. Then a mobile frame with no hover.",
+          "onScreen": "tested on desktop only",
+          "sound": "Dry hover tick, then silence. No touch equivalent."
+        },
+        {
+          "at": "11-13s",
+          "motion": "Three CSS lines type into a dark panel.",
+          "onScreen": "THE FIX: 3 lines",
+          "sound": "Three keystroke thocks, one per line."
+        },
+        {
+          "at": "13-15s",
+          "motion": "Mobile frame again. Menu glides open smoothly on the first tap.",
+          "onScreen": "TAP 1. Opens.",
+          "sound": "Satisfying glide-open swoosh. Warm chord resolves."
+        },
+        {
+          "at": "15-17s",
+          "motion": "Two nav taps in sequence, both responding instantly.",
+          "onScreen": "works. finally.",
+          "sound": "Two clean nav taps."
+        },
+        {
+          "at": "17-18s",
+          "motion": "Counter animates up to an estimated lost-enquiry figure.",
+          "onScreen": "[X] enquiries lost per month",
+          "sound": "Ascending counter ticks."
+        },
+        {
+          "at": "18-20s",
+          "motion": "Text card, static, comment prompt.",
+          "onScreen": "Drop a URL for Ep. 03.",
+          "sound": "Music ducks 6 dB and sustains under the card."
+        }
+      ],
+      "caption": "Episode 2. Test your own menu on a real phone tonight.",
+      "cta": "Comment a URL for episode 3.",
+      "retention": "Repeated failure. Three failed taps in 3 seconds is impossible to scroll past.",
+      "publishedAs": [
+        "d03-a"
+      ]
+    },
+    {
+      "day": 10,
+      "title": "The Line That Cost Us Everything",
+      "emotion": "MOTIVATION",
+      "template": "FounderStory",
+      "seconds": 20,
+      "status": "shipped",
+      "item": "d03-b",
+      "sourceId": "pdf-day-10-the-line-that-cost-us-everything",
+      "hooks": {
+        "a": "One line of code. 340 duplicate records.",
+        "b": "We shipped this at 2am. It ran for 6 days.",
+        "c": "This line looks fine. It cost us a client."
+      },
+      "whyItHolds": "A visible artefact plus an invisible consequence. Viewers scan the code to find the bug themselves.",
+      "musicBed": "Silence until 3s. Low sustained cello from 3s. A dissonant note at 7s. Resolves major at 17s.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "Dark code panel. One line fades up, syntax highlighted, centred.",
+          "onScreen": "one line",
+          "sound": "No music. One soft terminal blip."
+        },
+        {
+          "at": "1-2s",
+          "motion": "Line holds. A cursor blinks at the end of it.",
+          "onScreen": "This cost us a client.",
+          "sound": "Total silence. No music, no SFX. Let it sit."
+        },
+        {
+          "at": "2-3s",
+          "motion": "Text card fades under the code.",
+          "onScreen": "Can you see it?",
+          "sound": "Cello enters, single low sustained note."
+        },
+        {
+          "at": "3-5s",
+          "motion": "CI pipeline mock: 4 green checks stamp in sequence.",
+          "onScreen": "all tests passed",
+          "sound": "Pipeline chime per check. Cheerful and wrong."
+        },
+        {
+          "at": "5-7s",
+          "motion": "Clock graphic accelerates through 6 days. Date stamps blur past.",
+          "onScreen": "6 days in production",
+          "sound": "Clock-tick acceleration under the blur."
+        },
+        {
+          "at": "7-9s",
+          "motion": "Database table renders. Rows duplicate visibly, counter climbing to 340.",
+          "onScreen": "340 duplicate records",
+          "sound": "Dissonant cello note. Write-blips multiply, unsettling."
+        },
+        {
+          "at": "9-11s",
+          "motion": "Table holds, full of duplicates. No motion.",
+          "onScreen": "every one of them invoiced",
+          "sound": "Cello holds the dissonance. No SFX. Uncomfortable."
+        },
+        {
+          "at": "11-13s",
+          "motion": "Diff panel wipes in. The missing line highlights green above the original.",
+          "onScreen": "the missing line",
+          "sound": "Single clean keystroke as the line appears."
+        },
+        {
+          "at": "13-15s",
+          "motion": "Test file renders. One new test case types in and passes.",
+          "onScreen": "one test. would have caught it.",
+          "sound": "Cello shifts to a major chord. Tension releases."
+        },
+        {
+          "at": "15-17s",
+          "motion": "Text builds line by line.",
+          "onScreen": "We stopped blaming the line.",
+          "sound": "No SFX. Strings only, building."
+        },
+        {
+          "at": "17-19s",
+          "motion": "Second line joins.",
+          "onScreen": "We fixed the process instead.",
+          "sound": "Strings near full, warm."
+        },
+        {
+          "at": "19-20s",
+          "motion": "Cut to the frame 1 code panel, identical.",
+          "onScreen": "one line",
+          "sound": "Music resolves and stops on the loop point."
+        }
+      ],
+      "caption": "The line was not the problem. The missing test was.",
+      "cta": "Follow for the honest ones.",
+      "retention": "A visible puzzle in frame 1. Viewers rewatch to find the bug, which doubles watch time.",
+      "publishedAs": [
+        "d03-b"
+      ]
+    },
+    {
+      "day": 11,
+      "title": "We Cancelled A $200 Tool",
+      "emotion": "INTERESTING",
+      "template": "TechTip",
+      "seconds": 18,
+      "status": "shipped",
+      "item": "d03-c",
+      "sourceId": "pdf-day-11-we-cancelled-a-200-dollar-tool",
+      "hooks": {
+        "a": "We cancelled a $200/mo tool. Replaced it with 40 lines.",
+        "b": "$2,400 a year. Deleted.",
+        "c": "This subscription did one thing. We wrote that thing."
+      },
+      "whyItHolds": "A specific saving with a specific replacement. Money plus a testable claim beats a generic tip.",
+      "musicBed": "Upbeat clean electronic, 108 BPM. Drops to a single note at 11s for the honest caveat, returns for the saving reveal.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "Billing panel mock renders. Cursor moves to a cancel button and clicks.",
+          "onScreen": "$200 / month",
+          "sound": "Music in cold. Soft hover tick, then a decisive click."
+        },
+        {
+          "at": "1-2s",
+          "motion": "Confirmation modal springs open. Cancel confirmed. Panel greys out.",
+          "onScreen": "CANCELLED",
+          "sound": "Modal whoosh plus a deflating confirmation chime."
+        },
+        {
+          "at": "2-3s",
+          "motion": "Counter animates the annual figure upward, digits blurring.",
+          "onScreen": "$2,400 / year saved",
+          "sound": "Ascending counter ticks resolving on the figure."
+        },
+        {
+          "at": "3-5s",
+          "motion": "Split composition. Left: the tool's feature list, 14 rows. Right: one highlighted row.",
+          "onScreen": "we used 1 of 14 features",
+          "sound": "Clean UI open whoosh. Music adds a bright layer."
+        },
+        {
+          "at": "5-7s",
+          "motion": "Left column dims to 20% opacity. Right row scales up.",
+          "onScreen": "just this one",
+          "sound": "Two soft ticks, one per side."
+        },
+        {
+          "at": "7-9s",
+          "motion": "Dark code panel. 40 lines stream in fast, scrolling.",
+          "onScreen": "40 lines. one afternoon.",
+          "sound": "Fast code-stream blips. Music at full."
+        },
+        {
+          "at": "9-11s",
+          "motion": "Three green check rows stamp in beneath the code.",
+          "onScreen": "same output. every time.",
+          "sound": "Three rapid green-tick blips."
+        },
+        {
+          "at": "11-13s",
+          "motion": "Amber warning card slides in over the code, honest caveat.",
+          "onScreen": "HONEST BIT: we maintain it now",
+          "sound": "Music drops to one held note. Single low amber tone."
+        },
+        {
+          "at": "13-15s",
+          "motion": "Card holds still. No motion at all.",
+          "onScreen": "worth it at $200. not at $20.",
+          "sound": "No SFX. Music stays minimal. Do not dress up the caveat."
+        },
+        {
+          "at": "15-17s",
+          "motion": "Audit checklist renders: 4 rows fading up 8 frames apart.",
+          "onScreen": "AUDIT YOUR STACK: 4 questions",
+          "sound": "Tick per row. Music returns to full arrangement."
+        },
+        {
+          "at": "17-18s",
+          "motion": "Static summary card. Zero motion for the save frame.",
+          "onScreen": "1 of 14 features = cancel it",
+          "sound": "Music stops dead. Silence on the static frame."
+        }
+      ],
+      "caption": "Audit your stack. Most teams pay for 14 features and use one.",
+      "cta": "Save this before your next renewal.",
+      "retention": "Money hook plus an honest caveat. Admitting the downside raises credibility and comments.",
+      "publishedAs": [
+        "d03-c"
+      ]
+    },
+    {
+      "day": 12,
+      "title": "The Fifteen Minute Standup",
+      "emotion": "COMEDY",
+      "template": "DevJoke",
+      "seconds": 14,
+      "status": "shipped",
+      "item": "d03-d",
+      "sourceId": "pdf-day-12-the-fifteen-minute-standup",
+      "hooks": {
+        "a": "Day 400 of a 15 minute standup.",
+        "b": "Watch the timer. It never says 15.",
+        "c": "This standup has never taken 15 minutes."
+      },
+      "whyItHolds": "An on-screen timer the viewer is instructed to watch. A running number is a promise of a payoff.",
+      "musicBed": "Cheerful corporate loop, 100 BPM, that slowly degrades. Tape warble from 5s, pitch down a semitone per cut. Barely holding together by 12s.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "Meeting grid renders: 6 tiles as rounded rectangles with initials only, no faces. Timer chip top right.",
+          "onScreen": "15:00",
+          "sound": "Music in bright and corporate. Soft join chime."
+        },
+        {
+          "at": "1-2s",
+          "motion": "Timer counts down. One tile gets a speaking outline.",
+          "onScreen": "14:20",
+          "sound": "Quiet timer tick, once per second, from here to the end."
+        },
+        {
+          "at": "2-3s",
+          "motion": "Second tile outlines. Timer continues.",
+          "onScreen": "09:00",
+          "sound": "Muffled low tone under the music. Ticks continue."
+        },
+        {
+          "at": "3-4s",
+          "motion": "A screen-share panel expands over the grid.",
+          "onScreen": "someone shares their screen",
+          "sound": "Share-connect blip plus a collective low groan tone."
+        },
+        {
+          "at": "4-5s",
+          "motion": "Timer hits 00:00 and turns red. Grid keeps going.",
+          "onScreen": "00:00",
+          "sound": "Harsh buzzer as it hits zero. Music warbles."
+        },
+        {
+          "at": "5-6s",
+          "motion": "Timer flips to a count-up in amber.",
+          "onScreen": "+02:14",
+          "sound": "Tick flips slower and deeper. Music pitches down."
+        },
+        {
+          "at": "6-7s",
+          "motion": "Two tiles dim to grey, camera-off state.",
+          "onScreen": "+08:40",
+          "sound": "Two camera-off blips. Warble increasing."
+        },
+        {
+          "at": "7-8s",
+          "motion": "A tile shows a lunch icon springing in.",
+          "onScreen": "+16:05",
+          "sound": "Dry rustle. Music degrading further."
+        },
+        {
+          "at": "8-9s",
+          "motion": "Three more tiles dim. Only two remain active.",
+          "onScreen": "+24:30",
+          "sound": "Blip per tile dimming. Music down a semitone."
+        },
+        {
+          "at": "9-10s",
+          "motion": "Background gradient shifts from day to dusk via interpolate.",
+          "onScreen": "the sun has moved",
+          "sound": "Time-lapse wind whoosh under the shift."
+        },
+        {
+          "at": "10-11s",
+          "motion": "Timer digits blur, accelerating.",
+          "onScreen": "+47:55",
+          "sound": "Ticks accelerate into a blur. Music badly out of tune."
+        },
+        {
+          "at": "11-12s",
+          "motion": "Timer stops hard. Number locks, centred, full frame.",
+          "onScreen": "+51:00",
+          "sound": "All SFX stop. Music stops. Silence on the number."
+        },
+        {
+          "at": "12-13s",
+          "motion": "A chat bubble slides in from the manager tile.",
+          "onScreen": "and then, right at the end:",
+          "sound": "No music. One cheerful, oblivious blip."
+        },
+        {
+          "at": "13-14s",
+          "motion": "Punchline bubble stamps centre frame with a hard spring.",
+          "onScreen": "Anyway. Any blockers?",
+          "sound": "Single dry rimshot on the stamp. Nothing else."
+        }
+      ],
+      "caption": "51 minutes. Blockers: this meeting.",
+      "cta": "None.",
+      "retention": "Counter tension. An on-screen number climbing is the cheapest completion device that works.",
+      "publishedAs": [
+        "d03-d"
+      ]
+    },
+    {
+      "day": 13,
+      "title": "We Deleted 40 Pages",
+      "emotion": "INTERESTING",
+      "template": "CaseStudy",
+      "seconds": 20,
+      "status": "shipped",
+      "item": "d04-a",
+      "sourceId": "pdf-day-13-we-deleted-40-pages",
+      "hooks": {
+        "a": "We deleted 40 pages. Traffic went up.",
+        "b": "Deleting 40 pages fixed their SEO.",
+        "c": "Their site had 61 pages. 40 were invisible."
+      },
+      "whyItHolds": "A counter-intuitive claim. Deleting to gain is a contradiction that demands an explanation.",
+      "musicBed": "Minimal build, 98 BPM. One element added every 2 seconds so the track grows with the graph. Open pad at 15s.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "Flat traffic line renders across the frame, lifeless and horizontal.",
+          "onScreen": "61 pages. Flat traffic.",
+          "sound": "Flat-line hum, deliberately dead. No music yet."
+        },
+        {
+          "at": "1-2s",
+          "motion": "Sitemap grid of 61 nodes renders. 40 nodes flash red then delete with a stagger.",
+          "onScreen": "we deleted 40",
+          "sound": "Rapid delete ticks. Music enters on the last one."
+        },
+        {
+          "at": "2-3s",
+          "motion": "Grid settles at 21 nodes. Counter locks.",
+          "onScreen": "21 pages left",
+          "sound": "Delete-confirm thunk plus a rising riser tail."
+        },
+        {
+          "at": "3-5s",
+          "motion": "The 40 deleted nodes reappear dimmed, each labelled with a tiny word count.",
+          "onScreen": "THE PROBLEM: 120 words each",
+          "sound": "UI whoosh. Soft alarm blip on the labels."
+        },
+        {
+          "at": "5-7s",
+          "motion": "Crawl-budget diagram: bot icons scatter across dim nodes, wasting paths.",
+          "onScreen": "crawl budget wasted on nothing",
+          "sound": "Scattered chaotic data blips."
+        },
+        {
+          "at": "7-9s",
+          "motion": "Index-status counter animates downward as dim nodes vanish.",
+          "onScreen": "48 -> 0 not indexed",
+          "sound": "Descending tick tracking the counter."
+        },
+        {
+          "at": "9-11s",
+          "motion": "12 remaining nodes get new titles typing in, one per 6 frames.",
+          "onScreen": "12 pages rewritten",
+          "sound": "12 quick keystroke taps."
+        },
+        {
+          "at": "11-13s",
+          "motion": "Traffic line begins to bend upward. Path animates left to right.",
+          "onScreen": "week 3",
+          "sound": "Soft chime as it moves. Kick drum enters."
+        },
+        {
+          "at": "13-15s",
+          "motion": "Line climbs steeply. Counter beside it accelerates.",
+          "onScreen": "+180% organic",
+          "sound": "Accelerating counter ticks. Music adds layers."
+        },
+        {
+          "at": "15-17s",
+          "motion": "Line peaks and holds. Glow pulse behind the graph.",
+          "onScreen": "week 9",
+          "sound": "Warm shimmer plus a glow pulse. Full open pad."
+        },
+        {
+          "at": "17-19s",
+          "motion": "Text card builds in two lines over the graph.",
+          "onScreen": "Thin pages are not neutral. They cost you.",
+          "sound": "Music resolves and holds one note."
+        },
+        {
+          "at": "19-20s",
+          "motion": "Static summary card. No motion.",
+          "onScreen": "Fewer, better pages.",
+          "sound": "Music sustains. No SFX."
+        }
+      ],
+      "caption": "Thin pages are not neutral. They actively cost you rankings.",
+      "cta": "Comment AUDIT for the checklist.",
+      "retention": "Counter-intuitive claim in second 1. The brain will not accept it without the explanation.",
+      "publishedAs": [
+        "d04-a"
+      ]
+    },
+    {
+      "day": 14,
+      "title": "Nobody Is Coming",
+      "emotion": "MOTIVATION",
+      "template": "FounderStory",
+      "seconds": 18,
+      "status": "shipped",
+      "item": "d04-b",
+      "sourceId": "pdf-day-14-nobody-is-coming",
+      "hooks": {
+        "a": "Month 2. Zero enquiries. Nobody was coming.",
+        "b": "We waited 8 weeks for the phone to ring.",
+        "c": "Inbox: 0. For two straight months."
+      },
+      "whyItHolds": "A bleak, specific number. Founders recognise it instantly and stay for the resolution.",
+      "musicBed": "No music until 9s. Sparse piano from 9s, strings from 13s. The music arrives exactly when the story turns.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "Empty inbox mock renders. Zero rows. A large zero fades up beside it.",
+          "onScreen": "0 enquiries",
+          "sound": "No music. Faint low room hum only."
+        },
+        {
+          "at": "1-2s",
+          "motion": "Text line fades up under the zero.",
+          "onScreen": "Month 2.",
+          "sound": "Still no music. Do not score the bleak line."
+        },
+        {
+          "at": "2-3s",
+          "motion": "Text swaps with a hard cut.",
+          "onScreen": "Nobody is coming.",
+          "sound": "No music. One dull tone. Uncomfortable by design."
+        },
+        {
+          "at": "3-5s",
+          "motion": "Inbox refresh animation loops three times. Still zero rows.",
+          "onScreen": "refresh. refresh. refresh.",
+          "sound": "Three refresh blips, each landing on nothing."
+        },
+        {
+          "at": "5-7s",
+          "motion": "Calendar strip advances 8 weeks. Every cell empty.",
+          "onScreen": "8 weeks. Waiting.",
+          "sound": "Quiet calendar-page tick per week. Still no music."
+        },
+        {
+          "at": "7-9s",
+          "motion": "Text card, centred, full frame.",
+          "onScreen": "We were waiting to be found.",
+          "sound": "Silence held. One beat before the turn."
+        },
+        {
+          "at": "9-11s",
+          "motion": "Screen splits. Left: waiting. Right: an outreach list building row by row.",
+          "onScreen": "so we stopped waiting",
+          "sound": "Piano enters on a single note. This is the turn."
+        },
+        {
+          "at": "11-13s",
+          "motion": "Right side fills: 40 rows type in with a stagger, each a name field redacted to initials.",
+          "onScreen": "40 messages. Written by hand.",
+          "sound": "Real typing under the build. Piano continues."
+        },
+        {
+          "at": "13-15s",
+          "motion": "Inbox mock returns. One row slides in. Then two more.",
+          "onScreen": "3 replies",
+          "sound": "Notification per reply. Strings enter warm."
+        },
+        {
+          "at": "15-17s",
+          "motion": "Counter animates to the first contract value.",
+          "onScreen": "1 became a client",
+          "sound": "Strings build. Single solid confirmation thud."
+        },
+        {
+          "at": "17-18s",
+          "motion": "Cut to the frame 1 empty inbox, identical.",
+          "onScreen": "0 enquiries",
+          "sound": "Strings resolve and stop cleanly on the loop point."
+        }
+      ],
+      "caption": "Nobody is coming. That is not despair, it is a job description.",
+      "cta": "Follow for the honest ones.",
+      "retention": "Bleak opening, earned turn at 9s. The music arriving late makes the turn feel structural.",
+      "publishedAs": [
+        "d04-b"
+      ]
+    },
+    {
+      "day": 15,
+      "title": "Roast My Own Website",
+      "emotion": "INTERESTING",
+      "template": "SiteRoast",
+      "seconds": 20,
+      "status": "shipped",
+      "item": "d04-c",
+      "sourceId": "pdf-day-15-roast-my-own-website",
+      "hooks": {
+        "a": "Our own site scores 61. Here is every flaw.",
+        "b": "We roast clients. Now we roast ourselves.",
+        "c": "61/100. Our site. No excuses."
+      },
+      "whyItHolds": "Self-criticism is disarming and rare. Viewers stay because they expect you to go easy and you do not.",
+      "musicBed": "Wry, self-aware mid-tempo beat, 102 BPM. Drops out at 11s for the no-excuses card, returns for the commitment.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "Our own site mock renders. A red circle strokes on around the hero.",
+          "onScreen": "OUR SITE. 61/100.",
+          "sound": "Impact slam plus marker squeak. Music in on the slam."
+        },
+        {
+          "at": "1-2s",
+          "motion": "Score chip drops in. Camera pushes in 6%.",
+          "onScreen": "we roast clients. our turn.",
+          "sound": "Cut whoosh. Music adds a light snare."
+        },
+        {
+          "at": "2-3s",
+          "motion": "Score gauge fills only to 61%, stopping short with a visible gap.",
+          "onScreen": "61",
+          "sound": "Deflating comedic tone on the stop. Own it."
+        },
+        {
+          "at": "3-5s",
+          "motion": "Flaw callout 1 strokes on around a heavy hero image.",
+          "onScreen": "FLAW 1: 2.1MB hero image",
+          "sound": "Zoom whoosh plus a soft alarm blip."
+        },
+        {
+          "at": "5-7s",
+          "motion": "Heatmap overlay fades in. Attention clusters away from the CTA.",
+          "onScreen": "FLAW 2: nobody sees the CTA",
+          "sound": "Gentle heatmap shimmer on the fade."
+        },
+        {
+          "at": "7-9s",
+          "motion": "Scroll animation runs three full viewport heights.",
+          "onScreen": "FLAW 3: 3 scrolls to the point",
+          "sound": "Three scroll rumbles, one per viewport."
+        },
+        {
+          "at": "9-11s",
+          "motion": "Page-weight badge stamps in, oversized.",
+          "onScreen": "FLAW 4: 4.8MB total",
+          "sound": "Heavy thud on the stamp."
+        },
+        {
+          "at": "11-13s",
+          "motion": "All motion stops. Plain text card on white.",
+          "onScreen": "We had 14 months to fix this.",
+          "sound": "Music drops out entirely. No SFX. Genuine beat."
+        },
+        {
+          "at": "13-15s",
+          "motion": "Four fix rows type in, each with a tick stamping after it.",
+          "onScreen": "fixing all 4 this month",
+          "sound": "Squeak plus tick per row. Music returns."
+        },
+        {
+          "at": "15-17s",
+          "motion": "Target score chip animates from 61 toward 90 and locks.",
+          "onScreen": "target: 90+",
+          "sound": "Clean tick as the target locks."
+        },
+        {
+          "at": "17-19s",
+          "motion": "Text card, static.",
+          "onScreen": "Ep. 04 = our own rescore.",
+          "sound": "Music ducks 6 dB under the card."
+        },
+        {
+          "at": "19-20s",
+          "motion": "Cut to the frame 1 composition, identical.",
+          "onScreen": "OUR SITE. 61/100.",
+          "sound": "Short rewind zip into the loop. Music resets."
+        }
+      ],
+      "caption": "61/100. We will post the rescore whether it improves or not.",
+      "cta": "Follow to see if we actually fix it.",
+      "retention": "Public accountability. A promised future video converts viewers into followers.",
+      "publishedAs": [
+        "d04-c"
+      ]
+    },
+    {
+      "day": 16,
+      "title": "Just One Small Thing",
+      "emotion": "COMEDY",
+      "template": "DevJoke",
+      "seconds": 14,
+      "status": "shipped",
+      "item": "d04-d",
+      "sourceId": "pdf-day-16-just-one-small-thing",
+      "hooks": {
+        "a": "Just one small thing.",
+        "b": "5 words that mean 3 weeks of work.",
+        "c": "It started as one small thing."
+      },
+      "whyItHolds": "Six innocent words every developer knows the ending to. They stay to watch the escalation they can predict.",
+      "musicBed": "Single innocent ukulele note at 0s. Rhythm builds and accelerates with every message. Frantic gallop by 8s. Stops dead at 9s.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "Chat panel renders. One bubble slides in from a circle marked with initials.",
+          "onScreen": "just one small thing",
+          "sound": "One soft pop. Single ukulele note. Nothing more."
+        },
+        {
+          "at": "1-2s",
+          "motion": "A typing indicator animates in the reply position.",
+          "onScreen": "sure, what is it?",
+          "sound": "Light typing taps. Rhythm enters, gentle."
+        },
+        {
+          "at": "2-3s",
+          "motion": "Second bubble stacks, slightly longer.",
+          "onScreen": "can the button also...",
+          "sound": "Second pop, louder. Tempo nudges up."
+        },
+        {
+          "at": "3-4s",
+          "motion": "Third bubble, longer again. The typing indicator stops.",
+          "onScreen": "...and open a new page",
+          "sound": "Third pop. Typing stops abruptly. Tempo up."
+        },
+        {
+          "at": "4-5s",
+          "motion": "Two bubbles land together. Stack begins scrolling.",
+          "onScreen": "...with a form",
+          "sound": "Two pops close together. Music accelerating."
+        },
+        {
+          "at": "5-6s",
+          "motion": "Three overlapping bubbles. Stack scrolls faster.",
+          "onScreen": "...that emails the team",
+          "sound": "Three overlapping pops. Rhythm urgent."
+        },
+        {
+          "at": "6-7s",
+          "motion": "Bubble cascade: six bubbles in one second, blurring.",
+          "onScreen": "...and a dashboard",
+          "sound": "Pop cascade. Music galloping."
+        },
+        {
+          "at": "7-8s",
+          "motion": "Bubbles become a continuous stream, unreadable.",
+          "onScreen": "...and user accounts",
+          "sound": "Pops become a continuous stream. Music at maximum."
+        },
+        {
+          "at": "8-9s",
+          "motion": "Everything freezes. Stack held mid-scroll.",
+          "onScreen": "no text on screen",
+          "sound": "Everything stops. Total silence. Full beat."
+        },
+        {
+          "at": "9-10s",
+          "motion": "One final bubble lands, centred, oversized.",
+          "onScreen": "still just one small thing though",
+          "sound": "One final, very loud pop. Still no music."
+        },
+        {
+          "at": "10-12s",
+          "motion": "Wipe to a ticket panel. A title types in slowly, word by word.",
+          "onScreen": "TICKET: one small thing",
+          "sound": "Slow deliberate keystrokes, one per word."
+        },
+        {
+          "at": "12-13s",
+          "motion": "Story-point chip stamps in beside the title.",
+          "onScreen": "34 story points",
+          "sound": "Dry comedic thud on the stamp."
+        },
+        {
+          "at": "13-14s",
+          "motion": "Cut to the frame 1 chat panel, identical, one bubble.",
+          "onScreen": "just one small thing",
+          "sound": "Single innocent pop. Ukulele resets. Loop closed."
+        }
+      ],
+      "caption": "34 story points. One small thing.",
+      "cta": "Tag someone who says this.",
+      "retention": "Predictable escalation with an accelerating soundtrack. The audio does the comedy work.",
+      "publishedAs": [
+        "d04-d"
+      ]
+    },
+    {
+      "day": 17,
+      "title": "One Prompt, 200 Pages",
+      "emotion": "INTERESTING",
+      "template": "TechTip",
+      "seconds": 18,
+      "status": "planned",
+      "item": "w32-d01-c",
+      "sourceId": "pdf-day-17-one-prompt-200-pages",
+      "hooks": {
+        "a": "One prompt wrote 200 meta descriptions.",
+        "b": "200 pages. 40 seconds. One prompt.",
+        "c": "This prompt replaced 3 days of work."
+      },
+      "whyItHolds": "An extreme ratio of effort to output. Specific numbers make it credible enough to keep watching.",
+      "musicBed": "Clean productive electronic, 106 BPM. Steady, no drops. Fades to silence for the final static frame.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "Prompt panel renders. Text types in fast, 3 characters per frame.",
+          "onScreen": "one prompt",
+          "sound": "Music in cold. Fast keyboard taps synced to characters."
+        },
+        {
+          "at": "1-2s",
+          "motion": "Prompt completes. A timer chip starts at 00:00.",
+          "onScreen": "200 pages to fill",
+          "sound": "Soft timer-start beep. Taps continue."
+        },
+        {
+          "at": "2-3s",
+          "motion": "Output panel opens. Rows begin streaming in.",
+          "onScreen": "GO",
+          "sound": "Enter thock, then a generation whoosh."
+        },
+        {
+          "at": "3-5s",
+          "motion": "Table fills row by row, 4 rows per second, scrolling.",
+          "onScreen": "41 ... 88 ... 140",
+          "sound": "Soft data blip per row filling."
+        },
+        {
+          "at": "5-7s",
+          "motion": "Character-count column validates each row with a small tick.",
+          "onScreen": "all under 155 characters",
+          "sound": "Light tick per validation. Satisfying, not busy."
+        },
+        {
+          "at": "7-9s",
+          "motion": "Timer stops. Counter locks at 200.",
+          "onScreen": "200 done. 41 seconds.",
+          "sound": "Timer-stop beep plus a clean success chime."
+        },
+        {
+          "at": "9-11s",
+          "motion": "CTR metric card slides up, figure animating upward.",
+          "onScreen": "CTR +18% in 6 weeks",
+          "sound": "Ascending sweep tracking the figure."
+        },
+        {
+          "at": "11-13s",
+          "motion": "Prompt breaks into 3 labelled blocks, each highlighting in turn.",
+          "onScreen": "WHY IT WORKS: 3 parts",
+          "sound": "Three UI ticks, one per block."
+        },
+        {
+          "at": "13-15s",
+          "motion": "Each block expands to show its rule.",
+          "onScreen": "role. constraint. examples.",
+          "sound": "Three highlight whooshes."
+        },
+        {
+          "at": "15-18s",
+          "motion": "Full prompt renders as a static, readable card. Zero motion.",
+          "onScreen": "the full prompt",
+          "sound": "Music fades to silence across the static frame. No SFX."
+        }
+      ],
+      "caption": "The full prompt is in frame. Screenshot the last 3 seconds.",
+      "cta": "Save it. Steal it.",
+      "retention": "A screenshot-able payoff held static for 3 full seconds drives saves and shares."
+    },
+    {
+      "day": 18,
+      "title": "We Found Their Password",
+      "emotion": "INTERESTING",
+      "template": "CaseStudy",
+      "seconds": 20,
+      "status": "shipped",
+      "item": "d05-a",
+      "sourceId": "pdf-day-18-we-found-their-password",
+      "hooks": {
+        "a": "We found their database password in 90 seconds.",
+        "b": "It was in their public code. For 2 years.",
+        "c": "90 seconds. Public repo. Full database access."
+      },
+      "whyItHolds": "A countdown plus a security threat the viewer might share. Fear of exposure holds attention.",
+      "musicBed": "Low tense pulse, 88 BPM, single bass note. Countdown ticks run under the whole video. Resolves only at 17s.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "Timer chip starts counting up from 00:00. Dark terminal panel behind it.",
+          "onScreen": "90 SECONDS",
+          "sound": "Timer-start beep. Countdown ticks begin. Pulse enters."
+        },
+        {
+          "at": "1-2s",
+          "motion": "A repo view renders. Commit list scrolls.",
+          "onScreen": "their public repo",
+          "sound": "Terminal blip. Ticks continue under everything."
+        },
+        {
+          "at": "2-3s",
+          "motion": "A search field types in a query. Results filter to 4 rows.",
+          "onScreen": "one search query",
+          "sound": "Keyboard taps. Pulse adds a second note."
+        },
+        {
+          "at": "3-5s",
+          "motion": "A commit from 2 years ago expands. Diff renders.",
+          "onScreen": "commit from 2022",
+          "sound": "File-open blip. Low ominous tone."
+        },
+        {
+          "at": "5-7s",
+          "motion": "A config line highlights. Characters redacted to blocks except the key name.",
+          "onScreen": "DB_PASSWORD = ████████",
+          "sound": "Dull match-found thud on the highlight."
+        },
+        {
+          "at": "7-9s",
+          "motion": "Text card over the diff.",
+          "onScreen": "they deleted it later. git kept it.",
+          "sound": "Hollow reverse-whoosh. Pulse thickens."
+        },
+        {
+          "at": "9-11s",
+          "motion": "An admin panel mock loads, fully accessible, data redacted.",
+          "onScreen": "full admin access",
+          "sound": "Load chime, wrong and unsettling here."
+        },
+        {
+          "at": "11-13s",
+          "motion": "Timer stops and locks.",
+          "onScreen": "01:28",
+          "sound": "Timer-stop beep. Ticks stop. Pulse holds one note."
+        },
+        {
+          "at": "13-15s",
+          "motion": "Three fix rows slide in, each with a toggle animating to on.",
+          "onScreen": "THE FIX: rotate. scan. block.",
+          "sound": "Clean toggle per row."
+        },
+        {
+          "at": "15-17s",
+          "motion": "A secret-scanning setting toggles on, glowing green.",
+          "onScreen": "turn this on today",
+          "sound": "Two confirmation toggles. Pulse resolves warm."
+        },
+        {
+          "at": "17-19s",
+          "motion": "Static card, no motion.",
+          "onScreen": "git does not forget. ever.",
+          "sound": "Music stops. Two beats of clean silence."
+        },
+        {
+          "at": "19-20s",
+          "motion": "Card holds for the save frame.",
+          "onScreen": "rotate every key. now.",
+          "sound": "Silence under the final frame."
+        }
+      ],
+      "caption": "Deleting a secret does not remove it. Git keeps everything.",
+      "cta": "Send this to whoever owns your repo.",
+      "retention": "Live countdown plus a shareable threat. Fear-of-exposure content gets forwarded privately.",
+      "publishedAs": [
+        "d05-a"
+      ]
+    },
+    {
+      "day": 19,
+      "title": "Day 1 vs Day 400",
+      "emotion": "MOTIVATION",
+      "template": "FounderStory",
+      "seconds": 16,
+      "status": "shipped",
+      "item": "d05-b",
+      "sourceId": "pdf-day-19-day-one-vs-day-four-hundred",
+      "hooks": {
+        "a": "Day 1: one repo, zero clients.",
+        "b": "Day 1 vs Day 400. Same two numbers.",
+        "c": "400 days. Here is what actually changed."
+      },
+      "whyItHolds": "A before and after with no visible people. The numbers do the emotional work.",
+      "musicBed": "Single sustained piano note at 0s. Warm strings enter at 3s, one layer per reveal. Full and open by 13s. No percussion.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "Near-black frame. Two counters render at zero, side by side.",
+          "onScreen": "DAY 1",
+          "sound": "Quiet low hum. One sustained piano note."
+        },
+        {
+          "at": "1-2s",
+          "motion": "Counters hold at 1 and 0.",
+          "onScreen": "1 repo. 0 clients.",
+          "sound": "No SFX. Piano only. Let the emptiness read."
+        },
+        {
+          "at": "2-3s",
+          "motion": "Frame crossfades. A date chip flips forward.",
+          "onScreen": "DAY 400",
+          "sound": "Soft crossfade swell. Strings enter."
+        },
+        {
+          "at": "3-5s",
+          "motion": "Commit graph builds left to right, 400 columns filling with a stagger.",
+          "onScreen": "2,140 commits",
+          "sound": "Light tick per column group. Strings add a layer."
+        },
+        {
+          "at": "5-7s",
+          "motion": "Repo counter animates upward. Node diagram expands outward.",
+          "onScreen": "1 -> 34 repos",
+          "sound": "Gentle expansion whoosh. Layer three."
+        },
+        {
+          "at": "7-9s",
+          "motion": "Client counter animates upward beside it.",
+          "onScreen": "0 -> 19 clients",
+          "sound": "Solid tick per increment. Layer four."
+        },
+        {
+          "at": "9-11s",
+          "motion": "Both graphs hold together, full frame, glowing softly.",
+          "onScreen": "400 days",
+          "sound": "Strings near full. Soft shimmer under the hold."
+        },
+        {
+          "at": "11-13s",
+          "motion": "Text builds over the graphs, line one.",
+          "onScreen": "Nothing changed on day 400.",
+          "sound": "Strings peak here. No SFX."
+        },
+        {
+          "at": "13-15s",
+          "motion": "Line two joins beneath it.",
+          "onScreen": "It changed on the 399 boring days.",
+          "sound": "Strings sustain, open and warm."
+        },
+        {
+          "at": "15-16s",
+          "motion": "Cut to the frame 1 composition, identical, counters at zero.",
+          "onScreen": "DAY 1",
+          "sound": "All SFX cut. Music drops to the single opening piano note."
+        }
+      ],
+      "caption": "Day 400 is just day 1 repeated without stopping.",
+      "cta": "Follow for the honest ones.",
+      "retention": "Numeric before-and-after. No faces needed, and the loop makes day 1 feel repeatable.",
+      "publishedAs": [
+        "d05-b"
+      ]
+    },
+    {
+      "day": 20,
+      "title": "Friday, 5 PM, Deploy",
+      "emotion": "COMEDY",
+      "template": "DevJoke",
+      "seconds": 13,
+      "status": "shipped",
+      "item": "d05-c",
+      "sourceId": "pdf-day-20-friday-five-pm-deploy",
+      "hooks": {
+        "a": "Friday. 5 PM. Someone clicked deploy.",
+        "b": "Do not deploy on a Friday. They deployed.",
+        "c": "17:00 on a Friday. The button was pressed."
+      },
+      "whyItHolds": "Universal industry dread, framed as a horror trailer. Viewers stay for the inevitable disaster.",
+      "musicBed": "Horror trailer treatment. Low drone from 0s, rising string tremolo, one heavy hit at 6s. Silence 7-8s. Resolves comedic at 11s.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "Clock graphic renders at 16:59. Dark red vignette. Slow zoom in.",
+          "onScreen": "FRIDAY. 16:59.",
+          "sound": "Low ominous drone. Faint heartbeat under it."
+        },
+        {
+          "at": "1-2s",
+          "motion": "A deploy button renders centre frame, pulsing slowly.",
+          "onScreen": "do not press it",
+          "sound": "Horror string sting. Heartbeat faster."
+        },
+        {
+          "at": "2-3s",
+          "motion": "Cursor moves toward the button in slow motion, frame-stepped.",
+          "onScreen": "someone is going to press it",
+          "sound": "Slow-motion whoosh. Tremolo rising."
+        },
+        {
+          "at": "3-4s",
+          "motion": "Cursor hovers. Button glows. Everything slows further.",
+          "onScreen": "no no no no",
+          "sound": "Warped descending tone."
+        },
+        {
+          "at": "4-5s",
+          "motion": "Clock flips to 17:00 with a hard stamp.",
+          "onScreen": "17:00",
+          "sound": "Single loud clock tick. Drone holds."
+        },
+        {
+          "at": "5-6s",
+          "motion": "Button compresses under the click. Screen flashes white for 2 frames.",
+          "onScreen": "deployed.",
+          "sound": "Tremolo peaks. Heartbeat at maximum."
+        },
+        {
+          "at": "6-7s",
+          "motion": "Monitoring graph spikes vertically. Error count explodes upward.",
+          "onScreen": "errors: 340",
+          "sound": "Mouse click, then one huge percussion hit. Music stops."
+        },
+        {
+          "at": "7-8s",
+          "motion": "Frame freezes on the spike. Nothing moves.",
+          "onScreen": "no text on screen",
+          "sound": "Total silence. Only a faint distant hum."
+        },
+        {
+          "at": "8-9s",
+          "motion": "Alert cards flood in from all edges, stacking uncontrollably.",
+          "onScreen": "340 alerts",
+          "sound": "340 overlapping pings into a wall of sound."
+        },
+        {
+          "at": "9-10s",
+          "motion": "A laptop-lid graphic opens. Terminal springs up over the alerts.",
+          "onScreen": "weekend cancelled",
+          "sound": "Lid open, single chime. Pings continue behind."
+        },
+        {
+          "at": "10-11s",
+          "motion": "Rollback command types in fast and executes.",
+          "onScreen": "git revert",
+          "sound": "Frantic keystrokes. No music."
+        },
+        {
+          "at": "11-12s",
+          "motion": "Screen resets to calm. A Monday chip stamps in.",
+          "onScreen": "MONDAY: we deploy Tuesdays now",
+          "sound": "Cheerful tone. Light comedic music enters."
+        },
+        {
+          "at": "12-13s",
+          "motion": "Cut to the frame 1 clock at 16:59, identical.",
+          "onScreen": "FRIDAY. 16:59.",
+          "sound": "Drone returns instantly. Music resets."
+        }
+      ],
+      "caption": "We deploy on Tuesdays now. Learned the expensive way.",
+      "cta": "Tag your Friday deployer.",
+      "retention": "Genre parody. Horror pacing on a mundane subject, and the loop restarts the dread.",
+      "publishedAs": [
+        "d05-c"
+      ]
+    },
+    {
+      "day": 21,
+      "title": "Core Web Vitals In 18 Seconds",
+      "emotion": "INTERESTING",
+      "template": "TechTip",
+      "seconds": 18,
+      "status": "shipped",
+      "item": "d05-d",
+      "sourceId": "pdf-day-21-core-web-vitals-in-18-seconds",
+      "hooks": {
+        "a": "3 numbers decide your Google ranking.",
+        "b": "LCP. INP. CLS. You are failing one.",
+        "c": "If this number is over 2.5s, you rank lower."
+      },
+      "whyItHolds": "Three unknown acronyms with a ranking threat. Curiosity plus consequence in the first second.",
+      "musicBed": "Clean tech pulse, 110 BPM. One bright synth stab as each metric card fills. Fades out for the final static frame.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "Three empty metric cards snap in from the bottom with staggered springs.",
+          "onScreen": "3 NUMBERS",
+          "sound": "Three fast card-snap whooshes. Music in on the first."
+        },
+        {
+          "at": "1-2s",
+          "motion": "Question marks pulse in each card.",
+          "onScreen": "you are failing one of them",
+          "sound": "Soft questioning blip per card. Pulse holds."
+        },
+        {
+          "at": "2-3s",
+          "motion": "Card 1 fills. Label and threshold type in.",
+          "onScreen": "LCP < 2.5s",
+          "sound": "Card-fill whoosh plus synth stab one."
+        },
+        {
+          "at": "3-5s",
+          "motion": "A page mock paints. The largest element outlines and a timer stops on it.",
+          "onScreen": "biggest thing on screen",
+          "sound": "Page-paint snap on the outline."
+        },
+        {
+          "at": "5-7s",
+          "motion": "Card 2 fills.",
+          "onScreen": "INP < 200ms",
+          "sound": "Card-fill whoosh plus synth stab two, one tone up."
+        },
+        {
+          "at": "7-9s",
+          "motion": "Split test: left button lags visibly after a tap ripple, right responds instantly.",
+          "onScreen": "tap to response delay",
+          "sound": "Dull laggy thud, then a crisp instant tap."
+        },
+        {
+          "at": "9-11s",
+          "motion": "Card 3 fills.",
+          "onScreen": "CLS < 0.1",
+          "sound": "Card-fill whoosh plus synth stab three, higher again."
+        },
+        {
+          "at": "11-13s",
+          "motion": "A layout shifts as a late ad block loads. A cursor mis-taps the moved button.",
+          "onScreen": "the button that moves",
+          "sound": "Comedic mis-tap blip on the shift."
+        },
+        {
+          "at": "13-15s",
+          "motion": "A test URL types into a browser bar. A results panel loads with three scores.",
+          "onScreen": "test yours: pagespeed.web.dev",
+          "sound": "Keyboard taps, then a soft result chime."
+        },
+        {
+          "at": "15-18s",
+          "motion": "All three thresholds render as one static card. Zero motion.",
+          "onScreen": "2.5s / 200ms / 0.1",
+          "sound": "Music fades to silence across the static frame."
+        }
+      ],
+      "caption": "Three thresholds. Test your site and check all three.",
+      "cta": "Save this before your next site review.",
+      "retention": "Three-part list with a static save frame. Threshold numbers are inherently screenshot-able.",
+      "publishedAs": [
+        "d05-d"
+      ]
+    },
+    {
+      "day": 22,
+      "title": "Roast My Website — Ep. 03",
+      "emotion": "INTERESTING",
+      "template": "SiteRoast",
+      "seconds": 20,
+      "status": "shipped",
+      "item": "d06-a",
+      "sourceId": "pdf-day-22-roast-episode-three",
+      "hooks": {
+        "a": "34 fields. To download one PDF.",
+        "b": "This form has a fax number field. In 2026.",
+        "c": "Count the fields. It gets worse."
+      },
+      "whyItHolds": "An absurd number the viewer wants verified. Counting is an active task, and active viewers do not scroll.",
+      "musicBed": "Confident beat, 104 BPM. Drops out completely at 11s for the rebuild, returns fuller for the completion climb.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "A form mock renders. Field counter chip climbs rapidly as fields render in.",
+          "onScreen": "34 FIELDS",
+          "sound": "Impact slam plus rapid counting ticks per field."
+        },
+        {
+          "at": "1-2s",
+          "motion": "Form scrolls. Fields keep coming past the frame edge.",
+          "onScreen": "to download one PDF",
+          "sound": "Long scroll rumble, comically extended."
+        },
+        {
+          "at": "2-3s",
+          "motion": "Counter locks at 34. A completion-rate chip stamps in beside it.",
+          "onScreen": "completion: 4%",
+          "sound": "Hard stat-slam thud plus a deflating tone."
+        },
+        {
+          "at": "3-5s",
+          "motion": "Nine required asterisks pulse red in sequence.",
+          "onScreen": "9 required fields",
+          "sound": "Nine short asterisk ticks."
+        },
+        {
+          "at": "5-7s",
+          "motion": "One field highlights and zooms: fax number.",
+          "onScreen": "FAX NUMBER. in 2026.",
+          "sound": "Single dusty record-scratch. Music pauses one beat."
+        },
+        {
+          "at": "7-9s",
+          "motion": "Submit animates. A validation error banner wipes in and the form clears itself.",
+          "onScreen": "error. form cleared.",
+          "sound": "Submit click, harsh error buzz, then a wipe whoosh."
+        },
+        {
+          "at": "9-11s",
+          "motion": "Mobile frame. Fields overflow past the right edge, clipped.",
+          "onScreen": "on mobile it overflows",
+          "sound": "Dry overflow scrape."
+        },
+        {
+          "at": "11-13s",
+          "motion": "Full white wipe. A rebuilt form paints: three fields only.",
+          "onScreen": "REBUILT: 3 fields",
+          "sound": "Music cuts out. Clean wipe whoosh."
+        },
+        {
+          "at": "13-15s",
+          "motion": "Three fields fill in sequence, then a send animation completes.",
+          "onScreen": "name. email. one question.",
+          "sound": "Keystroke group per field, then a send whoosh."
+        },
+        {
+          "at": "15-17s",
+          "motion": "Completion-rate counter animates from 4 to 31.",
+          "onScreen": "4% -> 31%",
+          "sound": "Accelerating counter ticks. Music returns full."
+        },
+        {
+          "at": "17-18s",
+          "motion": "Two bars grow side by side, the second far taller.",
+          "onScreen": "7.7x more leads",
+          "sound": "Two bar-growth swells, second much larger."
+        },
+        {
+          "at": "18-20s",
+          "motion": "Static card, comment prompt.",
+          "onScreen": "Drop a URL for Ep. 04.",
+          "sound": "Music ducks 6 dB and sustains."
+        }
+      ],
+      "caption": "Every field you add costs you leads. 34 fields costs you all of them.",
+      "cta": "Comment a URL for episode 4.",
+      "retention": "A counting task in second 1 plus a series invitation at the end.",
+      "publishedAs": [
+        "d06-a"
+      ]
+    },
+    {
+      "day": 23,
+      "title": "Boring Beats Viral",
+      "emotion": "MOTIVATION",
+      "template": "FounderStory",
+      "seconds": 16,
+      "status": "shipped",
+      "item": "d06-b",
+      "sourceId": "pdf-day-23-boring-beats-viral",
+      "hooks": {
+        "a": "Our best month came from the most boring work.",
+        "b": "No viral post. No launch. Just retainers.",
+        "c": "The boring work paid. The exciting work did not."
+      },
+      "whyItHolds": "An anti-hype claim that contradicts every other business video the viewer has seen today.",
+      "musicBed": "No music for 3s. Understated warm piano from 3s. Deliberately unglamorous. One warm chord at 11s.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "Plain white frame. One line of text fades up. Nothing else.",
+          "onScreen": "Our best month.",
+          "sound": "No music. Room tone only. Deliberately flat."
+        },
+        {
+          "at": "1-2s",
+          "motion": "Second line joins beneath.",
+          "onScreen": "Zero viral posts.",
+          "sound": "Still no music. Anti-hype tone starts here."
+        },
+        {
+          "at": "2-3s",
+          "motion": "Third line joins.",
+          "onScreen": "The most boring work we do.",
+          "sound": "Dull blip. Piano enters, understated."
+        },
+        {
+          "at": "3-5s",
+          "motion": "A dashboard renders showing unremarkable maintenance tickets closing one by one.",
+          "onScreen": "patch. update. monitor.",
+          "sound": "Quiet tick per ticket closing."
+        },
+        {
+          "at": "5-7s",
+          "motion": "A jagged revenue line renders, spiking and crashing.",
+          "onScreen": "project work: unpredictable",
+          "sound": "Unstable wavering tone tracking the jagged path."
+        },
+        {
+          "at": "7-9s",
+          "motion": "A flat, solid base bar slides in under the jagged line, steadying it.",
+          "onScreen": "retainers: the same every month",
+          "sound": "Solid low thud as the base lands."
+        },
+        {
+          "at": "9-11s",
+          "motion": "Combined line smooths out and climbs steadily.",
+          "onScreen": "boring = predictable",
+          "sound": "Steady confident tone. Warm chord lands."
+        },
+        {
+          "at": "11-13s",
+          "motion": "Text builds over the graph.",
+          "onScreen": "Nobody posts about maintenance.",
+          "sound": "No SFX. Piano builds slightly."
+        },
+        {
+          "at": "13-15s",
+          "motion": "Second line joins.",
+          "onScreen": "It is the only thing that compounds.",
+          "sound": "Piano near full, warm."
+        },
+        {
+          "at": "15-16s",
+          "motion": "Cut to the frame 1 white card, identical.",
+          "onScreen": "Our best month.",
+          "sound": "Piano resolves and stops cleanly on the loop."
+        }
+      ],
+      "caption": "The unglamorous work is the work that compounds.",
+      "cta": "Follow for the honest ones.",
+      "retention": "Anti-hype contradiction. Standing against the algorithm's dominant tone drives comments.",
+      "publishedAs": [
+        "d06-b"
+      ]
+    },
+    {
+      "day": 24,
+      "title": "47 Comments In A Word Doc",
+      "emotion": "COMEDY",
+      "template": "DevJoke",
+      "seconds": 14,
+      "status": "shipped",
+      "item": "d06-c",
+      "sourceId": "pdf-day-24-47-comments-in-a-word-doc",
+      "hooks": {
+        "a": "47 comments. In a Word document. Comment 31 broke us.",
+        "b": "Design feedback arrived as a Word doc. 47 comments.",
+        "c": "Wait for comment number 31."
+      },
+      "whyItHolds": "A named future moment. The viewer must reach comment 31, which guarantees they watch to 9s.",
+      "musicBed": "Polite string quartet, 96 BPM, that gets increasingly frantic. Tremolo from 5s. Stops dead at 9s for the punchline hold.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "A document mock renders with a margin. Comment bubbles begin popping in.",
+          "onScreen": "47 COMMENTS",
+          "sound": "Document-open blip. Quartet in, polite."
+        },
+        {
+          "at": "1-2s",
+          "motion": "Document scrolls. Margin fills with more bubbles.",
+          "onScreen": "in a Word document",
+          "sound": "Continuous scroll rumble. Strings polite."
+        },
+        {
+          "at": "2-3s",
+          "motion": "Bubble 4 zooms in, text readable.",
+          "onScreen": "#4: make it pop more",
+          "sound": "Soft bubble pop. One per comment from here."
+        },
+        {
+          "at": "3-4s",
+          "motion": "Bubble 11 zooms in.",
+          "onScreen": "#11: not that kind of pop",
+          "sound": "Pop, pitched up. Light tremolo enters."
+        },
+        {
+          "at": "4-5s",
+          "motion": "Bubble 19 zooms in.",
+          "onScreen": "#19: can it be more premium",
+          "sound": "Pop, pitched up again. Tremolo increasing."
+        },
+        {
+          "at": "5-6s",
+          "motion": "Bubble 23 zooms in.",
+          "onScreen": "#23: premium but also fun",
+          "sound": "Pop plus a confused string stab."
+        },
+        {
+          "at": "6-7s",
+          "motion": "Split frame: two contradictory bubbles side by side.",
+          "onScreen": "#26: bigger | #27: smaller",
+          "sound": "Split whoosh. Two pops together."
+        },
+        {
+          "at": "7-8s",
+          "motion": "A screenshot-of-a-screenshot graphic nests three times.",
+          "onScreen": "#29: see attached screenshot",
+          "sound": "Shutter snap, deliberately lo-fi and absurd."
+        },
+        {
+          "at": "8-9s",
+          "motion": "Scroll slows to a crawl approaching the numbered bubble.",
+          "onScreen": "#30...",
+          "sound": "Scroll slows. Strings hold one tense note."
+        },
+        {
+          "at": "9-11s",
+          "motion": "Everything stops. Comment 31 renders alone, full frame.",
+          "onScreen": "#31: can we see the old one again",
+          "sound": "Total silence. Long hold. No music at all."
+        },
+        {
+          "at": "11-12s",
+          "motion": "The text holds. A single cursor blinks.",
+          "onScreen": "the old one was version 1",
+          "sound": "No music. One slow low tone. Nothing else."
+        },
+        {
+          "at": "12-13s",
+          "motion": "Wipe to a clean review-tool board with 3 threaded items.",
+          "onScreen": "we use a review tool now",
+          "sound": "Board-open whoosh. Strings return, calm."
+        },
+        {
+          "at": "13-14s",
+          "motion": "Cut to the frame 1 document, margin full of bubbles.",
+          "onScreen": "47 COMMENTS",
+          "sound": "Full margin of pops in one burst. Quartet resets."
+        }
+      ],
+      "caption": "Comment 31 is why we use a review tool now.",
+      "cta": "Tag a designer.",
+      "retention": "Named loop. Promising comment 31 in second 1 forces a watch to 9s.",
+      "publishedAs": [
+        "d06-c"
+      ]
+    },
+    {
+      "day": 25,
+      "title": "AI Killed 60% Of Their Tickets",
+      "emotion": "INTERESTING",
+      "template": "CaseStudy",
+      "seconds": 20,
+      "status": "shipped",
+      "item": "d06-d",
+      "sourceId": "pdf-day-25-ai-killed-60-percent-of-tickets",
+      "hooks": {
+        "a": "1,200 tickets a month. 60% never reach a human now.",
+        "b": "Their support queue dropped 60% in 5 weeks.",
+        "c": "720 of these tickets are answered without anyone reading them."
+      },
+      "whyItHolds": "A large number visibly draining in real time. Watching a counter fall is compulsive.",
+      "musicBed": "Rising optimistic electronic, 100 BPM. Chaotic layered percussion for 2s that resolves into a clean groove as the queue clears.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "A ticket queue renders, overflowing. Counter reads 1,200. Cards stack chaotically.",
+          "onScreen": "1,200 / month",
+          "sound": "Overwhelming stacked pings, chaotic and layered."
+        },
+        {
+          "at": "1-2s",
+          "motion": "More cards flood in from the edges. Counter climbing.",
+          "onScreen": "every single one read by a human",
+          "sound": "Pings intensify to a wall of sound."
+        },
+        {
+          "at": "2-3s",
+          "motion": "Counter drops hard to 480. Cards clear in a wave.",
+          "onScreen": "now: 480",
+          "sound": "Hard whoosh on the drop. Groove resolves clean."
+        },
+        {
+          "at": "3-5s",
+          "motion": "Cards sort themselves into 3 labelled groups with staggered motion.",
+          "onScreen": "3 questions = 61% of volume",
+          "sound": "Soft sorting blip per card group."
+        },
+        {
+          "at": "5-7s",
+          "motion": "A pie chart draws in three segments.",
+          "onScreen": "password. invoice. status.",
+          "sound": "Three segment ticks. Music adds a layer."
+        },
+        {
+          "at": "7-9s",
+          "motion": "A flow diagram animates: a request routes to an automated reset and completes.",
+          "onScreen": "AUTOMATED: password reset",
+          "sound": "Flow whoosh plus a success blip."
+        },
+        {
+          "at": "9-11s",
+          "motion": "A status page renders and updates itself live.",
+          "onScreen": "AUTOMATED: status page",
+          "sound": "Clean page-load snap."
+        },
+        {
+          "at": "11-13s",
+          "motion": "A chat panel: a typing indicator answers an invoice question, then hands off.",
+          "onScreen": "AUTOMATED: invoice lookup",
+          "sound": "Typing blips, then a clear handoff chime."
+        },
+        {
+          "at": "13-15s",
+          "motion": "Response-time metric card animates downward.",
+          "onScreen": "4h -> 40s",
+          "sound": "Music drops to one note. Descending sweep."
+        },
+        {
+          "at": "15-17s",
+          "motion": "Second metric card slides up beside it.",
+          "onScreen": "humans now handle the hard 39%",
+          "sound": "Solid tick. Music returns full."
+        },
+        {
+          "at": "17-19s",
+          "motion": "Text card builds over both metrics.",
+          "onScreen": "we removed the boring 61%",
+          "sound": "Calm confirmation tone."
+        },
+        {
+          "at": "19-20s",
+          "motion": "Static summary card.",
+          "onScreen": "not fewer people. better tickets.",
+          "sound": "Music resolves and holds."
+        }
+      ],
+      "caption": "Automate the three questions that make up most of your volume.",
+      "cta": "Comment SUPPORT for the breakdown.",
+      "retention": "A large number visibly draining. Falling counters hold attention as hard as rising ones.",
+      "publishedAs": [
+        "d06-d"
+      ]
+    },
+    {
+      "day": 26,
+      "title": "Is Your Site Hacked?",
+      "emotion": "INTERESTING",
+      "template": "TechTip",
+      "seconds": 16,
+      "status": "shipped",
+      "item": "d07-a",
+      "sourceId": "pdf-day-26-is-your-site-hacked",
+      "hooks": {
+        "a": "Search this. If you see pages you did not write, you are hacked.",
+        "b": "site:yourdomain.com — do it now.",
+        "c": "This site looks fine. Google sees 4,000 spam pages."
+      },
+      "whyItHolds": "A one-line instruction with a frightening possible outcome. The viewer tests it while watching.",
+      "musicBed": "Deceptively calm pad for 1s, then a low tense pulse from 1s. Serious, never an alarm.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "A clean, normal-looking site mock renders. Everything appears fine.",
+          "onScreen": "this site looks fine",
+          "sound": "Pleasant page-load chime. Calm pad."
+        },
+        {
+          "at": "1-2s",
+          "motion": "Hard cut to a search results mock. Result counter animates to 4,120.",
+          "onScreen": "Google sees 4,120 pages",
+          "sound": "Hard cut whoosh. Pad drops. Low pulse enters."
+        },
+        {
+          "at": "2-3s",
+          "motion": "Spam result rows scroll past, titles in another language, redacted.",
+          "onScreen": "they wrote 4,000 of them",
+          "sound": "Dull thud. Pulse thickens."
+        },
+        {
+          "at": "3-5s",
+          "motion": "A search field types the operator character by character.",
+          "onScreen": "site:yourdomain.com",
+          "sound": "Keyboard taps synced per character."
+        },
+        {
+          "at": "5-7s",
+          "motion": "Results scroll. Foreign-language spam pages highlight in red one by one.",
+          "onScreen": "pages you never wrote",
+          "sound": "Scroll rumble with an unsettling undertone."
+        },
+        {
+          "at": "7-9s",
+          "motion": "A cloaking diagram animates: bot sees spam, visitor sees the clean page.",
+          "onScreen": "you cannot see them. Google can.",
+          "sound": "Hollow reverse-whoosh on the reveal."
+        },
+        {
+          "at": "9-11s",
+          "motion": "A phone frame rotates in and immediately redirects to a different domain.",
+          "onScreen": "mobile visitors get redirected",
+          "sound": "Rotate blip, then a redirect swoosh."
+        },
+        {
+          "at": "11-13s",
+          "motion": "Three action rows slide in with toggles animating on.",
+          "onScreen": "scan. rotate keys. resubmit.",
+          "sound": "Clean tick per action."
+        },
+        {
+          "at": "13-15s",
+          "motion": "A search console mock shows a removal request submitted.",
+          "onScreen": "then tell Google",
+          "sound": "Submit chime. Pulse resolves."
+        },
+        {
+          "at": "15-16s",
+          "motion": "Static card holding the search operator, large and readable.",
+          "onScreen": "site:yourdomain.com",
+          "sound": "Music stops. Silence under the save frame."
+        }
+      ],
+      "caption": "One search tells you whether your site is compromised. Do it tonight.",
+      "cta": "Save this and run the search.",
+      "retention": "Immediate testable instruction. Videos that make viewers act mid-watch get saved and shared.",
+      "publishedAs": [
+        "d07-a"
+      ]
+    },
+    {
+      "day": 27,
+      "title": "Explaining Cache. Again.",
+      "emotion": "COMEDY",
+      "template": "DevJoke",
+      "seconds": 13,
+      "status": "shipped",
+      "item": "d07-b",
+      "sourceId": "pdf-day-27-explaining-cache-again",
+      "hooks": {
+        "a": "Explaining cache to a client. Attempt 6.",
+        "b": "It IS updated. Attempt 6 of explaining why.",
+        "c": "Six attempts to explain one refresh."
+      },
+      "whyItHolds": "An attempt counter in second 1 promises escalating failure. Every agency viewer knows this pain.",
+      "musicBed": "Weary comedic loop, 94 BPM, that sounds tired. A deflating tone at 8s. Stops for the punchline.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "A chat panel renders. A bubble slides in. An attempt counter chip stamps top right.",
+          "onScreen": "ATTEMPT 6",
+          "sound": "Long tired exhale tone. Music in, weary and slow."
+        },
+        {
+          "at": "1-2s",
+          "motion": "Client bubble lands.",
+          "onScreen": "the site is not updated",
+          "sound": "Cheerful incoming blip. Music unimpressed."
+        },
+        {
+          "at": "2-3s",
+          "motion": "A reply bubble types in and lands.",
+          "onScreen": "it is. please hard refresh.",
+          "sound": "Patient typing taps. Music thins."
+        },
+        {
+          "at": "3-4s",
+          "motion": "A diagram animates: browser, cache layer, server, with an arrow stopping at cache.",
+          "onScreen": "your browser saved the old one",
+          "sound": "Light diagram-draw whoosh."
+        },
+        {
+          "at": "4-5s",
+          "motion": "Client bubble returns, three dots then a short reply.",
+          "onScreen": "ok but it looks the same",
+          "sound": "Three hollow nod-taps."
+        },
+        {
+          "at": "5-6s",
+          "motion": "A key-combo chip stamps in, oversized.",
+          "onScreen": "Cmd + Shift + R",
+          "sound": "Hopeful rising blip. Music brightens slightly."
+        },
+        {
+          "at": "6-7s",
+          "motion": "A wrong-keys animation: random key chips flash and fail.",
+          "onScreen": "they pressed something else",
+          "sound": "Random wrong keypresses, clattering."
+        },
+        {
+          "at": "7-8s",
+          "motion": "A Word document icon springs in with a screenshot inside it.",
+          "onScreen": "they sent a screenshot. in Word.",
+          "sound": "Document chime. Deflating tone lands here."
+        },
+        {
+          "at": "8-9s",
+          "motion": "Everything freezes. The Word icon holds centre frame.",
+          "onScreen": "no text on screen",
+          "sound": "All audio stops. Total silence."
+        },
+        {
+          "at": "9-10s",
+          "motion": "A new bubble lands, bright and oblivious.",
+          "onScreen": "oh it works now!",
+          "sound": "One cheerful, oblivious blip. Still no music."
+        },
+        {
+          "at": "10-12s",
+          "motion": "The punchline bubble lands beneath it, no motion after.",
+          "onScreen": "did you change something?",
+          "sound": "No music. No SFX. Let it sit completely dry."
+        },
+        {
+          "at": "12-13s",
+          "motion": "Cut to the frame 1 chat panel. Counter now reads ATTEMPT 7.",
+          "onScreen": "ATTEMPT 7",
+          "sound": "Single dry rimshot. Music resets a semitone lower."
+        }
+      ],
+      "caption": "Attempt 7 begins tomorrow.",
+      "cta": "Tag someone who has explained cache this week.",
+      "retention": "Loop with one changed detail. The counter incrementing on the loop is the second punchline.",
+      "publishedAs": [
+        "d07-b"
+      ]
+    },
+    {
+      "day": 28,
+      "title": "Month Three, We Almost Closed",
+      "emotion": "MOTIVATION",
+      "template": "FounderStory",
+      "seconds": 18,
+      "status": "shipped",
+      "item": "d07-c",
+      "sourceId": "pdf-day-28-month-three-we-almost-closed",
+      "hooks": {
+        "a": "Month 3. Eleven days of money left.",
+        "b": "We had 11 days of runway. We nearly stopped.",
+        "c": "11 days. That was the whole runway."
+      },
+      "whyItHolds": "A precise, frightening number. Eleven days is specific enough to feel true and small enough to feel urgent.",
+      "musicBed": "Silence until 3s. Single low piano note from 3s. Sparse and cold. Warm strings only from 13s.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "Near-black frame. A runway counter renders: 11 days.",
+          "onScreen": "11 DAYS",
+          "sound": "No music. Faint hum. One quiet clock tick."
+        },
+        {
+          "at": "1-2s",
+          "motion": "Counter holds. A label fades in beneath it.",
+          "onScreen": "of money left",
+          "sound": "Total silence apart from the tick."
+        },
+        {
+          "at": "2-3s",
+          "motion": "A text line fades in under the counter.",
+          "onScreen": "Month 3.",
+          "sound": "Single low piano note enters."
+        },
+        {
+          "at": "3-5s",
+          "motion": "An invoice list renders. Three rows highlight amber, all marked overdue.",
+          "onScreen": "3 invoices. 60 days late.",
+          "sound": "Soft scroll tick per row."
+        },
+        {
+          "at": "5-7s",
+          "motion": "A text card, plain.",
+          "onScreen": "We had done the work. All of it.",
+          "sound": "No SFX. Piano only. Do not underscore it."
+        },
+        {
+          "at": "7-9s",
+          "motion": "A follow-up email thread renders, 4 unanswered messages stacking.",
+          "onScreen": "4 polite emails. No replies.",
+          "sound": "Sent-whoosh per email, each landing on nothing."
+        },
+        {
+          "at": "9-11s",
+          "motion": "A single payment notification slides in. Counter ticks from 11 to 19 days.",
+          "onScreen": "11 -> 19 days",
+          "sound": "Single payment chime. Piano lifts slightly."
+        },
+        {
+          "at": "11-13s",
+          "motion": "Frame holds on 19 days. No motion.",
+          "onScreen": "that was the whole margin",
+          "sound": "Piano holds. One beat before the turn."
+        },
+        {
+          "at": "13-15s",
+          "motion": "A contract mock renders. Three clauses type in and tick.",
+          "onScreen": "50% upfront. Net 14. Late fees.",
+          "sound": "Document tick per clause. Strings enter."
+        },
+        {
+          "at": "15-17s",
+          "motion": "A runway graph levels out flat and steady, extending right.",
+          "onScreen": "never below 90 days since",
+          "sound": "Steady confident tone. Strings build."
+        },
+        {
+          "at": "17-18s",
+          "motion": "Cut to the frame 1 counter, identical, reading 11 days.",
+          "onScreen": "11 DAYS",
+          "sound": "Strings resolve and stop on the loop point."
+        }
+      ],
+      "caption": "50% upfront is not rude. It is the reason we still exist.",
+      "cta": "Follow for the honest ones.",
+      "retention": "A specific frightening number, resolved with a concrete policy the viewer can copy.",
+      "publishedAs": [
+        "d07-c"
+      ]
+    },
+    {
+      "day": 29,
+      "title": "Design To Code In One Minute",
+      "emotion": "INTERESTING",
+      "template": "TechTip",
+      "seconds": 16,
+      "status": "shipped",
+      "item": "d07-d",
+      "sourceId": "pdf-day-29-design-to-code-in-one-minute",
+      "hooks": {
+        "a": "Design to working code in 58 seconds.",
+        "b": "58 seconds. Then we show what it got wrong.",
+        "c": "This took 58 seconds. It is 70% right."
+      },
+      "whyItHolds": "A speed claim plus a promised critique. The honesty promise is what stops the viewer scrolling.",
+      "musicBed": "Fast clean electronic, 112 BPM. Drops to one held note at 9s for the failures. Returns for the verdict.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "A design frame renders. A selection box springs around it.",
+          "onScreen": "58 SECONDS",
+          "sound": "Music in cold. Soft selection click."
+        },
+        {
+          "at": "1-2s",
+          "motion": "The frame exports. A timer chip starts counting.",
+          "onScreen": "design -> code",
+          "sound": "Export whoosh plus a timer-start beep."
+        },
+        {
+          "at": "2-3s",
+          "motion": "A code panel streams code fast, scrolling continuously.",
+          "onScreen": "generating",
+          "sound": "Rapid code-stream blips, fast and satisfying."
+        },
+        {
+          "at": "3-5s",
+          "motion": "Component names highlight one by one as they are created.",
+          "onScreen": "6 components",
+          "sound": "Light component-snap tick per name."
+        },
+        {
+          "at": "5-7s",
+          "motion": "A rendered page paints beside the design. Timer stops.",
+          "onScreen": "58s. it runs.",
+          "sound": "Page-paint snap plus a timer-stop beep."
+        },
+        {
+          "at": "7-9s",
+          "motion": "Design and output tile side by side, near identical.",
+          "onScreen": "70% there",
+          "sound": "Two comparison ticks."
+        },
+        {
+          "at": "9-11s",
+          "motion": "The output resizes to mobile. The layout visibly breaks and overlaps.",
+          "onScreen": "FAIL 1: breakpoints",
+          "sound": "Music drops to one held note. Dry layout-break scrape."
+        },
+        {
+          "at": "11-13s",
+          "motion": "A keyboard-navigation overlay runs and skips three elements.",
+          "onScreen": "FAIL 2: no aria labels",
+          "sound": "Flat error blip on each skip."
+        },
+        {
+          "at": "13-15s",
+          "motion": "A bundle-size chip stamps in, larger than expected.",
+          "onScreen": "FAIL 3: 340KB of unused CSS",
+          "sound": "Heavy thud on the stamp."
+        },
+        {
+          "at": "15-16s",
+          "motion": "Static verdict card, two lines, no motion.",
+          "onScreen": "great first draft. not a final build.",
+          "sound": "Music returns briefly and resolves. Then silence."
+        }
+      ],
+      "caption": "A great first draft. Never a final build. The last 30% is the job.",
+      "cta": "Comment TOOL for the workflow.",
+      "retention": "Speed claim plus honest failures. Balanced takes get argued about in the comments.",
+      "publishedAs": [
+        "d07-d"
+      ]
+    },
+    {
+      "day": 30,
+      "title": "30 Days. 30 Videos. The Real Numbers.",
+      "emotion": "MOTIVATION",
+      "template": "Recap",
+      "seconds": 25,
+      "status": "planned",
+      "item": "w37-d02-d",
+      "sourceId": "pdf-day-30-thirty-days-the-real-numbers",
+      "hooks": {
+        "a": "30 videos in 30 days. Every real number, including the bad ones.",
+        "b": "I promised transparency on day 1. Here it is.",
+        "c": "Most of these failed. Here is exactly how."
+      },
+      "whyItHolds": "Transparency plus a promise of failure. Audiences reward honest numbers far more than good ones.",
+      "musicBed": "Full warm build, 102 BPM. Sparse on the thumbnail grid, a layer per data reveal, peaks at 19s, resolves open at 25s.",
+      "rows": [
+        {
+          "at": "0-1s",
+          "motion": "A grid of 30 thumbnail tiles fills the frame with a fast stagger.",
+          "onScreen": "30 videos / 30 days",
+          "sound": "30 rapid thumbnail-snap ticks. Music in sparse."
+        },
+        {
+          "at": "1-2s",
+          "motion": "Grid holds. A follower counter renders blurred.",
+          "onScreen": "the real numbers",
+          "sound": "Soft counter blur hum. Music adds a pad."
+        },
+        {
+          "at": "2-3s",
+          "motion": "Counter unblurs with a snap.",
+          "onScreen": "[actual followers]",
+          "sound": "Clean unblur whoosh plus a confirmation chime."
+        },
+        {
+          "at": "3-5s",
+          "motion": "A total-views counter animates upward, digits blurring.",
+          "onScreen": "[actual total views]",
+          "sound": "Ascending counter ticks."
+        },
+        {
+          "at": "5-7s",
+          "motion": "A bar chart draws, one bar per video, wildly uneven.",
+          "onScreen": "most of them did not work",
+          "sound": "Uneven bar-growth swells, deliberately ragged."
+        },
+        {
+          "at": "7-9s",
+          "motion": "Three bars highlight and rise above the rest.",
+          "onScreen": "3 videos = 71% of views",
+          "sound": "Three highlight whooshes."
+        },
+        {
+          "at": "9-11s",
+          "motion": "The single best tile expands to fill the frame.",
+          "onScreen": "the winner",
+          "sound": "Full-frame snap. Music adds a bright layer."
+        },
+        {
+          "at": "11-13s",
+          "motion": "Its first 3 seconds replay in a small inset loop.",
+          "onScreen": "the hook did the work",
+          "sound": "The original hook SFX replayed at low level."
+        },
+        {
+          "at": "13-15s",
+          "motion": "The worst-performing tile expands, unflinching.",
+          "onScreen": "the flop",
+          "sound": "Dull deflating thud. Honest, not cruel."
+        },
+        {
+          "at": "15-17s",
+          "motion": "A format leaderboard renders, sorted by shares.",
+          "onScreen": "roasts won on shares",
+          "sound": "Two leaderboard ticks."
+        },
+        {
+          "at": "17-19s",
+          "motion": "A business-outcome metric card stamps in.",
+          "onScreen": "[enquiries] from content",
+          "sound": "Solid low thud. Music near full."
+        },
+        {
+          "at": "19-21s",
+          "motion": "Lesson one types in, full frame.",
+          "onScreen": "the hook beats everything else",
+          "sound": "Text-build tick per line. Music peaks."
+        },
+        {
+          "at": "21-23s",
+          "motion": "Lessons two and three build beneath it.",
+          "onScreen": "series > one-offs",
+          "sound": "Two more text ticks. Full arrangement."
+        },
+        {
+          "at": "23-25s",
+          "motion": "A final card renders, clean and still.",
+          "onScreen": "day 31 starts tomorrow",
+          "sound": "Music resolves to an open chord and sustains."
+        }
+      ],
+      "caption": "Every number, including the flops. Day 31 starts tomorrow.",
+      "cta": "Follow for round two.",
+      "retention": "Radical transparency. Reliably the best-performing video in any 30-day series."
+    }
+  ]
+}

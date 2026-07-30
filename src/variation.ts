@@ -38,15 +38,23 @@
 const CAMPAIGN_ID = /^w(\d{1,3})-d(\d{1,2})-([a-d])$/;
 
 /**
- * The campaign scheme starts at week 33.
+ * The campaign scheme starts at week 32.
  *
- * Weeks 31 and 32 were planned, rendered and in 31's case published before this
- * existed, and their frame fingerprints are already in the archive. Rewriting
- * their looks would mean a re-render no longer matches the fingerprint recorded
- * for the same id, which is exactly the alarm the duplicate detector exists to
- * raise. They keep `variationFor`; everything from week 33 walks.
+ * Week 31 stays on the old hashed `variationFor`: it is published, its frame
+ * fingerprints are in the archive, and rewriting its looks would mean a
+ * re-render no longer matches the fingerprint recorded for the same id — which
+ * is exactly the alarm the duplicate detector exists to raise.
+ *
+ * Week 32 was excluded for the same reason and has been brought in, because the
+ * reason stopped being true. Its unposted twenty-six items were re-scripted from
+ * the source PDF and will be rendered fresh, so there is no earlier look to
+ * preserve; the two that did post are frozen and will never be rendered again,
+ * so what look they *would* draw now is moot. Leaving the week out was worse
+ * than moot: a hashed draw is known to collide across three axes at once, and
+ * the uniqueness matrix skips legacy weeks entirely, so twenty-six videos would
+ * have been assigned palettes and beds that nothing checked.
  */
-export const CAMPAIGN_FIRST_WEEK = 33;
+export const CAMPAIGN_FIRST_WEEK = 32;
 
 export const SLOTS = ["a", "b", "c", "d"] as const;
 export const SLOTS_PER_DAY = SLOTS.length;
