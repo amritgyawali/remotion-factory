@@ -35,17 +35,6 @@
   "lastPostedAt": "2026-07-30T03:40:04.253Z",
   "rendered": [
     {
-      "id": "w32-d01-d",
-      "week": "2026-w32",
-      "template": "LogoLadder",
-      "url": "https://github.com/amritgyawali/remotion-factory/releases/download/videos-2026-w32/w32-d01-d.mp4",
-      "sha256": "961df11ce866dc45466dbfbd01c951c7716dd9eb99a596303dc3089d7ca0cce4",
-      "bytes": 1764957,
-      "durationSeconds": 17.045,
-      "approval": "pending",
-      "renderedAt": "2026-07-29T08:02:24.420Z"
-    },
-    {
       "id": "w32-d02-a",
       "week": "2026-w32",
       "template": "LogoLadder",
