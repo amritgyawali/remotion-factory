@@ -1499,7 +1499,7 @@
       "template": "TechTip",
       "seconds": 18,
       "status": "planned",
-      "item": "w32-d01-c",
+      "item": "w32-d02-a",
       "sourceId": "pdf-day-17-one-prompt-200-pages",
       "hooks": {
         "a": "One prompt wrote 200 meta descriptions.",

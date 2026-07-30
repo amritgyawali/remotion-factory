@@ -346,9 +346,14 @@ test("a week may not be built out of one composition", () => {
   const week = (templates) => templates.map((template, index) => ({ id: `w40-d0${index}`, template }));
 
   // The shape week 32 was accepted in: one composition, twenty-seven re-skins.
-  const ladder = templateConcentrationErrors(week(Array(28).fill("LogoLadder")));
-  assert.equal(ladder.length, 1);
-  assert.match(ladder[0], /28 of 28 items use the "LogoLadder" template — at most 10 may/);
+  const oneJoke = templateConcentrationErrors(week(Array(28).fill("DevJoke")));
+  assert.equal(oneJoke.length, 1);
+  assert.match(oneJoke[0], /28 of 28 items use the "DevJoke" template — at most 10 may/);
+
+  // Retired templates are exempt, and have to be: week 32 holds four published
+  // logo ladders for good, and a rule that fails on history is a rule that gets
+  // switched off. Nothing new can reach them anyway — RETIRED_TEMPLATES does that.
+  assert.deepEqual(templateConcentrationErrors(week(Array(28).fill("LogoLadder"))), []);
 
   // A third is allowed, so a strand may still dominate a week.
   const mixed = [
@@ -365,10 +370,13 @@ test("a week may not be built out of one composition", () => {
 });
 
 test("the two hard-coded compositions are retired to their published items", () => {
-  // Each names exactly one id: the master that is already public. Anything else
-  // reaching them is the same video with new words, which is what they were
-  // used for twenty-eight times.
+  // Each names the ids already public on it. Anything else reaching them is the
+  // same video with new words, which is what they were used for twenty-eight
+  // times and what five of them actually posted as.
   assert.deepEqual(Object.keys(RETIRED_TEMPLATES).sort(), ["LogoLadder", "WorksOnMyMachine"]);
+  for (const allowed of Object.values(RETIRED_TEMPLATES)) {
+    assert.ok(Array.isArray(allowed) && allowed.length > 0, "a retirement must name its items");
+  }
 
   const source = readSource("./validate-plan.mjs");
   assert.match(source, /RETIRED_TEMPLATES\[item\.template\]/, "the retirement is not enforced");

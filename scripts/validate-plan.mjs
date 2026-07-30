@@ -59,14 +59,24 @@ export const MAX_TEMPLATE_SHARE = 1 / 3;
  * reach them.
  */
 export const RETIRED_TEMPLATES = {
-  LogoLadder: "w32-d01-b",
-  WorksOnMyMachine: "w32-d01-a",
+  // Four of these went out before the duplication was caught. They are listed
+  // individually rather than as "week 32" so that adding a fifth is an edit
+  // somebody has to make on purpose.
+  LogoLadder: ["w32-d01-b", "w32-d01-c", "w32-d01-d", "w32-d02-b"],
+  WorksOnMyMachine: ["w32-d01-a"],
 };
 
 export function templateConcentrationErrors(items) {
   const counts = new Map();
   for (const item of items ?? []) {
-    if (item?.template) counts.set(item.template, (counts.get(item.template) ?? 0) + 1);
+    // Retired templates are exempt, because they are already refused to
+    // everything except the handful of items that have shipped on them — so they
+    // cannot contribute to a week being built out of one composition. Week 32
+    // holds four published logo ladders and always will; counting those would
+    // make history fail a rule that exists to constrain the future.
+    if (item?.template && !RETIRED_TEMPLATES[item.template]) {
+      counts.set(item.template, (counts.get(item.template) ?? 0) + 1);
+    }
   }
 
   const total = items?.length ?? 0;
@@ -310,12 +320,12 @@ export async function loadPlan(path = "plan.json") {
     }
 
     const retiredFor = RETIRED_TEMPLATES[item.template];
-    if (retiredFor !== undefined && item.id !== retiredFor) {
+    if (retiredFor !== undefined && !retiredFor.includes(item.id)) {
       errors.push(
         `${at}: "${item.template}" is retired — it hard-codes one script page and every ` +
           `prop it takes is a string laid over the same picture, so a second item on it ` +
-          `is that video again with new words. Only "${retiredFor}", which is already ` +
-          `published, may use it.`,
+          `is that video again with new words. Only ${retiredFor.join(", ")}, which are ` +
+          `already published, may use it.`,
       );
     }
 

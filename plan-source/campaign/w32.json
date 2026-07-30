@@ -1,7 +1,7 @@
 {
   "week": 32,
   "year": 2026,
-  "note": "A deliberately short week, and the smallest one the queue geometry allows. It previously held twenty-seven re-skins of the PDF's day 1 — one composition with a different client logo in each — and was rebuilt from the PDF's own script pages, until checking the provenance properly showed that week 31 had already published twenty-seven of the thirty pages under the older `meritbyte-pdf-NN` sourceIds. Re-making them would have swapped one kind of repetition for another, so only the two pages nobody has ever made are here: day 17 and the day 30 recap. Slots d01-a and d01-b have already posted and are frozen byte-for-byte.",
+  "note": "A short week, and the one this repair is about. It held twenty-seven re-skins of the PDF's day 1 — one composition with a different client logo in each — and five of those went out before it was caught: d01-a, d01-b, d01-c, d01-d and d02-b are published and frozen byte-for-byte, four of them logo ladders. They are kept because deleting the record of a live video would be a worse lie than the duplication. The week was going to be rebuilt from the PDF's own script pages until checking provenance properly showed week 31 had already published twenty-seven of the thirty under the older meritbyte-pdf-NN sourceIds, so the three slots that are still free carry the one PDF page nobody has ever made (day 17) and two new subjects.",
   "items": [
     {
       "template": "WorksOnMyMachine",
@@ -27,22 +27,152 @@
           "eyebrow": "LOGISTICS",
           "headline": "Freight that tracks itself",
           "sub": "Live shipment visibility for growing importers.",
-          "nav": ["Network", "Tracking", "Rates", "About"],
+          "nav": [
+            "Network",
+            "Tracking",
+            "Rates",
+            "About"
+          ],
           "cta": "Book a lane",
           "stats": [
-            { "v": "4.9/5", "l": "rated" },
-            { "v": "2 days", "l": "turnaround" },
-            { "v": "1.2k", "l": "clients" }
+            {
+              "v": "4.9/5",
+              "l": "rated"
+            },
+            {
+              "v": "2 days",
+              "l": "turnaround"
+            },
+            {
+              "v": "1.2k",
+              "l": "clients"
+            }
           ],
           "cards": [
-            { "dot": "#0EA5E9", "title": "Plan" },
-            { "dot": "#F2A93B", "title": "Track" },
-            { "dot": "#22C55E", "title": "Report" }
+            {
+              "dot": "#0EA5E9",
+              "title": "Plan"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Track"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Report"
+            }
           ]
         }
       }
     },
-
+    {
+      "template": "LogoLadder",
+      "sourceId": "ladder-03",
+      "caption": "Can it be more premium. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 3 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "hook": "CAN IT BE MORE PREMIUM",
+        "promise": "attempt 6 of 6",
+        "message": "getting there, maybe more premium?",
+        "payoff": "SIGNED OFF.",
+        "client": {
+          "name": "HEARTH",
+          "brand": "#E1477E",
+          "domain": "hearth.house",
+          "eyebrow": "INTERIORS",
+          "headline": "Rooms that finally work",
+          "sub": "Design and fit-out for homes with opinions.",
+          "nav": [
+            "Studio",
+            "Projects",
+            "Process",
+            "Journal"
+          ],
+          "cta": "Start a project",
+          "stats": [
+            {
+              "v": "36%",
+              "l": "faster"
+            },
+            {
+              "v": "18 mins",
+              "l": "saved daily"
+            },
+            {
+              "v": "8k",
+              "l": "seats"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#E1477E",
+              "title": "Design"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Build"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Launch"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "template": "LogoLadder",
+      "sourceId": "ladder-04",
+      "caption": "One small change. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 4 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "hook": "ONE SMALL CHANGE",
+        "promise": "change 12 of 12",
+        "message": "tiny thing, can the logo breathe more",
+        "payoff": "DONE. For real.",
+        "client": {
+          "name": "QUARRY",
+          "brand": "#F59E0B",
+          "domain": "quarry.build",
+          "eyebrow": "CONSTRUCTION",
+          "headline": "Build without the guesswork",
+          "sub": "Estimating and scheduling for small builders.",
+          "nav": [
+            "Estimating",
+            "Schedule",
+            "Crew",
+            "Docs"
+          ],
+          "cta": "Get a quote",
+          "stats": [
+            {
+              "v": "24/7",
+              "l": "coverage"
+            },
+            {
+              "v": "99.4%",
+              "l": "on time"
+            },
+            {
+              "v": "310",
+              "l": "sites"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#F59E0B",
+              "title": "Intake"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Review"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Deliver"
+            }
+          ]
+        }
+      }
+    },
     {
       "template": "TechTip",
       "sourceId": "pdf-day-17-one-prompt-200-pages",
@@ -71,40 +201,223 @@
         },
         "score": {
           "bed": [
-            { "frame": 0, "layers": ["pulse", "hat"] },
-            { "frame": 60, "layers": ["pad", "pulse", "hat"] },
-            { "frame": 210, "layers": ["pad", "pulse", "hat", "sub"] },
-            { "frame": 450, "layers": ["pad"] },
-            { "frame": 510, "layers": [] },
-            { "frame": 540, "layers": ["pad"] }
+            {
+              "frame": 0,
+              "layers": [
+                "pulse",
+                "hat"
+              ]
+            },
+            {
+              "frame": 60,
+              "layers": [
+                "pad",
+                "pulse",
+                "hat"
+              ]
+            },
+            {
+              "frame": 210,
+              "layers": [
+                "pad",
+                "pulse",
+                "hat",
+                "sub"
+              ]
+            },
+            {
+              "frame": 450,
+              "layers": [
+                "pad"
+              ]
+            },
+            {
+              "frame": 510,
+              "layers": []
+            },
+            {
+              "frame": 540,
+              "layers": [
+                "pad"
+              ]
+            }
           ],
           "cues": [
-            { "frame": 0, "sfx": "keyTap" },
-            { "frame": 6, "sfx": "keyTap-p1" },
-            { "frame": 12, "sfx": "keyTap" },
-            { "frame": 18, "sfx": "keyTap-p1" },
-            { "frame": 24, "sfx": "keyTap" },
-            { "frame": 30, "sfx": "beep", "major": true },
-            { "frame": 60, "sfx": "thock", "major": true },
-            { "frame": 70, "sfx": "whoosh-up" },
-            { "frame": 90, "sfx": "blip", "db": -5 },
-            { "frame": 105, "sfx": "blip", "db": -5 },
-            { "frame": 120, "sfx": "blip", "db": -5 },
-            { "frame": 135, "sfx": "blip", "db": -5 },
-            { "frame": 150, "sfx": "tick", "db": -5 },
-            { "frame": 168, "sfx": "tick", "db": -5 },
-            { "frame": 186, "sfx": "tick", "db": -5 },
-            { "frame": 210, "sfx": "beep-p7", "major": true },
-            { "frame": 222, "sfx": "confirm", "major": true },
-            { "frame": 270, "sfx": "riser-up", "major": true },
-            { "frame": 330, "sfx": "tick" },
-            { "frame": 348, "sfx": "tick" },
-            { "frame": 366, "sfx": "tick" },
-            { "frame": 390, "sfx": "whoosh-up", "db": -4 },
-            { "frame": 408, "sfx": "whoosh-up", "db": -4 },
-            { "frame": 426, "sfx": "whoosh-up", "db": -4 },
-            { "frame": 540, "sfx": "logoSting", "major": true },
-            { "frame": 548, "sfx": "chime", "db": -3 }
+            {
+              "frame": 0,
+              "sfx": "keyTap"
+            },
+            {
+              "frame": 6,
+              "sfx": "keyTap-p1"
+            },
+            {
+              "frame": 12,
+              "sfx": "keyTap"
+            },
+            {
+              "frame": 18,
+              "sfx": "keyTap-p1"
+            },
+            {
+              "frame": 24,
+              "sfx": "keyTap"
+            },
+            {
+              "frame": 30,
+              "sfx": "beep",
+              "major": true
+            },
+            {
+              "frame": 60,
+              "sfx": "thock",
+              "major": true
+            },
+            {
+              "frame": 70,
+              "sfx": "whoosh-up"
+            },
+            {
+              "frame": 90,
+              "sfx": "blip",
+              "db": -5
+            },
+            {
+              "frame": 105,
+              "sfx": "blip",
+              "db": -5
+            },
+            {
+              "frame": 120,
+              "sfx": "blip",
+              "db": -5
+            },
+            {
+              "frame": 135,
+              "sfx": "blip",
+              "db": -5
+            },
+            {
+              "frame": 150,
+              "sfx": "tick",
+              "db": -5
+            },
+            {
+              "frame": 168,
+              "sfx": "tick",
+              "db": -5
+            },
+            {
+              "frame": 186,
+              "sfx": "tick",
+              "db": -5
+            },
+            {
+              "frame": 210,
+              "sfx": "beep-p7",
+              "major": true
+            },
+            {
+              "frame": 222,
+              "sfx": "confirm",
+              "major": true
+            },
+            {
+              "frame": 270,
+              "sfx": "riser-up",
+              "major": true
+            },
+            {
+              "frame": 330,
+              "sfx": "tick"
+            },
+            {
+              "frame": 348,
+              "sfx": "tick"
+            },
+            {
+              "frame": 366,
+              "sfx": "tick"
+            },
+            {
+              "frame": 390,
+              "sfx": "whoosh-up",
+              "db": -4
+            },
+            {
+              "frame": 408,
+              "sfx": "whoosh-up",
+              "db": -4
+            },
+            {
+              "frame": 426,
+              "sfx": "whoosh-up",
+              "db": -4
+            },
+            {
+              "frame": 540,
+              "sfx": "logoSting",
+              "major": true
+            },
+            {
+              "frame": 548,
+              "sfx": "chime",
+              "db": -3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "template": "LogoLadder",
+      "sourceId": "ladder-06",
+      "caption": "Make it feel bigger. Every round, the layout pays for it — the nav wraps, the hero collapses, the page drops below the fold. Round 6 of the client-feedback series.\n\n#WebDesign #ClientWork #DevHumor",
+      "props": {
+        "hook": "MAKE IT FEEL BIGGER",
+        "promise": "take 7 of 7",
+        "message": "bigger, but like, tastefully bigger",
+        "payoff": "FINAL. Promise.",
+        "client": {
+          "name": "FORGE",
+          "brand": "#8B5CF6",
+          "domain": "forge.dev",
+          "eyebrow": "TOOLING",
+          "headline": "Ship your CI in an hour",
+          "sub": "Pipelines that configure themselves.",
+          "nav": [
+            "Pipelines",
+            "Runners",
+            "Pricing",
+            "Docs"
+          ],
+          "cta": "Try free",
+          "stats": [
+            {
+              "v": "4.9/5",
+              "l": "rated"
+            },
+            {
+              "v": "2 days",
+              "l": "turnaround"
+            },
+            {
+              "v": "1.2k",
+              "l": "clients"
+            }
+          ],
+          "cards": [
+            {
+              "dot": "#8B5CF6",
+              "title": "Plan"
+            },
+            {
+              "dot": "#F2A93B",
+              "title": "Track"
+            },
+            {
+              "dot": "#22C55E",
+              "title": "Report"
+            }
           ]
         }
       }
@@ -127,34 +440,275 @@
           "kind": "checklist",
           "title": "the banner, audited",
           "steps": [
-            { "label": "content visible underneath", "verdict": "fail" },
-            { "label": "no shift after paint", "verdict": "fail" },
-            { "label": "reject as easy as accept", "verdict": "fail" },
-            { "label": "one tap either way", "verdict": "warn" }
+            {
+              "label": "content visible underneath",
+              "verdict": "fail"
+            },
+            {
+              "label": "no shift after paint",
+              "verdict": "fail"
+            },
+            {
+              "label": "reject as easy as accept",
+              "verdict": "fail"
+            },
+            {
+              "label": "one tap either way",
+              "verdict": "warn"
+            }
           ]
         },
         "score": {
           "bed": [
-            { "frame": 0, "layers": ["pluck"] },
-            { "frame": 60, "layers": ["pluck", "hat"] },
-            { "frame": 150, "layers": ["pluck", "hat", "kick"] },
-            { "frame": 240, "layers": ["pluck", "hat", "kick", "bass"] },
-            { "frame": 330, "layers": [] },
-            { "frame": 360, "layers": ["pluck"] }
+            {
+              "frame": 0,
+              "layers": [
+                "pluck"
+              ]
+            },
+            {
+              "frame": 60,
+              "layers": [
+                "pluck",
+                "hat"
+              ]
+            },
+            {
+              "frame": 150,
+              "layers": [
+                "pluck",
+                "hat",
+                "kick"
+              ]
+            },
+            {
+              "frame": 240,
+              "layers": [
+                "pluck",
+                "hat",
+                "kick",
+                "bass"
+              ]
+            },
+            {
+              "frame": 330,
+              "layers": []
+            },
+            {
+              "frame": 360,
+              "layers": [
+                "pluck"
+              ]
+            }
           ],
           "cues": [
-            { "frame": 0, "sfx": "thunk", "major": true },
-            { "frame": 60, "sfx": "tick", "major": true },
-            { "frame": 90, "sfx": "whoosh-down", "db": -4 },
-            { "frame": 150, "sfx": "tick", "major": true },
-            { "frame": 180, "sfx": "boing", "db": -5 },
-            { "frame": 240, "sfx": "tick", "major": true },
-            { "frame": 276, "sfx": "tick", "db": -6 },
-            { "frame": 288, "sfx": "tick", "db": -6 },
-            { "frame": 300, "sfx": "tick", "db": -6 },
-            { "frame": 330, "sfx": "thud", "major": true },
-            { "frame": 360, "sfx": "logoSting", "major": true },
-            { "frame": 368, "sfx": "chime", "db": -3 }
+            {
+              "frame": 0,
+              "sfx": "thunk",
+              "major": true
+            },
+            {
+              "frame": 60,
+              "sfx": "tick",
+              "major": true
+            },
+            {
+              "frame": 90,
+              "sfx": "whoosh-down",
+              "db": -4
+            },
+            {
+              "frame": 150,
+              "sfx": "tick",
+              "major": true
+            },
+            {
+              "frame": 180,
+              "sfx": "boing",
+              "db": -5
+            },
+            {
+              "frame": 240,
+              "sfx": "tick",
+              "major": true
+            },
+            {
+              "frame": 276,
+              "sfx": "tick",
+              "db": -6
+            },
+            {
+              "frame": 288,
+              "sfx": "tick",
+              "db": -6
+            },
+            {
+              "frame": 300,
+              "sfx": "tick",
+              "db": -6
+            },
+            {
+              "frame": 330,
+              "sfx": "thud",
+              "major": true
+            },
+            {
+              "frame": 360,
+              "sfx": "logoSting",
+              "major": true
+            },
+            {
+              "frame": 368,
+              "sfx": "chime",
+              "db": -3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "template": "CaseStudy",
+      "sourceId": "c31-carousel-slide-one",
+      "caption": "A carousel looks like a decision about what matters most. It is the opposite: it is what you build when nobody would choose.\n\n#WebDesign #UX #ConversionRate",
+      "props": {
+        "durationInSeconds": 20,
+        "hook": "Nobody sees slide two.",
+        "before": "Five rotating slides, one of them the offer",
+        "after": "One fixed message, chosen on purpose",
+        "actions": [
+          "Count how many visitors reach slide two",
+          "Put the thing you sell on slide one",
+          "Delete the rotation, keep the winner"
+        ],
+        "lesson": "A carousel is a decision nobody made.",
+        "kicker": "FIELD NOTE",
+        "exhibit": {
+          "kind": "pipeline",
+          "title": "where the rotation loses them",
+          "stages": [
+            "slide 1",
+            "auto-advance",
+            "slide 2",
+            "slide 3",
+            "slide 4"
+          ],
+          "bottleneck": 1,
+          "note": "It moves before it is read"
+        },
+        "score": {
+          "bed": [
+            {
+              "frame": 0,
+              "layers": [
+                "pulse"
+              ]
+            },
+            {
+              "frame": 90,
+              "layers": [
+                "pulse",
+                "sub"
+              ]
+            },
+            {
+              "frame": 240,
+              "layers": [
+                "pad",
+                "pulse",
+                "sub"
+              ]
+            },
+            {
+              "frame": 390,
+              "layers": [
+                "pad",
+                "pulse",
+                "sub",
+                "bell"
+              ]
+            },
+            {
+              "frame": 510,
+              "layers": [
+                "pad",
+                "bell"
+              ]
+            },
+            {
+              "frame": 540,
+              "layers": [
+                "pad"
+              ]
+            }
+          ],
+          "cues": [
+            {
+              "frame": 0,
+              "sfx": "whoosh-down",
+              "major": true
+            },
+            {
+              "frame": 45,
+              "sfx": "tick",
+              "db": -5
+            },
+            {
+              "frame": 90,
+              "sfx": "whoosh-down",
+              "db": -4
+            },
+            {
+              "frame": 135,
+              "sfx": "tick",
+              "db": -6
+            },
+            {
+              "frame": 180,
+              "sfx": "whoosh-down",
+              "db": -6
+            },
+            {
+              "frame": 225,
+              "sfx": "hum",
+              "db": -8
+            },
+            {
+              "frame": 240,
+              "sfx": "thud",
+              "major": true
+            },
+            {
+              "frame": 300,
+              "sfx": "blip"
+            },
+            {
+              "frame": 330,
+              "sfx": "tick"
+            },
+            {
+              "frame": 360,
+              "sfx": "tick"
+            },
+            {
+              "frame": 390,
+              "sfx": "snap",
+              "major": true
+            },
+            {
+              "frame": 450,
+              "sfx": "confirm",
+              "major": true
+            },
+            {
+              "frame": 540,
+              "sfx": "logoSting",
+              "major": true
+            },
+            {
+              "frame": 548,
+              "sfx": "chime",
+              "db": -3
+            }
           ]
         }
       }
