@@ -32,9 +32,10 @@
     "w32-d01-b",
     "w32-d01-c",
     "w32-d01-d",
-    "w32-d02-b"
+    "w32-d02-b",
+    "w32-d02-c"
   ],
-  "lastPostedAt": "2026-07-30T17:55:18.071Z",
+  "lastPostedAt": "2026-07-31T03:59:02.942Z",
   "rendered": [
     {
       "id": "w32-d02-a",
@@ -47,17 +48,6 @@
       "approval": "rejected",
       "renderedAt": "2026-07-29T08:03:36.746Z",
       "reviewedAt": "2026-07-30T04:54:40.618Z"
-    },
-    {
-      "id": "w32-d02-c",
-      "week": "2026-w32",
-      "template": "LogoLadder",
-      "url": "https://github.com/amritgyawali/remotion-factory/releases/download/videos-2026-w32/w32-d02-c.mp4",
-      "sha256": "d490d10650920a43bccd6a5515b47d6c227b0c3ef7ef5c950817c3eca803dfae",
-      "bytes": 1704860,
-      "durationSeconds": 17.045,
-      "approval": "pending",
-      "renderedAt": "2026-07-30T17:09:43.333Z"
     },
     {
       "id": "w32-d02-d",
@@ -99,6 +89,10 @@
     {
       "id": "w32-d02-b",
       "at": "2026-08-26T15:15:00.000Z"
+    },
+    {
+      "id": "w32-d02-c",
+      "at": "2026-08-26T21:15:00.000Z"
     }
   ],
   "renderQuota": {
