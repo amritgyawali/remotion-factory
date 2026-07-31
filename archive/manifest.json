@@ -181,6 +181,19 @@
       "audioSignature": "6664454837543f5642571064b7468732",
       "url": "https://github.com/amritgyawali/remotion-factory/releases/download/videos-2026-w32/w32-d02-d.mp4",
       "archivedAt": "2026-07-30T22:47:31.093Z"
+    },
+    {
+      "id": "w32-d03-a",
+      "week": "2026-w32",
+      "template": "LogoLadder",
+      "sourceId": "ladder-09",
+      "bytes": 1643181,
+      "durationSeconds": 17.045,
+      "sha256": "55d9fe4b1e2456284a68af3040f31838928cddb1ea9f0d0042ef21b9507ba53b",
+      "visualSignature": "e8d8f2fa80dae80300eefaf2f080da0300e0a4f2b2f0da9600e0f2f282f2f00100daa4e08080f2150000caca0100000000feccbaf080da01e8d8f6f080dae801",
+      "audioSignature": "6663554847543f5642571064b7468733",
+      "url": "https://github.com/amritgyawali/remotion-factory/releases/download/videos-2026-w32/w32-d03-a.mp4",
+      "archivedAt": "2026-07-31T06:34:16.260Z"
     }
   ]
 }
