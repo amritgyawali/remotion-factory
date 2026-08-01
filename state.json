@@ -86,6 +86,17 @@
       "durationSeconds": 17.045,
       "approval": "pending",
       "renderedAt": "2026-08-01T16:38:14.157Z"
+    },
+    {
+      "id": "w32-d04-d",
+      "week": "2026-w32",
+      "template": "LogoLadder",
+      "url": "https://github.com/amritgyawali/remotion-factory/releases/download/videos-2026-w32/w32-d04-d.mp4",
+      "sha256": "cf80536257985b8d130f33a5d2ce56f00e3c6e8972ac4a21be2b3002de5dcc50",
+      "bytes": 1768595,
+      "durationSeconds": 17.045,
+      "approval": "pending",
+      "renderedAt": "2026-08-01T22:38:55.250Z"
     }
   ],
   "scheduled": [
@@ -144,6 +155,6 @@
   ],
   "renderQuota": {
     "day": "2026-08-01",
-    "count": 3
+    "count": 4
   }
 }
