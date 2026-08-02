@@ -1,0 +1,193 @@
+name: Render all videos
+
+# One click renders every brief in briefs/, in posting order, on as many
+# runners as GitHub provides. The discover job reads the brief directory and
+# builds the matrix; the render job runs one video per runner.
+#
+# This is the primary automation. For one-off batches, use render-batch.yml
+# with an explicit composition list.
+#
+# Usage:
+#   1. Open Actions > Render all videos > Run workflow
+#   2. Check "Publish to Postiz" to schedule posts at their exact slot times.
+#   3. Leave unchecked to render and verify only (safe for testing).
+on:
+  workflow_dispatch:
+    inputs:
+      max_parallel:
+        description: "How many runners may work at once"
+        type: string
+        default: "6"
+      publish:
+        description: "Upload to Postiz and schedule at exact slot time"
+        type: boolean
+        default: false
+      dry_run:
+        description: "Render only; never touch Postiz"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  # ── Discovery ────────────────────────────────────────────────────
+  # List every brief JSON and sort by slotIndex so videos render in the
+  # order they will be posted. The matrix below inherits this list.
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      compositions: ${{ steps.list.outputs.compositions }}
+      count: ${{ steps.list.outputs.count }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - id: list
+        name: Discover briefs and sort by slotIndex
+        shell: node {0}
+        run: |
+          const { readdirSync, readFileSync } = require("fs");
+          const briefs = readdirSync("briefs")
+            .filter(f => f.endsWith(".json"))
+            .map(f => {
+              const data = JSON.parse(readFileSync(`briefs/${f}`, "utf8"));
+              return { id: f.replace(".json", ""), slotIndex: data.slotIndex ?? 9999 };
+            })
+            .sort((a, b) => a.slotIndex - b.slotIndex);
+
+          const compositions = JSON.stringify(briefs.map(b => b.id));
+          const fs = require("fs");
+          const out = process.env.GITHUB_OUTPUT;
+          fs.appendFileSync(out, `compositions=${compositions}\n`);
+          fs.appendFileSync(out, `count=${briefs.length}\n`);
+          console.log(`${briefs.length} briefs found, in posting order:`);
+          briefs.forEach(b => console.log(`  ${b.id.padEnd(8)} slot ${b.slotIndex}`));
+
+  # ── Render ───────────────────────────────────────────────────────
+  # One video per runner. fail-fast off so one bad brief doesn't cancel
+  # the rest. Each job runs the full pipeline: bundle → audio → render →
+  # colour-normalise → mux → verify → (optionally) Postiz.
+  render:
+    needs: discover
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      max-parallel: ${{ fromJson(inputs.max_parallel) }}
+      matrix:
+        composition: ${{ fromJson(needs.discover.outputs.compositions) }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install Chrome runtime libraries
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            libnss3 libdbus-1-3 libatk1.0-0 libatk-bridge2.0-0 \
+            libcups2 libxkbcommon0 libxdamage1 libgbm1 libpango-1.0-0 \
+            libcairo2 fonts-liberation || true
+          sudo apt-get install -y libasound2t64 || sudo apt-get install -y libasound2 || true
+
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg
+
+      - run: npm ci
+
+      - name: Cache Chrome Headless Shell
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/remotion
+            node_modules/.remotion
+          key: remotion-browser-${{ runner.os }}-v1
+
+      # ── Bundle ───────────────────────────────────────────────────
+      - name: Bundle and measure the composition
+        run: |
+          node scripts/bundle.mjs --id Reel \
+            --props "$(cat briefs/${{ matrix.composition }}.json)"
+
+      # ── Audio ────────────────────────────────────────────────────
+      # Full-length soundtrack, rendered once, muxed at the end. Never
+      # per-chunk — that would restart the bed at every seam.
+      - name: Render the soundtrack
+        run: |
+          node scripts/render-audio.mjs \
+            --spec "audio/${{ matrix.composition }}.json" \
+            --out "out/${{ matrix.composition }}.wav"
+
+      - name: Verify the soundtrack
+        run: |
+          ffprobe -v error -show_entries stream=codec_name,sample_rate,channels \
+            -of default=noprint_wrappers=1 "out/${{ matrix.composition }}.wav"
+
+      # ── Picture ──────────────────────────────────────────────────
+      - name: Render the picture
+        run: |
+          node scripts/render-chunk.mjs \
+            --out "out/${{ matrix.composition }}-mute.mp4"
+
+      # Full-range frames must be converted to limited-range for playback.
+      - name: Colour-normalise
+        run: |
+          ffmpeg -y -v error -i "out/${{ matrix.composition }}-mute.mp4" \
+            -vf "scale=in_range=full:out_range=limited,format=yuv420p" \
+            -c:v libx264 -profile:v high -crf 17 -preset slow \
+            -color_range tv -colorspace bt709 -color_primaries bt709 -color_trc bt709 \
+            -an "out/${{ matrix.composition }}-norm.mp4"
+
+      - name: Mux picture and sound
+        run: |
+          ffmpeg -y -v error \
+            -i "out/${{ matrix.composition }}-norm.mp4" \
+            -i "out/${{ matrix.composition }}.wav" \
+            -c:v copy -c:a aac -b:a 192k -ar 48000 -ac 2 \
+            -shortest "out/${{ matrix.composition }}.mp4"
+
+      # ── Verify ───────────────────────────────────────────────────
+      # Assert frame count, codec, pixel format, colour range, audio
+      # format — all against the production spec, not the file header.
+      - name: Verify the finished file
+        run: node scripts/verify-render.mjs --id "${{ matrix.composition }}"
+
+      # ── Artifact ─────────────────────────────────────────────────
+      - name: Keep the master
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.composition }}
+          path: |
+            out/${{ matrix.composition }}.mp4
+            out/${{ matrix.composition }}.verify.json
+          retention-days: 14
+          if-no-files-found: warn
+
+      # ── Postiz ───────────────────────────────────────────────────
+      # Upload to Postiz and schedule at the exact slot time from the
+      # brief's slotIndex. The slot grid is Nov 1-30, 4 posts/day at
+      # 12:30am / 9am / 4pm / 9pm Nepal (UTC+5:45).
+      #
+      # Only runs when BOTH publish is checked AND dry_run is off.
+      # A dry_run render is safe to re-run — no Postiz state changes.
+      - name: Upload to Postiz and schedule
+        if: ${{ inputs.publish && !inputs.dry_run }}
+        env:
+          POSTIZ_API_URL: ${{ secrets.POSTIZ_API_URL }}
+          POSTIZ_API_KEY: ${{ secrets.POSTIZ_API_KEY }}
+        run: node scripts/schedule-one.mjs --id "${{ matrix.composition }}"

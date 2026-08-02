@@ -14,13 +14,17 @@ on:
   workflow_dispatch:
     inputs:
       composition:
-        description: "A single composition id"
+        description: "Brief id, e.g. Day01A (maps to the Reel composition)"
         type: string
         required: true
       chunks:
         description: "How many frame ranges to split it into"
         type: string
         default: "6"
+      publish:
+        description: "Upload to Postiz and schedule at exact slot time"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -45,12 +49,13 @@ jobs:
       # Refuses to fan out a composition that cannot be split safely. Cheaper to
       # fail here than to discover it in a seam after twelve parallel renders.
       - name: Check determinism
-        run: node scripts/check-determinism.mjs --id "${{ inputs.composition }}"
+        run: node scripts/check-determinism.mjs --dir src
 
       - id: measure
         name: Bundle and measure
         run: |
-          node scripts/bundle.mjs --id "${{ inputs.composition }}"
+          node scripts/bundle.mjs --id Reel \
+            --props "$(cat briefs/${{ inputs.composition }}.json)"
           frames=$(node -p "require('./out/composition.json').durationInFrames")
           echo "frames=$frames" >> "$GITHUB_OUTPUT"
 
@@ -112,7 +117,6 @@ jobs:
             c.start + '-' + c.end
           ")
           node scripts/render-chunk.mjs \
-            --id "${{ inputs.composition }}" \
             --serve-url out/bundle \
             --range "$range" \
             --out "out/chunk-${{ matrix.chunk }}.mp4"
@@ -145,6 +149,11 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg
 
       - uses: actions/download-artifact@v4
         with:
@@ -209,3 +218,10 @@ jobs:
             out/${{ inputs.composition }}.mp4
             out/${{ inputs.composition }}.verify.json
           retention-days: 14
+
+      - name: Upload to Postiz and schedule
+        if: ${{ inputs.publish }}
+        env:
+          POSTIZ_API_URL: ${{ secrets.POSTIZ_API_URL }}
+          POSTIZ_API_KEY: ${{ secrets.POSTIZ_API_KEY }}
+        run: node scripts/schedule-one.mjs --id "${{ inputs.composition }}"
