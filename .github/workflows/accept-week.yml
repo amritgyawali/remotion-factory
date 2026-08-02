@@ -1,10 +1,16 @@
 name: Accept weekly plan
 
+# DISABLED 2026-08-02. The push trigger below is commented out, not deleted.
+#
+# This fires on any push that touches plan.json and accepts it into the queue.
+# During a rebuild that is precisely wrong: it would take each intermediate
+# draft of the new campaign live before anybody had looked at a frame of it.
+# Re-enable by uncommenting the `push:` block once the campaign is settled.
 on:
-  push:
-    branches: [main]
-    paths:
-      - plan.json
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - plan.json
   workflow_dispatch:
 
 permissions:

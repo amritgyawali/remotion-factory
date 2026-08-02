@@ -1,87 +1,52 @@
-name: Render the next video
+name: Render batch
 
+# One whole video per runner, fanned out over a matrix of composition ids.
+#
+# This is the default. A 20-second reel renders in a few minutes on a runner,
+# and splitting it across machines would spend more on startup, npm ci and
+# browser launch than it saves on frames. Use render-fanout.yml only for a
+# single composition longer than three minutes.
 on:
-  schedule:
-    # One video every six hours — four a day, one render per run.
-    #
-    # 03:45 / 09:45 / 15:45 / 21:45 UTC is 09:30 / 15:30 / 21:30 / 03:30 in
-    # Asia/Kathmandu (UTC+5:45), which keeps the original 09:30 anchor. Off the
-    # top of the hour, where GitHub's scheduler is busiest. A late start costs
-    # nothing: publishing reads the buffer and Postiz owns the posting clock,
-    # so a render has to finish, not finish at a particular minute.
-    #
-    # One per run rather than a batch of four. A batch shares a single job's
-    # lifetime, so anything that kills the runner at video three throws away
-    # the rest of the day's work — which is how a whole morning was lost to one
-    # bad release tag. Four runs mean four independent failures, four retries,
-    # and six hours to notice each one.
-    #
-    # Each run tops the day up to four rather than rendering exactly one.
-    # GitHub delays scheduled workflows under load and drops them outright when
-    # it is busy enough, and a run that renders exactly one turns every dropped
-    # run into a video that is never made up — the daily rate silently becomes
-    # three and a 37-day campaign quietly becomes a 50-day one. Topping up means
-    # the next run absorbs the miss. See countFor() in scripts/render-batch.mjs.
-    - cron: "45 3,9,15,21 * * *"
   workflow_dispatch:
     inputs:
-      count:
-        description: "How many videos to render (the schedule renders one per run)"
+      compositions:
+        description: 'JSON array of composition ids, e.g. ["Day01A","Day01B"]'
         type: string
-        default: "1"
-      dry_run:
-        description: "Render only; archive nothing and leave state.json alone"
+        required: true
+      max_parallel:
+        description: "How many runners may work at once"
+        type: string
+        default: "4"
+      publish:
+        description: "Upload to Postiz and schedule. Off renders and verifies only."
         type: boolean
         default: false
 
 permissions:
-  contents: write
-
-concurrency:
-  # Shares the group with publishing so the two never write state.json at once.
-  group: render
-  cancel-in-progress: false
+  contents: read
 
 jobs:
   render:
     runs-on: ubuntu-latest
-    # A scheduled run normally renders one video: ~4.5 minutes on a developer
-    # machine, rather longer on a two-core runner doing software GL with x264
-    # preset "slow". But it renders up to four when earlier runs of the day were
-    # dropped, and four renders at twelve minutes plus install and the browser
-    # needs well past an hour.
-    #
-    # A timeout is not catastrophic here — videos are archived and recorded one
-    # at a time, so everything finished before the kill is kept and the next run
-    # picks up the remainder. The ceiling exists to stop a wedged render holding
-    # the concurrency group, not to bound the work.
-    timeout-minutes: 180
-    env:
-      DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && '1' || '0' }}
-      # Empty on a scheduled run, so scripts/render-batch.mjs works out how many
-      # videos today still owes. An explicit count always wins, which is what
-      # makes the manual dispatch a usable override.
-      RENDER_COUNT: ${{ github.event_name == 'workflow_dispatch' && inputs.count || '' }}
-      # The daily rate. Change it here rather than editing the cron.
-      DAILY_TARGET: "4"
+    timeout-minutes: 60
+    strategy:
+      # One bad composition must not cancel the others. Each is an independent
+      # video with its own slot; losing three good renders because the fourth
+      # had a typo is how a day's posting is lost to a five-minute fix.
+      fail-fast: false
+      max-parallel: ${{ fromJson(inputs.max_parallel) }}
+      matrix:
+        composition: ${{ fromJson(inputs.compositions) }}
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          # Production secrets must only ever run against reviewed code on main.
-          ref: main
-          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
-          # Restores ~/.npm between runs. Four runs a day each pulling the
-          # Remotion tree from the registry is the slowest step that buys
-          # nothing.
+          node-version: 22
           cache: npm
 
       - name: Install Chrome runtime libraries
-        shell: bash
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends \
@@ -90,8 +55,7 @@ jobs:
             libcairo2 fonts-liberation || true
           sudo apt-get install -y libasound2t64 || sudo apt-get install -y libasound2 || true
 
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
+      - run: npm ci
 
       - name: Cache Chrome Headless Shell
         uses: actions/cache@v4
@@ -101,95 +65,69 @@ jobs:
             node_modules/.remotion
           key: remotion-browser-${{ runner.os }}-v1
 
-      - name: Ensure browser
-        run: npx remotion browser ensure
+      - name: Bundle and measure the composition
+        run: node scripts/bundle.mjs --id "${{ matrix.composition }}"
 
-      - name: Render the video
-        env:
-          # Uploads each finished master to the week's GitHub Release, which is
-          # where the publish workflow fetches it from hours later.
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
-          R2_BUCKET: ${{ secrets.R2_BUCKET }}
-          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          CLOUDINARY_URL: ${{ secrets.CLOUDINARY_URL }}
-          # REMOTION_CONCURRENCY is deliberately unset: renders run one at a
-          # time, so remotion.config.ts gives each every core on the runner.
-        run: node scripts/render-batch.mjs
-
-      - name: Commit the render buffer
-        if: env.DRY_RUN != '1'
-        shell: bash
+      # Audio first and at full length. It is muxed on at the end; the picture
+      # is rendered muted so the two can never disagree about where zero is.
+      - name: Render the soundtrack
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -- state.json
-          if [ -f archive/manifest.json ]; then git add -- archive/manifest.json; fi
+          node scripts/render-audio.mjs \
+            --spec "audio/${{ matrix.composition }}.json" \
+            --out "out/${{ matrix.composition }}.wav"
 
-          unexpected="$(git diff --cached --name-only \
-            | grep -vx -e 'state.json' -e 'archive/manifest.json' || true)"
-          if [ -n "$unexpected" ]; then
-            echo "Refusing to commit unexpected paths:" >&2
-            echo "$unexpected" >&2
-            exit 1
-          fi
+      - name: Verify the soundtrack
+        run: |
+          ffprobe -v error -show_entries stream=codec_name,sample_rate,channels \
+            -of default=noprint_wrappers=1 "out/${{ matrix.composition }}.wav"
 
-          if git diff --cached --quiet; then
-            echo "Nothing to commit."
-            exit 0
-          fi
+      - name: Render the picture
+        run: |
+          node scripts/render-chunk.mjs \
+            --id "${{ matrix.composition }}" \
+            --out "out/${{ matrix.composition }}-mute.mp4"
 
-          git commit -m "chore(render): buffer the next video"
-          for attempt in 1 2 3; do
-            if git push origin HEAD:main; then exit 0; fi
-            echo "Push attempt $attempt failed; rebasing onto current main."
-            # --autostash is load-bearing, not tidiness. `npm install` rewrites
-            # package-lock.json, so by this point the tree is dirty through no
-            # fault of ours, and a plain `git pull --rebase` aborts with
-            # "cannot pull with rebase: You have unstaged changes". That turned
-            # a routine lost race into a failed run that had already rendered
-            # and uploaded four videos — the masters were in the Release and
-            # nothing on main knew they existed.
-            git fetch origin main
-            if ! git rebase --autostash origin/main; then
-              git rebase --abort || true
-              echo "Rebase onto origin/main conflicted; not forcing." >&2
-              exit 1
-            fi
-          done
-          echo "Could not push state.json after three attempts." >&2
-          exit 1
+      # Remotion writes full-range frames. Handing a full-range yuv420p file to a
+      # platform that assumes limited range is what makes blacks crush and whites
+      # clip on playback while looking correct in the render.
+      - name: Colour-normalise
+        run: |
+          ffmpeg -y -v error -i "out/${{ matrix.composition }}-mute.mp4" \
+            -vf "scale=in_range=full:out_range=limited,format=yuv420p" \
+            -c:v libx264 -profile:v high -crf 17 -preset slow \
+            -color_range tv -colorspace bt709 -color_primaries bt709 -color_trc bt709 \
+            -an "out/${{ matrix.composition }}-norm.mp4"
 
-      - name: Keep the master for 7 days
+      - name: Mux picture and sound
+        run: |
+          ffmpeg -y -v error \
+            -i "out/${{ matrix.composition }}-norm.mp4" \
+            -i "out/${{ matrix.composition }}.wav" \
+            -c:v copy -c:a aac -b:a 192k -ar 48000 -ac 2 \
+            -shortest "out/${{ matrix.composition }}.mp4"
+
+      # Measurements, not impressions. Asserts the frame count against what the
+      # bundle step measured from the real composition, so a silently truncated
+      # encode fails here rather than on someone's feed.
+      - name: Verify the finished file
+        run: node scripts/verify-render.mjs --id "${{ matrix.composition }}"
+
+      - name: Keep the master
         if: always()
-        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
-          name: render-${{ github.run_id }}
+          name: ${{ matrix.composition }}
           path: |
-            out/*.mp4
-            out/batch.json
-          retention-days: 7
+            out/${{ matrix.composition }}.mp4
+            out/${{ matrix.composition }}.verify.json
+          retention-days: 14
           if-no-files-found: warn
 
-  notify-failure:
-    needs: render
-    if: ${{ always() && needs.render.result == 'failure' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Telegram
+      # Last, and only on request. Everything above is reproducible and free to
+      # retry; this step is neither.
+      - name: Upload to Postiz and schedule
+        if: ${{ inputs.publish }}
         env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-        shell: bash
-        run: |
-          [ -z "$TELEGRAM_BOT_TOKEN" ] && exit 0
-          curl -fsS -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
-            -d chat_id="$TELEGRAM_CHAT_ID" \
-            -d disable_web_page_preview=true \
-            -d text="Render failed. The reason is in the run's job summary.
-          $RUN_URL" || true
+          POSTIZ_API_URL: ${{ secrets.POSTIZ_API_URL }}
+          POSTIZ_API_KEY: ${{ secrets.POSTIZ_API_KEY }}
+        run: node scripts/schedule-one.mjs --id "${{ matrix.composition }}"

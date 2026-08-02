@@ -1,0 +1,211 @@
+name: Render fanout
+
+# One composition, split into frame ranges across many runners.
+#
+# Only for a single composition longer than about three minutes. Below that,
+# per-runner startup, npm ci and browser launch cost more than the frames saved
+# and render-batch.yml is strictly faster.
+#
+# This is safe only because every pixel is a pure function of useCurrentFrame().
+# If a composition reads Date.now(), an unseeded Math.random(), or the network,
+# two runners will disagree and the stitched file will seam visibly at the
+# chunk boundaries. See scripts/check-determinism.mjs, which runs first.
+on:
+  workflow_dispatch:
+    inputs:
+      composition:
+        description: "A single composition id"
+        type: string
+        required: true
+      chunks:
+        description: "How many frame ranges to split it into"
+        type: string
+        default: "6"
+
+permissions:
+  contents: read
+
+jobs:
+  # Bundle once. Every render job downloads this artifact instead of webpacking
+  # the project again, which on a 12-way fan-out is eleven bundles not built.
+  bundle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      matrix: ${{ steps.chunks.outputs.matrix }}
+      frames: ${{ steps.measure.outputs.frames }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      # Refuses to fan out a composition that cannot be split safely. Cheaper to
+      # fail here than to discover it in a seam after twelve parallel renders.
+      - name: Check determinism
+        run: node scripts/check-determinism.mjs --id "${{ inputs.composition }}"
+
+      - id: measure
+        name: Bundle and measure
+        run: |
+          node scripts/bundle.mjs --id "${{ inputs.composition }}"
+          frames=$(node -p "require('./out/composition.json').durationInFrames")
+          echo "frames=$frames" >> "$GITHUB_OUTPUT"
+
+      - id: chunks
+        name: Plan the frame ranges
+        run: node scripts/plan-chunks.mjs --chunks "${{ inputs.chunks }}" --github-output
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bundle
+          path: |
+            out/bundle
+            out/composition.json
+            out/chunks.json
+          retention-days: 1
+
+  render:
+    needs: bundle
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        chunk: ${{ fromJson(needs.bundle.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Install Chrome runtime libraries
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            libnss3 libdbus-1-3 libatk1.0-0 libatk-bridge2.0-0 \
+            libcups2 libxkbcommon0 libxdamage1 libgbm1 libpango-1.0-0 \
+            libcairo2 fonts-liberation || true
+          sudo apt-get install -y libasound2t64 || sudo apt-get install -y libasound2 || true
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: bundle
+          path: out
+
+      - name: Cache Chrome Headless Shell
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/remotion
+            node_modules/.remotion
+          key: remotion-browser-${{ runner.os }}-v1
+
+      - name: Render this frame range
+        run: |
+          range=$(node -p "
+            const c = require('./out/chunks.json').chunks[${{ matrix.chunk }}];
+            c.start + '-' + c.end
+          ")
+          node scripts/render-chunk.mjs \
+            --id "${{ inputs.composition }}" \
+            --serve-url out/bundle \
+            --range "$range" \
+            --out "out/chunk-${{ matrix.chunk }}.mp4"
+
+      # Each chunk proves its own length before it is uploaded. A short chunk
+      # discovered at the stitch step tells you the total is wrong but not which
+      # runner produced it; asserted here, the failing job names itself.
+      - name: Assert this chunk's frame count
+        run: |
+          expected=$(node -p "require('./out/chunks.json').chunks[${{ matrix.chunk }}].frames")
+          actual=$(ffprobe -v error -select_streams v:0 -count_frames \
+            -show_entries stream=nb_read_frames -of csv=p=0 "out/chunk-${{ matrix.chunk }}.mp4")
+          echo "chunk ${{ matrix.chunk }}: expected $expected, got $actual"
+          test "$expected" = "$actual"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chunk-${{ matrix.chunk }}
+          path: out/chunk-${{ matrix.chunk }}.mp4
+          retention-days: 1
+
+  stitch:
+    needs: [bundle, render]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: bundle
+          path: out
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: chunk-*
+          path: out/chunks
+          merge-multiple: true
+
+      # Sorted numerically, not lexically. "chunk-10.mp4" sorts before
+      # "chunk-2.mp4" as a string, and the resulting video plays in the wrong
+      # order while every frame count still checks out.
+      - name: Build the concat list
+        run: |
+          node -e "
+            const {readdirSync, writeFileSync} = require('fs');
+            const files = readdirSync('out/chunks')
+              .filter(f => /^chunk-\d+\.mp4\$/.test(f))
+              .sort((a, b) => Number(a.match(/\d+/)[0]) - Number(b.match(/\d+/)[0]));
+            const expected = require('./out/chunks.json').chunks.length;
+            if (files.length !== expected) {
+              throw new Error('expected ' + expected + ' chunks, found ' + files.length);
+            }
+            writeFileSync('out/concat.txt', files.map(f => \"file 'chunks/\" + f + \"'\").join('\n') + '\n');
+            console.log(files.join('\n'));
+          "
+
+      - name: Concatenate
+        run: ffmpeg -y -v error -f concat -safe 0 -i out/concat.txt -c copy out/stitched.mp4
+
+      - name: Render the soundtrack
+        run: |
+          node scripts/render-audio.mjs \
+            --spec "audio/${{ inputs.composition }}.json" \
+            --out "out/${{ inputs.composition }}.wav"
+
+      - name: Colour-normalise
+        run: |
+          ffmpeg -y -v error -i out/stitched.mp4 \
+            -vf "scale=in_range=full:out_range=limited,format=yuv420p" \
+            -c:v libx264 -profile:v high -crf 17 -preset slow \
+            -color_range tv -colorspace bt709 -color_primaries bt709 -color_trc bt709 \
+            -an out/normalised.mp4
+
+      - name: Mux picture and sound
+        run: |
+          ffmpeg -y -v error \
+            -i out/normalised.mp4 -i "out/${{ inputs.composition }}.wav" \
+            -c:v copy -c:a aac -b:a 192k -ar 48000 -ac 2 \
+            -shortest "out/${{ inputs.composition }}.mp4"
+
+      - name: Verify the finished file
+        run: node scripts/verify-render.mjs --id "${{ inputs.composition }}"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.composition }}
+          path: |
+            out/${{ inputs.composition }}.mp4
+            out/${{ inputs.composition }}.verify.json
+          retention-days: 14

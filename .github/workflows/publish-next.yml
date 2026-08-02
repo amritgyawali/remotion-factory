@@ -1,14 +1,20 @@
 name: Publish next video
 
+# DISABLED 2026-08-02. The schedule below is commented out, not deleted.
+#
+# This is the workflow that actually sends videos to Postiz. It was posting the
+# duplicated logo-ladder renders four times a day. It stays off until the
+# campaign is rebuilt from the source PDF and a person has approved what the
+# queue holds. Re-enable by uncommenting the `schedule:` block.
 on:
-  schedule:
+  # schedule:
     # Attempted every two hours, away from GitHub's busy top-of-hour window.
     # This is not the posting rate: scripts/due.mjs holds it to four a day by
     # requiring MIN_GAP_HOURS since the last post. Scheduled runs on a free
     # public repo are best effort — one fired 90 minutes late here and the
     # next was dropped outright — so the extra attempts are what make the four
     # land. On time, :32 UTC is :17 past the hour in Asia/Kathmandu.
-    - cron: "32 */2 * * *"
+    #    - cron: "32 */2 * * *"
   workflow_dispatch:
     inputs:
       dry_run:
