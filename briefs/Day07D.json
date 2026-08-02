@@ -1,0 +1,34 @@
+{
+  "id": "Day07D",
+  "visualSystem": "museum-optics",
+  "title": "Three DevTools Tricks: What To Do",
+  "mechanism": "forensics",
+  "day": 7,
+  "slot": "D",
+  "caption": "Comment 1, 2 or 3.\n\n#MeritByte #BuildBetter #Actionable",
+  "beats": [
+    {
+      "copy": "TRICK 3: conditional breakpoint"
+    },
+    {
+      "copy": "stops only when id === 42"
+    },
+    {
+      "copy": "1 screenshot 2 fetch 3 breakpoint"
+    },
+    {
+      "copy": "Which did you not know?"
+    },
+    {
+      "copy": "Comment 1, 2 or 3."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 27
+}

@@ -1,0 +1,34 @@
+{
+  "id": "Day01C",
+  "visualSystem": "utility-room",
+  "title": "Make The Logo Bigger: Why",
+  "mechanism": "utility-chain",
+  "day": 1,
+  "slot": "C",
+  "caption": "Make The Logo Bigger\n\n#MeritByte #CaseStudy #Results",
+  "beats": [
+    {
+      "copy": "Make The Logo Bigger"
+    },
+    {
+      "copy": "Round one"
+    },
+    {
+      "copy": "Round two"
+    },
+    {
+      "copy": "Round three"
+    },
+    {
+      "copy": "The punchline"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#DevHumor",
+    "#TechComedy",
+    "#DevLife"
+  ],
+  "slotIndex": 2
+}

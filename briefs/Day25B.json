@@ -1,0 +1,34 @@
+{
+  "id": "Day25B",
+  "visualSystem": "museum-optics",
+  "title": "Their support queue dropped 60% in 5 weeks.",
+  "mechanism": "optics",
+  "day": 25,
+  "slot": "B",
+  "caption": "Automate the three questions that make up most of your volume.\n\n#MeritByte #TechInsight #WebDev",
+  "beats": [
+    {
+      "copy": "Their support queue dropped 60% in 5 weeks."
+    },
+    {
+      "copy": "password. invoice. status."
+    },
+    {
+      "copy": "AUTOMATED: status page"
+    },
+    {
+      "copy": "4h -> 40s"
+    },
+    {
+      "copy": "humans now handle the hard 39%"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 97
+}

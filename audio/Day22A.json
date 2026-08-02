@@ -1,0 +1,46 @@
+{
+  "id": "Day22A",
+  "durationInFrames": 900,
+  "fps": 30,
+  "rootHz": 124,
+  "bpm": 120,
+  "peak": 0.09,
+  "cues": [
+    {
+      "frame": 0,
+      "kind": "tone",
+      "seconds": 0.12,
+      "gain": 0.39,
+      "hz": 267
+    },
+    {
+      "frame": 90,
+      "kind": "tone",
+      "seconds": 0.09,
+      "gain": 0.43,
+      "hz": 370
+    },
+    {
+      "frame": 240,
+      "kind": "sweep",
+      "seconds": 0.12,
+      "gain": 0.48,
+      "hz": 395,
+      "sweep": 2.29
+    },
+    {
+      "frame": 450,
+      "kind": "tone",
+      "seconds": 0.12,
+      "gain": 0.36,
+      "hz": 235
+    },
+    {
+      "frame": 720,
+      "kind": "noise",
+      "seconds": 0.17,
+      "gain": 0.41,
+      "hz": 319
+    }
+  ]
+}

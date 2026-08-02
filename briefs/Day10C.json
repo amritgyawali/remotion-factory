@@ -1,0 +1,34 @@
+{
+  "id": "Day10C",
+  "visualSystem": "paper-lab",
+  "title": "This line looks fine. It cost us a client.",
+  "mechanism": "utility-chain",
+  "day": 10,
+  "slot": "C",
+  "caption": "The line was not the problem. The missing test was.\n\n#MeritByte #CaseStudy #Results",
+  "beats": [
+    {
+      "copy": "6 days in production"
+    },
+    {
+      "copy": "340 duplicate records"
+    },
+    {
+      "copy": "We fixed the process instead."
+    },
+    {
+      "copy": "We fixed the process instead."
+    },
+    {
+      "copy": "We fixed the process instead."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#FounderStory",
+    "#StartupLife",
+    "#Motivation"
+  ],
+  "slotIndex": 38
+}

@@ -1,0 +1,34 @@
+{
+  "id": "Day18C",
+  "visualSystem": "paper-lab",
+  "title": "90 seconds. Public repo. Full database access.",
+  "mechanism": "signal-rights",
+  "day": 18,
+  "slot": "C",
+  "caption": "Deleting a secret does not remove it. Git keeps everything.\n\n#MeritByte #CaseStudy #Results",
+  "beats": [
+    {
+      "copy": "90 SECONDS"
+    },
+    {
+      "copy": "commit from 2022"
+    },
+    {
+      "copy": "01:28"
+    },
+    {
+      "copy": "THE FIX: rotate. scan. block."
+    },
+    {
+      "copy": "THE FIX: rotate. scan. block."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 70
+}

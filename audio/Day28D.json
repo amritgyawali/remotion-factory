@@ -1,0 +1,46 @@
+{
+  "id": "Day28D",
+  "durationInFrames": 900,
+  "fps": 30,
+  "rootHz": 96,
+  "bpm": 114,
+  "peak": 0.09,
+  "cues": [
+    {
+      "frame": 0,
+      "kind": "tone",
+      "seconds": 0.08,
+      "gain": 0.48,
+      "hz": 405
+    },
+    {
+      "frame": 90,
+      "kind": "tone",
+      "seconds": 0.14,
+      "gain": 0.41,
+      "hz": 387
+    },
+    {
+      "frame": 240,
+      "kind": "sweep",
+      "seconds": 0.14,
+      "gain": 0.46,
+      "hz": 321,
+      "sweep": 2.78
+    },
+    {
+      "frame": 450,
+      "kind": "tone",
+      "seconds": 0.14,
+      "gain": 0.34,
+      "hz": 317
+    },
+    {
+      "frame": 720,
+      "kind": "noise",
+      "seconds": 0.17,
+      "gain": 0.48,
+      "hz": 406
+    }
+  ]
+}

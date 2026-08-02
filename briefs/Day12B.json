@@ -1,0 +1,34 @@
+{
+  "id": "Day12B",
+  "visualSystem": "sandbox",
+  "title": "Watch the timer. It never says 15.",
+  "mechanism": "shared-sky",
+  "day": 12,
+  "slot": "B",
+  "caption": "51 minutes. Blockers: this meeting.\n\n#MeritByte #TechInsight #WebDev",
+  "beats": [
+    {
+      "copy": "Watch the timer. It never says 15."
+    },
+    {
+      "copy": "00:00 — hits zero"
+    },
+    {
+      "copy": "+08:40 — the tiles dim"
+    },
+    {
+      "copy": "the sun has moved"
+    },
+    {
+      "copy": "+51:00 — and stops"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#DevHumor",
+    "#TechComedy",
+    "#DevLife"
+  ],
+  "slotIndex": 45
+}

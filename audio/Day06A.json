@@ -1,0 +1,46 @@
+{
+  "id": "Day06A",
+  "durationInFrames": 900,
+  "fps": 30,
+  "rootHz": 117,
+  "bpm": 112,
+  "peak": 0.09,
+  "cues": [
+    {
+      "frame": 0,
+      "kind": "tone",
+      "seconds": 0.17,
+      "gain": 0.38,
+      "hz": 391
+    },
+    {
+      "frame": 90,
+      "kind": "tone",
+      "seconds": 0.17,
+      "gain": 0.48,
+      "hz": 371
+    },
+    {
+      "frame": 240,
+      "kind": "sweep",
+      "seconds": 0.13,
+      "gain": 0.44,
+      "hz": 272,
+      "sweep": 1.59
+    },
+    {
+      "frame": 450,
+      "kind": "tone",
+      "seconds": 0.11,
+      "gain": 0.46,
+      "hz": 250
+    },
+    {
+      "frame": 720,
+      "kind": "noise",
+      "seconds": 0.12,
+      "gain": 0.42,
+      "hz": 275
+    }
+  ]
+}

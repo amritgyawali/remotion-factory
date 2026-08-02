@@ -1,0 +1,34 @@
+{
+  "id": "Day01B",
+  "visualSystem": "museum-optics",
+  "title": "Make The Logo Bigger: How",
+  "mechanism": "optics",
+  "day": 1,
+  "slot": "B",
+  "caption": "Make The Logo Bigger\n\n#MeritByte #TechInsight #WebDev",
+  "beats": [
+    {
+      "copy": "Make The Logo Bigger"
+    },
+    {
+      "copy": "Round one"
+    },
+    {
+      "copy": "Round two"
+    },
+    {
+      "copy": "Round three"
+    },
+    {
+      "copy": "The punchline"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#DevHumor",
+    "#TechComedy",
+    "#DevLife"
+  ],
+  "slotIndex": 1
+}

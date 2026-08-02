@@ -1,0 +1,34 @@
+{
+  "id": "Day23A",
+  "visualSystem": "utility-room",
+  "title": "Our best month came from the most boring work.",
+  "mechanism": "folded-claim",
+  "day": 23,
+  "slot": "A",
+  "caption": "The unglamorous work is the work that compounds.",
+  "beats": [
+    {
+      "copy": "Our best month."
+    },
+    {
+      "copy": "The most boring work we do."
+    },
+    {
+      "copy": "retainers: the same every month"
+    },
+    {
+      "copy": "Nobody posts about maintenance."
+    },
+    {
+      "copy": "Our best month."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#FounderStory",
+    "#StartupLife",
+    "#Motivation"
+  ],
+  "slotIndex": 88
+}

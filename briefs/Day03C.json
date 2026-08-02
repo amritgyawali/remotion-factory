@@ -1,0 +1,34 @@
+{
+  "id": "Day03C",
+  "visualSystem": "sandbox",
+  "title": "4 mistakes. This site makes all 4.",
+  "mechanism": "signal-rights",
+  "day": 3,
+  "slot": "C",
+  "caption": "Episode 1. Drop your URL and your site might be episode 2.\n\n#MeritByte #CaseStudy #Results",
+  "beats": [
+    {
+      "copy": "SCORE: 12/100"
+    },
+    {
+      "copy": "MISTAKE 2: what do you even sell?"
+    },
+    {
+      "copy": "MISTAKE 3: 22px tap targets"
+    },
+    {
+      "copy": "12 -> 96 — digits blur"
+    },
+    {
+      "copy": "Drop a URL. Ep. 02 roasts one of yours."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 10
+}

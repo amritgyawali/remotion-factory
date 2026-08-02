@@ -1,0 +1,34 @@
+{
+  "id": "Day09C",
+  "visualSystem": "utility-room",
+  "title": "68% of their traffic cannot use this menu.",
+  "mechanism": "signal-rights",
+  "day": 9,
+  "slot": "C",
+  "caption": "Episode 2. Test your own menu on a real phone tonight.\n\n#MeritByte #CaseStudy #Results",
+  "beats": [
+    {
+      "copy": "TAP 1"
+    },
+    {
+      "copy": "TAP 3. Still nothing."
+    },
+    {
+      "copy": "the culprit: z-index: 1"
+    },
+    {
+      "copy": "TAP 1. Opens."
+    },
+    {
+      "copy": "Drop a URL for Ep. 03."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 34
+}

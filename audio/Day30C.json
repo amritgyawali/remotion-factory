@@ -1,0 +1,46 @@
+{
+  "id": "Day30C",
+  "durationInFrames": 900,
+  "fps": 30,
+  "rootHz": 112,
+  "bpm": 97,
+  "peak": 0.09,
+  "cues": [
+    {
+      "frame": 0,
+      "kind": "tone",
+      "seconds": 0.15,
+      "gain": 0.42,
+      "hz": 439
+    },
+    {
+      "frame": 90,
+      "kind": "tone",
+      "seconds": 0.08,
+      "gain": 0.33,
+      "hz": 339
+    },
+    {
+      "frame": 240,
+      "kind": "sweep",
+      "seconds": 0.08,
+      "gain": 0.35,
+      "hz": 307,
+      "sweep": 2.33
+    },
+    {
+      "frame": 450,
+      "kind": "tone",
+      "seconds": 0.17,
+      "gain": 0.44,
+      "hz": 291
+    },
+    {
+      "frame": 720,
+      "kind": "noise",
+      "seconds": 0.13,
+      "gain": 0.35,
+      "hz": 347
+    }
+  ]
+}

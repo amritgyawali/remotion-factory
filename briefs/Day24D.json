@@ -1,0 +1,34 @@
+{
+  "id": "Day24D",
+  "visualSystem": "utility-room",
+  "title": "47 Comments In A Word Doc: What To Do",
+  "mechanism": "training-loop",
+  "day": 24,
+  "slot": "D",
+  "caption": "Tag a designer.\n\n#MeritByte #BuildBetter #Actionable",
+  "beats": [
+    {
+      "copy": "#29: see attached screenshot"
+    },
+    {
+      "copy": "#30..."
+    },
+    {
+      "copy": "the old one was version 1"
+    },
+    {
+      "copy": "we use a review tool now"
+    },
+    {
+      "copy": "47 COMMENTS"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#DevHumor",
+    "#TechComedy",
+    "#DevLife"
+  ],
+  "slotIndex": 95
+}

@@ -1,0 +1,34 @@
+{
+  "id": "Day03A",
+  "visualSystem": "utility-room",
+  "title": "This site loses money on purpose.",
+  "mechanism": "orbital-ledger",
+  "day": 3,
+  "slot": "A",
+  "caption": "Episode 1. Drop your URL and your site might be episode 2.",
+  "beats": [
+    {
+      "copy": "THIS LOSES MONEY"
+    },
+    {
+      "copy": "MISTAKE 1: nobody waits"
+    },
+    {
+      "copy": "MISTAKE 3: 22px tap targets"
+    },
+    {
+      "copy": "SAME CONTENT. REBUILT."
+    },
+    {
+      "copy": "Drop a URL. Ep. 02 roasts one of yours."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 8
+}

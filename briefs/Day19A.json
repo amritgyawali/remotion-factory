@@ -1,0 +1,34 @@
+{
+  "id": "Day19A",
+  "visualSystem": "utility-room",
+  "title": "Day 1: one repo, zero clients.",
+  "mechanism": "containment",
+  "day": 19,
+  "slot": "A",
+  "caption": "Day 400 is just day 1 repeated without stopping.",
+  "beats": [
+    {
+      "copy": "DAY 1"
+    },
+    {
+      "copy": "DAY 400"
+    },
+    {
+      "copy": "0 -> 19 clients"
+    },
+    {
+      "copy": "Nothing changed on day 400."
+    },
+    {
+      "copy": "DAY 1"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#FounderStory",
+    "#StartupLife",
+    "#Motivation"
+  ],
+  "slotIndex": 72
+}

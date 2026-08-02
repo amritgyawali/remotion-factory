@@ -1,0 +1,34 @@
+{
+  "id": "Day15C",
+  "visualSystem": "sandbox",
+  "title": "61/100. Our site. No excuses.",
+  "mechanism": "signal-rights",
+  "day": 15,
+  "slot": "C",
+  "caption": "61/100. We will post the rescore whether it improves or not.\n\n#MeritByte #CaseStudy #Results",
+  "beats": [
+    {
+      "copy": "OUR SITE. 61/100."
+    },
+    {
+      "copy": "FLAW 2: nobody sees the CTA"
+    },
+    {
+      "copy": "FLAW 4: 4.8MB total"
+    },
+    {
+      "copy": "target: 90+"
+    },
+    {
+      "copy": "OUR SITE. 61/100."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 58
+}

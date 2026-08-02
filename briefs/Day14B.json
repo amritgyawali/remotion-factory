@@ -1,0 +1,34 @@
+{
+  "id": "Day14B",
+  "visualSystem": "utility-room",
+  "title": "We waited 8 weeks for the phone to ring.",
+  "mechanism": "assembly-line",
+  "day": 14,
+  "slot": "B",
+  "caption": "Nobody is coming. That is not despair, it is a job description.\n\n#MeritByte #TechInsight #WebDev",
+  "beats": [
+    {
+      "copy": "We waited 8 weeks for the phone to ring."
+    },
+    {
+      "copy": "refresh. refresh. refresh."
+    },
+    {
+      "copy": "We were waiting to be found."
+    },
+    {
+      "copy": "40 messages. Written by hand."
+    },
+    {
+      "copy": "3 replies"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#FounderStory",
+    "#StartupLife",
+    "#Motivation"
+  ],
+  "slotIndex": 53
+}

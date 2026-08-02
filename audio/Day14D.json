@@ -1,0 +1,46 @@
+{
+  "id": "Day14D",
+  "durationInFrames": 900,
+  "fps": 30,
+  "rootHz": 135,
+  "bpm": 95,
+  "peak": 0.09,
+  "cues": [
+    {
+      "frame": 0,
+      "kind": "tone",
+      "seconds": 0.16,
+      "gain": 0.47,
+      "hz": 279
+    },
+    {
+      "frame": 90,
+      "kind": "tone",
+      "seconds": 0.13,
+      "gain": 0.49,
+      "hz": 369
+    },
+    {
+      "frame": 240,
+      "kind": "sweep",
+      "seconds": 0.15,
+      "gain": 0.43,
+      "hz": 245,
+      "sweep": 2.01
+    },
+    {
+      "frame": 450,
+      "kind": "tone",
+      "seconds": 0.17,
+      "gain": 0.39,
+      "hz": 382
+    },
+    {
+      "frame": 720,
+      "kind": "noise",
+      "seconds": 0.17,
+      "gain": 0.43,
+      "hz": 231
+    }
+  ]
+}

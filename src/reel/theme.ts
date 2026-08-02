@@ -1,4 +1,4 @@
-import { lookFor } from "../variation";
+import { lookFor } from "../theme";
 import type { Theme } from "../theme";
 
 /**

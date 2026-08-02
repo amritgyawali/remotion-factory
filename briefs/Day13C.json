@@ -1,0 +1,34 @@
+{
+  "id": "Day13C",
+  "visualSystem": "utility-room",
+  "title": "Their site had 61 pages. 40 were invisible.",
+  "mechanism": "utility-chain",
+  "day": 13,
+  "slot": "C",
+  "caption": "Thin pages are not neutral. They actively cost you rankings.\n\n#MeritByte #CaseStudy #Results",
+  "beats": [
+    {
+      "copy": "61 pages. Flat traffic."
+    },
+    {
+      "copy": "21 pages left"
+    },
+    {
+      "copy": "48 -> 0 not indexed"
+    },
+    {
+      "copy": "week 3"
+    },
+    {
+      "copy": "week 9"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 50
+}

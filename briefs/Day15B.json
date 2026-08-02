@@ -1,0 +1,34 @@
+{
+  "id": "Day15B",
+  "visualSystem": "paper-lab",
+  "title": "We roast clients. Now we roast ourselves.",
+  "mechanism": "shared-sky",
+  "day": 15,
+  "slot": "B",
+  "caption": "61/100. We will post the rescore whether it improves or not.\n\n#MeritByte #TechInsight #WebDev",
+  "beats": [
+    {
+      "copy": "We roast clients. Now we roast ourselves."
+    },
+    {
+      "copy": "FLAW 2: nobody sees the CTA"
+    },
+    {
+      "copy": "FLAW 4: 4.8MB total"
+    },
+    {
+      "copy": "fixing all 4 this month"
+    },
+    {
+      "copy": "target: 90+"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 57
+}

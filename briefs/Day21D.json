@@ -1,0 +1,34 @@
+{
+  "id": "Day21D",
+  "visualSystem": "paper-lab",
+  "title": "Core Web Vitals In 18 Seconds: What To Do",
+  "mechanism": "training-loop",
+  "day": 21,
+  "slot": "D",
+  "caption": "Save this before your next site review.\n\n#MeritByte #BuildBetter #Actionable",
+  "beats": [
+    {
+      "copy": "CLS < 0.1"
+    },
+    {
+      "copy": "the button that moves"
+    },
+    {
+      "copy": "test yours: pagespeed.web.dev"
+    },
+    {
+      "copy": "2.5s / 200ms / 0.1"
+    },
+    {
+      "copy": "Save this before your next site review."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 83
+}

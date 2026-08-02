@@ -1,0 +1,46 @@
+{
+  "id": "Day09C",
+  "durationInFrames": 900,
+  "fps": 30,
+  "rootHz": 118,
+  "bpm": 112,
+  "peak": 0.09,
+  "cues": [
+    {
+      "frame": 0,
+      "kind": "tone",
+      "seconds": 0.12,
+      "gain": 0.4,
+      "hz": 410
+    },
+    {
+      "frame": 90,
+      "kind": "tone",
+      "seconds": 0.17,
+      "gain": 0.31,
+      "hz": 439
+    },
+    {
+      "frame": 240,
+      "kind": "sweep",
+      "seconds": 0.12,
+      "gain": 0.45,
+      "hz": 338,
+      "sweep": 2.13
+    },
+    {
+      "frame": 450,
+      "kind": "tone",
+      "seconds": 0.18,
+      "gain": 0.3,
+      "hz": 430
+    },
+    {
+      "frame": 720,
+      "kind": "noise",
+      "seconds": 0.13,
+      "gain": 0.39,
+      "hz": 298
+    }
+  ]
+}

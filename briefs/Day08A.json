@@ -1,0 +1,34 @@
+{
+  "id": "Day08A",
+  "visualSystem": "paper-lab",
+  "title": "A QA tester walks into a bar.",
+  "mechanism": "folded-claim",
+  "day": 8,
+  "slot": "A",
+  "caption": "Order 12 is why QA exists. Tag your tester.",
+  "beats": [
+    {
+      "copy": "A QA tester walks into a bar."
+    },
+    {
+      "copy": "Orders 999999 beers."
+    },
+    {
+      "copy": "Orders NULL."
+    },
+    {
+      "copy": "The bar catches fire."
+    },
+    {
+      "copy": "A QA tester walks into a bar."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#DevHumor",
+    "#TechComedy",
+    "#DevLife"
+  ],
+  "slotIndex": 28
+}

@@ -1,0 +1,34 @@
+{
+  "id": "Day02C",
+  "visualSystem": "paper-lab",
+  "title": "3 URLs that should never load. Yours might.",
+  "mechanism": "vault-vs-field",
+  "day": 2,
+  "slot": "C",
+  "caption": "Three URLs. Test them on your own site in the next 60 seconds.\n\n#MeritByte #CaseStudy #Results",
+  "beats": [
+    {
+      "copy": "THE FIX"
+    },
+    {
+      "copy": "deny all. 3 lines."
+    },
+    {
+      "copy": "403 403 403"
+    },
+    {
+      "copy": "Test all 3 on your site. Right now."
+    },
+    {
+      "copy": "Test all 3 on your site. Right now."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 6
+}

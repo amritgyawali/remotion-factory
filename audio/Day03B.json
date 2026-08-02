@@ -1,0 +1,46 @@
+{
+  "id": "Day03B",
+  "durationInFrames": 900,
+  "fps": 30,
+  "rootHz": 103,
+  "bpm": 104,
+  "peak": 0.09,
+  "cues": [
+    {
+      "frame": 0,
+      "kind": "tone",
+      "seconds": 0.15,
+      "gain": 0.48,
+      "hz": 401
+    },
+    {
+      "frame": 90,
+      "kind": "tone",
+      "seconds": 0.12,
+      "gain": 0.39,
+      "hz": 412
+    },
+    {
+      "frame": 240,
+      "kind": "sweep",
+      "seconds": 0.12,
+      "gain": 0.4,
+      "hz": 347,
+      "sweep": 2.56
+    },
+    {
+      "frame": 450,
+      "kind": "tone",
+      "seconds": 0.11,
+      "gain": 0.34,
+      "hz": 399
+    },
+    {
+      "frame": 720,
+      "kind": "noise",
+      "seconds": 0.11,
+      "gain": 0.38,
+      "hz": 347
+    }
+  ]
+}

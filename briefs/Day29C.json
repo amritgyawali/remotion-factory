@@ -1,0 +1,34 @@
+{
+  "id": "Day29C",
+  "visualSystem": "utility-room",
+  "title": "This took 58 seconds. It is 70% right.",
+  "mechanism": "vault-vs-field",
+  "day": 29,
+  "slot": "C",
+  "caption": "A great first draft. Never a final build. The last 30% is the job.\n\n#MeritByte #CaseStudy #Results",
+  "beats": [
+    {
+      "copy": "58 SECONDS"
+    },
+    {
+      "copy": "6 components"
+    },
+    {
+      "copy": "70% there"
+    },
+    {
+      "copy": "FAIL 1: breakpoints"
+    },
+    {
+      "copy": "FAIL 3: 340KB of unused CSS"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 114
+}

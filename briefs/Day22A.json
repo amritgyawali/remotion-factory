@@ -1,0 +1,34 @@
+{
+  "id": "Day22A",
+  "visualSystem": "museum-optics",
+  "title": "34 fields. To download one PDF.",
+  "mechanism": "containment",
+  "day": 22,
+  "slot": "A",
+  "caption": "Every field you add costs you leads. 34 fields costs you all of them.",
+  "beats": [
+    {
+      "copy": "34 FIELDS"
+    },
+    {
+      "copy": "9 required fields"
+    },
+    {
+      "copy": "on mobile it overflows"
+    },
+    {
+      "copy": "name. email. one question."
+    },
+    {
+      "copy": "Drop a URL for Ep. 04."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 84
+}

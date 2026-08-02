@@ -1,0 +1,34 @@
+{
+  "id": "Day11B",
+  "visualSystem": "paper-lab",
+  "title": "$2,400 a year. Deleted.",
+  "mechanism": "assembly-line",
+  "day": 11,
+  "slot": "B",
+  "caption": "Audit your stack. Most teams pay for 14 features and use one.\n\n#MeritByte #TechInsight #WebDev",
+  "beats": [
+    {
+      "copy": "$2,400 a year. Deleted."
+    },
+    {
+      "copy": "we used 1 of 14 features"
+    },
+    {
+      "copy": "40 lines. one afternoon."
+    },
+    {
+      "copy": "HONEST BIT: we maintain it now"
+    },
+    {
+      "copy": "worth it at $200. not at $20."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 41
+}

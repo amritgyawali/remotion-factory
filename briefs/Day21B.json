@@ -1,0 +1,34 @@
+{
+  "id": "Day21B",
+  "visualSystem": "museum-optics",
+  "title": "LCP. INP. CLS. You are failing one.",
+  "mechanism": "shared-sky",
+  "day": 21,
+  "slot": "B",
+  "caption": "Three thresholds. Test your site and check all three.\n\n#MeritByte #TechInsight #WebDev",
+  "beats": [
+    {
+      "copy": "LCP. INP. CLS. You are failing one."
+    },
+    {
+      "copy": "biggest thing on screen"
+    },
+    {
+      "copy": "tap to response delay"
+    },
+    {
+      "copy": "CLS < 0.1"
+    },
+    {
+      "copy": "test yours: pagespeed.web.dev"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 81
+}

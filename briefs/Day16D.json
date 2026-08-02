@@ -1,0 +1,34 @@
+{
+  "id": "Day16D",
+  "visualSystem": "utility-room",
+  "title": "Just One Small Thing: What To Do",
+  "mechanism": "forensics",
+  "day": 16,
+  "slot": "D",
+  "caption": "Tag someone who says this.\n\n#MeritByte #BuildBetter #Actionable",
+  "beats": [
+    {
+      "copy": "...and user accounts"
+    },
+    {
+      "copy": "still just one small thing though"
+    },
+    {
+      "copy": "TICKET: one small thing"
+    },
+    {
+      "copy": "34 story points"
+    },
+    {
+      "copy": "just one small thing"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#DevHumor",
+    "#TechComedy",
+    "#DevLife"
+  ],
+  "slotIndex": 63
+}

@@ -1,0 +1,34 @@
+{
+  "id": "Day26C",
+  "visualSystem": "paper-lab",
+  "title": "This site looks fine. Google sees 4,000 spam pages.",
+  "mechanism": "vault-vs-field",
+  "day": 26,
+  "slot": "C",
+  "caption": "One search tells you whether your site is compromised. Do it tonight.\n\n#MeritByte #CaseStudy #Results",
+  "beats": [
+    {
+      "copy": "This site looks fine. Google sees 4,000 spam pages."
+    },
+    {
+      "copy": "pages you never wrote"
+    },
+    {
+      "copy": "you cannot see them. Google can."
+    },
+    {
+      "copy": "mobile visitors get redirected"
+    },
+    {
+      "copy": "scan. rotate keys. resubmit."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 102
+}

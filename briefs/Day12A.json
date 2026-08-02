@@ -1,0 +1,34 @@
+{
+  "id": "Day12A",
+  "visualSystem": "paper-lab",
+  "title": "Day 400 of a 15 minute standup.",
+  "mechanism": "orbital-ledger",
+  "day": 12,
+  "slot": "A",
+  "caption": "51 minutes. Blockers: this meeting.",
+  "beats": [
+    {
+      "copy": "14:20 — counts down"
+    },
+    {
+      "copy": "+02:14 — flips to a count-up"
+    },
+    {
+      "copy": "+24:30 — the tiles dim"
+    },
+    {
+      "copy": "+47:55 — digits blur"
+    },
+    {
+      "copy": "Anyway. Any blockers?"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#DevHumor",
+    "#TechComedy",
+    "#DevLife"
+  ],
+  "slotIndex": 44
+}

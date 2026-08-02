@@ -1,0 +1,34 @@
+{
+  "id": "Day05D",
+  "visualSystem": "paper-lab",
+  "title": "It Works On My Machine: What To Do",
+  "mechanism": "feeding-web",
+  "day": 5,
+  "slot": "D",
+  "caption": "It Works On My Machine\n\n#MeritByte #BuildBetter #Actionable",
+  "beats": [
+    {
+      "copy": "It Works On My Machine"
+    },
+    {
+      "copy": "Round one"
+    },
+    {
+      "copy": "Round two"
+    },
+    {
+      "copy": "Round three"
+    },
+    {
+      "copy": "The punchline"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#DevHumor",
+    "#TechComedy",
+    "#DevLife"
+  ],
+  "slotIndex": 19
+}

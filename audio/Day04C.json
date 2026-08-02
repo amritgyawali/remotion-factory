@@ -1,0 +1,46 @@
+{
+  "id": "Day04C",
+  "durationInFrames": 900,
+  "fps": 30,
+  "rootHz": 124,
+  "bpm": 105,
+  "peak": 0.09,
+  "cues": [
+    {
+      "frame": 0,
+      "kind": "tone",
+      "seconds": 0.16,
+      "gain": 0.4,
+      "hz": 411
+    },
+    {
+      "frame": 90,
+      "kind": "tone",
+      "seconds": 0.12,
+      "gain": 0.47,
+      "hz": 291
+    },
+    {
+      "frame": 240,
+      "kind": "sweep",
+      "seconds": 0.1,
+      "gain": 0.44,
+      "hz": 349,
+      "sweep": 2.94
+    },
+    {
+      "frame": 450,
+      "kind": "tone",
+      "seconds": 0.15,
+      "gain": 0.38,
+      "hz": 382
+    },
+    {
+      "frame": 720,
+      "kind": "noise",
+      "seconds": 0.17,
+      "gain": 0.34,
+      "hz": 370
+    }
+  ]
+}

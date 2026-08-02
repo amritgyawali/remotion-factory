@@ -1,0 +1,34 @@
+{
+  "id": "Day13A",
+  "visualSystem": "sandbox",
+  "title": "We deleted 40 pages. Traffic went up.",
+  "mechanism": "containment",
+  "day": 13,
+  "slot": "A",
+  "caption": "Thin pages are not neutral. They actively cost you rankings.",
+  "beats": [
+    {
+      "copy": "61 pages. Flat traffic."
+    },
+    {
+      "copy": "THE PROBLEM: 120 words each"
+    },
+    {
+      "copy": "12 pages rewritten"
+    },
+    {
+      "copy": "+180% organic"
+    },
+    {
+      "copy": "Fewer, better pages."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 48
+}

@@ -1,0 +1,46 @@
+{
+  "id": "Day21D",
+  "durationInFrames": 900,
+  "fps": 30,
+  "rootHz": 103,
+  "bpm": 82,
+  "peak": 0.09,
+  "cues": [
+    {
+      "frame": 0,
+      "kind": "tone",
+      "seconds": 0.1,
+      "gain": 0.42,
+      "hz": 346
+    },
+    {
+      "frame": 90,
+      "kind": "tone",
+      "seconds": 0.08,
+      "gain": 0.39,
+      "hz": 433
+    },
+    {
+      "frame": 240,
+      "kind": "sweep",
+      "seconds": 0.11,
+      "gain": 0.47,
+      "hz": 342,
+      "sweep": 2.26
+    },
+    {
+      "frame": 450,
+      "kind": "tone",
+      "seconds": 0.09,
+      "gain": 0.4,
+      "hz": 413
+    },
+    {
+      "frame": 720,
+      "kind": "noise",
+      "seconds": 0.11,
+      "gain": 0.41,
+      "hz": 297
+    }
+  ]
+}

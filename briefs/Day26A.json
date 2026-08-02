@@ -1,0 +1,34 @@
+{
+  "id": "Day26A",
+  "visualSystem": "museum-optics",
+  "title": "Search this. If you see pages you did not write, you are hacked.",
+  "mechanism": "folded-claim",
+  "day": 26,
+  "slot": "A",
+  "caption": "One search tells you whether your site is compromised. Do it tonight.",
+  "beats": [
+    {
+      "copy": "this site looks fine"
+    },
+    {
+      "copy": "they wrote 4,000 of them"
+    },
+    {
+      "copy": "you cannot see them. Google can."
+    },
+    {
+      "copy": "scan. rotate keys. resubmit."
+    },
+    {
+      "copy": "site:yourdomain.com"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 100
+}

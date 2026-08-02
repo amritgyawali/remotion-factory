@@ -1,0 +1,46 @@
+{
+  "id": "Day12D",
+  "durationInFrames": 900,
+  "fps": 30,
+  "rootHz": 100,
+  "bpm": 91,
+  "peak": 0.09,
+  "cues": [
+    {
+      "frame": 0,
+      "kind": "tone",
+      "seconds": 0.08,
+      "gain": 0.31,
+      "hz": 271
+    },
+    {
+      "frame": 90,
+      "kind": "tone",
+      "seconds": 0.1,
+      "gain": 0.34,
+      "hz": 356
+    },
+    {
+      "frame": 240,
+      "kind": "sweep",
+      "seconds": 0.15,
+      "gain": 0.49,
+      "hz": 251,
+      "sweep": 1.92
+    },
+    {
+      "frame": 450,
+      "kind": "tone",
+      "seconds": 0.09,
+      "gain": 0.5,
+      "hz": 314
+    },
+    {
+      "frame": 720,
+      "kind": "noise",
+      "seconds": 0.09,
+      "gain": 0.38,
+      "hz": 269
+    }
+  ]
+}

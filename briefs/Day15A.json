@@ -1,0 +1,34 @@
+{
+  "id": "Day15A",
+  "visualSystem": "utility-room",
+  "title": "Our own site scores 61. Here is every flaw.",
+  "mechanism": "orbital-ledger",
+  "day": 15,
+  "slot": "A",
+  "caption": "61/100. We will post the rescore whether it improves or not.",
+  "beats": [
+    {
+      "copy": "OUR SITE. 61/100."
+    },
+    {
+      "copy": "FLAW 1: 2.1MB hero image"
+    },
+    {
+      "copy": "FLAW 4: 4.8MB total"
+    },
+    {
+      "copy": "fixing all 4 this month"
+    },
+    {
+      "copy": "OUR SITE. 61/100."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 56
+}

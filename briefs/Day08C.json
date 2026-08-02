@@ -1,0 +1,34 @@
+{
+  "id": "Day08C",
+  "visualSystem": "museum-optics",
+  "title": "This joke is 12 orders long. Stay for order 12.",
+  "mechanism": "vault-vs-field",
+  "day": 8,
+  "slot": "C",
+  "caption": "Order 12 is why QA exists. Tag your tester.\n\n#MeritByte #CaseStudy #Results",
+  "beats": [
+    {
+      "copy": "Orders 0 beers."
+    },
+    {
+      "copy": "Orders 999999 beers."
+    },
+    {
+      "copy": "Orders -1 beers."
+    },
+    {
+      "copy": "Orders ';DROP TABLE—"
+    },
+    {
+      "copy": "Orders ';DROP TABLE—"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#DevHumor",
+    "#TechComedy",
+    "#DevLife"
+  ],
+  "slotIndex": 30
+}

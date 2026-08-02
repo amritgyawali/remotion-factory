@@ -1,0 +1,34 @@
+{
+  "id": "Day27D",
+  "visualSystem": "museum-optics",
+  "title": "Explaining Cache. Again.: What To Do",
+  "mechanism": "training-loop",
+  "day": 27,
+  "slot": "D",
+  "caption": "Tag someone who has explained cache this week.\n\n#MeritByte #BuildBetter #Actionable",
+  "beats": [
+    {
+      "copy": "they sent a screenshot. in Word."
+    },
+    {
+      "copy": "oh it works now!"
+    },
+    {
+      "copy": "did you change something?"
+    },
+    {
+      "copy": "ATTEMPT 7"
+    },
+    {
+      "copy": "Tag someone who has explained cache this week."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#DevHumor",
+    "#TechComedy",
+    "#DevLife"
+  ],
+  "slotIndex": 107
+}

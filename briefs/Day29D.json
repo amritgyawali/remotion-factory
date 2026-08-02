@@ -1,0 +1,34 @@
+{
+  "id": "Day29D",
+  "visualSystem": "paper-lab",
+  "title": "Design To Code In One Minute: What To Do",
+  "mechanism": "feeding-web",
+  "day": 29,
+  "slot": "D",
+  "caption": "Comment TOOL for the workflow.\n\n#MeritByte #BuildBetter #Actionable",
+  "beats": [
+    {
+      "copy": "FAIL 1: breakpoints"
+    },
+    {
+      "copy": "FAIL 2: no aria labels"
+    },
+    {
+      "copy": "FAIL 3: 340KB of unused CSS"
+    },
+    {
+      "copy": "great first draft. not a final build."
+    },
+    {
+      "copy": "Comment TOOL for the workflow."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 115
+}

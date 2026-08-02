@@ -1,0 +1,34 @@
+{
+  "id": "Day21C",
+  "visualSystem": "utility-room",
+  "title": "If this number is over 2.5s, you rank lower.",
+  "mechanism": "signal-rights",
+  "day": 21,
+  "slot": "C",
+  "caption": "Three thresholds. Test your site and check all three.\n\n#MeritByte #CaseStudy #Results",
+  "beats": [
+    {
+      "copy": "3 NUMBERS"
+    },
+    {
+      "copy": "LCP < 2.5s"
+    },
+    {
+      "copy": "INP < 200ms"
+    },
+    {
+      "copy": "CLS < 0.1"
+    },
+    {
+      "copy": "2.5s / 200ms / 0.1"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 82
+}

@@ -1,0 +1,34 @@
+{
+  "id": "Day27A",
+  "visualSystem": "utility-room",
+  "title": "Explaining cache to a client. Attempt 6.",
+  "mechanism": "orbital-ledger",
+  "day": 27,
+  "slot": "A",
+  "caption": "Attempt 7 begins tomorrow.",
+  "beats": [
+    {
+      "copy": "ATTEMPT 6"
+    },
+    {
+      "copy": "your browser saved the old one"
+    },
+    {
+      "copy": "Cmd + Shift + R"
+    },
+    {
+      "copy": "oh it works now!"
+    },
+    {
+      "copy": "ATTEMPT 7"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#DevHumor",
+    "#TechComedy",
+    "#DevLife"
+  ],
+  "slotIndex": 104
+}

@@ -1,0 +1,34 @@
+{
+  "id": "Day03D",
+  "visualSystem": "museum-optics",
+  "title": "Roast My Website — Ep. 01: What To Do",
+  "mechanism": "training-loop",
+  "day": 3,
+  "slot": "D",
+  "caption": "Comment a URL for episode 2.\n\n#MeritByte #BuildBetter #Actionable",
+  "beats": [
+    {
+      "copy": "MISTAKE 4: 71% mobile bounce"
+    },
+    {
+      "copy": "SAME CONTENT. REBUILT."
+    },
+    {
+      "copy": "12 -> 96 — digits blur"
+    },
+    {
+      "copy": "SCORE: 96/100"
+    },
+    {
+      "copy": "Drop a URL. Ep. 02 roasts one of yours."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 11
+}

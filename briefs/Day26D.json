@@ -1,0 +1,34 @@
+{
+  "id": "Day26D",
+  "visualSystem": "sandbox",
+  "title": "Is Your Site Hacked?: What To Do",
+  "mechanism": "feeding-web",
+  "day": 26,
+  "slot": "D",
+  "caption": "Save this and run the search.\n\n#MeritByte #BuildBetter #Actionable",
+  "beats": [
+    {
+      "copy": "mobile visitors get redirected"
+    },
+    {
+      "copy": "scan. rotate keys. resubmit."
+    },
+    {
+      "copy": "then tell Google"
+    },
+    {
+      "copy": "site:yourdomain.com"
+    },
+    {
+      "copy": "Save this and run the search."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 103
+}

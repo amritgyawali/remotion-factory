@@ -1,0 +1,34 @@
+{
+  "id": "Day04D",
+  "visualSystem": "utility-room",
+  "title": "Fired In Four Days: What To Do",
+  "mechanism": "forensics",
+  "day": 4,
+  "slot": "D",
+  "caption": "Follow for the honest ones.\n\n#MeritByte #BuildBetter #Actionable",
+  "beats": [
+    {
+      "copy": "They never doubted the code."
+    },
+    {
+      "copy": "They doubted we were working at all."
+    },
+    {
+      "copy": "Now: Friday update, every client, forever."
+    },
+    {
+      "copy": "Fired in 4 days."
+    },
+    {
+      "copy": "Follow for the honest ones."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#FounderStory",
+    "#StartupLife",
+    "#Motivation"
+  ],
+  "slotIndex": 15
+}

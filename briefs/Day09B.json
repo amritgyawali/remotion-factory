@@ -1,0 +1,34 @@
+{
+  "id": "Day09B",
+  "visualSystem": "museum-optics",
+  "title": "Tap 1. Tap 2. Tap 3. Nothing.",
+  "mechanism": "shared-sky",
+  "day": 9,
+  "slot": "B",
+  "caption": "Episode 2. Test your own menu on a real phone tonight.\n\n#MeritByte #TechInsight #WebDev",
+  "beats": [
+    {
+      "copy": "Tap 1. Tap 2. Tap 3. Nothing."
+    },
+    {
+      "copy": "the culprit: z-index: 1"
+    },
+    {
+      "copy": "tested on desktop only"
+    },
+    {
+      "copy": "TAP 1. Opens."
+    },
+    {
+      "copy": "works. finally."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 33
+}

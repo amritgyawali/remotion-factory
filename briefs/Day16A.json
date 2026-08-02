@@ -1,0 +1,34 @@
+{
+  "id": "Day16A",
+  "visualSystem": "paper-lab",
+  "title": "Just one small thing.",
+  "mechanism": "containment",
+  "day": 16,
+  "slot": "A",
+  "caption": "34 story points. One small thing.",
+  "beats": [
+    {
+      "copy": "just one small thing"
+    },
+    {
+      "copy": "...and open a new page"
+    },
+    {
+      "copy": "...and a dashboard"
+    },
+    {
+      "copy": "still just one small thing though"
+    },
+    {
+      "copy": "just one small thing"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#DevHumor",
+    "#TechComedy",
+    "#DevLife"
+  ],
+  "slotIndex": 60
+}

@@ -1,0 +1,34 @@
+{
+  "id": "Day25A",
+  "visualSystem": "sandbox",
+  "title": "1,200 tickets a month. 60% never reach a human now.",
+  "mechanism": "containment",
+  "day": 25,
+  "slot": "A",
+  "caption": "Automate the three questions that make up most of your volume.",
+  "beats": [
+    {
+      "copy": "1,200 / month"
+    },
+    {
+      "copy": "3 questions = 61% of volume"
+    },
+    {
+      "copy": "AUTOMATED: status page"
+    },
+    {
+      "copy": "4h -> 40s"
+    },
+    {
+      "copy": "not fewer people. better tickets."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 96
+}

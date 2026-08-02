@@ -1,0 +1,34 @@
+{
+  "id": "Day02A",
+  "visualSystem": "museum-optics",
+  "title": "Type this after your domain.",
+  "mechanism": "folded-claim",
+  "day": 2,
+  "slot": "A",
+  "caption": "Three URLs. Test them on your own site in the next 60 seconds.",
+  "beats": [
+    {
+      "copy": "yoursite.com/"
+    },
+    {
+      "copy": "/wp-admin /.git /backup.zip"
+    },
+    {
+      "copy": "and your database password"
+    },
+    {
+      "copy": "deny all. 3 lines."
+    },
+    {
+      "copy": "/wp-admin /.git /backup.zip"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 4
+}

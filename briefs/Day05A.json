@@ -1,0 +1,34 @@
+{
+  "id": "Day05A",
+  "visualSystem": "sandbox",
+  "title": "It Works On My Machine",
+  "mechanism": "folded-claim",
+  "day": 5,
+  "slot": "A",
+  "caption": "It Works On My Machine",
+  "beats": [
+    {
+      "copy": "It Works On My Machine"
+    },
+    {
+      "copy": "Round one"
+    },
+    {
+      "copy": "Round two"
+    },
+    {
+      "copy": "Round three"
+    },
+    {
+      "copy": "The punchline"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#DevHumor",
+    "#TechComedy",
+    "#DevLife"
+  ],
+  "slotIndex": 16
+}

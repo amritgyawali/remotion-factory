@@ -1,0 +1,34 @@
+{
+  "id": "Day07A",
+  "visualSystem": "utility-room",
+  "title": "You have used DevTools for years. Never opened this.",
+  "mechanism": "containment",
+  "day": 7,
+  "slot": "A",
+  "caption": "Three DevTools tricks. Which one did you not know?",
+  "beats": [
+    {
+      "copy": "YOU HAVE NEVER OPENED THIS"
+    },
+    {
+      "copy": "TRICK 1: full page screenshot"
+    },
+    {
+      "copy": "working API call. zero writing."
+    },
+    {
+      "copy": "stops only when id === 42"
+    },
+    {
+      "copy": "Which did you not know?"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 24
+}

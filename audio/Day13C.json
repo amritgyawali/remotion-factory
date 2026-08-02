@@ -1,0 +1,46 @@
+{
+  "id": "Day13C",
+  "durationInFrames": 900,
+  "fps": 30,
+  "rootHz": 135,
+  "bpm": 97,
+  "peak": 0.09,
+  "cues": [
+    {
+      "frame": 0,
+      "kind": "tone",
+      "seconds": 0.14,
+      "gain": 0.46,
+      "hz": 295
+    },
+    {
+      "frame": 90,
+      "kind": "tone",
+      "seconds": 0.08,
+      "gain": 0.34,
+      "hz": 256
+    },
+    {
+      "frame": 240,
+      "kind": "sweep",
+      "seconds": 0.11,
+      "gain": 0.34,
+      "hz": 277,
+      "sweep": 2.93
+    },
+    {
+      "frame": 450,
+      "kind": "tone",
+      "seconds": 0.16,
+      "gain": 0.42,
+      "hz": 314
+    },
+    {
+      "frame": 720,
+      "kind": "noise",
+      "seconds": 0.18,
+      "gain": 0.48,
+      "hz": 292
+    }
+  ]
+}

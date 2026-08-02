@@ -1,0 +1,34 @@
+{
+  "id": "Day28A",
+  "visualSystem": "paper-lab",
+  "title": "Month 3. Eleven days of money left.",
+  "mechanism": "containment",
+  "day": 28,
+  "slot": "A",
+  "caption": "50% upfront is not rude. It is the reason we still exist.",
+  "beats": [
+    {
+      "copy": "11 DAYS"
+    },
+    {
+      "copy": "3 invoices. 60 days late."
+    },
+    {
+      "copy": "4 polite emails. No replies."
+    },
+    {
+      "copy": "50% upfront. Net 14. Late fees."
+    },
+    {
+      "copy": "11 DAYS"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#FounderStory",
+    "#StartupLife",
+    "#Motivation"
+  ],
+  "slotIndex": 108
+}

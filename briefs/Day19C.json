@@ -1,0 +1,34 @@
+{
+  "id": "Day19C",
+  "visualSystem": "sandbox",
+  "title": "400 days. Here is what actually changed.",
+  "mechanism": "utility-chain",
+  "day": 19,
+  "slot": "C",
+  "caption": "Day 400 is just day 1 repeated without stopping.\n\n#MeritByte #CaseStudy #Results",
+  "beats": [
+    {
+      "copy": "DAY 1"
+    },
+    {
+      "copy": "DAY 400"
+    },
+    {
+      "copy": "0 -> 19 clients"
+    },
+    {
+      "copy": "Nothing changed on day 400."
+    },
+    {
+      "copy": "DAY 1"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#FounderStory",
+    "#StartupLife",
+    "#Motivation"
+  ],
+  "slotIndex": 74
+}

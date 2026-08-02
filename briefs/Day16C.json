@@ -1,0 +1,34 @@
+{
+  "id": "Day16C",
+  "visualSystem": "museum-optics",
+  "title": "It started as one small thing.",
+  "mechanism": "utility-chain",
+  "day": 16,
+  "slot": "C",
+  "caption": "34 story points. One small thing.\n\n#MeritByte #CaseStudy #Results",
+  "beats": [
+    {
+      "copy": "It started as one small thing."
+    },
+    {
+      "copy": "...that emails the team"
+    },
+    {
+      "copy": "...and a dashboard"
+    },
+    {
+      "copy": "...and user accounts"
+    },
+    {
+      "copy": "still just one small thing though"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#DevHumor",
+    "#TechComedy",
+    "#DevLife"
+  ],
+  "slotIndex": 62
+}

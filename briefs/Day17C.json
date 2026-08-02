@@ -1,0 +1,34 @@
+{
+  "id": "Day17C",
+  "visualSystem": "utility-room",
+  "title": "This prompt replaced 3 days of work.",
+  "mechanism": "vault-vs-field",
+  "day": 17,
+  "slot": "C",
+  "caption": "The full prompt is in frame. Screenshot the last 3 seconds.\n\n#MeritByte #CaseStudy #Results",
+  "beats": [
+    {
+      "copy": "200 pages to fill"
+    },
+    {
+      "copy": "41 ... 88 ... 140"
+    },
+    {
+      "copy": "200 done. 41 seconds."
+    },
+    {
+      "copy": "CTR +18% in 6 weeks"
+    },
+    {
+      "copy": "WHY IT WORKS: 3 parts"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 66
+}

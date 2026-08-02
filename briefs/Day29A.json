@@ -1,0 +1,34 @@
+{
+  "id": "Day29A",
+  "visualSystem": "sandbox",
+  "title": "Design to working code in 58 seconds.",
+  "mechanism": "folded-claim",
+  "day": 29,
+  "slot": "A",
+  "caption": "A great first draft. Never a final build. The last 30% is the job.",
+  "beats": [
+    {
+      "copy": "58 SECONDS"
+    },
+    {
+      "copy": "generating"
+    },
+    {
+      "copy": "70% there"
+    },
+    {
+      "copy": "FAIL 2: no aria labels"
+    },
+    {
+      "copy": "great first draft. not a final build."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 112
+}

@@ -1,0 +1,34 @@
+{
+  "id": "Day05B",
+  "visualSystem": "museum-optics",
+  "title": "It Works On My Machine: How",
+  "mechanism": "assembly-line",
+  "day": 5,
+  "slot": "B",
+  "caption": "It Works On My Machine\n\n#MeritByte #TechInsight #WebDev",
+  "beats": [
+    {
+      "copy": "It Works On My Machine"
+    },
+    {
+      "copy": "Round one"
+    },
+    {
+      "copy": "Round two"
+    },
+    {
+      "copy": "Round three"
+    },
+    {
+      "copy": "The punchline"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#DevHumor",
+    "#TechComedy",
+    "#DevLife"
+  ],
+  "slotIndex": 17
+}

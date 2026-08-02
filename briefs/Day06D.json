@@ -1,0 +1,34 @@
+{
+  "id": "Day06D",
+  "visualSystem": "sandbox",
+  "title": "Eleven Seconds To One: What To Do",
+  "mechanism": "training-loop",
+  "day": 6,
+  "slot": "D",
+  "caption": "Comment SPEED for the checklist.\n\n#MeritByte #BuildBetter #Actionable",
+  "beats": [
+    {
+      "copy": "11x smaller"
+    },
+    {
+      "copy": "FIX 2: 9 scripts -> 2"
+    },
+    {
+      "copy": "FIX 3: one cache header"
+    },
+    {
+      "copy": "bounce -41% enquiries +2.3x"
+    },
+    {
+      "copy": "same site. 3 fixes."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 23
+}

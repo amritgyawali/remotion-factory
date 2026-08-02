@@ -1,0 +1,34 @@
+{
+  "id": "Day24C",
+  "visualSystem": "museum-optics",
+  "title": "Wait for comment number 31.",
+  "mechanism": "signal-rights",
+  "day": 24,
+  "slot": "C",
+  "caption": "Comment 31 is why we use a review tool now.\n\n#MeritByte #CaseStudy #Results",
+  "beats": [
+    {
+      "copy": "47 COMMENTS"
+    },
+    {
+      "copy": "#19: can it be more premium"
+    },
+    {
+      "copy": "#26: bigger | #27: smaller"
+    },
+    {
+      "copy": "#31: can we see the old one again"
+    },
+    {
+      "copy": "47 COMMENTS"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#DevHumor",
+    "#TechComedy",
+    "#DevLife"
+  ],
+  "slotIndex": 94
+}

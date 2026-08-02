@@ -1,0 +1,34 @@
+{
+  "id": "Day08D",
+  "visualSystem": "utility-room",
+  "title": "A QA Tester Walks Into A Bar: What To Do",
+  "mechanism": "feeding-web",
+  "day": 8,
+  "slot": "D",
+  "caption": "No CTA. Tag bait.\n\n#MeritByte #BuildBetter #Actionable",
+  "beats": [
+    {
+      "copy": "The bar catches fire."
+    },
+    {
+      "copy": "He files a bug report."
+    },
+    {
+      "copy": "Priority: LOW"
+    },
+    {
+      "copy": "Nobody ordered a real drink."
+    },
+    {
+      "copy": "A QA tester walks into a bar."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#DevHumor",
+    "#TechComedy",
+    "#DevLife"
+  ],
+  "slotIndex": 31
+}

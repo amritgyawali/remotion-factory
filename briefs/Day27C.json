@@ -1,0 +1,34 @@
+{
+  "id": "Day27C",
+  "visualSystem": "sandbox",
+  "title": "Six attempts to explain one refresh.",
+  "mechanism": "signal-rights",
+  "day": 27,
+  "slot": "C",
+  "caption": "Attempt 7 begins tomorrow.\n\n#MeritByte #CaseStudy #Results",
+  "beats": [
+    {
+      "copy": "ATTEMPT 6"
+    },
+    {
+      "copy": "your browser saved the old one"
+    },
+    {
+      "copy": "ATTEMPT 7"
+    },
+    {
+      "copy": "ATTEMPT 7"
+    },
+    {
+      "copy": "ATTEMPT 7"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#DevHumor",
+    "#TechComedy",
+    "#DevLife"
+  ],
+  "slotIndex": 106
+}

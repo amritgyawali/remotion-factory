@@ -1,0 +1,34 @@
+{
+  "id": "Day20B",
+  "visualSystem": "sandbox",
+  "title": "Do not deploy on a Friday. They deployed.",
+  "mechanism": "assembly-line",
+  "day": 20,
+  "slot": "B",
+  "caption": "We deploy on Tuesdays now. Learned the expensive way.\n\n#MeritByte #TechInsight #WebDev",
+  "beats": [
+    {
+      "copy": "Do not deploy on a Friday. They deployed."
+    },
+    {
+      "copy": "17:00 — the clock flips"
+    },
+    {
+      "copy": "errors: 340 — error count"
+    },
+    {
+      "copy": "340 alerts"
+    },
+    {
+      "copy": "git revert"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#DevHumor",
+    "#TechComedy",
+    "#DevLife"
+  ],
+  "slotIndex": 77
+}

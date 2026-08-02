@@ -1,0 +1,34 @@
+{
+  "id": "Day10B",
+  "visualSystem": "utility-room",
+  "title": "We shipped this at 2am. It ran for 6 days.",
+  "mechanism": "optics",
+  "day": 10,
+  "slot": "B",
+  "caption": "The line was not the problem. The missing test was.\n\n#MeritByte #TechInsight #WebDev",
+  "beats": [
+    {
+      "copy": "We shipped this at 2am. It ran for 6 days."
+    },
+    {
+      "copy": "6 days in production"
+    },
+    {
+      "copy": "every one of them invoiced"
+    },
+    {
+      "copy": "one test. would have caught it."
+    },
+    {
+      "copy": "We stopped blaming the line."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#FounderStory",
+    "#StartupLife",
+    "#Motivation"
+  ],
+  "slotIndex": 37
+}

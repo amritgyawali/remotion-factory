@@ -1,0 +1,34 @@
+{
+  "id": "Day20A",
+  "visualSystem": "paper-lab",
+  "title": "Friday. 5 PM. Someone clicked deploy.",
+  "mechanism": "folded-claim",
+  "day": 20,
+  "slot": "A",
+  "caption": "We deploy on Tuesdays now. Learned the expensive way.",
+  "beats": [
+    {
+      "copy": "FRIDAY. 16:59. — clock graphic"
+    },
+    {
+      "copy": "no no no no"
+    },
+    {
+      "copy": "errors: 340 — error count"
+    },
+    {
+      "copy": "340 alerts"
+    },
+    {
+      "copy": "FRIDAY. 16:59."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#DevHumor",
+    "#TechComedy",
+    "#DevLife"
+  ],
+  "slotIndex": 76
+}

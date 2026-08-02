@@ -1,0 +1,34 @@
+{
+  "id": "Day09D",
+  "visualSystem": "paper-lab",
+  "title": "Roast My Website — Ep. 02: What To Do",
+  "mechanism": "training-loop",
+  "day": 9,
+  "slot": "D",
+  "caption": "Comment a URL for episode 3.\n\n#MeritByte #BuildBetter #Actionable",
+  "beats": [
+    {
+      "copy": "THE FIX: 3 lines"
+    },
+    {
+      "copy": "TAP 1. Opens."
+    },
+    {
+      "copy": "works. finally."
+    },
+    {
+      "copy": "[X] enquiries lost per month"
+    },
+    {
+      "copy": "Drop a URL for Ep. 03."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 35
+}

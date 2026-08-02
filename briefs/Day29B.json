@@ -1,0 +1,34 @@
+{
+  "id": "Day29B",
+  "visualSystem": "museum-optics",
+  "title": "58 seconds. Then we show what it got wrong.",
+  "mechanism": "assembly-line",
+  "day": 29,
+  "slot": "B",
+  "caption": "A great first draft. Never a final build. The last 30% is the job.\n\n#MeritByte #TechInsight #WebDev",
+  "beats": [
+    {
+      "copy": "58 seconds. Then we show what it got wrong."
+    },
+    {
+      "copy": "6 components"
+    },
+    {
+      "copy": "70% there"
+    },
+    {
+      "copy": "FAIL 1: breakpoints"
+    },
+    {
+      "copy": "FAIL 3: 340KB of unused CSS"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 113
+}

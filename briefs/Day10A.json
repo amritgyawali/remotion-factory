@@ -1,0 +1,34 @@
+{
+  "id": "Day10A",
+  "visualSystem": "museum-optics",
+  "title": "One line of code. 340 duplicate records.",
+  "mechanism": "containment",
+  "day": 10,
+  "slot": "A",
+  "caption": "The line was not the problem. The missing test was.",
+  "beats": [
+    {
+      "copy": "one line"
+    },
+    {
+      "copy": "all tests passed"
+    },
+    {
+      "copy": "every one of them invoiced"
+    },
+    {
+      "copy": "one test. would have caught it."
+    },
+    {
+      "copy": "one line"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#FounderStory",
+    "#StartupLife",
+    "#Motivation"
+  ],
+  "slotIndex": 36
+}

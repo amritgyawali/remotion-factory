@@ -1,0 +1,46 @@
+{
+  "id": "Day24B",
+  "durationInFrames": 900,
+  "fps": 30,
+  "rootHz": 106,
+  "bpm": 81,
+  "peak": 0.09,
+  "cues": [
+    {
+      "frame": 0,
+      "kind": "tone",
+      "seconds": 0.11,
+      "gain": 0.49,
+      "hz": 277
+    },
+    {
+      "frame": 90,
+      "kind": "tone",
+      "seconds": 0.16,
+      "gain": 0.45,
+      "hz": 431
+    },
+    {
+      "frame": 240,
+      "kind": "sweep",
+      "seconds": 0.13,
+      "gain": 0.42,
+      "hz": 428,
+      "sweep": 2.79
+    },
+    {
+      "frame": 450,
+      "kind": "tone",
+      "seconds": 0.09,
+      "gain": 0.45,
+      "hz": 344
+    },
+    {
+      "frame": 720,
+      "kind": "noise",
+      "seconds": 0.17,
+      "gain": 0.41,
+      "hz": 430
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "id": "Day17B",
+  "durationInFrames": 900,
+  "fps": 30,
+  "rootHz": 100,
+  "bpm": 113,
+  "peak": 0.09,
+  "cues": [
+    {
+      "frame": 0,
+      "kind": "tone",
+      "seconds": 0.08,
+      "gain": 0.35,
+      "hz": 322
+    },
+    {
+      "frame": 90,
+      "kind": "tone",
+      "seconds": 0.11,
+      "gain": 0.36,
+      "hz": 326
+    },
+    {
+      "frame": 240,
+      "kind": "sweep",
+      "seconds": 0.13,
+      "gain": 0.48,
+      "hz": 301,
+      "sweep": 2.22
+    },
+    {
+      "frame": 450,
+      "kind": "tone",
+      "seconds": 0.1,
+      "gain": 0.41,
+      "hz": 360
+    },
+    {
+      "frame": 720,
+      "kind": "noise",
+      "seconds": 0.11,
+      "gain": 0.4,
+      "hz": 233
+    }
+  ]
+}

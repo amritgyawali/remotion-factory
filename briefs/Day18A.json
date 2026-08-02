@@ -1,0 +1,34 @@
+{
+  "id": "Day18A",
+  "visualSystem": "museum-optics",
+  "title": "We found their database password in 90 seconds.",
+  "mechanism": "orbital-ledger",
+  "day": 18,
+  "slot": "A",
+  "caption": "Deleting a secret does not remove it. Git keeps everything.",
+  "beats": [
+    {
+      "copy": "90 SECONDS"
+    },
+    {
+      "copy": "commit from 2022"
+    },
+    {
+      "copy": "full admin access"
+    },
+    {
+      "copy": "THE FIX: rotate. scan. block."
+    },
+    {
+      "copy": "rotate every key. now."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 68
+}

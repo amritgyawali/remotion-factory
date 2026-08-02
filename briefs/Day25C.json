@@ -1,0 +1,34 @@
+{
+  "id": "Day25C",
+  "visualSystem": "utility-room",
+  "title": "720 of these tickets are answered without anyone reading them.",
+  "mechanism": "utility-chain",
+  "day": 25,
+  "slot": "C",
+  "caption": "Automate the three questions that make up most of your volume.\n\n#MeritByte #CaseStudy #Results",
+  "beats": [
+    {
+      "copy": "1,200 / month"
+    },
+    {
+      "copy": "now: 480"
+    },
+    {
+      "copy": "4h -> 40s"
+    },
+    {
+      "copy": "humans now handle the hard 39%"
+    },
+    {
+      "copy": "we removed the boring 61%"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 98
+}

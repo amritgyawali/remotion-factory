@@ -1,0 +1,34 @@
+{
+  "id": "Day20C",
+  "visualSystem": "museum-optics",
+  "title": "17:00 on a Friday. The button was pressed.",
+  "mechanism": "vault-vs-field",
+  "day": 20,
+  "slot": "C",
+  "caption": "We deploy on Tuesdays now. Learned the expensive way.\n\n#MeritByte #CaseStudy #Results",
+  "beats": [
+    {
+      "copy": "FRIDAY. 16:59. — clock graphic"
+    },
+    {
+      "copy": "17:00 — the clock flips"
+    },
+    {
+      "copy": "errors: 340 — error count"
+    },
+    {
+      "copy": "340 alerts"
+    },
+    {
+      "copy": "FRIDAY. 16:59."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#DevHumor",
+    "#TechComedy",
+    "#DevLife"
+  ],
+  "slotIndex": 78
+}

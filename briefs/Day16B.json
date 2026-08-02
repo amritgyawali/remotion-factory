@@ -1,0 +1,34 @@
+{
+  "id": "Day16B",
+  "visualSystem": "sandbox",
+  "title": "5 words that mean 3 weeks of work.",
+  "mechanism": "optics",
+  "day": 16,
+  "slot": "B",
+  "caption": "34 story points. One small thing.\n\n#MeritByte #TechInsight #WebDev",
+  "beats": [
+    {
+      "copy": "5 words that mean 3 weeks of work."
+    },
+    {
+      "copy": "...with a form"
+    },
+    {
+      "copy": "...and a dashboard"
+    },
+    {
+      "copy": "still just one small thing though"
+    },
+    {
+      "copy": "TICKET: one small thing"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#DevHumor",
+    "#TechComedy",
+    "#DevLife"
+  ],
+  "slotIndex": 61
+}

@@ -1,0 +1,34 @@
+{
+  "id": "Day26B",
+  "visualSystem": "utility-room",
+  "title": "site:yourdomain.com — do it now.",
+  "mechanism": "assembly-line",
+  "day": 26,
+  "slot": "B",
+  "caption": "One search tells you whether your site is compromised. Do it tonight.\n\n#MeritByte #TechInsight #WebDev",
+  "beats": [
+    {
+      "copy": "site:yourdomain.com — do it now."
+    },
+    {
+      "copy": "site:yourdomain.com"
+    },
+    {
+      "copy": "you cannot see them. Google can."
+    },
+    {
+      "copy": "mobile visitors get redirected"
+    },
+    {
+      "copy": "then tell Google"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 101
+}

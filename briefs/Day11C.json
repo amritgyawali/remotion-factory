@@ -1,0 +1,34 @@
+{
+  "id": "Day11C",
+  "visualSystem": "sandbox",
+  "title": "This subscription did one thing. We wrote that thing.",
+  "mechanism": "vault-vs-field",
+  "day": 11,
+  "slot": "C",
+  "caption": "Audit your stack. Most teams pay for 14 features and use one.\n\n#MeritByte #CaseStudy #Results",
+  "beats": [
+    {
+      "copy": "$200 / month"
+    },
+    {
+      "copy": "we used 1 of 14 features"
+    },
+    {
+      "copy": "40 lines. one afternoon."
+    },
+    {
+      "copy": "AUDIT YOUR STACK: 4 questions"
+    },
+    {
+      "copy": "1 of 14 features = cancel it"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 42
+}

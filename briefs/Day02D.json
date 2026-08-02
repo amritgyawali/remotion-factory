@@ -1,0 +1,34 @@
+{
+  "id": "Day02D",
+  "visualSystem": "sandbox",
+  "title": "Your Website Is Leaking: What To Do",
+  "mechanism": "feeding-web",
+  "day": 2,
+  "slot": "D",
+  "caption": "Save this. Then actually test it.\n\n#MeritByte #BuildBetter #Actionable",
+  "beats": [
+    {
+      "copy": "THE FIX"
+    },
+    {
+      "copy": "deny all. 3 lines."
+    },
+    {
+      "copy": "403 403 403"
+    },
+    {
+      "copy": "Test all 3 on your site. Right now."
+    },
+    {
+      "copy": "/wp-admin /.git /backup.zip"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 7
+}

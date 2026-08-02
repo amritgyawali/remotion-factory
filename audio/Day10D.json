@@ -1,0 +1,46 @@
+{
+  "id": "Day10D",
+  "durationInFrames": 900,
+  "fps": 30,
+  "rootHz": 110,
+  "bpm": 104,
+  "peak": 0.09,
+  "cues": [
+    {
+      "frame": 0,
+      "kind": "tone",
+      "seconds": 0.13,
+      "gain": 0.46,
+      "hz": 309
+    },
+    {
+      "frame": 90,
+      "kind": "tone",
+      "seconds": 0.16,
+      "gain": 0.44,
+      "hz": 251
+    },
+    {
+      "frame": 240,
+      "kind": "sweep",
+      "seconds": 0.1,
+      "gain": 0.43,
+      "hz": 394,
+      "sweep": 2.62
+    },
+    {
+      "frame": 450,
+      "kind": "tone",
+      "seconds": 0.13,
+      "gain": 0.34,
+      "hz": 278
+    },
+    {
+      "frame": 720,
+      "kind": "noise",
+      "seconds": 0.16,
+      "gain": 0.43,
+      "hz": 422
+    }
+  ]
+}

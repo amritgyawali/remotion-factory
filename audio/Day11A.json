@@ -1,0 +1,46 @@
+{
+  "id": "Day11A",
+  "durationInFrames": 900,
+  "fps": 30,
+  "rootHz": 114,
+  "bpm": 82,
+  "peak": 0.09,
+  "cues": [
+    {
+      "frame": 0,
+      "kind": "tone",
+      "seconds": 0.17,
+      "gain": 0.37,
+      "hz": 306
+    },
+    {
+      "frame": 90,
+      "kind": "tone",
+      "seconds": 0.16,
+      "gain": 0.3,
+      "hz": 415
+    },
+    {
+      "frame": 240,
+      "kind": "sweep",
+      "seconds": 0.17,
+      "gain": 0.44,
+      "hz": 346,
+      "sweep": 2.72
+    },
+    {
+      "frame": 450,
+      "kind": "tone",
+      "seconds": 0.17,
+      "gain": 0.43,
+      "hz": 328
+    },
+    {
+      "frame": 720,
+      "kind": "noise",
+      "seconds": 0.17,
+      "gain": 0.43,
+      "hz": 395
+    }
+  ]
+}

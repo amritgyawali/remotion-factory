@@ -1,0 +1,34 @@
+{
+  "id": "Day17A",
+  "visualSystem": "sandbox",
+  "title": "One prompt wrote 200 meta descriptions.",
+  "mechanism": "folded-claim",
+  "day": 17,
+  "slot": "A",
+  "caption": "The full prompt is in frame. Screenshot the last 3 seconds.",
+  "beats": [
+    {
+      "copy": "one prompt"
+    },
+    {
+      "copy": "41 ... 88 ... 140"
+    },
+    {
+      "copy": "200 done. 41 seconds."
+    },
+    {
+      "copy": "WHY IT WORKS: 3 parts"
+    },
+    {
+      "copy": "the full prompt"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 64
+}

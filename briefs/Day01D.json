@@ -1,0 +1,34 @@
+{
+  "id": "Day01D",
+  "visualSystem": "paper-lab",
+  "title": "Make The Logo Bigger: What To Do",
+  "mechanism": "forensics",
+  "day": 1,
+  "slot": "D",
+  "caption": "Make The Logo Bigger\n\n#MeritByte #BuildBetter #Actionable",
+  "beats": [
+    {
+      "copy": "Make The Logo Bigger"
+    },
+    {
+      "copy": "Round one"
+    },
+    {
+      "copy": "Round two"
+    },
+    {
+      "copy": "Round three"
+    },
+    {
+      "copy": "The punchline"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#DevHumor",
+    "#TechComedy",
+    "#DevLife"
+  ],
+  "slotIndex": 3
+}

@@ -1,0 +1,34 @@
+{
+  "id": "Day05C",
+  "visualSystem": "utility-room",
+  "title": "It Works On My Machine: Why",
+  "mechanism": "vault-vs-field",
+  "day": 5,
+  "slot": "C",
+  "caption": "It Works On My Machine\n\n#MeritByte #CaseStudy #Results",
+  "beats": [
+    {
+      "copy": "It Works On My Machine"
+    },
+    {
+      "copy": "Round one"
+    },
+    {
+      "copy": "Round two"
+    },
+    {
+      "copy": "Round three"
+    },
+    {
+      "copy": "The punchline"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#DevHumor",
+    "#TechComedy",
+    "#DevLife"
+  ],
+  "slotIndex": 18
+}

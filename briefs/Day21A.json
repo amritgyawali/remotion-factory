@@ -1,0 +1,34 @@
+{
+  "id": "Day21A",
+  "visualSystem": "sandbox",
+  "title": "3 numbers decide your Google ranking.",
+  "mechanism": "orbital-ledger",
+  "day": 21,
+  "slot": "A",
+  "caption": "Three thresholds. Test your site and check all three.",
+  "beats": [
+    {
+      "copy": "3 NUMBERS"
+    },
+    {
+      "copy": "LCP < 2.5s"
+    },
+    {
+      "copy": "tap to response delay"
+    },
+    {
+      "copy": "the button that moves"
+    },
+    {
+      "copy": "2.5s / 200ms / 0.1"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 80
+}

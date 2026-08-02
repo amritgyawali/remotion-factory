@@ -1,0 +1,34 @@
+{
+  "id": "Day18D",
+  "visualSystem": "sandbox",
+  "title": "We Found Their Password: What To Do",
+  "mechanism": "training-loop",
+  "day": 18,
+  "slot": "D",
+  "caption": "Send this to whoever owns your repo.\n\n#MeritByte #BuildBetter #Actionable",
+  "beats": [
+    {
+      "copy": "01:28"
+    },
+    {
+      "copy": "THE FIX: rotate. scan. block."
+    },
+    {
+      "copy": "turn this on today"
+    },
+    {
+      "copy": "git does not forget. ever."
+    },
+    {
+      "copy": "rotate every key. now."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 71
+}

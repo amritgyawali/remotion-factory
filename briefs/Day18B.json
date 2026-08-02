@@ -1,0 +1,34 @@
+{
+  "id": "Day18B",
+  "visualSystem": "utility-room",
+  "title": "It was in their public code. For 2 years.",
+  "mechanism": "shared-sky",
+  "day": 18,
+  "slot": "B",
+  "caption": "Deleting a secret does not remove it. Git keeps everything.\n\n#MeritByte #TechInsight #WebDev",
+  "beats": [
+    {
+      "copy": "It was in their public code. For 2 years."
+    },
+    {
+      "copy": "DB_PASSWORD = ████████"
+    },
+    {
+      "copy": "full admin access"
+    },
+    {
+      "copy": "THE FIX: rotate. scan. block."
+    },
+    {
+      "copy": "turn this on today"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 69
+}

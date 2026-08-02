@@ -1,0 +1,34 @@
+{
+  "id": "Day23B",
+  "visualSystem": "paper-lab",
+  "title": "No viral post. No launch. Just retainers.",
+  "mechanism": "assembly-line",
+  "day": 23,
+  "slot": "B",
+  "caption": "The unglamorous work is the work that compounds.\n\n#MeritByte #TechInsight #WebDev",
+  "beats": [
+    {
+      "copy": "No viral post. No launch. Just retainers."
+    },
+    {
+      "copy": "patch. update. monitor."
+    },
+    {
+      "copy": "retainers: the same every month"
+    },
+    {
+      "copy": "boring = predictable"
+    },
+    {
+      "copy": "It is the only thing that compounds."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#FounderStory",
+    "#StartupLife",
+    "#Motivation"
+  ],
+  "slotIndex": 89
+}

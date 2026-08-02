@@ -1,0 +1,34 @@
+{
+  "id": "Day06C",
+  "visualSystem": "paper-lab",
+  "title": "This page took 11 seconds to load.",
+  "mechanism": "signal-rights",
+  "day": 6,
+  "slot": "C",
+  "caption": "Three fixes. 11.4s to 1.2s. No redesign, no rebuild.\n\n#MeritByte #CaseStudy #Results",
+  "beats": [
+    {
+      "copy": "1.0s ... 1.2s"
+    },
+    {
+      "copy": "BEFORE: 6.8s ..."
+    },
+    {
+      "copy": "11x smaller"
+    },
+    {
+      "copy": "FIX 3: one cache header"
+    },
+    {
+      "copy": "same site. 3 fixes."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 22
+}

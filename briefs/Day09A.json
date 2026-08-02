@@ -1,0 +1,34 @@
+{
+  "id": "Day09A",
+  "visualSystem": "sandbox",
+  "title": "This menu does not open on any phone.",
+  "mechanism": "orbital-ledger",
+  "day": 9,
+  "slot": "A",
+  "caption": "Episode 2. Test your own menu on a real phone tonight.",
+  "beats": [
+    {
+      "copy": "TAP 1"
+    },
+    {
+      "copy": "68% of their traffic is mobile"
+    },
+    {
+      "copy": "tested on desktop only"
+    },
+    {
+      "copy": "TAP 1. Opens."
+    },
+    {
+      "copy": "Drop a URL for Ep. 03."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#TechInsight",
+    "#WebDev",
+    "#SoftwareEngineering"
+  ],
+  "slotIndex": 32
+}

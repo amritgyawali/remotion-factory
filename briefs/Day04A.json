@@ -1,0 +1,34 @@
+{
+  "id": "Day04A",
+  "visualSystem": "paper-lab",
+  "title": "Our first client fired us in 4 days.",
+  "mechanism": "containment",
+  "day": 4,
+  "slot": "A",
+  "caption": "The Friday update rule came from getting fired. Still the best process we have.",
+  "beats": [
+    {
+      "copy": "Fired in 4 days."
+    },
+    {
+      "copy": "Day 0: signed"
+    },
+    {
+      "copy": "14 tasks. Zero updates sent."
+    },
+    {
+      "copy": "They doubted we were working at all."
+    },
+    {
+      "copy": "Fired in 4 days."
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#FounderStory",
+    "#StartupLife",
+    "#Motivation"
+  ],
+  "slotIndex": 12
+}

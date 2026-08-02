@@ -1,0 +1,34 @@
+{
+  "id": "Day08B",
+  "visualSystem": "sandbox",
+  "title": "A QA tester orders a beer. Then -1 beers.",
+  "mechanism": "assembly-line",
+  "day": 8,
+  "slot": "B",
+  "caption": "Order 12 is why QA exists. Tag your tester.\n\n#MeritByte #TechInsight #WebDev",
+  "beats": [
+    {
+      "copy": "A QA tester orders a beer. Then -1 beers."
+    },
+    {
+      "copy": "Orders -1 beers."
+    },
+    {
+      "copy": "Orders NULL."
+    },
+    {
+      "copy": "The bar catches fire."
+    },
+    {
+      "copy": "Priority: LOW"
+    }
+  ],
+  "hashtags": [
+    "#MeritByte",
+    "#BuildBetter",
+    "#DevHumor",
+    "#TechComedy",
+    "#DevLife"
+  ],
+  "slotIndex": 29
+}
