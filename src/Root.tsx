@@ -179,19 +179,17 @@ export const RemotionRoot: React.FC = () => (
       {...VERTICAL}
       durationInFrames={900}
       defaultProps={{
-        brief: {
-          id: "placeholder",
-          visualSystem: "sandbox",
-          title: "Placeholder Reel",
-          beats: [
-            { copy: "Beat one" },
-            { copy: "Beat two" },
-            { copy: "Beat three" },
-            { copy: "Beat four" },
-            { copy: "Beat five" },
-          ],
-          mechanism: "containment",
-        },
+        id: "placeholder",
+        visualSystem: "sandbox",
+        title: "Placeholder Reel",
+        beats: [
+          { copy: "Beat one" },
+          { copy: "Beat two" },
+          { copy: "Beat three" },
+          { copy: "Beat four" },
+          { copy: "Beat five" },
+        ],
+        mechanism: "containment",
       }}
     />
 

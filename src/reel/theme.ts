@@ -21,10 +21,10 @@ import type { Theme } from "../theme";
 export type ReelTheme = Theme;
 
 export const VISUAL_SYSTEM_PALETTES: Record<string, Partial<Theme>> = {
-  "sandbox": { ground: "#0E1A16", groundLift: "#1B2F27", paper: "#EAF2EC", amber: "#7DD9A8", seaglass: "#9BC5E0" },
-  "museum-optics": { ground: "#1A0E12", groundLift: "#331B24", paper: "#F3E9E6", amber: "#E8B98C", seaglass: "#A9C7C2" },
-  "utility-room": { ground: "#17140C", groundLift: "#2C2613", paper: "#F2EBD9", amber: "#D9A05B", seaglass: "#8FBFA0" },
-  "paper-lab": { ground: "#14101C", groundLift: "#29213A", paper: "#EFEAF4", amber: "#C9A26B", seaglass: "#9FB6D9" },
+  "sandbox": { ground: "#0E1A16" as any, groundLift: "#1B2F27" as any, paper: "#EAF2EC" as any, amber: "#7DD9A8" as any, seaglass: "#9BC5E0" as any },
+  "museum-optics": { ground: "#1A0E12" as any, groundLift: "#331B24" as any, paper: "#F3E9E6" as any, amber: "#E8B98C" as any, seaglass: "#A9C7C2" as any },
+  "utility-room": { ground: "#17140C" as any, groundLift: "#2C2613" as any, paper: "#F2EBD9" as any, amber: "#D9A05B" as any, seaglass: "#8FBFA0" as any },
+  "paper-lab": { ground: "#14101C" as any, groundLift: "#29213A" as any, paper: "#EFEAF4" as any, amber: "#C9A26B" as any, seaglass: "#9FB6D9" as any },
 };
 
 export function themeForReel(id: string | undefined, visualSystem?: string): ReelTheme {
