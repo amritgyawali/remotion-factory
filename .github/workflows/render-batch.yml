@@ -66,7 +66,9 @@ jobs:
           key: remotion-browser-${{ runner.os }}-v1
 
       - name: Bundle and measure the composition
-        run: node scripts/bundle.mjs --id "${{ matrix.composition }}"
+        run: |
+          node scripts/bundle.mjs --id Reel \
+            --props "$(cat briefs/${{ matrix.composition }}.json)"
 
       # Audio first and at full length. It is muxed on at the end; the picture
       # is rendered muted so the two can never disagree about where zero is.
@@ -84,7 +86,6 @@ jobs:
       - name: Render the picture
         run: |
           node scripts/render-chunk.mjs \
-            --id "${{ matrix.composition }}" \
             --out "out/${{ matrix.composition }}-mute.mp4"
 
       # Remotion writes full-range frames. Handing a full-range yuv420p file to a

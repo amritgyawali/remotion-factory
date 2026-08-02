@@ -5,11 +5,11 @@ import { DevJoke } from "./templates/DevJoke";
 import { FounderStory } from "./templates/FounderStory";
 import { Recap } from "./templates/Recap";
 import { ListReveal } from "./templates/ListReveal";
-import { LogoLadder } from "./templates/LogoLadder";
 import { SiteRoast } from "./templates/SiteRoast";
 import { StatCard } from "./templates/StatCard";
 import { TechTip } from "./templates/TechTip";
 import { WorksOnMyMachine } from "./templates/WorksOnMyMachine";
+import { Reel } from "./reel/Reel";
 
 const FPS = 30;
 const VERTICAL = { width: 1080, height: 1920, fps: FPS } as const;
@@ -27,21 +27,6 @@ export const RemotionRoot: React.FC = () => (
       timed in seconds against a 15s body; stretching it with a prop would move
       the beats out from under the soundtrack rather than making a longer video.
     */}
-    <Composition
-      id="LogoLadder"
-      component={LogoLadder}
-      {...VERTICAL}
-      durationInFrames={17 * FPS}
-      defaultProps={{
-        eyebrow: "MeritByte — Build Better",
-        day: 1,
-        durationInSeconds: 17,
-        hook: "MAKE THE LOGO BIGGER",
-        promise: "round 7 of 7",
-        message: "perfect, can we see one more option",
-        payoff: "PERFECT. Ship it.",
-      }}
-    />
 
     <Composition
       id="WorksOnMyMachine"
@@ -104,11 +89,11 @@ export const RemotionRoot: React.FC = () => (
         eyebrow: "MERITBYTE / DEV LIFE",
         day: 1,
         durationInSeconds: 17,
-        hook: "MAKE THE LOGO BIGGER",
-        beats: ["Round 1 · balanced", "Round 4 · crowded", "Round 7 · the whole page"],
-        punchline: "We shipped round one.",
-        variant: "logo",
-        kicker: "DEV LIFE",
+        hook: "IT WORKS ON MY MACHINE",
+        beats: ["Local tests glow green", "Production config disagrees", "The error graph wakes up"],
+        punchline: "Ship the environment, not excuses.",
+        variant: "terminal",
+        kicker: "MATCH THE ENV",
       }}
     />
 
@@ -185,6 +170,31 @@ export const RemotionRoot: React.FC = () => (
         kicker: "FOUNDER NOTE",
       }}
     />
+    {/* The campaign reel. One composition, brief-driven: the workflow passes
+        the per-video brief JSON as inputProps, so each video is unique by its
+        brief, never by being a different component. */}
+    <Composition
+      id="Reel"
+      component={Reel}
+      {...VERTICAL}
+      durationInFrames={900}
+      defaultProps={{
+        brief: {
+          id: "placeholder",
+          visualSystem: "sandbox",
+          title: "Placeholder Reel",
+          beats: [
+            { copy: "Beat one" },
+            { copy: "Beat two" },
+            { copy: "Beat three" },
+            { copy: "Beat four" },
+            { copy: "Beat five" },
+          ],
+          mechanism: "containment",
+        },
+      }}
+    />
+
     <Composition
       id="Recap"
       component={Recap}

@@ -1,0 +1,18 @@
+{
+  "id": "Day01A",
+  "visualSystem": "sandbox",
+  "title": "YOUR PASSWORD IS YOUR NAME",
+  "mechanism": "containment",
+  "day": 1,
+  "slot": "A",
+  "caption": "Your password is your name. Fix it. #CyberSecurity #InfoSec #DataBreach #Privacy #EthicalHacking",
+  "beats": [
+    { "copy": "Most people use their own name\nas their password." },
+    { "copy": "That means a stranger\ncan guess it in one try." },
+    { "copy": "The breach report showed\n34% reused the same word." },
+    { "copy": "One password manager\nfixes every account." },
+    { "copy": "Your name should never\nbe your password." }
+  ],
+  "hashtags": ["#CyberSecurity", "#InfoSec", "#DataBreach", "#Privacy", "#EthicalHacking"],
+  "slotIndex": 0
+}
