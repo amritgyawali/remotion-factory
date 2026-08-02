@@ -55,6 +55,14 @@ jobs:
             libcairo2 fonts-liberation || true
           sudo apt-get install -y libasound2t64 || sudo apt-get install -y libasound2 || true
 
+      # ffmpeg and ffprobe are used by colour-normalise, mux and verify. Not
+      # present on the base image, and the workflow fails at the first ffprobe
+      # call without them.
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg
+
       - run: npm ci
 
       - name: Cache Chrome Headless Shell
