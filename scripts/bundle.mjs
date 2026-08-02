@@ -46,13 +46,15 @@ function inputProps() {
 export async function bundleProject({ id, outDir = DEFAULT_OUT, props = {} } = {}) {
   if (!id) throw new Error("bundleProject({ id }) is required — pass --id <compositionId>");
 
-  await mkdir(path.dirname(outDir), { recursive: true });
-  await rm(outDir, { recursive: true, force: true });
+  // Remotion's bundler requires an absolute path for outDir.
+  const absOut = path.resolve(outDir);
+  await mkdir(path.dirname(absOut), { recursive: true });
+  await rm(absOut, { recursive: true, force: true });
 
   const started = Date.now();
   const serveUrl = await bundle({
     entryPoint: path.resolve("src/index.ts"),
-    outDir,
+    outDir: absOut,
     // The bundle is thrown away with the runner, so the public folder can be
     // linked rather than copied. On Windows this silently falls back to a copy.
     symlinkPublicDir: true,
