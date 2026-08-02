@@ -76,7 +76,15 @@ export function describeNepal(when) {
   }).format(when);
 }
 
-export async function scheduleOne({ id, file, caption, when, channels = "all", dryRun = false }) {
+export async function scheduleOne({
+  id,
+  file,
+  caption,
+  when,
+  channels = "all",
+  channelSettings = {},
+  dryRun = false,
+}) {
   if (!id) throw new Error("scheduleOne({ id }) is required");
   if (!caption) throw new Error(`${id} has no caption — refusing to post an empty body`);
   if (!(when instanceof Date) || Number.isNaN(when.getTime())) {
@@ -148,7 +156,12 @@ export async function scheduleOne({ id, file, caption, when, channels = "all", d
       posts: wanted.map((integration) => ({
         integration: { id: integration.id },
         value: [{ content: caption, image: [{ id: media.id, path: media.path }] }],
-        settings: { __type: integration.identifier },
+        settings: {
+          __type: integration.identifier,
+          // Per-channel settings from plan.json, keyed by identifier or id.
+          ...(channelSettings[integration.identifier] ?? {}),
+          ...(channelSettings[integration.id] ?? {}),
+        },
       })),
     }),
   });
@@ -187,11 +200,22 @@ async function main() {
   const explicit = argValue("--at");
   const when = explicit ? new Date(explicit) : slotForIndex(brief.slotIndex).at;
 
+  // Per-channel settings from plan.json — Instagram needs post_type, X needs
+  // who_can_reply_post, etc. Missing the right key produces a 400 from Postiz.
+  let channelSettings = {};
+  try {
+    const plan = JSON.parse(await readFile("plan.json", "utf8"));
+    channelSettings = plan.channelSettings ?? {};
+  } catch {
+    // plan.json is optional — the defaults work for channels that need nothing.
+  }
+
   await scheduleOne({
     id,
     caption: brief.caption,
     when,
     channels: brief.channels ?? "all",
+    channelSettings,
     dryRun: process.argv.includes("--dry-run"),
   });
 }
