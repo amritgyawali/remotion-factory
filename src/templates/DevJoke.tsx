@@ -8,7 +8,6 @@ import { themeFor } from "../theme";
 import type { DevJokeProps } from "../types";
 
 const variantLabel: Record<DevJokeProps["variant"], string> = {
-  logo: "CLIENT NOTES",
   terminal: "WORKS ON MINE",
   qa: "QA",
   timer: "STANDUP",

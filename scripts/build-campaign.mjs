@@ -50,7 +50,6 @@ const RUNTIME = {
   Recap: 27,
   StatCard: 8,
   ListReveal: 10,
-  LogoLadder: 17,
   WorksOnMyMachine: 15,
 };
 
@@ -64,7 +63,6 @@ const EYEBROW = {
   Recap: "MERITBYTE / RECAP",
   StatCard: "MERITBYTE / NUMBERS",
   ListReveal: "MERITBYTE / CHECKLIST",
-  LogoLadder: SERIES,
   WorksOnMyMachine: SERIES,
 };
 

@@ -65,7 +65,6 @@ export type ListRevealProps = BaseProps & {
 };
 
 export type DevJokeVariant =
-  | "logo"
   | "terminal"
   | "qa"
   | "timer"
@@ -149,23 +148,6 @@ export type RecapProps = BaseProps & {
  * silence, the snap-back, the loop — is timed in seconds against that length.
  * `durationInSeconds` is ignored for this template rather than honoured badly.
  */
-export type LogoLadderProps = BaseProps & {
-  /** Two lines at most. Readable by frame 6, so it never animates in. */
-  hook: string;
-  /** The retention promise, e.g. "round 7 of 7". A number the viewer stays for. */
-  promise: string;
-  /** What the client sends at 10s. The turn the whole build is waiting on. */
-  message: string;
-  /** The release, on the green tick. */
-  payoff: string;
-  /**
-   * The site being wrecked. Varying it is what lets one template carry a week:
-   * archive uniqueness compares frame fingerprints, so twenty-eight identical
-   * mocks would be rejected after paying for every render.
-   */
-  client?: Partial<import("./components/SiteMock").Client>;
-};
-
 /**
  * Day 5 — "It Works On My Machine". Fixed at 15s (13s body + the 2s brand
  * close): the freeze at 6-7s, the silence at 8-9s and the loop cut at 12-13s
@@ -186,7 +168,6 @@ export type TemplateId =
   | "CaseStudy"
   | "FounderStory"
   | "Recap"
-  | "LogoLadder"
   | "WorksOnMyMachine";
 
 /** One entry in plan.json. */

@@ -59,10 +59,9 @@ export const MAX_TEMPLATE_SHARE = 1 / 3;
  * reach them.
  */
 export const RETIRED_TEMPLATES = {
-  // Four of these went out before the duplication was caught. They are listed
-  // individually rather than as "week 32" so that adding a fifth is an edit
+  // One of these went out before the duplication was caught. It is listed
+  // individually rather than as "week 32" so that adding another is an edit
   // somebody has to make on purpose.
-  LogoLadder: ["w32-d01-b", "w32-d01-c", "w32-d01-d", "w32-d02-b"],
   WorksOnMyMachine: ["w32-d01-a"],
 };
 
@@ -94,17 +93,7 @@ export function templateConcentrationErrors(items) {
 }
 
 const TEMPLATES = {
-  /**
-   * Fixed at 17s: the escalation, the freeze, the silence and the loop cut are
-   * all timed in seconds against a 15s body plus the 2s brand close, so a
-   * different duration would move the beats out from under the soundtrack
-   * rather than making a longer video.
-   */
-  LogoLadder: {
-    required: ["eyebrow", "day", "durationInSeconds", "hook", "promise", "message", "payoff"],
-    limits: { hook: 30, promise: 22, message: 54, payoff: 26, eyebrow: 26 },
-  },
-  /** Fixed at 15s for the same reason as LogoLadder — the beats are absolute. */
+  /** Fixed at 15s — the beats are absolute. */
   WorksOnMyMachine: {
     required: ["eyebrow", "day", "durationInSeconds", "hook"],
     limits: { hook: 30, eyebrow: 26 },
@@ -121,7 +110,7 @@ const TEMPLATES = {
     required: ["eyebrow", "day", "durationInSeconds", "hook", "beats", "punchline", "variant"],
     limits: { hook: 52, punchline: 58, eyebrow: 26, kicker: 20 },
     array: { key: "beats", min: 3, max: 5, line: 46 },
-    variants: ["logo", "terminal", "qa", "timer", "scope", "deploy", "comments", "cache"],
+    variants: ["terminal", "qa", "timer", "scope", "deploy", "comments", "cache"],
   },
   TechTip: {
     required: ["eyebrow", "day", "durationInSeconds", "hook", "steps", "result", "variant"],
